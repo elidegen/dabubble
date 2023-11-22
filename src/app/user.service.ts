@@ -12,7 +12,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 
 
-export class FirebaseService {
+export class UserService {
 
   firestore: Firestore = inject(Firestore);
   users: UserData[] = [];
