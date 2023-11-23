@@ -11,6 +11,10 @@ body {
     background-color: #ECEEFE;
 }
 
+.color-main {
+    background-color: #ECEEFE;
+}
+
 
 .container {
     margin-top: 20px;
@@ -61,4 +65,15 @@ button {
     &:hover {
         background-color: #ECEEFE !important;
     }
+}
+
+.color-purple {
+    background-color: #797EF3;
+}
+
+.p-0 {
+    padding: 0 !important;
+}
+.color-purple2-text {
+    color: #535AF1;
 }
