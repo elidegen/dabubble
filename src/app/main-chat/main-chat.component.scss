@@ -126,6 +126,7 @@ mat-card {
 .message-box-received {
     display: flex;
     padding: 0 20px;
+    position: relative;
 }
 
 .received-message-container {
@@ -203,9 +204,6 @@ mat-card {
     height: 20px;
     width: 20px;
     background-color: white;
-    // &:hover {
-
-    // }
     img {
         height: 16px;
         width: 16px;
