@@ -1,0 +1,58 @@
+header {
+    display: flex;
+    justify-content: space-between;
+}
+.trans {
+    background-color: transparent;
+}
+
+.profile-container {
+    display: flex;
+    align-items: center;
+}
+h1 {
+    margin: 0;
+}
+.home-container {
+    padding: 16px;
+    height: 100vh;
+}
+
+main {
+    display: flex;
+    justify-content: space-between;
+    height: 500px;
+}
+
+.workspace-button {
+    position: fixed;
+    bottom: 32px;
+    left: 0;
+    rotate: -90deg;
+    transform-origin: top left;
+    z-index: 10;
+    background-color: white;
+    border-radius: 0 0 10px 10px;
+    font-size: 10px !important;
+    padding: 0 24px;
+}
+
+.test-button {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+}
+
+mat-drawer-container {
+    width: 100vw;
+    background-color: transparent;
+}
+
+.main-chat-container {
+    margin: 0 16px;
+}
+
+mat-drawer {
+    background-color: transparent;
+    border: 0 !important;
+}

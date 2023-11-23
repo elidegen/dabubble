@@ -28,6 +28,9 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { WorkspaceComponent } from './workspace/workspace.component';
+import { MainChatComponent } from './main-chat/main-chat.component';
+import { ThreadComponent } from './thread/thread.component';
 
 
 
@@ -38,7 +41,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   declarations: [
     AppComponent,
     LoginScreenComponent,
-    HomeComponent
+    HomeComponent,
+    WorkspaceComponent,
+    MainChatComponent,
+    ThreadComponent
   ],
   imports: [
     BrowserModule,

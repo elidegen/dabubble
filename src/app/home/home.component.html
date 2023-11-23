@@ -1,12 +1,53 @@
-<section>
+<div class="home-container">
+  <header>
     <div>
-        <img src="assets/img/logo-home.svg" alt="home">
-        
+      <img src="assets/img/logo-home.svg" alt="home" />
     </div>
     <div>
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Search" />
+        <mat-icon matSuffix fontIcon="search"></mat-icon>
+      </mat-form-field>
+    </div>
+    <div class="profile-container">
+      <h1>Guest</h1>
+      <div class="profile-picture">
+        <img src="" alt="" />
+        <div class="online-status"></div>
+      </div>
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>expand_more</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu" xPosition="before">
+        <button class="menu" mat-menu-item>Profile</button>
+        <button mat-menu-item>Log Out</button>
+      </mat-menu>
+    </div>
+  </header>
 
-    </div>
-    <div>
+  <main>
+    <mat-drawer-container class="example-container" autosize>
+      <mat-drawer #workspace mode="side">
+        <app-workspace></app-workspace>
+      </mat-drawer>
+      <div class="main-chat-container">
+        <app-main-chat></app-main-chat>
+      </div>
+      <mat-drawer #thread mode="side" position="end">
+        <app-thread></app-thread>
+      </mat-drawer>
+    </mat-drawer-container>
 
-    </div>
-</section>
+
+    <button class="workspace-button" type="button" mat-button (click)="workspace.toggle()">
+        <span>Workspace-Menu</span>
+        <mat-icon>expand_more</mat-icon>
+    </button>
+
+    <button class="test-button" type="button" mat-button (click)="thread.toggle()">
+        <span>I</span>
+    </button>
+    
+    
+  </main>
+</div>
