@@ -1,7 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-color: #ECEEFE; }
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    background-color: #ECEEFE;
+}
 
 
 .container {
@@ -13,12 +21,13 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-
 }
 
 h1 {
-     margin: 0 !important;
+    margin: 0 !important;
 }
 
 h3 {
     margin: 0 !important;
 }
+
 .edit {
     background: white;
 }
@@ -26,6 +35,11 @@ h3 {
 .ml-16 {
     margin-left: 16px;
 }
+
+.mr-16 {
+    margin-right: 16px;
+}
+
 .pl-16 {
     padding-left: 16px;
 }
@@ -34,11 +48,17 @@ h3 {
     padding-left: 16px;
 }
 
-.br-32 {
-    border-radius: 32px !important;
+*{
+    box-sizing: border-box;
 }
 
-.no-shadow {
-    box-shadow: none !important;
+mat-card{
+    border-radius: 32px !important;   
+    box-shadow: none !important; 
 }
 
+button {
+    &:hover {
+        background-color: #ECEEFE !important;
+    }
+}

@@ -1,3 +1,64 @@
-<mat-card class="br-32 no-shadow">
-  <mat-card-content>Simple card</mat-card-content>
+<mat-card>
+  <mat-card-header>
+    <div class="header">
+      <button mat-button>
+        <div class="chat-title">
+          <img src="assets/img/icons/tag.svg" alt="" class="mr-16">
+          <span class="chat-name mr-16">Entwicklerteam</span>
+          <mat-icon>expand_more</mat-icon>
+        </div>
+      </button>
+      <div class="group-members-container">
+        <div class="group-members">
+          <img src="assets/img/avatars/avatar_male2.svg" alt="">
+          <img src="assets/img/avatars/avatar_male2.svg" alt="">
+          <img src="assets/img/avatars/avatar_male2.svg" alt="">
+        </div>
+
+        <h3 class="member-count"> 5 </h3>
+
+        <button mat-icon-button class="add-user">
+          <img src="assets/img/icons/add-person.svg" alt="">
+        </button>
+      </div>
+    </div>
+  </mat-card-header>
+
+
+  <mat-card-content>
+    <div class="messages-container">
+
+
+
+
+    </div>
+  </mat-card-content>
+
+  <mat-card-content>
+    <div class="text-field-container">
+      <textarea placeholder="Nachricht an #Entwicklerteam"></textarea>
+
+      <div class="message-buttons">
+        <div class="attachments">
+          <div class="border-right">
+            <button mat-icon-button>
+              <img src="assets/img/icons/add.svg" alt="">
+            </button>
+          </div>
+
+          <button mat-icon-button>
+            <img src="assets/img/icons/smiley.svg" alt="">
+          </button>
+
+          <button mat-icon-button>
+            <img src="assets/img/icons/@.svg" alt="">
+          </button>
+        </div>
+
+        <button mat-icon-button class="send-button">
+          <img src="assets/img/icons/send.svg" alt="">
+        </button>
+      </div>
+    </div>
+  </mat-card-content>
 </mat-card>
