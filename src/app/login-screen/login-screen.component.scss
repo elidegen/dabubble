@@ -1,0 +1,119 @@
+.start-animation-container {
+    height: 100vh;
+    width: 100%;
+    background-color: #545BEC;
+    opacity: 1;
+    z-index: 2;
+    position: absolute;
+    opacity: 1;
+    top: 0;
+  
+}
+
+.login-container {
+    height: 100vh;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    background-color: #ECEEFE;
+    z-index: 1;
+}
+
+.start-logo {
+    position: absolute;
+    top: 75px;
+    left: 75px;
+}
+
+.start-animation-logo {
+    width: 100px;
+    height: 100px;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #545BEC;
+
+    img {
+        height: 100%;
+        width: 100%;
+
+    }
+
+
+}
+
+.top-span {
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+    position: absolute;
+    top: 75px;
+    right: 75px;
+}
+
+.start-animation-span {
+    font-size: 40px;
+    z-index: 1;
+    transform: translate(0);
+    display: flex;
+    animation: holdSpanLeft 2s,
+}
+
+.start-animation {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    animation: moveLeft 1s ease, moveToLeftCorner 1s ease 1.5s;
+    overflow: hidden;
+}
+
+
+@keyframes moveToLeftCorner {
+    from {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    to {
+        top: 75px;
+        left: 75px;
+        transform: translate(0, 0);
+    }
+
+}
+
+
+@keyframes holdSpanLeft{
+    from {
+     
+        transform: translateX(-200%);
+    }
+}
+
+
+@keyframes moveLeft {
+    from {
+      
+        transform: translate(-20%, -50%);
+        opacity: 1;
+    }
+
+    to {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
+}
+
+
+@keyframes showContainer {
+    from {
+       opacity: 1;
+    }
+}
