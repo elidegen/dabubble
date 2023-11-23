@@ -1,10 +1,10 @@
-<mat-card>
+<mat-card class="br-32 no-shadow">
   <mat-card-content>
     <div class="headline">
-      <img src="assets/img/workspace-logo.svg" alt="workspace-logo" />
+      <img class="workspace-logo" src="assets/img/icons/workspace-logo.svg" alt="workspace-logo" />
       <h1>Code learning</h1>
       <button mat-icon-button>
-        <img src="assets/img/edit_square.svg" alt="edit" />
+        <img class="edit_square" src="assets/img/icons/edit_square.svg" alt="edit" />
       </button>
     </div>
 
@@ -15,13 +15,13 @@
           (closed)="panelOpenState = false"
         >
           <mat-expansion-panel-header>
-            <mat-panel-title><img class="spoke" src="assets/img/spoke.svg" alt="spoke"> Channels</mat-panel-title>
+            <mat-panel-title><img class="spoke" src="assets/img/icons/spoke.svg" alt="spoke"> Channels</mat-panel-title>
           </mat-expansion-panel-header>
           <div class="channel-container">
             <button mat-button>#entwicklerteam</button>
             <button mat-button>
               <div class="add_channel_button">
-                <img class="add_circle" src="assets/img/add_circle.svg" alt="add_circle">
+                <img src="assets/img/icons/add_circle.svg" alt="add_circle">
                 <span>Add Channel</span>
               </div>
             </button>
@@ -37,9 +37,71 @@
           (closed)="panelOpenState = false"
         >
           <mat-expansion-panel-header>
-            <mat-panel-title> Self aware panel </mat-panel-title>
+            <mat-panel-title>
+              <div class="direct-messages-headline"> 
+                <img src="assets/img/icons/account_circle.svg" alt="account_circle"> 
+                <span>Direct messages</span> 
+              </div>
+            </mat-panel-title>
           </mat-expansion-panel-header>
-          <p>I'm visible because I am open</p>
+          <div class="direct-message-container">
+            <div class="contact-container">
+              <div class="profile-message-container">
+                <img src="assets/img/avatars/avatar_male2.svg" alt="male2">
+                <div class="online-status"></div>
+              </div>
+              <h3>Maximillian Schneider</h3>
+            </div>
+            <div class="contact-container">
+              <div class="profile-message-container">
+                <img src="assets/img/avatars/avatar_male2.svg" alt="male2">
+                <div class="online-status"></div>
+              </div>
+              <h3>Maximillian Schneider</h3>
+            </div>
+            <div class="contact-container">
+              <div class="profile-message-container">
+                <img src="assets/img/avatars/avatar_male2.svg" alt="male2">
+                <div class="online-status"></div>
+              </div>
+              <h3>Maximillian Schneider</h3>
+            </div>
+            <div class="contact-container">
+              <div class="profile-message-container">
+                <img src="assets/img/avatars/avatar_male2.svg" alt="male2">
+                <div class="online-status"></div>
+              </div>
+              <h3>Maximillian Schneider</h3>
+            </div>
+            <div class="contact-container">
+              <div class="profile-message-container">
+                <img src="assets/img/avatars/avatar_male2.svg" alt="male2">
+                <div class="online-status"></div>
+              </div>
+              <h3>Maximillian Schneider</h3>
+            </div>
+            <div class="contact-container">
+              <div class="profile-message-container">
+                <img src="assets/img/avatars/avatar_male2.svg" alt="male2">
+                <div class="online-status"></div>
+              </div>
+              <h3>Maximillian Schneider</h3>
+            </div>
+            <div class="contact-container">
+              <div class="profile-message-container">
+                <img src="assets/img/avatars/avatar_male2.svg" alt="male2">
+                <div class="online-status"></div>
+              </div>
+              <h3>Maximillian Schneider</h3>
+            </div>
+            <div class="contact-container">
+              <div class="profile-message-container">
+                <img src="assets/img/avatars/avatar_male2.svg" alt="male2">
+                <div class="online-status"></div>
+              </div>
+              <h3>Maximillian Schneider</h3>
+            </div>
+          </div>
         </mat-expansion-panel>
       </mat-accordion>
     </div>

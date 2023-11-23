@@ -15,6 +15,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-
 h1 {
      margin: 0 !important;
 }
+
+h3 {
+    margin: 0 !important;
+}
 .edit {
     background: white;
 }
@@ -28,5 +32,13 @@ h1 {
 
 .pr-16 {
     padding-left: 16px;
+}
+
+.br-32 {
+    border-radius: 32px !important;
+}
+
+.no-shadow {
+    box-shadow: none !important;
 }
 

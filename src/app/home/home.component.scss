@@ -15,13 +15,14 @@ h1 {
 }
 .home-container {
     padding: 16px;
-    height: 100vh;
+    height: calc(100vh - 32px);
 }
 
 main {
     display: flex;
     justify-content: space-between;
     height: 500px;
+    height: calc(100vh - 110px);
 }
 
 .workspace-button {
@@ -35,6 +36,7 @@ main {
     border-radius: 0 0 10px 10px;
     font-size: 10px !important;
     padding: 0 24px;
+    box-shadow: 0px 1px 4px 2px rgba(0, 0, 0, 0.2);
 }
 
 .test-button {

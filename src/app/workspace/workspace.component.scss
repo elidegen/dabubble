@@ -1,7 +1,17 @@
+mat-card {
+    height: calc(100vh - 112px);
+}
+
+
 .headline {
     display: flex;
     align-items: center;
     gap: 8px;
+    margin-bottom: 16px;
+    // button {
+    //     height: 40px !important;
+    //     width: 40px !important;
+    // }
 }
 
 mat-expansion-panel {
@@ -28,3 +38,51 @@ mat-expansion-panel {
     flex-direction: column;
     align-items: flex-start;
 }
+
+.direct-messages-headline {
+    display: flex;
+    align-items: center;
+    img {
+        margin-bottom: 2px;
+        margin-right: 8px;
+    }
+}
+
+.contact-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.profile-message-container {
+    position: relative;
+    img {
+        height: 40px;
+        width: 40px;
+    }
+}
+
+.online-status {
+    position: absolute;
+    bottom: 4px;
+    right: 1px;
+    background-color: #92C83E;
+    border-radius: 100%;
+    height: 7px;
+    width: 7px;
+    border: 2px solid white;
+}
+
+.workspace-logo {
+    height: 48px;
+}
+
+.direct-message-container {
+    max-height: 150px;
+    overflow: scroll;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
