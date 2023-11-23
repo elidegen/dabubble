@@ -31,6 +31,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { WorkspaceComponent } from './workspace/workspace.component';
 import { MainChatComponent } from './main-chat/main-chat.component';
 import { ThreadComponent } from './thread/thread.component';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 
 
@@ -72,6 +73,7 @@ import { ThreadComponent } from './thread/thread.component';
     MatSnackBarModule,
     MatSliderModule,
     MatSelectModule,
+    MatExpansionModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

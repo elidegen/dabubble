@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./workspace.component.scss']
 })
 export class WorkspaceComponent {
+panelOpenState: boolean = true;
 
 }
