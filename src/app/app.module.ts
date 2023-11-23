@@ -8,6 +8,8 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginScreenComponent } from './login-screen/login-screen.component';
 import { HomeComponent } from './home/home.component';
+import { MatInputModule } from '@angular/material/input';
+
 
 @NgModule({
   declarations: [
@@ -18,6 +20,7 @@ import { HomeComponent } from './home/home.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    MatInputModule,
     provideFirebaseApp(() => initializeApp({"projectId":"dabubble-c4b96","appId":"1:390532295885:web:ad6cd75380acc256d50d84","storageBucket":"dabubble-c4b96.appspot.com","apiKey":"AIzaSyAEu4ozPAp4fPV6zGVHoY_x9YT8wbZrMs4","authDomain":"dabubble-c4b96.firebaseapp.com","messagingSenderId":"390532295885"})),
     provideFirestore(() => getFirestore()),
     BrowserAnimationsModule
