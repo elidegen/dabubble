@@ -97,9 +97,21 @@ form {
         padding: 12px 24px !important;
         height: fit-content !important;
         width: fit-content !important;
+        border: 1px solid #444df2;
+        color: #444df2;
+        transition: all 125ms;
+
+        &:hover {
+            opacity: 0.8;
+        }
     }
 
     .saveButton {
         background-color: #444df2;
+        color: white;
+
+        &:hover {
+            background-color: #444df2 !important;
+        }
     }
 }
