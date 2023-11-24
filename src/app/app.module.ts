@@ -36,9 +36,7 @@ import { DialogEditProfileComponent } from './dialog-edit-profile/dialog-edit-pr
 import { DialogEditChannelComponent } from './dialog-edit-channel/dialog-edit-channel.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DialogViewProfileComponent } from './dialog-view-profile/dialog-view-profile.component';
-
-
-
+import { DialogAddChannelComponent } from './dialog-add-channel/dialog-add-channel.component';
 
 
 
@@ -53,6 +51,7 @@ import { DialogViewProfileComponent } from './dialog-view-profile/dialog-view-pr
     DialogEditProfileComponent,
     DialogEditChannelComponent,
     DialogViewProfileComponent,
+    DialogAddChannelComponent,
   ],
   imports: [
     BrowserModule,
