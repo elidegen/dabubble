@@ -34,14 +34,14 @@
           <div class="bottom-line"></div><span class="or">Or</span>
           <div class="bottom-line"></div>
         </div>
-        <div class="input-container margin-top align-center cursor-pointer google-button">
+        <div mat-button class="input-container margin-top align-center cursor-pointer google-button main-button">
           <img src="assets\img\icons\google.svg">
           <span class="color-purple2-text ">Login with google</span>
         </div>
 
         <div class="submit-buttons margin-top">
-          <button class="login-button" type="submit">Login</button>
-          <button class="guest-button">Guest login</button>
+          <button  mat-button class="main-button" type="submit">Login</button>
+          <button  mat-button class="main-button primary">Guest login</button>
         </div>
       </form>
     </div>
@@ -71,7 +71,7 @@
 
 
         <div class="submit-buttons margin-top justify-content-end">
-          <button (click)="changeSwitchCase('avatar')" class="login-button align-self" type="submit">Next</button>
+          <button mat-button (click)="changeSwitchCase('avatar')" class="login-button align-self" type="submit">Next</button>
         </div>
       </form>
     </div>
@@ -85,14 +85,18 @@
         src="assets\img\icons\arrow_back.svg">
       <h1 class="color-purple2-text padding-bottom"> Choose your Avatar</h1>
       <div class="big-profile-pic"><img class=""
-        src="assets\img\icons\person.svg"></div>
+        src="assets\img\icons\profile.svg"></div>
         <h2>Frederik Beck</h2>
 
       <form [formGroup]="addUser">
 
         <div class="choose-profile-pic"><span>Choose from list</span></div>
+        <div class="choose-profile-pic"><span>Choose from list</span>
+          <div  class="picture-container"> <img *ngFor="let pic of profileImages ; index as i;"  src="assets\img\icons\character_{{pic}}.svg"></div>
+        </div>
+        <div class="upload-picture"><span>choose own picture</span> <button mat-button class="main-button" type="submit">Upload file</button></div>
         <div class="submit-buttons margin-top justify-content-end">
-          <button (click)="changeSwitchCase('avatar')" class="login-button align-self" type="submit">Next</button>
+          <button mat-button (click)="changeSwitchCase('avatar')" class="align-self main-button" type="submit">Next</button>
         </div>
       </form>
     </div>
@@ -104,7 +108,7 @@
     <div class="form-container">
       <img (click)="changeSwitchCase('createAccount')" class="position-relative cursor-pointer transform"
         src="assets\img\icons\arrow_back.svg">
-      <h1 class="color-purple2-text padding-bottom"> Reset password</h1>
+      <h1 class="color-purple2-text padding-bottom">Reset password</h1>
       <p style="font-size:20px;">Create your account with your name and e-mail adress.</p>
       <form [formGroup]="addUser">
         <div class="input-container margin-top">
@@ -113,7 +117,7 @@
         </div>
         <p class="margin-top grey-span-resetpw">Receive an e-mail to reset your password</p>
         <div class="submit-buttons margin-top justify-content-end">
-          <button (click)="changeSwitchCase('avatar')" class="send-mail-button" type="submit">Send Email</button>
+          <button mat-button (click)="changeSwitchCase('avatar')" class="send-mail-button" type="submit">Send Email</button>
         </div>
       </form>
     </div>
