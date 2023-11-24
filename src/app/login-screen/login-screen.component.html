@@ -6,12 +6,14 @@
 
 
 
-<div class="login-container">
+<div [ngSwitch]="switch_expression" class="login-container">
   <img class="start-logo" src="assets\img\icons\logo-home.svg">
-  <div class="top-span"><span class="padding-bottom">New at DABubble ?</span><span class="color-purple2-text cursor-pointer transform">Create Account</span></div>
+  <div *ngSwitchCase="'login'" class="top-span"><span class="padding-bottom">New at DABubble ?</span><span
+      (click)="changeSwitchCase('createAccount')" class="color-purple2-text cursor-pointer transform">Create
+      Account</span></div>
   <div class="impressum-span"><a>Impress</a><a>Privacy Policy</a></div>
 
-  <div class="login bg-white">
+  <div *ngSwitchCase="'login'" class="login bg-white">
     <div class="form-container">
       <h1 class="color-purple2-text padding-bottom">Login</h1>
       <p>We recommend using the email address that you use at work.</p>
@@ -24,18 +26,95 @@
           <input matInput placeholder="E-mail" formControlName="email" required>
         </div>
         <mat-error>{{getErrorMessage()}}</mat-error>
-        <div class="input-container"><img src="assets\img\icons\lock.svg"><input matInput placeholder="Password" formControlName="assword" required></div>
-        <span class="margin-top color-purple2-text cursor-pointer transform">Forgot password ?</span>
-        <div class="or-container margin-top"><div class="bottom-line"></div><span class="or">Or</span><div class="bottom-line"></div></div>
+        <div class="input-container"><img src="assets\img\icons\lock.svg"><input matInput placeholder="Password"
+            formControlName="assword" required></div>
+        <span (click)="changeSwitchCase('resetPassword')"
+          class="margin-top color-purple2-text cursor-pointer transform">Forgot password ?</span>
+        <div class="or-container margin-top">
+          <div class="bottom-line"></div><span class="or">Or</span>
+          <div class="bottom-line"></div>
+        </div>
         <div class="input-container margin-top align-center cursor-pointer google-button">
           <img src="assets\img\icons\google.svg">
-        <span class="color-purple2-text ">Login with google</span>
+          <span class="color-purple2-text ">Login with google</span>
         </div>
 
         <div class="submit-buttons margin-top">
-        <button class="login-button" type="submit">Login</button>
-        <button class="guest-button">Guest login</button>
-      </div>
+          <button class="login-button" type="submit">Login</button>
+          <button class="guest-button">Guest login</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div *ngSwitchCase="'createAccount'" class="login bg-white">
+    <div class="form-container">
+      <img (click)="changeSwitchCase('login')" class="position-relative cursor-pointer transform"
+        src="assets\img\icons\arrow_back.svg">
+      <h1 class="color-purple2-text padding-bottom"> Create account</h1>
+      <p>Create your account with your name and e-mail adress.</p>
+
+      <form [formGroup]="addUser">
+        <div class="input-container margin-top">
+          <img src="assets\img\icons\person.svg">
+          <input matInput placeholder="First and  Lastname" formControlName="email" required>
+        </div>
+        <div class="input-container margin-top">
+          <img src="assets\img\icons\mail.svg">
+          <input matInput placeholder="E-mail" formControlName="email" required>
+        </div>
+        <mat-error>{{getErrorMessage()}}</mat-error>
+        <div class="input-container"><img src="assets\img\icons\lock.svg"><input matInput placeholder="Password"
+            formControlName="password" required></div>
+        <span class="margin-top gap  cursor-pointer align-center"><input class="cursor-pointer" type="checkbox">I accept
+          the <a class="color-purple2-text transform">privacy policy</a></span>
+
+
+        <div class="submit-buttons margin-top justify-content-end">
+          <button (click)="changeSwitchCase('avatar')" class="login-button align-self" type="submit">Next</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+
+  <div *ngSwitchCase="'avatar'" class="login bg-white">
+    <div class="form-container">
+      <img (click)="changeSwitchCase('createAccount')" class="position-relative cursor-pointer transform"
+        src="assets\img\icons\arrow_back.svg">
+      <h1 class="color-purple2-text padding-bottom"> Choose your Avatar</h1>
+      <div class="big-profile-pic"><img class=""
+        src="assets\img\icons\person.svg"></div>
+        <h2>Frederik Beck</h2>
+
+      <form [formGroup]="addUser">
+
+        <div class="choose-profile-pic"><span>Choose from list</span> <pict</div>
+        <div class="submit-buttons margin-top justify-content-end">
+          <button (click)="changeSwitchCase('avatar')" class="login-button align-self" type="submit">Next</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+
+  <div *ngSwitchCase="'resetPassword'" class="login bg-white">
+    <div class="form-container">
+      <img (click)="changeSwitchCase('createAccount')" class="position-relative cursor-pointer transform"
+        src="assets\img\icons\arrow_back.svg">
+      <h1 class="color-purple2-text padding-bottom"> Reset password</h1>
+      <p style="font-size:20px;">Create your account with your name and e-mail adress.</p>
+      <form [formGroup]="addUser">
+        <div class="input-container margin-top">
+          <img src="assets\img\icons\mail.svg">
+          <input matInput placeholder="E-mail" formControlName="email" required>
+        </div>
+        <p class="margin-top grey-span-resetpw">Receive an e-mail to reset your password</p>
+        <div class="submit-buttons margin-top justify-content-end">
+          <button (click)="changeSwitchCase('avatar')" class="send-mail-button" type="submit">Send Email</button>
+        </div>
       </form>
     </div>
   </div>
