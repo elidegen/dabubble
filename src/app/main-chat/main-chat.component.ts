@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogAddChannelComponent } from '../dialog-add-channel/dialog-add-channel.component';
+import { DialogEditChannelComponent } from '../dialog-edit-channel/dialog-edit-channel.component';
 
 @Component({
   selector: 'app-main-chat',
@@ -12,7 +12,7 @@ export class MainChatComponent {
   constructor(public dialog: MatDialog) {}
 
 openEditChannelDialog() {
-  this.dialog.open(DialogAddChannelComponent, {
+  this.dialog.open(DialogEditChannelComponent, {
     panelClass: 'dialog-edit-channel'});
 
 }

@@ -57,7 +57,7 @@ mat-card,
 
 .mat-dialog-container {
     border-radius: 20px !important;
-  }
+}
 
 button {
     &:hover {
@@ -77,18 +77,42 @@ button {
     color: #535AF1;
 }
 
+
 .align-center {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.dialog-container .mat-mdc-dialog-container .mdc-dialog__surface{
+.dialog-container .mat-mdc-dialog-container .mdc-dialog__surface {
     border-radius: 32px;
 }
 
-.dialog-edit-channel .mat-mdc-dialog-container .mdc-dialog__surface{
+.dialog-edit-channel .mat-mdc-dialog-container .mdc-dialog__surface {
     border-radius: 0 32px 32px 32px;
+}
+
+.w100 {
+    width: 100%;
+}
+
+.input {
+    border-radius: 32px;
+    padding: 16px;
+    outline: none;
+    border: 1px solid #ADB0D9;
+
+    &:hover {
+        border: 1px solid #797EF3;
+    }
+
+    &:focus {
+        border: 1px solid #444df2;
+    }
+}
+
+
+a {
     border-radius: 32px !important;
 }
 .br-32 {
@@ -101,6 +125,7 @@ button {
 
 a{
     cursor: pointer;
+
     &:hover {
         transform: scale(1.1);
     }

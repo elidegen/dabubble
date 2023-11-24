@@ -8,11 +8,12 @@ import { DialogAddChannelComponent } from '../dialog-add-channel/dialog-add-chan
   styleUrls: ['./workspace.component.scss']
 })
 export class WorkspaceComponent {
+  panelOpenState: boolean = true;
   constructor(public dialog: MatDialog) {}
 
   openDialog() {
-    this.dialog.open(DialogAddChannelComponent,  {panelClass: 'dialog-container',});
+    this.dialog.open(DialogAddChannelComponent,  {panelClass: 'dialog-container'});
   }
-  panelOpenState: boolean = true;
+  
 
 }

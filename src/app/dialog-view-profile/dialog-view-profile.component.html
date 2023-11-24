@@ -12,7 +12,7 @@
 
         <div class="name">
             <h1>Frederik Beck</h1>
-            <span (click)="editState = true">Edit</span>
+            <span (click)="editState = false">Edit</span>
         </div>
 
         <div class="status">
@@ -42,23 +42,28 @@
             <img src="assets/img/avatars/avatar_male2.svg" alt="">
         </div>
 
-        <div class="editName">
-            <mat-icon>account_circle</mat-icon>
-            <h1>Full Name</h1>
-        </div>
-
-        <div class="input">
-            <input type="text">
-        </div>
-
-        <div class="email-container">
-            <div class="mailIcon">
-                <mat-icon>mail</mat-icon>
+        <form>
+            <div class="display-flex">
+                <img class="mr-16" src="assets/img/icons/account_circle_big.svg">
+                <h2>Full Name</h2>
             </div>
-            <div class="email">
+
+            <input class="input" type="text" value="Frederik Beck">
+
+            <div class="display-flex">
+                <img class="mr-16" src="assets/img/icons/mail.svg">
                 <h2>E-Mail Adress</h2>
-                <span>fred.beck@mail.com</span>
             </div>
+            <input class="input" type="email" value="fred.beck@mail.com">
+        </form>
+
+        <div class="buttons w100">
+            <button mat-button class="mr-16">
+                Cancel
+            </button>
+            <button class="saveButton" mat-button>
+                Save
+            </button>
         </div>
     </mat-card-content>
 </mat-card>

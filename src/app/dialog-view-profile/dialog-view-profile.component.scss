@@ -5,7 +5,7 @@ mat-card {
 mat-card-content {
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    gap: 16px;
     padding: 32px;
 }
 
@@ -71,3 +71,35 @@ h1 {
     }
 }
 
+.display-flex {
+    display: flex;
+    align-items: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    *>,
+    input {
+        width: 100%;
+    }
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    button {
+        border-radius: 24px;
+        padding: 12px 24px !important;
+        height: fit-content !important;
+        width: fit-content !important;
+    }
+
+    .saveButton {
+        background-color: #444df2;
+    }
+}
