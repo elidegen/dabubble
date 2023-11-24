@@ -10,14 +10,7 @@ mat-card-content {
     padding: 32px;
 }
 
-.br-32 {
-    ::ng-deep{
-        border-radius: 32px !important;
-        box-shadow: none !important;
-        border: 1px solid red;
-        background-color: green;
-    }
-}
+
 
 h1 {
     font-weight: 500;
