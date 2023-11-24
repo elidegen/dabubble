@@ -156,6 +156,7 @@ input{
     display: flex;
     width: 100%;
     justify-content: center;
+   
 }
 
 
@@ -172,12 +173,25 @@ button {
     background-color: #545BEC;
     color: white;
     width: 100px;
+    transition: background-color 0.2s ease, color 0.2s;
     &:hover {
         background-color: #FFFFFF!important;
         color: #545BEC;
         border: 1px solid #545BEC;
+        box-shadow: 0px 2px 10px 0px #00000014;
         
     }
+}
+
+.google-button {
+    transition: border 0.2s ease;
+
+    &:hover {
+        border: 1px solid #545BEC;
+        box-shadow: 0px 2px 10px 0px #00000014;
+        
+    }
+
 }
 
 .guest-button {
@@ -185,17 +199,29 @@ background-color: #FFFFFF;
 border: 1px solid #545BEC;
 color: #545BEC;
 width: 120px;
+transition: background-color 0.2s ease, color 0.2s;
+
 
 &:hover {
     color: white!important;
-    background-color:  #545BEC!important;;
+    background-color:  #545BEC!important;
+    box-shadow: 0px 2px 10px 0px #00000014;
     
 }
 }
 
+.transform {
+    transform: scale(1.0);
+    &:hover {
+        transform: scale(1.1);
+    }
+}
+
 .cursor-pointer {
     cursor: pointer;
+   
 }
+
 
 @keyframes moveToLeftCorner {
     from {
