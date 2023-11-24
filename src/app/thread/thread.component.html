@@ -1,3 +1,151 @@
 <mat-card>
-  <mat-card-content>Simple card</mat-card-content>
+    <mat-card-header>
+      <header>
+        <div class="header">
+          <span class="title">Thread</span>
+          <span class="channel-title color-purple2-text"># Entwicklerteam</span>
+        </div>
+        <button mat-icon-button class="close-thread">
+          <img class="close-icon" src="assets/img/icons/close.svg" alt="close">
+        </button>
+      </header>
+    </mat-card-header>
+
+    <mat-card-content class="p-0 main-chat-container">
+
+      <section> <!-- Main Commment -->
+        <div class="message-row-container">
+          <div class="message-box-received">
+            <div class="message-avatar-container">
+              <img src="assets/img/avatars/avatar_male2.svg" alt="" />
+            </div>
+            <div class="received-message-container ml-16">
+              <div class="message-data">
+                <span class="name">Maximillian Schneider</span>
+                <span class="date">15:06</span>
+              </div>
+
+              <div class="received-message color-main">
+                <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="reaction">
+            <button mat-icon-button>
+              <img src="assets/img/icons/add_reaction.svg" alt="">
+            </button>
+          </div>
+        </div>
+      </section>
+
+
+      <section> <!-- Oberste section für Kommentar_bereich -->
+                <!-- separator -->
+        <div class="comments-container">
+          <span class="comments">2 Antworten</span>
+          <div class="separator"></div>
+        </div>
+
+        <section> <!-- Alle Antworten -->
+
+          <div class="message-row-container">
+            <div class="message-box-received">
+              <div class="message-avatar-container">
+                <img src="assets/img/avatars/avatar_male2.svg" alt="" />
+              </div>
+              <div class="received-message-container ml-16">
+                <div class="message-data">
+                  <span class="name">Maximillian Schneider</span>
+                  <span class="date">15:06</span>
+                </div>
+
+                <div class="received-message color-main">
+                  <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</span>
+                </div>
+              </div>
+            </div>
+            <div class="reaction">
+              <button mat-icon-button>
+                <img src="assets/img/icons/add_reaction.svg" alt="">
+              </button>
+            </div>
+          </div>
+
+          <div class="message-row-container"> <!--own message-->
+            <div class="message-box">
+              <div class="sent-message-container mr-16">
+                <div class="message-data">
+                  <span class="date">15:06</span>
+                  <span class="name">Maximillian Schneider</span>
+                </div>
+  
+                <div class="sent-message color-purple">
+                  <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                    Beatae dolorem nesciunt tenetur laborum quibusdam perferendis
+                    minus, illum fugit totam omnis, deleniti distinctio accusantium
+                    quos voluptatibus. Aliquid totam cupiditate sit molestias?</span>
+                </div>
+  
+                <div class="reaction-container">
+                  <div class="reaction-emoji-container">
+                    <button class="reaction-emoji-button">
+                      <img src="assets/img/emojis/rocket.svg" alt="rocket" />
+                      <span>1</span>
+                    </button>
+                    <button class="reaction-emoji-button">
+                      <img src="assets/img/emojis/check.svg" alt="rocket" />
+                      <span>1</span>
+                    </button>
+                    <button class="add-reaction-button" mat-icon-button>
+                      <img src="assets/img/icons/add_reaction.svg" alt="" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+  
+              <div class="message-avatar-container">
+                <img src="assets/img/avatars/avatar_male2.svg" alt="" />
+              </div>
+            </div>
+  
+            <div class="reaction own-message">
+              <button mat-icon-button>
+                <img src="assets/img/icons/add_reaction.svg" alt="">
+              </button>
+            </div>
+          </div>
+
+        </section>
+
+      </section>
+    </mat-card-content>
+
+    <mat-card-content class="textfield-content">
+      <div class="text-field-container">
+        <textarea placeholder="Comment"></textarea>
+
+        <div class="message-buttons">
+          <div class="attachments">
+            <div class="border-right">
+              <button mat-icon-button class="textfield-buttons">
+                <img src="assets/img/icons/add.svg" alt="" />
+              </button>
+            </div>
+
+            <button mat-icon-button class="textfield-buttons">
+              <img src="assets/img/icons/smiley.svg" alt="" />
+            </button>
+
+            <button mat-icon-button class="textfield-buttons">
+              <img src="assets/img/icons/@.svg" alt="" />
+            </button>
+          </div>
+
+          <button mat-icon-button class="textfield-buttons">
+            <img src="assets/img/icons/send.svg" alt="" />
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
 </mat-card>

@@ -1,0 +1,64 @@
+<mat-card [ngSwitch]="editState">
+    <mat-card-content *ngSwitchCase="true">
+        <div class="header">
+            <h1>Profile</h1>
+            <button mat-icon-button (click)="dialogRef.close()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+        <div class="picture">
+            <img src="assets/img/avatars/avatar_male2.svg" alt="">
+        </div>
+
+        <div class="name">
+            <h1>Frederik Beck</h1>
+            <span (click)="editState = true">Edit</span>
+        </div>
+
+        <div class="status">
+            <div class="status-circle"></div>
+            <span>Active</span>
+        </div>
+
+        <div class="email-container">
+            <div class="mailIcon">
+                <mat-icon>mail</mat-icon>
+            </div>
+            <div class="email">
+                <h2>E-Mail Adress</h2>
+                <span>fred.beck@mail.com</span>
+            </div>
+        </div>
+    </mat-card-content>
+
+    <mat-card-content *ngSwitchCase="false">
+        <div class="header">
+            <h1>Edit your profile</h1>
+            <button mat-icon-button (click)="dialogRef.close()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+        <div class="picture">
+            <img src="assets/img/avatars/avatar_male2.svg" alt="">
+        </div>
+
+        <div class="editName">
+            <mat-icon>account_circle</mat-icon>
+            <h1>Full Name</h1>
+        </div>
+
+        <div class="input">
+            <input type="text">
+        </div>
+
+        <div class="email-container">
+            <div class="mailIcon">
+                <mat-icon>mail</mat-icon>
+            </div>
+            <div class="email">
+                <h2>E-Mail Adress</h2>
+                <span>fred.beck@mail.com</span>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
