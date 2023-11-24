@@ -18,7 +18,7 @@ login = new FormGroup({
 
   getErrorMessage() {
     let emailControl = this.login.get('email');
-    if (emailControl?.hasError('required')) {
+    if (emailControl?.hasError('email')) {
       return 'You must enter a value';
     }
 
