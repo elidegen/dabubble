@@ -84,5 +84,9 @@ button {
 }
 
 .dialog-container .mat-mdc-dialog-container .mdc-dialog__surface{
-    border-radius: 32px !important;
+    border-radius: 32px;
+}
+
+.dialog-edit-channel .mat-mdc-dialog-container .mdc-dialog__surface{
+    border-radius: 0 32px 32px 32px;
 }

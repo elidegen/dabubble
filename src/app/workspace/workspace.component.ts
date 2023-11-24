@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogAddChannelComponent } from '../dialog-add-channel/dialog-add-channel.component';
 
 @Component({
   selector: 'app-workspace',
@@ -6,8 +8,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./workspace.component.scss']
 })
 export class WorkspaceComponent {
+  constructor(public dialog: MatDialog) {}
+
   openDialog() {
-    throw new Error('Method not implemented.');
+    this.dialog.open(DialogAddChannelComponent,  {panelClass: 'dialog-container',});
   }
   panelOpenState: boolean = true;
 
