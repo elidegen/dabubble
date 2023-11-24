@@ -8,12 +8,22 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class LoginScreenComponent implements OnInit {
 animationIsFinished = false;
+switch_expression: any = "login";
+
+
+
+
 
 login = new FormGroup({
   email:new FormControl('', [Validators.required, Validators.email]),
   password: new FormControl('', [Validators.required] ),
 });
 
+
+addUser = new FormGroup({
+  email:new FormControl('', [Validators.required, Validators.email]),
+  password: new FormControl('', [Validators.required] ),
+});
 
 
   getErrorMessage() {
@@ -40,6 +50,11 @@ login = new FormGroup({
 
      onSubmit() {
 
+     }
+
+
+     changeSwitchCase(newSwitchCase:string) {
+      this.switch_expression = newSwitchCase;
      }
 
 }
