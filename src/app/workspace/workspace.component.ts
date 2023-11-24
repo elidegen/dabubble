@@ -6,6 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./workspace.component.scss']
 })
 export class WorkspaceComponent {
-panelOpenState: boolean = true;
+  openDialog() {
+    throw new Error('Method not implemented.');
+  }
+  panelOpenState: boolean = true;
 
 }

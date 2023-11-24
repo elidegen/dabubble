@@ -6,5 +6,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./main-chat.component.scss']
 })
 export class MainChatComponent {
+openEditChannelDialog() {
+throw new Error('Method not implemented.');
+}
 
 }

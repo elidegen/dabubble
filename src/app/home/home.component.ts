@@ -6,6 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-showFiller: any;
+  openProfileDialog() {
+    throw new Error('Method not implemented.');
+  }
+  showFiller: any;
 
 }

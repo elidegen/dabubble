@@ -32,6 +32,8 @@ import { WorkspaceComponent } from './workspace/workspace.component';
 import { MainChatComponent } from './main-chat/main-chat.component';
 import { ThreadComponent } from './thread/thread.component';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { DialogEditProfileComponent } from './dialog-edit-profile/dialog-edit-profile.component';
+import { DialogEditChannelComponent } from './dialog-edit-channel/dialog-edit-channel.component';
 
 
 
@@ -45,7 +47,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
     HomeComponent,
     WorkspaceComponent,
     MainChatComponent,
-    ThreadComponent
+    ThreadComponent,
+    DialogEditProfileComponent,
+    DialogEditChannelComponent,
   ],
   imports: [
     BrowserModule,
