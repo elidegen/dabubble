@@ -83,11 +83,6 @@ button {
     align-items: center;
 }
 
-.br-32 {
-  
-        border-radius: 32px !important;
-        box-shadow: none !important;
-        border: 1px solid red;
-        background-color: green;
-    
+.dialog-container .mat-mdc-dialog-container .mdc-dialog__surface{
+    border-radius: 32px !important;
 }

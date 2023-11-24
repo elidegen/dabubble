@@ -14,7 +14,7 @@ export class HomeComponent {
 
   openProfileDialog(): void {
     const dialogRef = this.dialog.open(DialogViewProfileComponent, {
-      panelClass: 'br-32',
+      panelClass: 'dialog-container',
       data: { userID: 'as8d5asd16a' },
     });
 
