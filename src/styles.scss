@@ -96,7 +96,7 @@ button {
     width: 100%;
 }
 
-.input {
+input {
     border-radius: 32px;
     padding: 16px;
     outline: none;
@@ -115,18 +115,42 @@ button {
 a {
     border-radius: 32px !important;
 }
+
 .br-32 {
-  
-        border-radius: 32px !important;
-        box-shadow: none !important;
-        border: 1px solid red;
-        background-color: green;
+
+    border-radius: 32px !important;
+    box-shadow: none !important;
+    border: 1px solid red;
+    background-color: green;
 }
 
-a{
+a {
     cursor: pointer;
 
     &:hover {
         transform: scale(1.1);
+    }
+}
+
+.main-button {
+    border-radius: 24px !important;
+    padding: 12px 24px !important;
+    height: fit-content !important;
+    width: fit-content !important;
+    border: 1px solid #444df2 !important;
+    color: #444df2 !important;
+    transition: all 125ms !important;
+
+    &:hover {
+        opacity: 0.8 !important;
+    }
+}
+
+.primary {
+    background-color: #444df2 !important;
+    color: white !important;
+
+    &:hover {
+        background-color: #444df2 !important;
     }
 }

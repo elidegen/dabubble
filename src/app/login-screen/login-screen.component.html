@@ -90,6 +90,7 @@
 
       <form [formGroup]="addUser">
 
+        <div class="choose-profile-pic"><span>Choose from list</span></div>
         <div class="choose-profile-pic"><span>Choose from list</span>
           <div  class="picture-container"> <img *ngFor="let pic of profileImages ; index as i;"  src="assets\img\icons\character_{{pic}}.svg"></div>
         </div>
