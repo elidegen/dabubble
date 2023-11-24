@@ -157,6 +157,10 @@ form {
     
 }
 
+.flex-column {
+    flex-direction: column;
+}
+
 .justify-content-end {
     justify-content: flex-end!important;
     display: flex;
@@ -192,6 +196,11 @@ input{
 //     cursor: pointer;
 //     background-color: white;
 // }
+
+
+.font-size20  {
+    font-size: 20px;
+}
 
 .login-button {
     background-color: #545BEC;
@@ -261,13 +270,13 @@ transition: background-color 0.2s ease, color 0.2s;
     display: flex;
     gap: 10px;
     flex-direction: column;
-    align-items: flex-start;
- 
+    align-items: center;
+    text-align: left!important;;
 }
 
 .picture-container {
     display: flex;
-    gap: 10px;
+    justify-content: space-between;
 }
 
 .upload-picture {

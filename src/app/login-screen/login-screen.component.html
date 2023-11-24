@@ -19,8 +19,6 @@
       <p>We recommend using the email address that you use at work.</p>
 
       <form [formGroup]="login" (ngSubmit)="onSubmit()" novalidate>
-
-
         <div class="input-container margin-top">
           <img src="assets\img\icons\mail.svg">
           <input matInput placeholder="E-mail" formControlName="email" required>
@@ -34,14 +32,14 @@
           <div class="bottom-line"></div><span class="or">Or</span>
           <div class="bottom-line"></div>
         </div>
-        <div mat-button class="input-container margin-top align-center cursor-pointer google-button main-button">
+        <div mat-button class="input-container  cursor-pointer align-center  google-button">
           <img src="assets\img\icons\google.svg">
           <span class="color-purple2-text ">Login with google</span>
         </div>
 
         <div class="submit-buttons margin-top">
-          <button  mat-button class="main-button" type="submit">Login</button>
-          <button  mat-button class="main-button primary">Guest login</button>
+          <button  mat-button class="main-button primary mr-16" type="submit">Login</button>
+          <button  routerLink="home" mat-button class="main-button ">Guest login</button>
         </div>
       </form>
     </div>
@@ -71,7 +69,7 @@
 
 
         <div class="submit-buttons margin-top justify-content-end">
-          <button mat-button (click)="changeSwitchCase('avatar')" class="login-button align-self" type="submit">Next</button>
+          <button mat-button (click)="changeSwitchCase('avatar')" class="align-self main-button primary" type="submit">Next</button>
         </div>
       </form>
     </div>
@@ -90,13 +88,13 @@
 
       <form [formGroup]="addUser">
 
-        <div class="choose-profile-pic"><span>Choose from list</span></div>
-        <div class="choose-profile-pic"><span>Choose from list</span>
-          <div  class="picture-container"> <img *ngFor="let pic of profileImages ; index as i;"  src="assets\img\icons\character_{{pic}}.svg"></div>
+     
+        <div class="choose-profile-pic margin-top"><span class="font-size20 w100 ">Choose from list</span>
+          <div  class="picture-container w100"> <img class="transform cursor-pointer" *ngFor="let pic of profileImages ; index as i;"  src="assets\img\icons\character_{{pic}}.svg"></div>
         </div>
-        <div class="upload-picture"><span>choose own picture</span> <button mat-button class="main-button" type="submit">Upload file</button></div>
+        <div class="upload-picture margin-top align-center"><span class="font-size20">choose own picture</span> <button mat-button class="main-button" type="submit">Upload file</button></div>
         <div class="submit-buttons margin-top justify-content-end">
-          <button mat-button (click)="changeSwitchCase('avatar')" class="align-self main-button" type="submit">Next</button>
+          <button mat-button (click)="changeSwitchCase('avatar')" class="align-self main-button primary" type="submit">Next</button>
         </div>
       </form>
     </div>
@@ -117,7 +115,7 @@
         </div>
         <p class="margin-top grey-span-resetpw">Receive an e-mail to reset your password</p>
         <div class="submit-buttons margin-top justify-content-end">
-          <button mat-button (click)="changeSwitchCase('avatar')" class="send-mail-button" type="submit">Send Email</button>
+          <button mat-button (click)="changeSwitchCase('avatar')" class="main-button" type="submit">Send Email</button>
         </div>
       </form>
     </div>
