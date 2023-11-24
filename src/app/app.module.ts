@@ -32,11 +32,12 @@ import { WorkspaceComponent } from './workspace/workspace.component';
 import { MainChatComponent } from './main-chat/main-chat.component';
 import { ThreadComponent } from './thread/thread.component';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { DialogEditProfileComponent } from './dialog-edit-profile/dialog-edit-profile.component';
 import { DialogEditChannelComponent } from './dialog-edit-channel/dialog-edit-channel.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DialogViewProfileComponent } from './dialog-view-profile/dialog-view-profile.component';
 import { DialogAddChannelComponent } from './dialog-add-channel/dialog-add-channel.component';
+import { DialogAddToGroupComponent } from './dialog-add-to-group/dialog-add-to-group.component';
+import { DialogShowGroupMemberComponent } from './dialog-show-group-member/dialog-show-group-member.component';
 
 
 
@@ -48,10 +49,11 @@ import { DialogAddChannelComponent } from './dialog-add-channel/dialog-add-chann
     WorkspaceComponent,
     MainChatComponent,
     ThreadComponent,
-    DialogEditProfileComponent,
     DialogEditChannelComponent,
     DialogViewProfileComponent,
     DialogAddChannelComponent,
+    DialogAddToGroupComponent,
+    DialogShowGroupMemberComponent,
   ],
   imports: [
     BrowserModule,

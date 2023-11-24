@@ -3,12 +3,9 @@
     <div>
       <img src="assets/img/icons/logo-home.svg" alt="home" />
     </div>
-    <div>
-      <mat-form-field appearance="outline">
-        <input matInput placeholder="Search" />
-        <mat-icon matSuffix fontIcon="search"></mat-icon>
-      </mat-form-field>
-    </div>
+
+    <input class="search" placeholder="Search" />
+
     <div class="profile-container">
       <h1>Guest</h1>
       <div class="profile-picture">
@@ -19,7 +16,7 @@
         <mat-icon>expand_more</mat-icon>
       </button>
       <mat-menu #menu="matMenu" xPosition="before">
-        <button (click)="openProfileDialog()"  class="menu" mat-menu-item>Profile</button>
+        <button (click)="openProfileDialog()" class="menu" mat-menu-item>Profile</button>
         <button mat-menu-item>Log Out</button>
       </mat-menu>
     </div>
@@ -40,8 +37,8 @@
 
 
     <button class="workspace-button" type="button" mat-button (click)="workspace.toggle()">
-        <span>Workspace-Menu</span>
-        <mat-icon>expand_more</mat-icon>
+      <span>Workspace-Menu</span>
+      <mat-icon>expand_more</mat-icon>
     </button>
   </main>
 </div>

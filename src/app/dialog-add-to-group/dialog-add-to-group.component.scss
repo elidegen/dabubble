@@ -1,0 +1,25 @@
+mat-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 32px;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+h3 {
+    color: #797ef3;
+}
+
+input {
+    width: 300px;
+}
+
+.button-position {
+    display: flex;
+    justify-content: flex-end;
+}

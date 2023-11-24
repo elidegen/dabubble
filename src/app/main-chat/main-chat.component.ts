@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogEditChannelComponent } from '../dialog-edit-channel/dialog-edit-channel.component';
+import { DialogAddToGroupComponent } from '../dialog-add-to-group/dialog-add-to-group.component';
 
 @Component({
   selector: 'app-main-chat',
@@ -9,12 +10,22 @@ import { DialogEditChannelComponent } from '../dialog-edit-channel/dialog-edit-c
 })
 export class MainChatComponent {
 
-  constructor(public dialog: MatDialog) {}
+  constructor(public dialog: MatDialog) { }
 
-openEditChannelDialog() {
-  this.dialog.open(DialogEditChannelComponent, {
-    panelClass: 'dialog-edit-channel'});
+  openEditChannelDialog() {
+    this.dialog.open(DialogEditChannelComponent, {
+      panelClass: 'dialog-edit-channel'
+    });
+  }
 
-}
+  openDialog() {
+    const dialogRef = this.dialog.open(DialogAddToGroupComponent, {
+      panelClass: 'dialog-container'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
 
 }
