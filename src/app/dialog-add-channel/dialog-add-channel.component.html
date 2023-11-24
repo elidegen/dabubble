@@ -1,9 +1,9 @@
 <mat-card>
     <mat-card-header>
-        <div>
+        <div class="">
             <h2>Add Channel</h2>
             <button mat-icon-button>
-                <img src="assets/img/icons/close.svg" alt="">
+                <img src="assets/img/icons/close.svg" alt="tag">
             </button>
         </div>
     </mat-card-header>
@@ -11,11 +11,18 @@
         <p>Channels serve your team for communication. Ideally, they should be topic-specific, for example, #marketing.</p>
         <div>
             <h3>Channel-Name</h3>
-            <input type="text">
+            <div>
+                <input type="text" placeholder="e.g. Corporation Projects">
+            </div>
         </div>
         <div>
-            <h3></h3>
-            <input type="text">
+            <div>
+                <h3>Description</h3>
+                <span>(optional)</span>
+            </div>
+             <div>
+                <input type="text" placeholder="Your message">
+            </div>
         </div>
     </mat-card-content>
 </mat-card>
