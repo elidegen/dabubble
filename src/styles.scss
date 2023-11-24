@@ -19,10 +19,8 @@ body {
     background-color: white !important;
 }
 
-h1 {
-    margin: 0 !important;
-}
-
+h1,
+h2,
 h3 {
     margin: 0 !important;
 }
@@ -47,14 +45,19 @@ h3 {
     padding-left: 16px;
 }
 
-*{
+* {
     box-sizing: border-box;
 }
 
-mat-card{
-    border-radius: 32px !important;   
-    box-shadow: none !important; 
+mat-card,
+.mat-dialog-container {
+    border-radius: 32px !important;
+    box-shadow: none !important;
 }
+
+.mat-dialog-container {
+    border-radius: 20px !important;
+  }
 
 button {
     &:hover {
@@ -69,6 +72,7 @@ button {
 .p-0 {
     padding: 0 !important;
 }
+
 .color-purple2-text {
     color: #535AF1;
 }
