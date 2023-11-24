@@ -8,7 +8,7 @@
 
 <div class="login-container">
   <img class="start-logo" src="assets\img\icons\logo-home.svg">
-  <div class="top-span"><span>New at DABubble ?</span><span><a>Create Account</a></span></div>
+  <div class="top-span"><span class="padding-bottom">New at DABubble ?</span><span class="color-purple2-text cursor-pointer transform">Create Account</span></div>
   <div class="impressum-span"><a>Impress</a><a>Privacy Policy</a></div>
 
   <div class="login bg-white">
@@ -24,14 +24,18 @@
           <input matInput placeholder="E-mail" formControlName="email" required>
         </div>
         <mat-error>{{getErrorMessage()}}</mat-error>
-        <div class="input-container"><img src="assets\img\icons\lock.svg"><input matInput placeholder="password" formControlName="password" required></div>
-        <span class="margin-top color-purple2-text">Forgot password ?</span>
+        <div class="input-container"><img src="assets\img\icons\lock.svg"><input matInput placeholder="Password" formControlName="assword" required></div>
+        <span class="margin-top color-purple2-text cursor-pointer transform">Forgot password ?</span>
         <div class="or-container margin-top"><div class="bottom-line"></div><span class="or">Or</span><div class="bottom-line"></div></div>
-        <div class="input-container margin-top">
+        <div class="input-container margin-top align-center cursor-pointer google-button">
           <img src="assets\img\icons\google.svg">
-        <span class="color-purple2-text">Login with google</span>
+        <span class="color-purple2-text ">Login with google</span>
         </div>
-        <button type="submit">Submit</button>
+
+        <div class="submit-buttons margin-top">
+        <button class="login-button" type="submit">Login</button>
+        <button class="guest-button">Guest login</button>
+      </div>
       </form>
     </div>
   </div>

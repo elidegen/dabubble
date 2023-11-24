@@ -7,7 +7,7 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./dialog-view-profile.component.scss']
 })
 export class DialogViewProfileComponent {
-  editState: boolean = true;
+  editState: boolean = false;
   constructor(public dialogRef: MatDialogRef<DialogViewProfileComponent>) { }
 
 
