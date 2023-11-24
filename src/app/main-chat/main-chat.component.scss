@@ -17,6 +17,13 @@
     gap: 16px;
 }
 
+.group-members-button {
+    padding: 4px 16px !important;
+    border-radius: 24px;
+    height: fit-content;
+    width: fit-content;
+}
+
 .group-members {
     display: flex;
     align-items: center;

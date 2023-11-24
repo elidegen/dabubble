@@ -1,1 +1,32 @@
-<p>dialog-show-group-member works!</p>
+<mat-card>
+    <mat-card-content>
+        <header>
+            <h1>Member</h1>
+            <button mat-icon-button>
+                <mat-icon>close</mat-icon>
+            </button>
+        </header>
+
+        <div class="member">
+            <img class="mr-16" src="assets/img/avatars/avatar_male2.svg" alt="">
+            <h3>Frederik Beck</h3>
+        </div>
+
+        <div class="member">
+            <img class="mr-16" src="assets/img/avatars/avatar_male2.svg" alt="">
+            <h3>Maximilian Schneider</h3>
+        </div>
+
+        <div class="member">
+            <img class="mr-16" src="assets/img/avatars/avatar_male2.svg" alt="">
+            <h3>Johan Wolfgang von Goethe</h3>
+        </div>
+
+        <button mat-button class="add-member" (click)="openDialog()">
+            <div class="display-flex">
+                <img class="mr-16" src="assets/img/icons/add-person.svg" alt="" />
+                <h3>Add Members</h3>
+            </div>
+        </button>
+    </mat-card-content>
+</mat-card>

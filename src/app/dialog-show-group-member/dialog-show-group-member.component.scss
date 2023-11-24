@@ -1,0 +1,41 @@
+mat-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 32px;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.member {
+    display: flex;
+    align-items: center;
+
+    img {
+        height: 50px;
+    }
+}
+
+h3 {
+    font-size: 20px;
+}
+
+.add-member {
+    padding: 4px 16px !important;
+    border-radius: 24px;
+    height: fit-content;
+    width: fit-content;
+
+    .display-flex {
+        display: flex;
+        align-items: center;
+
+        img {
+            height: 30px;
+        }
+    }
+}

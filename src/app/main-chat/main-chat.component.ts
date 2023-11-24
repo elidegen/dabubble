@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogEditChannelComponent } from '../dialog-edit-channel/dialog-edit-channel.component';
 import { DialogAddToGroupComponent } from '../dialog-add-to-group/dialog-add-to-group.component';
+import { DialogShowGroupMemberComponent } from '../dialog-show-group-member/dialog-show-group-member.component';
 
 @Component({
   selector: 'app-main-chat',
@@ -19,12 +20,14 @@ export class MainChatComponent {
   }
 
   openDialog() {
-    const dialogRef = this.dialog.open(DialogAddToGroupComponent, {
+    this.dialog.open(DialogAddToGroupComponent, {
       panelClass: 'dialog-container'
     });
+  }
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+  openMemberDialog() {
+    this.dialog.open(DialogShowGroupMemberComponent, {
+      panelClass: 'dialog-container'
     });
   }
 

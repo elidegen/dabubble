@@ -10,13 +10,18 @@
           </div>
         </button>
         <div class="group-members-container">
-          <div class="group-members">
-            <img src="assets/img/avatars/avatar_male2.svg" alt="" />
-            <img src="assets/img/avatars/avatar_male2.svg" alt="" />
-            <img src="assets/img/avatars/avatar_male2.svg" alt="" />
-          </div>
 
-          <h3 class="member-count">5</h3>
+          <button mat-button class="group-members-button" (click)="openMemberDialog()">
+            <div class="group-members-container">
+              <div class="group-members">
+                <img src="assets/img/avatars/avatar_male2.svg" alt="" />
+                <img src="assets/img/avatars/avatar_male2.svg" alt="" />
+                <img src="assets/img/avatars/avatar_male2.svg" alt="" />
+              </div>
+
+              <h3 class="member-count">5</h3>
+            </div>
+          </button>
 
           <button mat-icon-button class="add-user" (click)="openDialog()">
             <img src="assets/img/icons/add-person.svg" alt="" />
@@ -56,7 +61,7 @@
               </div>
             </div>
           </div>
-          
+
           <div class="reaction">
             <button mat-icon-button>
               <img src="assets/img/emojis/checkGreen.svg" alt="">
