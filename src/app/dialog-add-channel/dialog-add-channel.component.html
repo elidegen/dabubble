@@ -1,28 +1,30 @@
-<mat-card>
+<mat-card class="pr-pl-8">
     <mat-card-header class="w100">
         <div class="w100 dialog-header">
-            <h2>Add Channel</h2>
-            <button mat-icon-button>
+            <h2>Create a channel</h2>
+            <button mat-icon-button class="close">
                 <img src="assets/img/icons/close.svg" alt="tag">
             </button>
         </div>
     </mat-card-header>
     <mat-card-content>
         <p>Channels serve your team for communication. Ideally, they should be topic-specific, for example, #marketing.</p>
-        <div class="channel-name">
-            <h3>Channel-Name</h3>
-            <div>
-                <input type="text" placeholder="e.g. Corporation Projects">
-            </div>
+        <div class="channel-name w100">
+            <h3>Channel name</h3>
+            <input type="text" placeholder="e.g. Corporation Projects">
         </div>
-        <div>
-            <div>
+        <div class="w100 description-container">
+            <div class="description">
                 <h3>Description</h3>
                 <span>(optional)</span>
             </div>
-             <div>
                 <input type="text" placeholder="Your message">
-            </div>
+        </div>
+
+        <div class="create-container">
+            <button mat-button class="main-button primary">
+                Create
+            </button>
         </div>
     </mat-card-content>
 </mat-card>
