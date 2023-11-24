@@ -132,12 +132,12 @@ form {
     color: #A0A0A0;
 }
 
-.send-mail-button {
-    background-color: #686868;
-    border-radius: 25px;
-    padding-left: 10px;
-    padding-right: 10px;
-}
+// .send-mail-button {
+//     background-color: #686868;
+//     border-radius: 25px;
+//     padding-left: 10px;
+//     padding-right: 10px;
+// }
 
 .input-container {
     display: flex;
@@ -175,23 +175,23 @@ input{
    
 }
 
-.submit-buttons {
-    gap: 30px;
-    display: flex;
-    width: 100%;
-    justify-content: center;
+// .submit-buttons {
+//     gap: 30px;
+//     display: flex;
+//     width: 100%;
+//     justify-content: center;
    
-}
+// }
 
 
-button {
-    height: 50px;
-    border-radius: 25px;
-    border: none;
-    font-size: 18px;
-    cursor: pointer;
-    background-color: white;
-}
+// button {
+//     height: 50px;
+//     border-radius: 25px;
+//     border: none;
+//     font-size: 18px;
+//     cursor: pointer;
+//     background-color: white;
+// }
 
 .login-button {
     background-color: #545BEC;
@@ -255,6 +255,23 @@ transition: background-color 0.2s ease, color 0.2s;
 .position-relative-right{
     position: absolute;
     right: 25px;
+}
+
+.choose-profile-pic {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    align-items: flex-start;
+ 
+}
+
+.picture-container {
+    display: flex;
+    gap: 10px;
+}
+
+.upload-picture {
+    gap: 20px;
 }
 
 @keyframes moveToLeftCorner {

@@ -1,8 +1,8 @@
 input {
     background-image: url('../../assets/img/icons/tag.svg');
     background-repeat: no-repeat;
-    background-position: 7%;
-    padding-left: 50px;
+    background-position: 4%;
+    padding-left: 60px;
 }
 
 mat-card {
@@ -17,4 +17,39 @@ mat-card {
 
 .channel-name {
     display: flex;
+}
+.channel-name {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.description-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.description {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.create-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 32px;
+    margin-bottom: 48px !important;
+}
+
+
+.pr-pl-8 {
+    padding: 0 8px;
+}
+
+p {
+    margin-top: 8px !important;
+    margin-bottom: 16px !important;
 }
