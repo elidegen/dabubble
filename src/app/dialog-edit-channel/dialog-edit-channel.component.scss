@@ -78,3 +78,8 @@ textarea {
 *{
     transition: all 125ms;
 }
+
+.button-position {
+    display: flex;
+    justify-content: flex-end;
+}
