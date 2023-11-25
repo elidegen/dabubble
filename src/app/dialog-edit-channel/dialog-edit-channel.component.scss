@@ -1,6 +1,10 @@
 mat-card {
-    width: 600px;
+    width: 700px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
 }
+
 header {
     display: flex;
     justify-content: space-between;
@@ -10,4 +14,63 @@ header {
     display: flex;
     align-items: center;
     gap: 16px;
+}
+
+.channel-info {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    border-radius: 32px;
+
+    .top-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        span {
+            font-size: 16px;
+            color: var(--purple3);
+
+            &:hover {
+                cursor: pointer;
+                font-weight: 500;
+            }
+        }
+    }
+
+    h3 {
+        display: flex;
+        align-items: center;
+    }
+
+    .edit-name {
+        background: url('../../assets/img/icons/tag.svg') no-repeat 3%;
+        padding-left: 50px;
+    }
+}
+
+.view-state {
+    border: 1px solid var(--border);
+    padding: 16px;
+}
+
+.creator {
+    font-size: 24px;
+    color: var(--purple3);
+}
+
+textarea {
+    border-radius: 32px;
+    padding: 16px;
+    outline: none;
+    border: 1px solid var(--border);
+    resize: none;
+
+    &:hover {
+        border: 1px solid var(--purple2);
+    }
+
+    &:focus {
+        border: 1px solid var(--purple1);
+    }
 }
