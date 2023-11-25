@@ -20,9 +20,11 @@
               </svg>Channels</mat-panel-title>
           </mat-expansion-panel-header>
           <div class="channel-container">
-            <div class="channel-button-container">
-              <button mat-button># Entwicklerteam</button>
+
+            <div class="channel-button-container" *ngFor="let channel of allChannels;">
+              <button (click)="renderChat(channel)" mat-button># {{channel.name}}</button>
             </div>
+
             <button (click)="openDialog()" class="add_channel_button">
               <div class="add_channel_button-container">
                 <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 -960 960 960" width="16">

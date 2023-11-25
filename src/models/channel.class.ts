@@ -2,8 +2,9 @@ export class Channel {
     name: string | undefined;
     description: string | undefined;
     creator: string | undefined
-    members: [] | undefined;
-    messages: [] | undefined;
+    members: [];
+    messages: [];
+    id: string | undefined;
 
     constructor(obj?: any) {
         this.name = obj ? obj.name : '';
@@ -15,11 +16,11 @@ export class Channel {
 
     public toJSON() {
         return {
-            name:  this.name,
+            name: this.name,
             description: this.description,
             creator: this.creator,
-            members:  this.members,
-            messages:  this.messages,
+            members: this.members,
+            messages: this.messages,
         }
     }
 }
