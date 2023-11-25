@@ -274,6 +274,11 @@ transition: background-color 0.2s ease, color 0.2s;
     text-align: left!important;;
 }
 
+.userPic {
+    width: 150px;
+    height: 150px;
+}
+
 .picture-container {
     display: flex;
     justify-content: space-between;
