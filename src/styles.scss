@@ -116,11 +116,6 @@ a {
     border-radius: 32px !important;
 }
 
-.br-32 {
-
-    border-radius: 32px !important;
-    box-shadow: none !important;
-}
 
 a {
     cursor: pointer;
@@ -151,4 +146,15 @@ a {
     &:hover {
         background-color: #444df2 !important;
     }
+}
+
+:root {
+    --purple1: #444df2;
+    --primary: #ECEEFE;
+    --border: #ADB0D9;
+    --purple2: #797EF3;
+    --purple3: #535AF1;
+    --textGray: #686868;
+
+
 }
