@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-profile.component';
+import { UserService } from '../user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -10,7 +12,7 @@ import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-p
 export class HomeComponent {
   showFiller: any;
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog, public userService: UserService, public router: Router) { }
 
   openProfileDialog(): void {
     const dialogRef = this.dialog.open(DialogViewProfileComponent, {
@@ -22,6 +24,11 @@ export class HomeComponent {
         console.log('The dialog was closed');
       // this.animal = result;
     });
+  }
+
+  logOutUser() {
+    this.userService.signOutUser();
+    this.router.navigate(['']);
   }
 
 }
