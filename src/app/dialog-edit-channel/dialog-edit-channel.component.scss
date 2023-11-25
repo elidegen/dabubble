@@ -74,3 +74,12 @@ textarea {
         border: 1px solid var(--purple1);
     }
 }
+
+*{
+    transition: all 125ms;
+}
+
+.button-position {
+    display: flex;
+    justify-content: flex-end;
+}

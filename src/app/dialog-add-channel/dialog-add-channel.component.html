@@ -8,21 +8,22 @@
         </div>
     </mat-card-header>
     <mat-card-content>
-        <p>Channels serve your team for communication. Ideally, they should be topic-specific, for example, #marketing.</p>
+        <p>Channels serve your team for communication. Ideally, they should be topic-specific, for example, #marketing.
+        </p>
         <div class="channel-name w100">
             <h3>Channel name</h3>
-            <input type="text" placeholder="e.g. Corporation Projects">
+            <input [(ngModel)]="channel.name" type="text" placeholder="e.g. Corporation Projects">
         </div>
         <div class="w100 description-container">
             <div class="description">
                 <h3>Description</h3>
                 <span>(optional)</span>
             </div>
-                <input type="text" placeholder="Your message">
+            <input [(ngModel)]="channel.description" type="text" placeholder="Your message">
         </div>
 
         <div class="create-container">
-            <button mat-button class="main-button primary">
+            <button mat-button class="main-button primary" (click)="createChannel()">
                 Create
             </button>
         </div>

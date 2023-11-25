@@ -17,6 +17,13 @@ export class LoginScreenComponent implements OnInit {
   email: string = "";
   password: string = "";
   newUser: UserData;
+  animationIsFinished = false;
+  picSrc = "profile.svg";
+  switch_expression: any = "login";
+  profileImages: any = ["1", "2", "3", "4", "5", "6"];
+  email: string = "";
+  password: string = "";
+  newUser: UserData;
 
 
 
@@ -30,35 +37,46 @@ export class LoginScreenComponent implements OnInit {
       id: ""
     };
   }
-
-
-
-  login = new FormGroup({
-    loginemail: new FormControl('', [Validators.required, Validators.email]),
-    loginpassword: new FormControl('', [Validators.required]),
-  });
-
-
-  addUser = new FormGroup({
-    newName: new FormControl('', [Validators.required]),
-    newEmail: new FormControl('', [Validators.required, Validators.email]),
-    newPassword: new FormControl('', [Validators.required]),
-    disableSelect: new FormControl(false),
-  });
-
-
-  get newName() {
-    return this.addUser.get('newName') as FormControl;
+  constructor(public userService: UserService, public router: Router) {
+    this.newUser = {
+      name: "",
+      email: "",
+      password: "",
+      picture: "",
+      id: ""
+    };
   }
-  get newEmail() {
-    return this.addUser.get('newEmail') as FormControl;
-  }
-  get newPassword() {
-    return this.addUser.get('newPassword') as FormControl;
-  }
-  get loginemail() {
-    return this.login.get('loginemail') as FormControl;
-  }
+
+
+
+login = new FormGroup({
+  loginemail: new FormControl('', [Validators.required, Validators.email]),
+  loginpassword: new FormControl('', [Validators.required] ),
+});
+
+
+addUser = new FormGroup({
+  newName: new FormControl('', [Validators.required] ),
+  newEmail:new FormControl('', [Validators.required, Validators.email]),
+  newPassword: new FormControl('', [Validators.required] ),
+  disableSelect : new FormControl(false),
+});
+
+
+get newName() {
+  return  this.addUser.get('newName') as FormControl;
+}
+
+
+get newEmail() {
+  return  this.addUser.get('newEmail') as FormControl;
+}
+get newPassword() {
+  return  this.addUser.get('newPassword') as FormControl;
+}
+get loginemail() {
+  return  this.login.get('loginemail') as FormControl;
+}
 
   get loginpassword() {
     return this.login.get('loginpassword') as FormControl;
@@ -69,7 +87,7 @@ export class LoginScreenComponent implements OnInit {
   }
 
 
-  getErrorMessage() {
+  getErrorMessage(){
     if (this.loginemail?.hasError('email')) {
       return 'Not a valid email';
     }
@@ -84,17 +102,16 @@ export class LoginScreenComponent implements OnInit {
   }
 
 
-
+  
 
   ngOnInit() {
-
+   
     this.hideContentAfterAnimation();
-
   }
 
-  changePicSrc(pic: string) {
-    this.picSrc = "character_" + pic + ".svg";
-
+  changePicSrc(pic:string) {
+    this.picSrc = "character_" + pic +".svg";
+    
   }
 
   createUser() {
@@ -113,24 +130,16 @@ export class LoginScreenComponent implements OnInit {
     this.changeSwitchCase('avatar');
   }
 
-  async uploadUser() {
-    this.newUser.picture = this.picSrc;
-    this.userService.addUser(this.newUser as UserData);
-    this.userService.currentEmail = this.newUser.email;
-    this.userService.currentPassword = this.newUser.password;
-    await this.userService.createUser();
-    this.userService.signInUser(this.userService.currentEmail,this.userService.currentPassword );
-  }
-
-  async loginUser() {
-    console.log("user wird eingeloggt mit folgendem namen und passwort", this.email, this.password)
-    this.userService.signInUser(this.email, this.password);
+  uploadUser() {
+      this.newUser.picture = this.picSrc;
+  this.userService.addUser(this.newUser as UserData);
+this.router.navigate(['home']);
   }
 
 
 
 
-
+ 
   hideContentAfterAnimation() {
     setTimeout(() => {
       this.animationIsFinished = true;
@@ -142,12 +151,12 @@ export class LoginScreenComponent implements OnInit {
   }
 
 
-  changeSwitchCase(newSwitchCase: string) {
-    this.switch_expression = newSwitchCase;
-  }
+     changeSwitchCase(newSwitchCase:string) {
+      this.switch_expression = newSwitchCase;
+     }
 
 }
-
+ 
 
 
 

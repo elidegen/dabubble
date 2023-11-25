@@ -6,47 +6,36 @@ mat-card {
 .headline {
     display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: space-between;
     margin-bottom: 16px;
-    // button {
-    //     height: 40px !important;
-    //     width: 40px !important;
-    // }
+    button {
+        height: 38px !important;
+        width: 38px !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        img {
+            height: 18px;
+            width: 18px;
+        }
+    }
 }
 
 mat-expansion-panel {
     box-shadow: none !important;
 }
 
-.spoke {
-    height: 16px;
-    margin-right: 8px;
-    margin-bottom: 1px;
-}
 
-.add_channel_button {
-    display: flex;
-    align-items: center;
-    img {
-        margin-bottom: 2px;
-        margin-right: 8px;
-    }
-}
+
+
 
 .channel-container {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    gap: 16px;
 }
 
-.direct-messages-headline {
-    display: flex;
-    align-items: center;
-    img {
-        margin-bottom: 2px;
-        margin-right: 8px;
-    }
-}
 
 .contact-container {
     display: flex;
@@ -85,4 +74,65 @@ mat-expansion-panel {
         display: none;
     }
 }
+
+mat-expansion-panel-header {
+    &:hover {
+      background-color: transparent !important;
+  
+      mat-panel-title {
+        color: var(--purple3);
+  
+        svg path {
+            fill: var(--purple3); // Ändern Sie dies entsprechend Ihren Anforderungen
+          }
+      }
+    }
+  
+    mat-panel-title {
+      margin-top: 4px;
+      font-weight: 700 !important;
+    }
+    svg {
+        height: 16px;
+        width: 16px;
+        margin-right: 8px;
+        margin-bottom: 1px;
+    }
+  }
+
+  .channel-button-container {
+    button {
+        border-radius: 32px;
+        &:hover {
+            color: var(--purple3);
+        }
+    }
+  }
+
+  .add_channel_button-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    img {
+        margin-bottom: 2px;
+        margin-right: 8px;
+    }
+}
+
+.add_channel_button {
+    background-color: white;
+    outline: none;
+    border: 0;
+    font-weight: 700;
+    cursor: pointer;
+    
+    &:hover {
+        background-color: transparent !important;
+        color: var(--purple3);
+        svg path {
+            fill: var(--purple3);
+        }
+    }
+}
+
 

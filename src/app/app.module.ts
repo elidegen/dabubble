@@ -38,6 +38,8 @@ import { DialogViewProfileComponent } from './dialog-view-profile/dialog-view-pr
 import { DialogAddChannelComponent } from './dialog-add-channel/dialog-add-channel.component';
 import { DialogAddToGroupComponent } from './dialog-add-to-group/dialog-add-to-group.component';
 import { DialogShowGroupMemberComponent } from './dialog-show-group-member/dialog-show-group-member.component';
+import { FormsModule } from '@angular/forms';
+
 
 
 
@@ -79,6 +81,7 @@ import { DialogShowGroupMemberComponent } from './dialog-show-group-member/dialo
     MatDividerModule,
     MatTooltipModule,
     MatSnackBarModule,
+    FormsModule,
     MatSliderModule,
     MatSelectModule,
     MatExpansionModule,

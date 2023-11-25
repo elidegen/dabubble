@@ -1,18 +1,14 @@
 import { Injectable } from '@angular/core';
 import { UserData } from './interfaces/user-interface';
 import { inject } from '@angular/core';
-import { Firestore, collection, doc, collectionData, onSnapshot,addDoc,deleteDoc,updateDoc} from '@angular/fire/firestore';
-import { getAuth, createUserWithEmailAndPassword,signOut,GoogleAuthProvider,signInWithPopup,signInWithEmailAndPassword, } from "firebase/auth";
+import { Firestore, collection, doc, collectionData, onSnapshot, addDoc, deleteDoc, updateDoc } from '@angular/fire/firestore';
 import { Timestamp } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
 
-
 @Injectable({
   providedIn: 'root'
 })
-
-
 
 export class UserService {
 
@@ -25,18 +21,15 @@ export class UserService {
   provider = new GoogleAuthProvider();
   signInSuccess = false;
  unsubList;
+
   ngOnInit() {
-   
   }
 
   constructor(public router: Router) {
     this.unsubList = this.subUserList();
     // this.unsubSingle = onSnapshot(this.getSingleDocRef("users", "adsfasdf"), (element) => {
     // });
-
-    // this.unsubSingle();
-   
-
+    // this.unsubSingle()
    
   }
 
@@ -89,39 +82,37 @@ signOutUser() {
 }
 
 
-  setUserData(obj:any,) {
-     // Check if 'birthdate' is a Timestamp and convert to Date object
+  
+
+  setUserData(obj: any,) {
+    // Check if 'birthdate' is a Timestamp and convert to Date object
     return {
-      name:  obj.name  || "",
+      name: obj.name || "",
       email: obj.email || "",
       password: obj.password || "",
       id: obj.id,
       picture: obj.picture || "",
+    }
   }
-
-}
 
   async addUser(item: UserData) {
-    await addDoc(this.getUsersRef(),item).catch(
-      (err) => {console.log(err)}
-    ).then (
-      (docRef)=> {console.log()
-      this.updateUserId(item, docRef!.id);
+    await addDoc(this.getUsersRef(), item).catch(
+      (err) => { console.log(err) }
+    ).then(
+      (docRef) => {
+        console.log()
+        this.updateUserId(item, docRef!.id);
         console.log("New user with id", docRef!.id)
-    
-    }
-      
+      }
     )
-   
   }
-
 
   subUserList() {
     return onSnapshot(this.getUsersRef(), (list) => {
      this.users = [];
        list.forEach(element => {
          this.users.push(this.setUserData(element.data()));
-         console.log("Alle existierenden User:",element.data());
+         console.log("Available users",element.data());
        })
      })
    }
@@ -131,17 +122,14 @@ signOutUser() {
     async deleteCustomer(colId: "users", docId: string) {
     await  deleteDoc(this.getSingleDocRef(colId, docId)).catch (
 
-      (err) => {console.log(err);}
+      (err) => { console.log(err); }
     )
-
-   }
+  }
 
 async updateUserId(user: UserData, newId: string) {
   user.id = newId;
   await this.updateUser(user);
 }
-
-
    async updateUser(user: UserData) {
       let docRef = this.getSingleDocRef('users',user.id);
       await updateDoc(docRef, this.getUpdateData(user)).catch(
@@ -153,7 +141,7 @@ async updateUserId(user: UserData, newId: string) {
     
   }
 
-  getUpdateData(user:UserData) {
+  getUpdateData(user: UserData) {
     return {
       name: user.name,
       email: user.email,
@@ -161,10 +149,7 @@ async updateUserId(user: UserData, newId: string) {
       id: user.id,
       picture: user.picture,
   }
-} 
 
-findUserWithEmail(email: string) {
-return this.users.find(user => user.email === email);
 }
   
   
@@ -184,15 +169,12 @@ return this.users.find(user => user.email === email);
   //     return 'Trash'
   //   }
   // }
-  
-
-
 
   /**This is for getting the collection "customers" from firebase */
   getUsersRef() {
     return collection(this.firestore, 'users');
-
   }
+
   /**Here i get the Infos about a single customer, 
   
   * colId = the id from the collection, in this case probably "customers,"
@@ -201,5 +183,10 @@ return this.users.find(user => user.email === email);
   getSingleDocRef(colId: string, docId: string) {
     return doc(collection(this.firestore, colId), docId);
   }
+
+  findUserWithEmail(email: string) {
+    return this.users.find(user => user.email === email);
+  }
+
 
 }
