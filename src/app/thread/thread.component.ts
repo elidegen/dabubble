@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-thread',
@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./thread.component.scss']
 })
 export class ThreadComponent {
+  @Output() closeThread: EventEmitter<void> = new EventEmitter<void>();
 
+  onCloseClick() {
+    this.closeThread.emit();
+  }
 }

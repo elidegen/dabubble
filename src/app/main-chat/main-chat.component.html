@@ -176,7 +176,7 @@
 
 
   <mat-drawer #thread mode="side" position="end">
-    <app-thread></app-thread>
+    <app-thread (closeThread)="onCloseThread()"></app-thread>
   </mat-drawer>
 
 </mat-drawer-container>

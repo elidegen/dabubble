@@ -1,5 +1,8 @@
 mat-card {
-    height: calc(100vh - 112px);
+    height: calc(100vh - 110px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 mat-card-header {

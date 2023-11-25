@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogEditChannelComponent } from '../dialog-edit-channel/dialog-edit-channel.component';
 import { DialogAddToGroupComponent } from '../dialog-add-to-group/dialog-add-to-group.component';
 import { DialogShowGroupMemberComponent } from '../dialog-show-group-member/dialog-show-group-member.component';
+import { MatDrawer } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-main-chat',
@@ -29,6 +30,12 @@ export class MainChatComponent {
     this.dialog.open(DialogShowGroupMemberComponent, {
       panelClass: 'dialog-container'
     });
+  }
+
+  @ViewChild('thread') threadDrawer!: MatDrawer;
+
+  onCloseThread() {
+    this.threadDrawer.close();
   }
 
 }
