@@ -114,10 +114,17 @@ get loginemail() {
     this.changeSwitchCase('avatar');
   }
 
-  uploadUser() {
-      this.newUser.picture = this.picSrc;
-  this.userService.addUser(this.newUser as UserData);
-this.router.navigate(['home']);
+  async uploadUser() {
+    this.newUser.picture = this.picSrc;
+    this.userService.addUser(this.newUser as UserData);
+    this.userService.currentEmail = this.newUser.email;
+    this.userService.currentPassword = this.newUser.password;
+    await this.userService.createUser();
+  }
+
+  async loginUser() {
+    console.log("user wird eingeloggt mit folgendem namen und passwort", this.email, this.password)
+   await this.userService.signInUser(this.email, this.password);
   }
 
 

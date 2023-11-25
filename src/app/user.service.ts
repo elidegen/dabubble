@@ -1,12 +1,11 @@
-import { Inject } from '@angular/core';
-import { UserData } from './interfaces/user-interface';
 import { Injectable } from '@angular/core';
-import { Firestore, collection, doc, collectionData, onSnapshot, addDoc, deleteDoc, updateDoc } from '@angular/fire/firestore';
+import { UserData } from './interfaces/user-interface';
+import { inject } from '@angular/core';
+import { Firestore, collection, doc, collectionData, onSnapshot,addDoc,deleteDoc,updateDoc} from '@angular/fire/firestore';
+import { getAuth, createUserWithEmailAndPassword,signOut,GoogleAuthProvider,signInWithPopup,signInWithEmailAndPassword, User, } from "firebase/auth";
 import { Timestamp } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { getAuth, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, } from "firebase/auth";
-
 
 @Injectable({
   providedIn: 'root'
@@ -14,74 +13,107 @@ import { getAuth, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, s
 
 export class UserService {
 
-  firestore: Firestore = Inject(Firestore);
+  firestore: Firestore = inject(Firestore);
   users: UserData[] = [];
   activeUsers: UserData[] = [];
-  currentEmail: string = "";
+  currentUser = {
+    name: "",
+    email: "",
+    password: "",
+    id: "",
+    picture:"",
+  }
+  currentEmail: string ="";
   currentPassword: string = "";
   private auth = getAuth();
   provider = new GoogleAuthProvider();
   signInSuccess = false;
-  unsubList;
-
+ unsubList;
   ngOnInit() {
+
+    this.currentUser = {
+      name: "",
+      email: "",
+      password: "",
+      id: "",
+      picture:"",
+    }
   }
 
   constructor(public router: Router) {
     this.unsubList = this.subUserList();
     // this.unsubSingle = onSnapshot(this.getSingleDocRef("users", "adsfasdf"), (element) => {
     // });
-    // this.unsubSingle()
+    // this.unsubSingle();
+   
 
+   
   }
 
   ngOnDestroy() {
     this.unsubList();
   }
 
-  createUser() {
-    createUserWithEmailAndPassword(this.auth, this.currentEmail, this.currentPassword)
-      .then((userCredential) => {
-        console.log(this.currentEmail, this.currentPassword);
-        const user = userCredential.user;
-        console.log("created User:", user)
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(`Error Code: ${errorCode}`);
-        console.log(`Error Message: ${errorMessage}`);
-        // ..
-      });
-
-  }
-
-  signInUser(email: string, password: string) {
-    signInWithEmailAndPassword(this.auth, email, password)
-      .then((userCredential) => {
-        console.log('Benutzer angemeldet:', userCredential.user);
-        this.signInSuccess = true;
-        let activeUser = this.findUserWithEmail(email);
-        this.activeUsers.push(activeUser as UserData);
-        console.log("Diese Nutzer sind Eingeloggt", this.activeUsers);
-        if (this.signInSuccess) {
-          this.router.navigate(['home']);
-        }
-      })
-      .catch((error) => {
-        console.error('Anmeldefehler:', error);
-      });
-  }
 
 
-  signOutUser() {
-    signOut(this.auth).then(() => {
-      console.log('Benutzer erfolgreich abgemeldet');
-      this.activeUsers = [];
-    }).catch((error) => {
-      console.error('Fehler beim Abmelden:', error);
+createUser() {
+  createUserWithEmailAndPassword(this.auth, this.currentEmail, this.currentPassword)
+  .then((userCredential) => {
+    console.log(this.currentEmail,this.currentPassword);
+    const user = userCredential.user;
+    console.log("created User:", user)
+    this.signInUser(this.currentEmail,this.currentPassword);
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.log(`Error Code: ${errorCode}`);
+    console.log(`Error Message: ${errorMessage}`);
+    // ..
+  });
+
+}
+
+signInUser(email: string, password: string) {
+  signInWithEmailAndPassword(this.auth, email, password)
+    .then((userCredential) => {
+      console.log('Benutzer angemeldet:', userCredential.user);
+      this.signInSuccess = true;
+       let activeUser= this.findUserWithEmail(email);
+      this.currentUser = activeUser as UserData;
+       console.log("Diese Nutzer sind Eingeloggt",this.activeUsers);
+       if (this.signInSuccess) {
+        this.router.navigate(['home']);
+      }
+    })
+    .catch((error) => {
+      console.error('Anmeldefehler:', error);
     });
-  }
+}
+
+
+signOutUser() {
+  signOut(this.auth).then(() => {
+    console.log('Benutzer erfolgreich abgemeldet');
+    this.activeUsers = [];
+   
+  }).catch((error) => {
+    console.error('Fehler beim Abmelden:', error);
+  });
+}
+
+
+
+
+
+
+findUserWithEmail(email: string): UserData | undefined {
+  return this.users.find(user => user.email === email);
+}
+
+findUserWithId(id: string): UserData | undefined {
+  return this.users.find(user => user.email === id);
+}
 
 
 
@@ -111,36 +143,36 @@ export class UserService {
 
   subUserList() {
     return onSnapshot(this.getUsersRef(), (list) => {
-      this.users = [];
-      list.forEach(element => {
-        this.users.push(this.setUserData(element.data()));
-        console.log("Available users", element.data());
-      })
-    })
-  }
+     this.users = [];
+       list.forEach(element => {
+         this.users.push(this.setUserData(element.data()));
+         console.log("Available users",element.data());
+       })
+     })
+   }
 
 
-
-  async deleteCustomer(colId: "users", docId: string) {
-    await deleteDoc(this.getSingleDocRef(colId, docId)).catch(
+ 
+    async deleteCustomer(colId: "users", docId: string) {
+    await  deleteDoc(this.getSingleDocRef(colId, docId)).catch (
 
       (err) => { console.log(err); }
     )
   }
 
-  async updateUserId(user: UserData, newId: string) {
-    user.id = newId;
-    await this.updateUser(user);
-  }
-  async updateUser(user: UserData) {
-    let docRef = this.getSingleDocRef('users', user.id);
-    await updateDoc(docRef, this.getUpdateData(user)).catch(
-
-      (error) => { console.log(error); }
-
-    );
-
-
+async updateUserId(user: UserData, newId: string) {
+  user.id = newId;
+  await this.updateUser(user);
+}
+   async updateUser(user: UserData) {
+      let docRef = this.getSingleDocRef('users',user.id);
+      await updateDoc(docRef, this.getUpdateData(user)).catch(
+    
+        (error) => { console.log(error); }
+        
+      );
+     
+    
   }
 
   getUpdateData(user: UserData) {
@@ -150,12 +182,12 @@ export class UserService {
       password: user.password,
       id: user.id,
       picture: user.picture,
-    }
-
   }
 
-
-
+}
+  
+  
+  
   // getCleanJson(note: Note) {
   //    return {
   //     type: note.type,
@@ -186,9 +218,8 @@ export class UserService {
     return doc(collection(this.firestore, colId), docId);
   }
 
-  findUserWithEmail(email: string) {
-    return this.users.find(user => user.email === email);
+timestampToDate(timestamp:Timestamp): Date {
+    return timestamp.toDate();
   }
-
-
 }
+
