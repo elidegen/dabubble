@@ -17,15 +17,14 @@
     <div class="form-container">
       <h1 class="color-purple2-text padding-bottom">Login</h1>
       <p>We recommend using the email address that you use at work.</p>
-
       <form [formGroup]="login" (ngSubmit)="onSubmit()" novalidate>
         <div class="input-container margin-top">
           <img src="assets\img\icons\mail.svg">
-          <input matInput placeholder="E-mail" formControlName="email" required>
+          <input [(ngModel)]="email"matInput placeholder="E-mail" formControlName="email" required>
         </div>
         <mat-error>{{getErrorMessage()}}</mat-error>
-        <div class="input-container"><img src="assets\img\icons\lock.svg"><input matInput placeholder="Password"
-            formControlName="assword" required></div>
+        <div class="input-container"><img src="assets\img\icons\lock.svg"><input [(ngModel)]="password" matInput placeholder="Password"
+            formControlName="password" required></div>
         <span (click)="changeSwitchCase('resetPassword')"
           class="margin-top color-purple2-text cursor-pointer transform">Forgot password ?</span>
         <div class="or-container margin-top">

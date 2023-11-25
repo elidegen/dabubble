@@ -10,6 +10,8 @@ export class LoginScreenComponent implements OnInit {
 animationIsFinished = false;
 switch_expression: any = "login";
 profileImages: any = ["1","2","3","4","5","6"];
+email: string = "";
+password: string = "";
 
 
 
