@@ -6,12 +6,19 @@ mat-card {
 .headline {
     display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: space-between;
     margin-bottom: 16px;
-    // button {
-    //     height: 40px !important;
-    //     width: 40px !important;
-    // }
+    button {
+        height: 38px !important;
+        width: 38px !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        img {
+            height: 18px;
+            width: 18px;
+        }
+    }
 }
 
 mat-expansion-panel {
@@ -37,6 +44,7 @@ mat-expansion-panel {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    gap: 16px;
 }
 
 .direct-messages-headline {
@@ -85,4 +93,22 @@ mat-expansion-panel {
         display: none;
     }
 }
+
+mat-expansion-panel-header {
+    &:hover {
+        background-color: transparent !important;
+    }
+    mat-panel-title {
+        margin-top: 4px;
+        &:hover {
+            color: var(--purple1);
+        }
+        img {
+            &:hover {
+                fill: var(--purple1);
+            }
+        }
+    }
+}
+
 

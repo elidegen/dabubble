@@ -2,7 +2,7 @@
   <mat-card-content>
     <div class="headline">
       <img class="workspace-logo" src="assets/img/icons/workspace-logo.svg" alt="workspace-logo" />
-      <h1>Code learning</h1>
+      <h2>Code learning</h2>
       <button mat-icon-button>
         <img class="edit_square" src="assets/img/icons/edit_square.svg" alt="edit" />
       </button>
@@ -12,13 +12,14 @@
       <mat-accordion>
         <mat-expansion-panel
           (opened)="panelOpenState = true"
-          (closed)="panelOpenState = false"
-        >
+          (closed)="panelOpenState = false" [togglePosition]="'before'">
           <mat-expansion-panel-header>
             <mat-panel-title><img class="spoke" src="assets/img/icons/spoke.svg" alt="spoke"> Channels</mat-panel-title>
           </mat-expansion-panel-header>
           <div class="channel-container">
-            <button mat-button>#entwicklerteam</button>
+            <div class="channel-button-container">
+              <button mat-button>#entwicklerteam</button>
+            </div>
             <button mat-button>
               <div class="add_channel_button">
                 <img src="assets/img/icons/add_circle.svg" alt="add_circle">
@@ -34,8 +35,7 @@
       <mat-accordion>
         <mat-expansion-panel
           (opened)="panelOpenState = true"
-          (closed)="panelOpenState = false"
-        >
+          (closed)="panelOpenState = false" [togglePosition]="'before'">
           <mat-expansion-panel-header>
             <mat-panel-title>
               <div class="direct-messages-headline"> 
