@@ -1,5 +1,5 @@
 <mat-card [ngSwitch]="editState">
-    <mat-card-content *ngSwitchCase="true">
+    <mat-card-content *ngSwitchCase="false">
         <div class="header">
             <h1>Profile</h1>
             <button mat-icon-button (click)="dialogRef.close()">
@@ -12,7 +12,7 @@
 
         <div class="name">
             <h1>Frederik Beck</h1>
-            <span (click)="editState = false">Edit</span>
+            <span (click)="editState = true">Edit</span>
         </div>
 
         <div class="status">
@@ -21,8 +21,8 @@
         </div>
 
         <div class="email-container">
-            <div class="mailIcon">
-                <mat-icon>mail</mat-icon>
+            <div class="mail-icon mr-16">
+                <img src="assets/img/icons/mail.svg" alt="">
             </div>
             <div class="email">
                 <h2>E-Mail Adress</h2>
@@ -31,7 +31,7 @@
         </div>
     </mat-card-content>
 
-    <mat-card-content *ngSwitchCase="false">
+    <mat-card-content *ngSwitchCase="true">
         <div class="header">
             <h1>Edit your profile</h1>
             <button mat-icon-button (click)="dialogRef.close()">
@@ -58,7 +58,7 @@
         </form>
 
         <div class="buttons w100">
-            <button mat-button class="main-button mr-16">
+            <button mat-button class="main-button mr-16" (click)="editState = false">
                 Cancel
             </button>
             <button class="main-button primary" mat-button>
