@@ -17,13 +17,7 @@ export class LoginScreenComponent implements OnInit {
   email: string = "";
   password: string = "";
   newUser: UserData;
-  animationIsFinished = false;
-  picSrc = "profile.svg";
-  switch_expression: any = "login";
-  profileImages: any = ["1", "2", "3", "4", "5", "6"];
-  email: string = "";
-  password: string = "";
-  newUser: UserData;
+  
 
 
 
@@ -37,16 +31,6 @@ export class LoginScreenComponent implements OnInit {
       id: ""
     };
   }
-  constructor(public userService: UserService, public router: Router) {
-    this.newUser = {
-      name: "",
-      email: "",
-      password: "",
-      picture: "",
-      id: ""
-    };
-  }
-
 
 
 login = new FormGroup({
