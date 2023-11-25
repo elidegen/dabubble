@@ -17,14 +17,15 @@
     <div class="form-container">
       <h1 class="color-purple2-text padding-bottom">Login</h1>
       <p>We recommend using the email address that you use at work.</p>
-      <form [formGroup]="login" (ngSubmit)="onSubmit()" novalidate>
+      <form [formGroup]="login" (ngSubmit)="onSubmit()" >
         <div class="input-container margin-top">
           <img src="assets\img\icons\mail.svg">
-          <input [(ngModel)]="email"matInput placeholder="E-mail" formControlName="email" required>
+          <input [(ngModel)]="email"matInput placeholder="E-mail" [formControl]="loginemail" required>
+         
         </div>
-        <mat-error>{{getErrorMessage()}}</mat-error>
+        <mat-error *ngIf="!loginemail.valid">{{getErrorMessage()}}</mat-error>
         <div class="input-container"><img src="assets\img\icons\lock.svg"><input [(ngModel)]="password" matInput placeholder="Password"
-            formControlName="password" required></div>
+          [formControl]="loginpassword" required></div>
         <span (click)="changeSwitchCase('resetPassword')"
           class="margin-top color-purple2-text cursor-pointer transform">Forgot password ?</span>
         <div class="or-container margin-top">
@@ -51,24 +52,24 @@
       <h1 class="color-purple2-text padding-bottom"> Create account</h1>
       <p>Create your account with your name and e-mail adress.</p>
 
-      <form [formGroup]="addUser">
+      <form [formGroup]="addUser" (ngSubmit)="createUser()">
         <div class="input-container margin-top">
           <img src="assets\img\icons\person.svg">
-          <input matInput placeholder="First and  Lastname" formControlName="email" required>
+          <input [formControl]="newName"  matInput placeholder="First and  Lastname" required>
         </div>
         <div class="input-container margin-top">
           <img src="assets\img\icons\mail.svg">
-          <input matInput placeholder="E-mail" formControlName="email" required>
+          <input [formControl]="newEmail" matInput placeholder="E-mail" required>
         </div>
-        <mat-error>{{getErrorMessage()}}</mat-error>
-        <div class="input-container"><img src="assets\img\icons\lock.svg"><input matInput placeholder="Password"
-            formControlName="password" required></div>
-        <span class="margin-top gap  cursor-pointer align-center"><input class="cursor-pointer" type="checkbox">I accept
+        <mat-error *ngIf="!newEmail.valid">{{getNewErrorMessage()}}</mat-error>
+        <div class="input-container"><img src="assets\img\icons\lock.svg"><input [formControl]="newPassword"  matInput placeholder="Password"
+         required></div>
+        <span class="margin-top gap  cursor-pointer align-center"><input [formControl]="disableSelect" class="cursor-pointer" type="checkbox">I accept
           the <a class="color-purple2-text transform">privacy policy</a></span>
 
 
         <div class="submit-buttons margin-top justify-content-end">
-          <button mat-button (click)="changeSwitchCase('avatar')" class="align-self main-button primary" type="submit">Next</button>
+          <button mat-button  class="align-self main-button primary" type="submit"  [disabled]="!disableSelect.value || !addUser.valid">Next</button>
         </div>
       </form>
     </div>
@@ -81,19 +82,19 @@
       <img (click)="changeSwitchCase('createAccount')" class="position-relative cursor-pointer transform"
         src="assets\img\icons\arrow_back.svg">
       <h1 class="color-purple2-text padding-bottom"> Choose your Avatar</h1>
-      <div class="big-profile-pic"><img class=""
-        src="assets\img\icons\profile.svg"></div>
+      <div class="big-profile-pic"><img class="userPic"
+        src="assets\img\icons\{{this.picSrc}}"></div>
         <h2>Frederik Beck</h2>
 
       <form [formGroup]="addUser">
 
      
         <div class="choose-profile-pic margin-top"><span class="font-size20 w100 ">Choose from list</span>
-          <div  class="picture-container w100"> <img class="transform cursor-pointer" *ngFor="let pic of profileImages ; index as i;"  src="assets\img\icons\character_{{pic}}.svg"></div>
+          <div  class="picture-container w100"> <img class="transform cursor-pointer " *ngFor="let pic of profileImages ; index as i;" (click)="changePicSrc(pic)"   src="assets\img\icons\character_{{pic}}.svg"></div>
         </div>
         <div class="upload-picture margin-top align-center"><span class="font-size20">choose own picture</span> <button mat-button class="main-button" type="submit">Upload file</button></div>
         <div class="submit-buttons margin-top justify-content-end">
-          <button mat-button (click)="changeSwitchCase('avatar')" class="align-self main-button primary" type="submit">Next</button>
+          <button mat-button (click)="uploadUser()" class="align-self main-button primary" type="submit">Next</button>
         </div>
       </form>
     </div>
@@ -103,7 +104,7 @@
 
   <div *ngSwitchCase="'resetPassword'" class="login bg-white">
     <div class="form-container">
-      <img (click)="changeSwitchCase('createAccount')" class="position-relative cursor-pointer transform"
+      <img (click)="changeSwitchCase('login')" class="position-relative cursor-pointer transform"
         src="assets\img\icons\arrow_back.svg">
       <h1 class="color-purple2-text padding-bottom">Reset password</h1>
       <p style="font-size:20px;">Create your account with your name and e-mail adress.</p>

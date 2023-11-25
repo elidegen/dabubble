@@ -42,41 +42,46 @@ export class UserService {
 
 
 
-  setUserData(obj:any, userid:string) {
+  setUserData(obj:any,) {
      // Check if 'birthdate' is a Timestamp and convert to Date object
- 
     return {
       name:  obj.name  || "",
       email: obj.email || "",
-      id: obj.id || "",
+      password: obj.password || "",
+      id: obj.id,
       picture: obj.picture || "",
   }
 
 }
 
   async addUser(item: UserData) {
-    console.log("New Customer Added");
-    await addDoc(this.getCustomersRef(),item).catch(
-      (err) => {console.error}
+    await addDoc(this.getUsersRef(),item).catch(
+      (err) => {console.log(err)}
     ).then (
-      (docRef)=> {console.log("Document written with Id", docRef?.id)}
+      (docRef)=> {console.log()
+      this.updateUserId(item, docRef!.id);
+        console.log("New user with id", docRef!.id)
+    
+    }
+      
     )
+   
   }
 
 
   subCustomerList() {
-    return onSnapshot(this.getCustomersRef(), (list) => {
+    return onSnapshot(this.getUsersRef(), (list) => {
      this.users = [];
        list.forEach(element => {
-         this.users.push(this.setUserData(element.data(),element.id));
-         console.log("subCustomerList is triggered");
+         this.users.push(this.setUserData(element.data()));
+         console.log("Available users",element.data());
        })
      })
    }
 
 
  
-    async deleteCustomer(colId: "customers", docId: string) {
+    async deleteCustomer(colId: "users", docId: string) {
     await  deleteDoc(this.getSingleDocRef(colId, docId)).catch (
 
       (err) => {console.log(err);}
@@ -84,25 +89,28 @@ export class UserService {
 
    }
 
-
+async updateUserId(user: UserData, newId: string) {
+  user.id = newId;
+  await this.updateUser(user);
+}
    async updateUser(user: UserData) {
-    if (user.id) {
-      let docRef = this.getSingleDocRef('customers',user.id);
+      let docRef = this.getSingleDocRef('users',user.id);
       await updateDoc(docRef, this.getUpdateData(user)).catch(
-       
+    
         (error) => { console.log(error); }
         
       );
      
-    }
-    console.log("Customer wurde geupdated mit ",user);
+    
   }
 
   getUpdateData(user:UserData) {
     return {
-      name:  user.name,
+      name: user.name,
       email: user.email,
-    
+      password: user.password,
+      id: user.id,
+      picture: user.picture,
   }
 
 }
@@ -129,8 +137,8 @@ export class UserService {
 
 
   /**This is for getting the collection "customers" from firebase */
-  getCustomersRef() {
-    return collection(this.firestore, 'customers');
+  getUsersRef() {
+    return collection(this.firestore, 'users');
 
   }
   /**Here i get the Infos about a single customer, 
