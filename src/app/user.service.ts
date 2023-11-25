@@ -92,10 +92,42 @@ signInUser(email: string, password: string) {
 }
 
 
+signInWithGoogle() {
+  signInWithPopup(this.auth, this.provider)
+    .then((result) => {
+      // Das Anmeldeergebnis enthält Benutzerinformationen
+      const user = result.user;
+      console.log('Google Benutzer angemeldet:', user);
+
+      // Optional: Benutzerinformationen in Firestore speichern oder in Ihrem System aktualisieren
+      this.currentUser = {
+        name: user.displayName || "",
+        email: user.email || "",
+        password: "", // Das Passwort wird bei Google-Anmeldungen nicht verwendet
+        id: user.uid,
+        picture: user.photoURL || "",
+      };
+      this.addUser(this.currentUser);
+
+      // Weiterleitung oder andere Aktionen
+      this.router.navigate(['home']);
+    })
+    .catch((error) => {
+      console.error('Fehler bei Google-Anmeldung:', error);
+    });
+}
+
+
 signOutUser() {
   signOut(this.auth).then(() => {
     console.log('Benutzer erfolgreich abgemeldet');
-    this.activeUsers = [];
+    this.currentUser = {
+      name: "",
+      email: "",
+      password: "",
+      id: "",
+      picture:"",
+    }
    
   }).catch((error) => {
     console.error('Fehler beim Abmelden:', error);

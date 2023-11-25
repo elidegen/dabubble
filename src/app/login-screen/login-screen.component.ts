@@ -127,6 +127,10 @@ get loginemail() {
    await this.userService.signInUser(this.email, this.password);
   }
 
+  loginWithGoogle() {
+    this.userService.signInWithGoogle();
+  }
+
 
 
 
