@@ -9,7 +9,11 @@ import { DialogAddChannelComponent } from '../dialog-add-channel/dialog-add-chan
 })
 export class WorkspaceComponent {
   panelOpenState: boolean = true;
-  constructor(public dialog: MatDialog) {}
+  allChannel: [] = [];
+
+  constructor(public dialog: MatDialog) {
+    
+  }
 
   openDialog() {
     this.dialog.open(DialogAddChannelComponent,  {panelClass: 'dialog-container'});
