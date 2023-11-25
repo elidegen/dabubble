@@ -1,9 +1,10 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogEditChannelComponent } from '../dialog-edit-channel/dialog-edit-channel.component';
 import { DialogAddToGroupComponent } from '../dialog-add-to-group/dialog-add-to-group.component';
 import { DialogShowGroupMemberComponent } from '../dialog-show-group-member/dialog-show-group-member.component';
 import { MatDrawer } from '@angular/material/sidenav';
+import { Firestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-main-chat',
@@ -11,6 +12,7 @@ import { MatDrawer } from '@angular/material/sidenav';
   styleUrls: ['./main-chat.component.scss']
 })
 export class MainChatComponent {
+  firestore: Firestore = inject(Firestore);
 
   constructor(public dialog: MatDialog) { }
 
@@ -37,5 +39,4 @@ export class MainChatComponent {
   onCloseThread() {
     this.threadDrawer.close();
   }
-
 }
