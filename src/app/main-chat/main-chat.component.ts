@@ -15,7 +15,7 @@ export class MainChatComponent {
 
   openEditChannelDialog() {
     this.dialog.open(DialogEditChannelComponent, {
-      panelClass: 'dialog-edit-channel'
+      panelClass: 'dialog-container'
     });
   }
 

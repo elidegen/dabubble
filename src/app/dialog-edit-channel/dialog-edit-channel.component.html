@@ -10,11 +10,47 @@
             </button>
         </header>
     </mat-card-header>
+
+
     <mat-card-content class="w100">
-        <div ></div>
-        <div></div>
-        <button mat-button class="main-button primary">
-            Leave Channel
-        </button>
+        <div class="channel-info w100" [ngClass]="{'view-state': !editName}" [ngSwitch]="editName">
+            <div class="top-row w100">
+                <h1>Channel Name</h1>
+                <span (click)="editName = true" *ngSwitchCase="false">Edit</span>
+                <span (click)="editName = false" *ngSwitchCase="true">Save</span>
+            </div>
+
+            <h2 *ngSwitchCase="false"><img src="assets/img/icons/tag-black.svg" alt=""> Entwicklerteam</h2>
+
+            <input *ngSwitchCase="true" placeholder="Entwicklerteam" class="edit-name w100" type="text">
+        </div>
     </mat-card-content>
+
+    <mat-card-content class="w100">
+        <div class="channel-info w100" [ngClass]="{'view-state': !editDescription}" [ngSwitch]="editDescription">
+            <div class="top-row w100">
+                <h1>Description</h1>
+                <span (click)="editDescription = true" *ngSwitchCase="false">Edit</span>
+                <span (click)="editDescription = false" *ngSwitchCase="true">Save</span>
+            </div>
+
+            <h3 *ngSwitchCase="false">Dieser Channel ist so unglablich toll lorem ipsum bla elijah ist der beste coder
+                der welt Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe nisi cupiditate culpa
+                accusantium ad, ratione obcaecati hic cumque sequi consequatur! Autem qui doloribus deleniti, voluptas
+                tempora facilis aut ipsum dolor. </h3>
+
+            <mat-divider></mat-divider>
+
+            <h1>Created by</h1>
+
+            
+
+            <input *ngSwitchCase="true" placeholder="Entwicklerteam" class="edit-name w100" type="text">
+        </div>
+    </mat-card-content>
+
+
+    <button mat-button class="main-button primary">
+        Leave Channel
+    </button>
 </mat-card>

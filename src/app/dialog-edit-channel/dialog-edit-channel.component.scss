@@ -1,6 +1,7 @@
 mat-card {
     width: 600px;
 }
+
 header {
     display: flex;
     justify-content: space-between;
@@ -10,4 +11,38 @@ header {
     display: flex;
     align-items: center;
     gap: 16px;
+}
+
+.channel-info {
+    border-radius: 32px;
+
+    .top-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        span {
+            font-size: 16px;
+            color: #535af1;
+            &:hover {
+                cursor: pointer;
+                font-weight: 500;
+            }
+        }
+    }
+
+    h2{
+        display: flex;
+        align-items: center;
+    }
+
+    .edit-name {
+        background: url('../..//assets/img/icons/tag.svg') no-repeat 3%;
+        padding-left: 40px;
+    }
+}
+
+.view-state {
+    border: 1px solid #adb0d9;
+    padding: 16px;
 }

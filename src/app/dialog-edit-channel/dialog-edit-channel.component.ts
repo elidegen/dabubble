@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./dialog-edit-channel.component.scss']
 })
 export class DialogEditChannelComponent {
-
+  editName: boolean = false;
+  editDescription: boolean = false;
 }
