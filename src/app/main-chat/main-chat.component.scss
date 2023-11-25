@@ -37,7 +37,7 @@
 }
 
 .add-user {
-    background-color: #ECEEFE;
+    background-color: var(--primary);
     height: 38px;
     width: 38px;
     display: flex;
@@ -111,7 +111,7 @@ mat-card {
 }
 
 .time-box {
-    border: 1px solid #ADB0D9;
+    border: 1px solid var(--border);
     border-radius: 20px;
     padding: 4px 8px;
     white-space: nowrap;
@@ -119,7 +119,7 @@ mat-card {
 
 .separator {
     height: 1px;
-    background-color: #ADB0D9;
+    background-color: var(--border);
     width: 100%;
 }
 
@@ -166,7 +166,7 @@ mat-card {
             color: black;
         }
 
-        background-color: #ECEEFE;
+        background-color: var(--primary);
 
         .reaction {
             transition: all 125ms;

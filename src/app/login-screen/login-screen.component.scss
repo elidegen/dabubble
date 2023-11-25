@@ -19,7 +19,7 @@
     width: 100%;
     position: absolute;
     top: 0;
-    background-color: #ECEEFE;
+    background-color: var(--primary);
     z-index: 1;
 }
 
@@ -133,7 +133,7 @@ form {
 }
 
 // .send-mail-button {
-//     background-color: #686868;
+//     background-color: var(--textGray);
 //     border-radius: 25px;
 //     padding-left: 10px;
 //     padding-right: 10px;
@@ -143,12 +143,12 @@ form {
     display: flex;
     align-items: center;
     width: 100%;
-    background-color: #ECEEFE;
+    background-color: var(--primary);
     height: 60px;
     border-radius: 100px;
     gap: 20px;
    font-size: 18px;
-    color:  #686868;
+    color:  var(--textGray);
     margin-top: 20px;
 
     img {
@@ -173,7 +173,7 @@ form {
 input{
     outline: none;
     border: none;
-    background-color: #ECEEFE;
+    background-color: var(--primary);
     height: 30px;
     font-size: 20px;
    

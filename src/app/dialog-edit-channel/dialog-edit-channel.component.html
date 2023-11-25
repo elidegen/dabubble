@@ -11,7 +11,6 @@
         </header>
     </mat-card-header>
 
-
     <mat-card-content class="w100">
         <div class="channel-info w100" [ngClass]="{'view-state': !editName}" [ngSwitch]="editName">
             <div class="top-row w100">
@@ -20,7 +19,7 @@
                 <span (click)="editName = false" *ngSwitchCase="true">Save</span>
             </div>
 
-            <h2 *ngSwitchCase="false"><img src="assets/img/icons/tag-black.svg" alt=""> Entwicklerteam</h2>
+            <h3 *ngSwitchCase="false"><img src="assets/img/icons/tag-black.svg" alt=""> Entwicklerteam</h3>
 
             <input *ngSwitchCase="true" placeholder="Entwicklerteam" class="edit-name w100" type="text">
         </div>
@@ -38,19 +37,19 @@
                 der welt Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe nisi cupiditate culpa
                 accusantium ad, ratione obcaecati hic cumque sequi consequatur! Autem qui doloribus deleniti, voluptas
                 tempora facilis aut ipsum dolor. </h3>
+            <textarea *ngSwitchCase="true" placeholder="Describe your channel" class="w100" type="text"></textarea>
 
             <mat-divider></mat-divider>
 
             <h1>Created by</h1>
-
-            
-
-            <input *ngSwitchCase="true" placeholder="Entwicklerteam" class="edit-name w100" type="text">
+            <span class="creator">Noah Braun</span>
         </div>
+
     </mat-card-content>
+    <mat-card-content>
 
-
-    <button mat-button class="main-button primary">
-        Leave Channel
-    </button>
+        <button mat-button class="main-button primary">
+            Leave Channel
+        </button>
+    </mat-card-content>
 </mat-card>

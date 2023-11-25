@@ -127,7 +127,7 @@ header {
             color: black;
         }
 
-        background-color: #ECEEFE;
+        background-color: var(--primary);
 
         .reaction {
             transition: all 125ms;
@@ -217,7 +217,7 @@ header {
 
 .separator {
     height: 1px;
-    background-color: #ADB0D9;
+    background-color: var(--border);
     width: 100%;
 }
 
@@ -231,7 +231,7 @@ header {
 
 .comments {
     white-space: nowrap;
-    color: #ADB0D9;
+    color: var(--border);
     font-size: 12px;
 }
 
