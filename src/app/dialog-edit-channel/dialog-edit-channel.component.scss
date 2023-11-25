@@ -1,0 +1,13 @@
+mat-card {
+    width: 600px;
+}
+header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.headline {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
