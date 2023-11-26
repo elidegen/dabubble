@@ -22,6 +22,10 @@ export class ChatService {
   }
 
 
+
+  
+
+
   getChannelsRef() {
     return collection(this.firestore, 'channels');
   }
@@ -34,13 +38,4 @@ export class ChatService {
     return doc(collection(this.firestore, colId), docId);
   }
 
-  subCustomerList() {
-    // return onSnapshot(this.getUsersRef(), (list) => {
-    //   this.users = [];
-    //   list.forEach(element => {
-    //     this.users.push(this.setUserData(element.data()));
-    //     console.log("Available users", element.data());
-    //   })
-    // })
-  }
 }

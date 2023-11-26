@@ -4,10 +4,11 @@ import { DialogEditChannelComponent } from '../dialog-edit-channel/dialog-edit-c
 import { DialogAddToGroupComponent } from '../dialog-add-to-group/dialog-add-to-group.component';
 import { DialogShowGroupMemberComponent } from '../dialog-show-group-member/dialog-show-group-member.component';
 import { MatDrawer } from '@angular/material/sidenav';
-import { DocumentReference, FieldValue, Firestore, addDoc, collection, doc, updateDoc } from '@angular/fire/firestore';
+import { DocumentReference, FieldValue, Firestore, addDoc, arrayUnion, collection, doc, updateDoc } from '@angular/fire/firestore';
 import { ChatService } from '../chat.service';
 import { Channel } from 'src/models/channel.class';
 import { Message } from 'src/models/message.class';
+import { getDocs, onSnapshot, orderBy, query } from 'firebase/firestore';
 
 @Component({
   selector: 'app-main-chat',
@@ -18,7 +19,9 @@ export class MainChatComponent implements OnInit {
   firestore: Firestore = inject(Firestore);
   currentChat!: Channel | undefined;
   @ViewChild('thread') threadDrawer!: MatDrawer;
-  message: Message = new Message;
+  message: Message = new Message();
+  allMessages: Message[] = [];
+  unSubMessages: any;
 
   constructor(public dialog: MatDialog, private chatService: ChatService) {
     
@@ -28,9 +31,16 @@ export class MainChatComponent implements OnInit {
     this.chatService.openChat$.subscribe((openChat) => {
       if (openChat) {
         this.currentChat = openChat as Channel;
+        this.loadMessages();
         console.log('currentChat updated: ', this.currentChat);
       }
     });
+
+    
+  }
+
+  ngOnDestroy() {
+    this.unSubMessages;
   }
 
   openEditChannelDialog() {
@@ -57,9 +67,39 @@ export class MainChatComponent implements OnInit {
     this.threadDrawer.close();
   }
 
-   async sendMessage() {
-    
+  async sendMessage() {
+    if (this.currentChat?.id) {
+      const currentTime = new Date();
+      const formattedTime = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      this.message.time = formattedTime;
+
+      const subColRef = collection(this.firestore, `channels/${this.currentChat.id}/messages`);
+      await addDoc(subColRef, this.message.toJSON())
+      .catch((err) => {
+        console.log(err);
+      })
+      .then((result: any) => {
+        this.message.content = '';
+        console.log('Message sent', result);
+      });
+    }
   }
+
+  async loadMessages() {
+    if (this.currentChat?.id) {
+      const messageCollection = collection(this.firestore, `channels/${this.currentChat.id}/messages`);
+      this.unSubMessages = onSnapshot(messageCollection, (snapshot) => {
+        this.allMessages = snapshot.docs.map(doc => {
+          const message = doc.data() as Message;
+          message.id = doc.id;
+          console.log('check Message', message);
+          
+          return message;
+        });
+    })
+  }
+}
+
 
   getSingleDocRef(colId: string, docId: string) {
     return doc(collection(this.firestore, colId), docId);

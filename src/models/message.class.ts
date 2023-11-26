@@ -1,14 +1,15 @@
 export class Message {
     creator: string | undefined;
     content: string | undefined;
-    date: number | undefined;
+    time: string | undefined;
     answers: [];
     reactions: [];
+    id: string | undefined;
 
     constructor(obj?: any) {
         this.creator = obj ? obj.creator : '';
         this.content = obj ? obj.content : '';
-        this.date = obj ? obj.date : null;
+        this.time = obj ? obj.time : null;
         this.answers = obj ? obj.answers : [];
         this.reactions = obj ? obj.reactions : [];
     }
@@ -17,7 +18,7 @@ export class Message {
         return {
             creator:  this.creator,
             content:  this.content,
-            date:  this.date,
+            time:  this.time,
             answers:  this.answers,
             reactions:  this.reactions,
         }

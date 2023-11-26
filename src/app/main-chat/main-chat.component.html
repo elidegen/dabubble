@@ -31,7 +31,8 @@
     </mat-card-header>
 
     <mat-card-content class="p-0 main-chat-container">
-      <section> <!-- nachricht / tag -->
+
+      <section> 
         <div class="date-container">
           <div class="separator"></div>
           <div class="time-box">Tuesday, 15. April</div>
@@ -87,7 +88,7 @@
           <div class="separator"></div>
         </div>
 
-        <div class="message-row-container">
+        <div class="message-row-container" *ngFor="let message of allMessages">
           <div class="message-box">
             <div class="sent-message-container mr-16">
               <div class="message-data">
@@ -96,10 +97,7 @@
               </div>
 
               <div class="sent-message color-purple">
-                <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                  Beatae dolorem nesciunt tenetur laborum quibusdam perferendis
-                  minus, illum fugit totam omnis, deleniti distinctio accusantium
-                  quos voluptatibus. Aliquid totam cupiditate sit molestias?</span>
+                <span> {{message.content}}</span>
               </div>
 
               <div class="reaction-container">
