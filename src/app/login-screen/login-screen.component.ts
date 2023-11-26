@@ -18,6 +18,7 @@ export class LoginScreenComponent implements OnInit {
   password: string = "";
   newUser: UserData;
   resetEmail: string = "";
+  uploadFile: string ="";
   
 
 
@@ -165,6 +166,16 @@ get emailForReset() {
      sendResetEmail() {
       this.userService.sendResetEmail(this.resetEmail);
      }
+
+     onFileSelected(event: any): void {
+      if (event.target.files && event.target.files[0]) {
+        const file = event.target.files[0];
+        this.userService.uploadProfileImage(file);
+      }
+      setTimeout(() => {
+        this.picSrc = this.userService.customPic;
+      }, 2000);
+    }
 
 }
  

@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { UserData } from './interfaces/user-interface';
 import { inject } from '@angular/core';
-import { Firestore, collection, doc, collectionData, onSnapshot, addDoc, deleteDoc, updateDoc } from '@angular/fire/firestore';
+import { Firestore, collection, doc, collectionData, onSnapshot, addDoc, deleteDoc, updateDoc, } from '@angular/fire/firestore';
 import { getAuth, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, User, sendPasswordResetEmail } from "firebase/auth";
 import { Timestamp } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,7 @@ export class UserService {
   private auth = getAuth();
   provider = new GoogleAuthProvider();
   signInSuccess = false;
+  customPic: string ="";
   unsubList;
 
   ngOnInit() {
@@ -67,6 +69,8 @@ export class UserService {
   async signInUser(email: string, password: string) {
     await signInWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
+        const user = userCredential.user;
+        console.log("created User:", user)
         this.signInSuccess = true;
         let activeUser = this.findUserIndexWithEmail(email);
         console.log(activeUser);
@@ -275,5 +279,36 @@ export class UserService {
     return this.users.some(user => user.email === email);
   }
 
+
+  async uploadProfileImage(file: File,) {
+    const storage = getStorage();
+    const storageReference = storageRef(storage, `profileImages/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageReference, file);
+    uploadTask.on('state_changed',
+      (onSnapshot) => {
+        const progress = (onSnapshot.bytesTransferred / onSnapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+        switch (onSnapshot.state) {
+          case 'paused':
+            console.log('Upload is paused');
+            break;
+          case 'running':
+            console.log('Upload is running');
+            break;
+        }
+      },
+      (error) => {
+        console.error('Upload error:', error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          console.log('File available at', downloadURL);
+          this.customPic = downloadURL;
+        
+        });
+      }
+    );
+  }
 }
+
 
