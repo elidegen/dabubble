@@ -5,7 +5,7 @@
                 <img src="assets/img/icons/tag-black.svg" alt="tag">
                 <h3>{{ currentChat?.name || '' }}</h3>
             </div>
-            <button mat-icon-button>
+            <button mat-icon-button (click)="dialogRef.close()">
                 <mat-icon>close</mat-icon>
             </button>
         </header>

@@ -49,7 +49,6 @@ export class MainChatComponent implements OnInit {
     this.unSubMessages;
   }
 
-
   openEditChannelDialog() {
     this.dialog.open(DialogEditChannelComponent, {
       panelClass: 'dialog-container'
@@ -67,8 +66,6 @@ export class MainChatComponent implements OnInit {
       panelClass: 'dialog-container'
     });
   }
-
-
 
   onCloseThread() {
     this.threadDrawer.close();
@@ -100,7 +97,7 @@ export class MainChatComponent implements OnInit {
         this.allMessages = snapshot.docs.map(doc => {
           const message = doc.data() as Message;
           message.id = doc.id;
-          console.log('check Message', message);
+          // console.log('check Message', message);
           return message;
         });
         this.scrollToBottom();
@@ -114,8 +111,6 @@ export class MainChatComponent implements OnInit {
     this.message.date = formattedDate;
   }
 
-
-
   getSentMessageTime() {
     const currentTime = new Date();
     const formattedTime = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -128,10 +123,7 @@ export class MainChatComponent implements OnInit {
 
     this.message.creator = name;
     this.message.profilePic = profilePic;
-
   }
-
-
 
   getSingleDocRef(colId: string, docId: string) {
     return doc(collection(this.firestore, colId), docId);

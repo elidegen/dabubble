@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DialogAddToGroupComponent } from '../dialog-add-to-group/dialog-add-to-group.component';
 
 @Component({
@@ -9,7 +9,7 @@ import { DialogAddToGroupComponent } from '../dialog-add-to-group/dialog-add-to-
 })
 export class DialogShowGroupMemberComponent {
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<DialogAddToGroupComponent>) { }
 
   openDialog() {
     this.dialog.open(DialogAddToGroupComponent, {

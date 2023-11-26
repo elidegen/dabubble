@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Channel } from 'src/models/channel.class';
 import { ChatService } from '../chat.service';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dialog-edit-channel',
@@ -12,9 +13,7 @@ export class DialogEditChannelComponent implements OnInit {
   editDescription: boolean = false;
   currentChat!: Channel | undefined;
 
-  constructor(private chatService: ChatService) {
-    
-  }
+  constructor(private chatService: ChatService, public dialogRef: MatDialogRef<DialogEditChannelComponent>) { }
 
   ngOnInit() {
     this.chatService.openChat$.subscribe((openChat) => {

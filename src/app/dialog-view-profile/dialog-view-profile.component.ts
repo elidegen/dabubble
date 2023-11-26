@@ -9,9 +9,4 @@ import { MatDialogRef } from '@angular/material/dialog';
 export class DialogViewProfileComponent {
   editState: boolean = false;
   constructor(public dialogRef: MatDialogRef<DialogViewProfileComponent>) { }
-
-
-  closeDialog() {
-    this.dialogRef.close();
-  }
 }
