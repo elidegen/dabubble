@@ -3,7 +3,8 @@
     {
       "target": "dabubble",
       "source": ".",
-      "frameworksBackend": {}
+      "frameworksBackend": {},
+      "key": "Access-Control-Allow-Origin"
     }
   ]
 }

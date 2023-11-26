@@ -34,6 +34,10 @@ export class LoginScreenComponent implements OnInit {
     };
   }
 
+  getEmailForNewPassword= new FormGroup({
+    emailForReset: new FormControl('', [Validators.required, Validators.email]),
+   
+  });
 
 login = new FormGroup({
   loginemail: new FormControl('', [Validators.required, Validators.email]),
@@ -62,6 +66,10 @@ get newPassword() {
 }
 get loginemail() {
   return  this.login.get('loginemail') as FormControl;
+}
+
+get emailForReset() {
+  return  this.getEmailForNewPassword.get('emailForReset') as FormControl;
 }
 
   get loginpassword() {
@@ -152,6 +160,10 @@ get loginemail() {
 
      changeSwitchCase(newSwitchCase:string) {
       this.switch_expression = newSwitchCase;
+     }
+
+     sendResetEmail() {
+      this.userService.sendResetEmail(this.resetEmail);
      }
 
 }
