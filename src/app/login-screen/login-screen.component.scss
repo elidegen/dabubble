@@ -273,6 +273,17 @@ transition: background-color 0.2s ease, color 0.2s;
     align-items: center;
     text-align: left!important;;
 }
+input[type="file"] {
+    display: none;
+    
+}
+
+.custom-file-upload {
+    cursor: pointer;
+}
+
+ 
+  
 
 .userPic {
     width: 150px;
