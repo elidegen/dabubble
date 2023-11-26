@@ -17,6 +17,10 @@ export class LoginScreenComponent implements OnInit {
   email: string = "";
   password: string = "";
   newUser: UserData;
+  
+
+
+
 
   constructor(public userService: UserService, public router: Router) {
     this.newUser = {
@@ -28,31 +32,35 @@ export class LoginScreenComponent implements OnInit {
     };
   }
 
-  login = new FormGroup({
-    loginemail: new FormControl('', [Validators.required, Validators.email]),
-    loginpassword: new FormControl('', [Validators.required]),
-  });
 
-  addUser = new FormGroup({
-    newName: new FormControl('', [Validators.required]),
-    newEmail: new FormControl('', [Validators.required, Validators.email]),
-    newPassword: new FormControl('', [Validators.required]),
-    disableSelect: new FormControl(false),
-  });
+login = new FormGroup({
+  loginemail: new FormControl('', [Validators.required, Validators.email]),
+  loginpassword: new FormControl('', [Validators.required] ),
+});
 
-  get newName() {
-    return this.addUser.get('newName') as FormControl;
-  }
 
-  get newEmail() {
-    return this.addUser.get('newEmail') as FormControl;
-  }
-  get newPassword() {
-    return this.addUser.get('newPassword') as FormControl;
-  }
-  get loginemail() {
-    return this.login.get('loginemail') as FormControl;
-  }
+addUser = new FormGroup({
+  newName: new FormControl('', [Validators.required] ),
+  newEmail:new FormControl('', [Validators.required, Validators.email]),
+  newPassword: new FormControl('', [Validators.required] ),
+  disableSelect : new FormControl(false),
+});
+
+
+get newName() {
+  return  this.addUser.get('newName') as FormControl;
+}
+
+
+get newEmail() {
+  return  this.addUser.get('newEmail') as FormControl;
+}
+get newPassword() {
+  return  this.addUser.get('newPassword') as FormControl;
+}
+get loginemail() {
+  return  this.login.get('loginemail') as FormControl;
+}
 
   get loginpassword() {
     return this.login.get('loginpassword') as FormControl;
@@ -62,7 +70,8 @@ export class LoginScreenComponent implements OnInit {
     return this.addUser.get("disableSelect") as FormControl;
   }
 
-  getErrorMessage() {
+
+  getErrorMessage(){
     if (this.loginemail?.hasError('email')) {
       return 'Not a valid email';
     }
@@ -76,12 +85,17 @@ export class LoginScreenComponent implements OnInit {
     return "";
   }
 
+
+  
+
   ngOnInit() {
+   
     this.hideContentAfterAnimation();
   }
 
-  changePicSrc(pic: string) {
-    this.picSrc = "character_" + pic + ".svg";
+  changePicSrc(pic:string) {
+    this.picSrc = "character_" + pic +".svg";
+    
   }
 
   createUser() {
@@ -100,12 +114,27 @@ export class LoginScreenComponent implements OnInit {
     this.changeSwitchCase('avatar');
   }
 
-  uploadUser() {
+  async uploadUser() {
     this.newUser.picture = this.picSrc;
     this.userService.addUser(this.newUser as UserData);
-    this.router.navigate(['home']);
+    this.userService.currentEmail = this.newUser.email;
+    this.userService.currentPassword = this.newUser.password;
+    await this.userService.createUser();
   }
 
+  async loginUser() {
+    console.log("user wird eingeloggt mit folgendem namen und passwort", this.email, this.password)
+   await this.userService.signInUser(this.email, this.password);
+  }
+
+  loginWithGoogle() {
+    this.userService.signInWithGoogle();
+  }
+
+
+
+
+ 
   hideContentAfterAnimation() {
     setTimeout(() => {
       this.animationIsFinished = true;
@@ -116,7 +145,13 @@ export class LoginScreenComponent implements OnInit {
 
   }
 
-  changeSwitchCase(newSwitchCase: string) {
-    this.switch_expression = newSwitchCase;
-  }
+
+     changeSwitchCase(newSwitchCase:string) {
+      this.switch_expression = newSwitchCase;
+     }
+
 }
+ 
+
+
+

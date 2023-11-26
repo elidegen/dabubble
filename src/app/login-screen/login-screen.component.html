@@ -17,14 +17,14 @@
     <div class="form-container">
       <h1 class="color-purple2-text padding-bottom">Login</h1>
       <p>We recommend using the email address that you use at work.</p>
-      <form [formGroup]="login" (ngSubmit)="onSubmit()" >
+      <form [formGroup]="login">
         <div class="input-container margin-top">
           <img src="assets\img\icons\mail.svg">
           <input [(ngModel)]="email"matInput placeholder="E-mail" [formControl]="loginemail" required>
          
         </div>
         <mat-error *ngIf="!loginemail.valid">{{getErrorMessage()}}</mat-error>
-        <div class="input-container"><img src="assets\img\icons\lock.svg"><input [(ngModel)]="password" matInput placeholder="Password"
+        <div class="input-container"><img src="assets\img\icons\lock.svg"><input type="password" [(ngModel)]="password" matInput placeholder="Password"
           [formControl]="loginpassword" required></div>
         <span (click)="changeSwitchCase('resetPassword')"
           class="margin-top color-purple2-text cursor-pointer transform">Forgot password ?</span>
@@ -34,11 +34,11 @@
         </div>
         <div mat-button class="input-container  cursor-pointer align-center  google-button">
           <img src="assets\img\icons\google.svg">
-          <span class="color-purple2-text ">Login with google</span>
+          <span (click)="loginWithGoogle()" class="color-purple2-text ">Login with google</span>
         </div>
 
         <div class="submit-buttons margin-top">
-          <button  mat-button class="main-button primary mr-16" type="submit">Login</button>
+          <button (click)="loginUser()"  mat-button class="main-button primary mr-16" type="submit">Login</button>
           <button  routerLink="home" mat-button class="main-button ">Guest login</button>
         </div>
       </form>
@@ -62,7 +62,7 @@
           <input [formControl]="newEmail" matInput placeholder="E-mail" required>
         </div>
         <mat-error *ngIf="!newEmail.valid">{{getNewErrorMessage()}}</mat-error>
-        <div class="input-container"><img src="assets\img\icons\lock.svg"><input [formControl]="newPassword"  matInput placeholder="Password"
+        <div class="input-container"><img src="assets\img\icons\lock.svg"><input minlength="6" type="password" [formControl]="newPassword"  matInput placeholder="Password"
          required></div>
         <span class="margin-top gap  cursor-pointer align-center"><input [formControl]="disableSelect" class="cursor-pointer" type="checkbox">I accept
           the <a class="color-purple2-text transform">privacy policy</a></span>

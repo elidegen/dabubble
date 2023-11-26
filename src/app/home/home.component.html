@@ -7,7 +7,7 @@
     <input class="search" placeholder="Search" />
 
     <div class="profile-container">
-      <h1>Guest</h1>
+      <h1>{{this.currentUser.name}}</h1>
       <div class="profile-picture">
         <img src="" alt="" />
         <div class="online-status"></div>
@@ -17,7 +17,7 @@
       </button>
       <mat-menu #menu="matMenu" xPosition="before">
         <button (click)="openProfileDialog()" class="menu" mat-menu-item>Profile</button>
-        <button mat-menu-item>Log Out</button>
+        <button (click)="logOutUser()" mat-menu-item>Log Out</button>
       </mat-menu>
     </div>
   </header>
