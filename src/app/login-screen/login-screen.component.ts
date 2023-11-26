@@ -28,7 +28,8 @@ export class LoginScreenComponent implements OnInit {
       email: "",
       password: "",
       picture: "",
-      id: ""
+      id: "",
+      online: false,
     };
   }
 
@@ -105,6 +106,7 @@ get loginemail() {
       password: "",
       id: "",
       picture: this.picSrc,
+      online: false,
     }
     newUser.name = this.newName.value;
     newUser.password = this.newPassword.value;
@@ -116,7 +118,8 @@ get loginemail() {
 
   async uploadUser() {
     this.newUser.picture = this.picSrc;
-    this.userService.addUser(this.newUser as UserData);
+    this.newUser.online = true;
+    this.userService.addUser('users',this.newUser as UserData);
     this.userService.currentEmail = this.newUser.email;
     this.userService.currentPassword = this.newUser.password;
     await this.userService.createUser();

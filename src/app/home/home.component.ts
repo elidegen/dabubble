@@ -13,18 +13,21 @@ import { UserData } from '../interfaces/user-interface';
 export class HomeComponent {
   showFiller: any;
   currentUser: UserData = {
-    name: "",
+    name: "Guest",
     email: "",
     password: "",
     id: "",
     picture:"",
+    online: false,
   }
 
-  constructor(public dialog: MatDialog, public userService: UserService, public router: Router) { }
+  constructor(public dialog: MatDialog, public userService: UserService, public router: Router) { 
+    this.currentUser = this.userService.currentUser;
+  }
 
 
   ngOnInit() {
-  this.currentUser.name = this.userService.currentUser.name!;
+
   }
   openProfileDialog(): void {
     const dialogRef = this.dialog.open(DialogViewProfileComponent, {

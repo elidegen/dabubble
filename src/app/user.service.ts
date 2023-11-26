@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { UserData } from './interfaces/user-interface';
 import { inject } from '@angular/core';
-import { Firestore, collection, doc, collectionData, onSnapshot,addDoc,deleteDoc,updateDoc} from '@angular/fire/firestore';
-import { getAuth, createUserWithEmailAndPassword,signOut,GoogleAuthProvider,signInWithPopup,signInWithEmailAndPassword, User, } from "firebase/auth";
+import { Firestore, collection, doc, collectionData, onSnapshot, addDoc, deleteDoc, updateDoc } from '@angular/fire/firestore';
+import { getAuth, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, User, } from "firebase/auth";
 import { Timestamp } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
@@ -15,39 +15,28 @@ export class UserService {
 
   firestore: Firestore = inject(Firestore);
   users: UserData[] = [];
-  activeUsers: UserData[] = [];
-  currentUser = {
-    name: "",
-    email: "",
-    password: "",
-    id: "",
-    picture:"",
-  }
-  currentEmail: string ="";
+  currentUser = this.createEmptyUser();
+  currentEmail: string = "";
   currentPassword: string = "";
   private auth = getAuth();
   provider = new GoogleAuthProvider();
   signInSuccess = false;
- unsubList;
+  unsubList;
+
   ngOnInit() {
 
-    this.currentUser = {
-      name: "",
-      email: "",
-      password: "",
-      id: "",
-      picture:"",
-    }
+
   }
 
   constructor(public router: Router) {
-    this.unsubList = this.subUserList();
+    this.unsubList = this.subUserList('users');
+
     // this.unsubSingle = onSnapshot(this.getSingleDocRef("users", "adsfasdf"), (element) => {
     // });
     // this.unsubSingle();
-   
 
-   
+
+
   }
 
   ngOnDestroy() {
@@ -56,155 +45,158 @@ export class UserService {
 
 
 
-createUser() {
-  createUserWithEmailAndPassword(this.auth, this.currentEmail, this.currentPassword)
-  .then((userCredential) => {
-    console.log(this.currentEmail,this.currentPassword);
-    const user = userCredential.user;
-    console.log("created User:", user)
-    this.signInUser(this.currentEmail,this.currentPassword);
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    console.log(`Error Code: ${errorCode}`);
-    console.log(`Error Message: ${errorMessage}`);
-    // ..
-  });
+  createUser() {
+    createUserWithEmailAndPassword(this.auth, this.currentEmail, this.currentPassword)
+      .then((userCredential) => {
+        console.log(this.currentEmail, this.currentPassword);
+        const user = userCredential.user;
+        console.log("created User:", user)
+        this.signInUser(this.currentEmail, this.currentPassword);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(`Error Code: ${errorCode}`);
+        console.log(`Error Message: ${errorMessage}`);
+        // ..
+      });
 
-}
+  }
 
-signInUser(email: string, password: string) {
-  signInWithEmailAndPassword(this.auth, email, password)
-    .then((userCredential) => {
-      console.log('Benutzer angemeldet:', userCredential.user);
-      this.signInSuccess = true;
-       let activeUser= this.findUserWithEmail(email);
-      this.currentUser = activeUser as UserData;
-       console.log("Diese Nutzer sind Eingeloggt",this.activeUsers);
-       if (this.signInSuccess) {
-        this.router.navigate(['home']);
-      }
-    })
-    .catch((error) => {
-      console.error('Anmeldefehler:', error);
+
+  async signInUser(email: string, password: string) {
+   await  signInWithEmailAndPassword(this.auth, email, password)
+      .then((userCredential) => {
+        this.signInSuccess = true;
+        let activeUser = this.findUserIndexWithEmail(email);
+        console.log(activeUser);
+        this.users[activeUser].online = true;
+        this.currentUser = this.users[activeUser];
+       this.setCurrentUserToLocalStorage();
+     this.getCurrentUserFromLocalStorage();
+        if (this.signInSuccess) {
+          this.router.navigate(['home']);
+          console.log("CurrentUser", this.currentUser);
+        }
+      })
+      .catch((error) => {
+        console.error('Anmeldefehler:', error);
+      });
+      
+  }
+
+
+  async signInWithGoogle() {
+    await signInWithPopup(this.auth, this.provider)
+      .then((result) => {
+        const user = result.user;
+        console.log('Google Benutzer angemeldet:', user);
+        this.currentUser = {
+          name: user.displayName || "",
+          email: user.email || "",
+          password: "",
+          id: user.uid,
+          picture: user.photoURL || "",
+          online: true,
+        };
+
+      })
+      .catch((error) => {
+        console.error('Fehler bei Google-Anmeldung:', error);
+      });
+    await this.addUser('users', this.currentUser);
+    await this.router.navigate(['home']);
+    await this.setCurrentUserToLocalStorage();
+    await this.getCurrentUserFromLocalStorage();
+  }
+
+
+  async signOutUser() {
+    await signOut(this.auth).then(() => {
+      console.log('Benutzer erfolgreich abgemeldet');
+
+    }).catch((error) => {
+      console.error('Fehler beim Abmelden:', error);
     });
-}
-
-
-signInWithGoogle() {
-  signInWithPopup(this.auth, this.provider)
-    .then((result) => {
-      // Das Anmeldeergebnis enthält Benutzerinformationen
-      const user = result.user;
-      console.log('Google Benutzer angemeldet:', user);
-
-      // Optional: Benutzerinformationen in Firestore speichern oder in Ihrem System aktualisieren
-      this.currentUser = {
-        name: user.displayName || "",
-        email: user.email || "",
-        password: "", // Das Passwort wird bei Google-Anmeldungen nicht verwendet
-        id: user.uid,
-        picture: user.photoURL || "",
-      };
-      this.addUser(this.currentUser);
-
-      // Weiterleitung oder andere Aktionen
-      this.router.navigate(['home']);
-    })
-    .catch((error) => {
-      console.error('Fehler bei Google-Anmeldung:', error);
-    });
-}
-
-
-signOutUser() {
-  signOut(this.auth).then(() => {
-    console.log('Benutzer erfolgreich abgemeldet');
-    this.currentUser = {
-      name: "",
-      email: "",
-      password: "",
-      id: "",
-      picture:"",
-    }
-   
-  }).catch((error) => {
-    console.error('Fehler beim Abmelden:', error);
-  });
-}
+    let userIndexToLogout = this.findUserIndexWithEmail(this.currentUser.email);
+    console.log("Index to Logout", userIndexToLogout);
+    this.users[userIndexToLogout].online = false;
+    await this.updateUser('users', this.users[userIndexToLogout]);
+    console.log(this.users[userIndexToLogout]);
+    this.currentUser = this.createEmptyUser();
+    await this.removeCurrentUserFromLocalStorage();
+  }
 
 
 
 
 
 
-findUserWithEmail(email: string): UserData | undefined {
-  return this.users.find(user => user.email === email);
-}
-
-findUserWithId(id: string): UserData | undefined {
-  return this.users.find(user => user.email === id);
-}
+  findUserIndexWithEmail(email: string) {
+    return this.users.findIndex(user => user.email === email);
+  }
 
 
 
 
   setUserData(obj: any,) {
-    // Check if 'birthdate' is a Timestamp and convert to Date object
+
     return {
       name: obj.name || "",
       email: obj.email || "",
       password: obj.password || "",
       id: obj.id,
       picture: obj.picture || "",
+      online: obj.online || false,
     }
   }
 
-  async addUser(item: UserData) {
-    await addDoc(this.getUsersRef(), item).catch(
+  async addUser(colId: string, item: UserData) {
+    await addDoc(this.getUsersRef(colId), item).catch(
       (err) => { console.log(err) }
     ).then(
       (docRef) => {
         console.log()
-        this.updateUserId(item, docRef!.id);
+        this.updateUserId(colId, item, docRef!.id);
         console.log("New user with id", docRef!.id)
       }
     )
   }
 
-  subUserList() {
-    return onSnapshot(this.getUsersRef(), (list) => {
-     this.users = [];
-       list.forEach(element => {
-         this.users.push(this.setUserData(element.data()));
-         console.log("Available users",element.data());
-       })
-     })
-   }
+  subUserList(coldId: string) {
+    return onSnapshot(this.getUsersRef(coldId), (list) => {
+      this.users = [];
+      list.forEach(element => {
+        this.users.push(this.setUserData(element.data()));
+        console.log("Available users", element.data());
+      })
+    })
+  }
 
 
- 
-    async deleteCustomer(colId: "users", docId: string) {
-    await  deleteDoc(this.getSingleDocRef(colId, docId)).catch (
+
+  async deleteUser(colId: string, docId: string) {
+    await deleteDoc(this.getSingleDocRef(colId, docId)).catch(
 
       (err) => { console.log(err); }
     )
   }
 
-async updateUserId(user: UserData, newId: string) {
-  user.id = newId;
-  await this.updateUser(user);
-}
-   async updateUser(user: UserData) {
-      let docRef = this.getSingleDocRef('users',user.id);
-      await updateDoc(docRef, this.getUpdateData(user)).catch(
-    
-        (error) => { console.log(error); }
-        
-      );
-     
-    
+  async updateUserId(colId: string, user: UserData, newId: string,) {
+    user.id = newId;
+    await this.updateUser(colId, user);
+  }
+
+
+  async updateUser(colId: string, user: UserData) {
+    let docRef = this.getSingleDocRef(colId, user.id);
+    await updateDoc(docRef, this.getUpdateData(user)).catch(
+
+      (error) => { console.log(error); }
+
+    );
+
+
   }
 
   getUpdateData(user: UserData) {
@@ -214,31 +206,46 @@ async updateUserId(user: UserData, newId: string) {
       password: user.password,
       id: user.id,
       picture: user.picture,
+      online: user.online,
+    }
   }
 
-}
-  
-  
-  
-  // getCleanJson(note: Note) {
-  //    return {
-  //     type: note.type,
-  //     titel: note.titel,
-  //     content: note.content,
-  //     marked: note.marked,
-  //    }
-  // }
-  // getColIdFromNote(customer: CustomerData) {
-  //   if (note.type == 'note') {
-  //     return 'Notes'
-  //   } else {
-  //     return 'Trash'
-  //   }
-  // }
+  createEmptyUser(): UserData {
+    return {
+      name: "Guest",
+      email: "",
+      password: "",
+      id: "",
+      picture: "",
+      online: false,
+    }
+  }
+
+
+  setCurrentUserToLocalStorage() {
+    let userJson = JSON.stringify(this.currentUser);
+    localStorage.setItem('currentUser', userJson);
+    console.log('currentUser im LocalStorage gespeichert');
+  }
+
+  removeCurrentUserFromLocalStorage() {
+    localStorage.removeItem('currentUser');
+    console.log('currentUser aus LocalStorage entfernt');
+  }
+
+  getCurrentUserFromLocalStorage(): void  {
+    const userJson = localStorage.getItem('currentUser');
+    if (userJson) {
+       this.currentUser = JSON.parse(userJson) as UserData;
+    } else {
+      console.log('Kein currentUser im LocalStorage gefunden');
+      this.currentUser = this.createEmptyUser();
+    }
+  }
 
   /**This is for getting the collection "customers" from firebase */
-  getUsersRef() {
-    return collection(this.firestore, 'users');
+  getUsersRef(colId: string) {
+    return collection(this.firestore, colId);
   }
 
   /**Here i get the Infos about a single customer, 
@@ -250,8 +257,5 @@ async updateUserId(user: UserData, newId: string) {
     return doc(collection(this.firestore, colId), docId);
   }
 
-timestampToDate(timestamp:Timestamp): Date {
-    return timestamp.toDate();
-  }
 }
 

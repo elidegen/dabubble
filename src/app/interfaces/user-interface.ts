@@ -4,4 +4,5 @@ export interface UserData {
   password: string;
   id: string;
   picture: string;
+  online: boolean;
 }
