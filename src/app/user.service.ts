@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { UserData } from './interfaces/user-interface';
 import { inject } from '@angular/core';
 import { Firestore, collection, doc, collectionData, onSnapshot, addDoc, deleteDoc, updateDoc } from '@angular/fire/firestore';
-import { getAuth, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, User,sendPasswordResetEmail } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, User, sendPasswordResetEmail } from "firebase/auth";
 import { Timestamp } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
@@ -65,15 +65,15 @@ export class UserService {
 
 
   async signInUser(email: string, password: string) {
-   await  signInWithEmailAndPassword(this.auth, email, password)
+    await signInWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
         this.signInSuccess = true;
         let activeUser = this.findUserIndexWithEmail(email);
         console.log(activeUser);
         this.users[activeUser].online = true;
         this.currentUser = this.users[activeUser];
-       this.setCurrentUserToLocalStorage();
-     
+        this.setCurrentUserToLocalStorage();
+
         if (this.signInSuccess) {
           this.router.navigate(['home']);
           console.log("CurrentUser", this.currentUser);
@@ -82,7 +82,7 @@ export class UserService {
       .catch((error) => {
         console.error('Anmeldefehler:', error);
       });
-      
+
   }
 
 
@@ -104,7 +104,7 @@ export class UserService {
       .catch((error) => {
         console.error('Fehler bei Google-Anmeldung:', error);
       });
- 
+
   }
 
 
@@ -125,15 +125,14 @@ export class UserService {
   }
 
 
-async addGoogleUser() {
- 
+  async addGoogleUser() {
+    if (!this.userExists(this.currentUser.email)) {
     await this.addUser('users', this.currentUser);
-  
- 
-  await this.setCurrentUserToLocalStorage();
-  await this.getCurrentUserFromLocalStorage();
-  await this.router.navigate(['home']);
-}
+  }
+    await this.setCurrentUserToLocalStorage();
+    await this.getCurrentUserFromLocalStorage();
+    await this.router.navigate(['home']);
+  }
 
 
 
@@ -150,8 +149,8 @@ async addGoogleUser() {
         console.error('Fehler beim Senden der Passwort-Reset-E-Mail:', error);
       });
   }
-  
-  
+
+
 
 
 
@@ -212,8 +211,6 @@ async addGoogleUser() {
       (error) => { console.log(error); }
 
     );
-
-
   }
 
   getUpdateData(user: UserData) {
@@ -250,10 +247,10 @@ async addGoogleUser() {
     console.log('currentUser aus LocalStorage entfernt');
   }
 
-  getCurrentUserFromLocalStorage(): void  {
+  getCurrentUserFromLocalStorage(): void {
     const userJson = localStorage.getItem('currentUser');
     if (userJson) {
-       this.currentUser = JSON.parse(userJson) as UserData;
+      this.currentUser = JSON.parse(userJson) as UserData;
     } else {
       console.log('Kein currentUser im LocalStorage gefunden');
       this.currentUser = this.createEmptyUser();
@@ -272,6 +269,10 @@ async addGoogleUser() {
   */
   getSingleDocRef(colId: string, docId: string) {
     return doc(collection(this.firestore, colId), docId);
+  }
+
+  userExists(email: string): boolean {
+    return this.users.some(user => user.email === email);
   }
 
 }

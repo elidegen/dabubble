@@ -96,7 +96,7 @@ get loginemail() {
   }
 
   changePicSrc(pic:string) {
-    this.picSrc = "character_" + pic +".svg";
+    this.picSrc = pic;
     
   }
 
