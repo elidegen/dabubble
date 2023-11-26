@@ -138,14 +138,17 @@ async addGoogleUser() {
     return this.users.findIndex(user => user.email === email);
   }
 
-  // sendResetEmail() {
-  //   this.auth.sendPasswordResetEmail(emailAddress).then(function() {
-  //     // Email sent.
-  //   }).catch(function(error) {
-  //     // An error happened.
-  //   });
-  // }
-
+  sendResetEmail(emailAddress: string) {
+ 
+    sendPasswordResetEmail(this.auth, emailAddress)
+      .then(() => {
+        console.log('Passwort-Reset-E-Mail gesendet.');
+      })
+      .catch((error) => {
+        console.error('Fehler beim Senden der Passwort-Reset-E-Mail:', error);
+      });
+  }
+  
   
 
 
