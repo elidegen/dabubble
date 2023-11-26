@@ -133,24 +133,66 @@ mat-card {
     }
 }
 
-.message-box-received {
+.my-messages {
+    .message-box {
+        flex-direction: row-reverse;
+    }
+
+    .message-data {
+        flex-direction: row-reverse;
+    }
+
+    .my-message-content {
+        border-radius: 24px 0 24px 24px;
+        background-color: var(--purple2);
+        color: white;
+    }
+
+    .message-container {
+        align-items: flex-end;
+    }
+
+    .message-row-container {
+        &:hover {
+            background-color: var(--primary);
+
+            .my-message-content {
+                background-color: var(--purple2) !important;
+            }
+        }
+    }
+
+    .reaction-container {
+        align-items: flex-end;
+    }
+}
+
+.message-box {
     display: flex;
     padding: 0 20px;
-    position: relative;
+    justify-content: flex-start;
+    gap: 16px;
 }
 
-.received-message-container {
+.message-container {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
+    gap: 6px;
 }
 
-.received-message {
-    font-size: 10px !important;
-    border-radius: 0 32px 32px 32px;
-    padding: 8px 8px 8px 16px;
-    max-width: 400px;
+.message-data {
+    display: flex;
+    gap: 16px;
+}
+
+.message-content,
+.my-message-content {
+    border-radius: 0 24px 24px 24px;
+    padding: 12px 16px;
+    width: fit-content;
+    max-width: 100%;
+    color: black;
+    background-color: var(--primary);
 }
 
 .message-row-container {
@@ -159,28 +201,31 @@ mat-card {
     cursor: pointer;
 
     &:hover {
-        .received-message {
-            background-color: white;
-        }
+        background-color: var(--primary);
 
         .last-comment {
             color: black;
         }
 
-        background-color: var(--primary);
-
         .reaction {
-            transition: all 125ms;
             right: 25px;
             opacity: 1;
         }
 
         .own-message {
-            transition: all 125ms;
-            left: 25px !important;
-            opacity: 1;
+            left: 25px;
+        }
+
+        .message-content {
+            background-color: white;
         }
     }
+}
+
+section {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
 }
 
 .reaction {
@@ -210,40 +255,15 @@ mat-card {
     left: 50px;
 }
 
-.message-box {
-    display: flex;
-    padding: 0 20px;
-    justify-content: flex-end;
-}
-
-.sent-message-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 4px;
-}
-
-.message-avatar-container {
+.creator-picture-container {
     display: flex;
     align-items: flex-start;
+
     img {
         height: 64px;
         width: 64px;
         border-radius: 50%;
     }
-}
-
-.sent-message {
-    color: white;
-    font-size: 10px !important;
-    border-radius: 32px 0 32px 32px;
-    padding: 8px 8px 8px 16px;
-    max-width: 400px
-}
-
-.message-data {
-    display: flex;
-    gap: 16px;
 }
 
 .date {
@@ -252,49 +272,22 @@ mat-card {
 }
 
 .name {
-    font-size: 12px;
-    font-weight: bold;
+    font-size: 18px;
+    font-weight: 500;
 }
 
-.add-reaction-button {
+.reaction-container {
     display: flex;
-    align-items: center;
+    flex-direction: column-reverse;
     justify-content: center;
-    height: 20px;
-    width: 20px;
-    background-color: white;
-
-    img {
-        height: 16px;
-        width: 16px;
-    }
+    gap: 6px;
 }
-
-.comment-section {
-    display: flex;
-    gap: 16px;
-}
-
-.comments {
-    font-size: 10px;
-
-    &:hover {
-        font-weight: bold;
-    }
-}
-
-.last-comment {
-    font-size: 8px;
-    color: grey;
-}
-
 
 .reaction-emoji-container {
     display: flex;
     gap: 8px;
     margin-top: 4px;
 }
-
 
 .reaction-emoji-button {
     background-color: white;
@@ -316,6 +309,35 @@ mat-card {
         height: 16px;
         width: 15px;
     }
+}
+
+.add-reaction-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 16px;
+    width: 16px;
+    background-color: white;
+
+    img {
+        height: 16px;
+        width: 16px;
+    }
+}
+
+.comment-section {
+    display: flex;
+    gap: 16px;
+    margin-top: 2px;
+
+    &:hover .comments {
+        font-weight: 550;
+    }
+}
+
+.last-comment {
+    font-size: 12px;
+    color: grey;
 }
 
 mat-drawer-container,

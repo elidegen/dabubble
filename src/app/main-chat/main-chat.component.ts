@@ -10,6 +10,7 @@ import { Channel } from 'src/models/channel.class';
 import { Message } from 'src/models/message.class';
 import { onSnapshot, orderBy, query } from 'firebase/firestore';
 import { UserService } from '../user.service';
+import { UserData } from '../interfaces/user-interface';
 
 @Component({
   selector: 'app-main-chat',
@@ -24,8 +25,12 @@ export class MainChatComponent implements OnInit {
   message: Message = new Message();
   allMessages: Message[] = [];
   unSubMessages: any;
+  currentUser: UserData;
 
   constructor(public dialog: MatDialog, private chatService: ChatService, private userService: UserService) {
+    userService.getCurrentUserFromLocalStorage();
+    this.currentUser = this.userService.currentUser;
+    console.log('currentuser: ',this.currentUser);
     
   }
 
@@ -34,7 +39,7 @@ export class MainChatComponent implements OnInit {
       if (openChat) {
         this.currentChat = openChat as Channel;
         this.loadMessages();
-     
+
         console.log('currentChat updated: ', this.currentChat);
       }
     });
@@ -63,7 +68,7 @@ export class MainChatComponent implements OnInit {
     });
   }
 
-  
+
 
   onCloseThread() {
     this.threadDrawer.close();
@@ -76,13 +81,13 @@ export class MainChatComponent implements OnInit {
       this.getSentMessageCreator();
       const subColRef = collection(this.firestore, `channels/${this.currentChat.id}/messages`);
       await addDoc(subColRef, this.message.toJSON())
-      .catch((err) => {
-        console.log(err);
-      })
-      .then((result: any) => {
-        this.message.content = '';
-        console.log('Message sent', result);
-      });
+        .catch((err) => {
+          console.log(err);
+        })
+        .then((result: any) => {
+          this.message.content = '';
+          console.log('Message sent', result);
+        });
     }
   }
 
@@ -99,9 +104,7 @@ export class MainChatComponent implements OnInit {
           return message;
         });
         this.scrollToBottom();
-        console.log('All messages:', this.allMessages); // Überprüfe die aktualisierte Liste
       });
-    
     }
   }
 
@@ -133,17 +136,12 @@ export class MainChatComponent implements OnInit {
   getSingleDocRef(colId: string, docId: string) {
     return doc(collection(this.firestore, colId), docId);
   }
-  
+
   getChannelsRef() {
     return collection(this.firestore, 'channels');
   }
 
   scrollToBottom(): void {
-    try {
-      this.messageContainer.nativeElement.scrollTop = this.messageContainer.nativeElement.scrollHeight;
-      console.log('Scrolled to bottom');
-    } catch (err) {
-      console.error('Error scrolling to bottom:', err);
-    }
+    this.messageContainer.nativeElement.scrollTop = this.messageContainer.nativeElement.scrollHeight;
   }
 }
