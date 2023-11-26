@@ -5,7 +5,7 @@
         <button (click)="openEditChannelDialog()" mat-button>
           <div class="chat-title">
             <img src="assets/img/icons/tag.svg" alt="" class="mr-16" />
-            <span class="mr-16">Entwicklerteam</span>
+            <span class="mr-16">{{ currentChat?.name || '' }}</span>
             <mat-icon>expand_more</mat-icon>
           </div>
         </button>
@@ -147,7 +147,7 @@
 
     <mat-card-content class="textfield-content">
       <div class="text-field-container">
-        <textarea placeholder="Message to #Entwicklerteam"></textarea>
+        <textarea [(ngModel)]="message.content" placeholder="Message to #Entwicklerteam"></textarea>
 
         <div class="message-buttons">
           <div class="attachments">
@@ -166,7 +166,7 @@
             </button>
           </div>
 
-          <button mat-icon-button>
+          <button mat-icon-button (click)="sendMessage()">
             <img src="assets/img/icons/send.svg" alt="" />
           </button>
         </div>

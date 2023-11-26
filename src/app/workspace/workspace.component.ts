@@ -36,12 +36,8 @@ export class WorkspaceComponent implements OnInit {
   }
 
   renderChat(channel: Channel) {
-    console.log('renderChat Channel: ',channel);
-    
+    console.log('renderChat Channel: ', channel);
     this.chatservice.openChat = channel;
-
-    console.log('renderchat openchat: ', this.chatservice.openChat);
-    
   }
 
   ngOnDestroy(): void {
