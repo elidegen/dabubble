@@ -30,8 +30,7 @@ export class MainChatComponent implements OnInit {
   constructor(public dialog: MatDialog, private chatService: ChatService, private userService: UserService) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
-    console.log('currentuser: ',this.currentUser);
-    
+    console.log('currentuser: ', this.currentUser);
   }
 
   ngOnInit() {
@@ -39,7 +38,6 @@ export class MainChatComponent implements OnInit {
       if (openChat) {
         this.currentChat = openChat as Channel;
         this.loadMessages();
-
         console.log('currentChat updated: ', this.currentChat);
       }
     });

@@ -7,17 +7,23 @@
             </button>
         </div>
         <div class="picture">
-            <img src="assets/img/avatars/avatar_male2.svg" alt="">
+            <img src="{{currentUser.picture}}" alt="" />
         </div>
 
         <div class="name">
-            <h1>Frederik Beck</h1>
+            <h1>{{currentUser.name}}</h1>
             <span (click)="editState = true">Edit</span>
         </div>
 
-        <div class="status">
-            <div class="status-circle"></div>
-            <span>Active</span>
+        <div [ngSwitch]="currentUser.online">
+            <div class="status" *ngSwitchCase="false">
+                <div class="status-circle" style="background-color: grey !important;"></div>
+                <span style="color: grey;">Inactive</span>
+            </div>
+            <div class="status" *ngSwitchCase="true">
+                <div class="status-circle" style="background-color: #92c83e !important;"></div>
+                <span style="color: #92c83e;">Active</span>
+            </div>
         </div>
 
         <div class="email-container">
@@ -26,7 +32,7 @@
             </div>
             <div class="email">
                 <h2>E-Mail Adress</h2>
-                <span>fred.beck@mail.com</span>
+                <span>{{currentUser.email}}</span>
             </div>
         </div>
     </mat-card-content>
@@ -39,7 +45,7 @@
             </button>
         </div>
         <div class="picture">
-            <img src="assets/img/avatars/avatar_male2.svg" alt="">
+            <img src="{{currentUser.picture}}" alt="" />
         </div>
 
         <form>
@@ -48,13 +54,14 @@
                 <h2>Full Name</h2>
             </div>
 
-            <input type="text" value="Frederik Beck" placeholder="Enter Name">
+            <input type="text" value="{{currentUser.name}}" placeholder="Enter Name">
 
             <div class="display-flex">
                 <img class="mr-16" src="assets/img/icons/mail.svg">
                 <h2>E-Mail Adress</h2>
             </div>
-            <input type="email" value="fred.beck@mail.com" placeholder="Enter E-Mail">
+
+            <input type="email" value="{{currentUser.email}}" placeholder="Enter E-Mail">
         </form>
 
         <div class="buttons w100">

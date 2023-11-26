@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import { UserService } from '../user.service';
+import { UserData } from '../interfaces/user-interface';
 
 @Component({
   selector: 'app-dialog-view-profile',
@@ -8,5 +10,11 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class DialogViewProfileComponent {
   editState: boolean = false;
-  constructor(public dialogRef: MatDialogRef<DialogViewProfileComponent>) { }
+  currentUser: UserData;
+
+  constructor(public dialogRef: MatDialogRef<DialogViewProfileComponent>, private userService: UserService) {
+    userService.getCurrentUserFromLocalStorage();
+    this.currentUser = this.userService.currentUser;
+    console.log('currentuser: ', this.currentUser);
+  }
 }
