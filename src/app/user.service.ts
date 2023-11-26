@@ -104,7 +104,7 @@ export class UserService {
       .catch((error) => {
         console.error('Fehler bei Google-Anmeldung:', error);
       });
-   this.addGoogleUser();
+ 
   }
 
 
@@ -126,7 +126,10 @@ export class UserService {
 
 
 async addGoogleUser() {
-  await this.addUser('users', this.currentUser);
+ 
+    await this.addUser('users', this.currentUser);
+  
+ 
   await this.setCurrentUserToLocalStorage();
   await this.getCurrentUserFromLocalStorage();
   await this.router.navigate(['home']);
@@ -139,7 +142,6 @@ async addGoogleUser() {
   }
 
   sendResetEmail(emailAddress: string) {
- 
     sendPasswordResetEmail(this.auth, emailAddress)
       .then(() => {
         console.log('Passwort-Reset-E-Mail gesendet.');
@@ -231,7 +233,7 @@ async addGoogleUser() {
       email: "",
       password: "",
       id: "",
-      picture: "profile.svg",
+      picture: "assets/img/avatars/profile.svg",
       online: false,
     }
   }

@@ -17,7 +17,7 @@ export class HomeComponent {
     email: "",
     password: "",
     id: "",
-    picture: "profile.svg",
+    picture: "assets/img/avatars/profile.svg",
     online: false,
   }
 

@@ -11,9 +11,9 @@ import { Router } from '@angular/router';
 })
 export class LoginScreenComponent implements OnInit {
   animationIsFinished = false;
-  picSrc = "profile.svg";
+  picSrc = "assets/img/avatars/profile.svg";
   switch_expression: any = "login";
-  profileImages: any = ["1", "2", "3", "4", "5", "6"];
+  profileImages: any = ["assets/img/avatars/character_1.svg","assets/img/avatars/character_2.svg","assets/img/avatars/character_3.svg","assets/img/avatars/character_4.svg","assets/img/avatars/character_5.svg","assets/img/avatars/character_6.svg",]
   email: string = "";
   password: string = "";
   newUser: UserData;
@@ -28,7 +28,7 @@ export class LoginScreenComponent implements OnInit {
       name: "",
       email: "",
       password: "",
-      picture: "profile.svg",
+      picture: "assets/img/avatars/profile.svg",
       id: "",
       online: false,
     };
