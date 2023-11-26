@@ -92,8 +92,8 @@
           <div class="message-box">
             <div class="sent-message-container mr-16">
               <div class="message-data">
-                <span class="date">15:06</span>
-                <span class="name">Maximillian Schneider</span>
+                <span class="date">{{message.time}}</span>
+                <span class="name">{{ message.creator }}</span>
               </div>
 
               <div class="sent-message color-purple">
@@ -118,7 +118,7 @@
             </div>
 
             <div class="message-avatar-container">
-              <img src="assets/img/avatars/avatar_male2.svg" alt="" />
+              <img src="assets/img/avatars/{{message.profilePic}}" alt="" />
             </div>
           </div>
 

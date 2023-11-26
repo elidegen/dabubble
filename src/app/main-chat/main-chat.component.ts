@@ -9,6 +9,7 @@ import { ChatService } from '../chat.service';
 import { Channel } from 'src/models/channel.class';
 import { Message } from 'src/models/message.class';
 import { getDocs, onSnapshot, orderBy, query } from 'firebase/firestore';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-main-chat',
@@ -23,7 +24,7 @@ export class MainChatComponent implements OnInit {
   allMessages: Message[] = [];
   unSubMessages: any;
 
-  constructor(public dialog: MatDialog, private chatService: ChatService) {
+  constructor(public dialog: MatDialog, private chatService: ChatService, private userService: UserService) {
     
   }
 
@@ -69,10 +70,9 @@ export class MainChatComponent implements OnInit {
 
   async sendMessage() {
     if (this.currentChat?.id) {
-      const currentTime = new Date();
-      const formattedTime = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      this.message.time = formattedTime;
-
+      this.getSentMessageTime();
+      this.getSentMessageDate();
+      this.getSentMessageCreator();
       const subColRef = collection(this.firestore, `channels/${this.currentChat.id}/messages`);
       await addDoc(subColRef, this.message.toJSON())
       .catch((err) => {
@@ -95,10 +95,34 @@ export class MainChatComponent implements OnInit {
           console.log('check Message', message);
           
           return message;
-        });
-    })
+          });
+      });
+    }
   }
-}
+
+  getSentMessageDate() {
+    const currentDate = new Date();
+    const formattedDate = currentDate.toLocaleDateString();
+    this.message.date = formattedDate;
+  }
+
+
+
+  getSentMessageTime() {
+    const currentTime = new Date();
+    const formattedTime = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    this.message.time = formattedTime;
+  }
+
+  getSentMessageCreator() {
+    const name = this.userService.currentUser.name;
+    const profilePic = this.userService.currentUser.picture;
+
+    this.message.creator = name;
+    this.message.profilePic = profilePic;
+
+  }
+
 
 
   getSingleDocRef(colId: string, docId: string) {
