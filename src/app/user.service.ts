@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { UserData } from './interfaces/user-interface';
 import { inject } from '@angular/core';
 import { Firestore, collection, doc, collectionData, onSnapshot, addDoc, deleteDoc, updateDoc } from '@angular/fire/firestore';
-import { getAuth, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, User, } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, User,sendPasswordResetEmail } from "firebase/auth";
 import { Timestamp } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
@@ -24,7 +24,7 @@ export class UserService {
   unsubList;
 
   ngOnInit() {
-
+    this.getCurrentUserFromLocalStorage();
 
   }
 
@@ -73,7 +73,7 @@ export class UserService {
         this.users[activeUser].online = true;
         this.currentUser = this.users[activeUser];
        this.setCurrentUserToLocalStorage();
-     this.getCurrentUserFromLocalStorage();
+     
         if (this.signInSuccess) {
           this.router.navigate(['home']);
           console.log("CurrentUser", this.currentUser);
@@ -99,15 +99,12 @@ export class UserService {
           picture: user.photoURL || "",
           online: true,
         };
-
+        this.addGoogleUser();
       })
       .catch((error) => {
         console.error('Fehler bei Google-Anmeldung:', error);
       });
-    await this.addUser('users', this.currentUser);
-    await this.router.navigate(['home']);
-    await this.setCurrentUserToLocalStorage();
-    await this.getCurrentUserFromLocalStorage();
+   this.addGoogleUser();
   }
 
 
@@ -128,13 +125,28 @@ export class UserService {
   }
 
 
-
+async addGoogleUser() {
+  await this.addUser('users', this.currentUser);
+  await this.setCurrentUserToLocalStorage();
+  await this.getCurrentUserFromLocalStorage();
+  await this.router.navigate(['home']);
+}
 
 
 
   findUserIndexWithEmail(email: string) {
     return this.users.findIndex(user => user.email === email);
   }
+
+  // sendResetEmail() {
+  //   this.auth.sendPasswordResetEmail(emailAddress).then(function() {
+  //     // Email sent.
+  //   }).catch(function(error) {
+  //     // An error happened.
+  //   });
+  // }
+
+  
 
 
 
@@ -216,7 +228,7 @@ export class UserService {
       email: "",
       password: "",
       id: "",
-      picture: "",
+      picture: "profile.svg",
       online: false,
     }
   }

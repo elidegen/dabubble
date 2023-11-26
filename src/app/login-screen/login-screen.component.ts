@@ -17,6 +17,7 @@ export class LoginScreenComponent implements OnInit {
   email: string = "";
   password: string = "";
   newUser: UserData;
+  resetEmail: string = "";
   
 
 
@@ -27,7 +28,7 @@ export class LoginScreenComponent implements OnInit {
       name: "",
       email: "",
       password: "",
-      picture: "",
+      picture: "profile.svg",
       id: "",
       online: false,
     };

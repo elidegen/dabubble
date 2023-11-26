@@ -83,14 +83,14 @@
         src="assets\img\icons\arrow_back.svg">
       <h1 class="color-purple2-text padding-bottom"> Choose your Avatar</h1>
       <div class="big-profile-pic"><img class="userPic"
-        src="assets\img\icons\{{this.picSrc}}"></div>
+        src="assets\img\avatars\{{this.picSrc}}"></div>
         <h2>{{newUser.name}}</h2>
 
       <form [formGroup]="addUser">
 
      
         <div class="choose-profile-pic margin-top"><span class="font-size20 w100 ">Choose from list</span>
-          <div  class="picture-container w100"> <img class="transform cursor-pointer " *ngFor="let pic of profileImages ; index as i;" (click)="changePicSrc(pic)"   src="assets\img\icons\character_{{pic}}.svg"></div>
+          <div  class="picture-container w100"> <img class="transform cursor-pointer " *ngFor="let pic of profileImages ; index as i;" (click)="changePicSrc(pic)"   src="assets\img\avatars\character_{{pic}}.svg"></div>
         </div>
         <div class="upload-picture margin-top align-center"><span class="font-size20">choose own picture</span> <button mat-button class="main-button" type="submit">Upload file</button></div>
         <div class="submit-buttons margin-top justify-content-end">
@@ -111,7 +111,46 @@
       <form [formGroup]="addUser">
         <div class="input-container margin-top">
           <img src="assets\img\icons\mail.svg">
-          <input matInput placeholder="E-mail" formControlName="email" required>
+          <input matInput placeholder="E-mail" [(ngModel)]="resetEmail" formControlName="email" required>
+        </div>
+        <p class="margin-top grey-span-resetpw">Receive an e-mail to reset your password</p>
+        <div class="submit-buttons margin-top justify-content-end">
+          <button mat-button (click)="changeSwitchCase('avatar')" class="main-button" type="submit">Send Email</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div *ngSwitchCase="'resetPassword'" class="login bg-white">
+    <div class="form-container">
+      <img (click)="changeSwitchCase('login')" class="position-relative cursor-pointer transform"
+        src="assets\img\icons\arrow_back.svg">
+      <h1 class="color-purple2-text padding-bottom">Reset password</h1>
+      <p style="font-size:20px;">Create your account with your name and e-mail adress.</p>
+      <form [formGroup]="addUser">
+        <div class="input-container margin-top">
+          <img src="assets\img\icons\mail.svg">
+          <input matInput placeholder="E-mail" [(ngModel)]="resetEmail" formControlName="email" required>
+        </div>
+        <p class="margin-top grey-span-resetpw">Receive an e-mail to reset your password</p>
+        <div class="submit-buttons margin-top justify-content-end">
+          <button mat-button (click)="changeSwitchCase('avatar')" class="main-button" type="submit">Send Email</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <div *ngSwitchCase="'newPassword'" class="login bg-white">
+    <div class="form-container">
+      <img (click)="changeSwitchCase('login')" class="position-relative cursor-pointer transform"
+        src="assets\img\icons\arrow_back.svg">
+      <h1 class="color-purple2-text padding-bottom">Reset password</h1>
+      <p style="font-size:20px;">Create your account with your name and e-mail adress.</p>
+      <form [formGroup]="addUser">
+        <div class="input-container margin-top">
+          <img src="assets\img\icons\mail.svg">
+          <input matInput placeholder="E-mail"  formControlName="email" required>
         </div>
         <p class="margin-top grey-span-resetpw">Receive an e-mail to reset your password</p>
         <div class="submit-buttons margin-top justify-content-end">
