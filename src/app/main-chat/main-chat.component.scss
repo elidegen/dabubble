@@ -126,6 +126,7 @@ mat-card {
 
 .main-chat-container {
     overflow-y: scroll;
+    height: 100%;
 
     &::-webkit-scrollbar {
         display: none;
@@ -225,6 +226,11 @@ mat-card {
 .message-avatar-container {
     display: flex;
     align-items: flex-start;
+    img {
+        height: 64px;
+        width: 64px;
+        border-radius: 50%;
+    }
 }
 
 .sent-message {

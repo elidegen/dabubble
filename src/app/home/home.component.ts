@@ -22,6 +22,7 @@ export class HomeComponent {
   }
 
   constructor(public dialog: MatDialog, public userService: UserService, public router: Router) { 
+    userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
   }
 
@@ -29,6 +30,7 @@ export class HomeComponent {
   ngOnInit() {
 
   }
+  
   openProfileDialog(): void {
     const dialogRef = this.dialog.open(DialogViewProfileComponent, {
       panelClass: 'dialog-container',

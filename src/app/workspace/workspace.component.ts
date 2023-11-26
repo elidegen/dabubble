@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogAddChannelComponent } from '../dialog-add-channel/dialog-add-channel.component';
-import { Firestore, collection, doc, onSnapshot } from '@angular/fire/firestore';
+import { Firestore, collection, doc, onSnapshot, orderBy, query } from '@angular/fire/firestore';
 import { Channel } from 'src/models/channel.class';
 import { ChatService } from '../chat.service';
 
@@ -21,14 +21,18 @@ export class WorkspaceComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.unsubscribeChannels = onSnapshot(collection(this.firestore, "channels"), (snapshot) => {
-      this.allChannels = snapshot.docs.map(doc => {
-        const channel = doc.data() as Channel;
-        channel.id = doc.id;
-        return channel;
-      });
-      console.log('workspace allchannels: ', this.allChannels);
-    });
+    this.unsubscribeChannels = onSnapshot(
+      query(collection(this.firestore, "channels"), orderBy("name")),
+      (snapshot) => {
+        this.allChannels = snapshot.docs.map((doc) => {
+          const channel = doc.data() as Channel;
+          channel.id = doc.id;
+          return channel;
+        });
+  
+        console.log('workspace allchannels: ', this.allChannels);
+      }
+    );
   }
 
   openDialog() {

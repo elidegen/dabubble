@@ -1,14 +1,14 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogEditChannelComponent } from '../dialog-edit-channel/dialog-edit-channel.component';
 import { DialogAddToGroupComponent } from '../dialog-add-to-group/dialog-add-to-group.component';
 import { DialogShowGroupMemberComponent } from '../dialog-show-group-member/dialog-show-group-member.component';
 import { MatDrawer } from '@angular/material/sidenav';
-import { DocumentReference, FieldValue, Firestore, addDoc, arrayUnion, collection, doc, updateDoc } from '@angular/fire/firestore';
+import { Firestore, addDoc, arrayUnion, collection, doc, updateDoc } from '@angular/fire/firestore';
 import { ChatService } from '../chat.service';
 import { Channel } from 'src/models/channel.class';
 import { Message } from 'src/models/message.class';
-import { getDocs, onSnapshot, orderBy, query } from 'firebase/firestore';
+import { onSnapshot, orderBy, query } from 'firebase/firestore';
 import { UserService } from '../user.service';
 
 @Component({
@@ -17,6 +17,7 @@ import { UserService } from '../user.service';
   styleUrls: ['./main-chat.component.scss']
 })
 export class MainChatComponent implements OnInit {
+  @ViewChild('messageContainer') messageContainer!: ElementRef;
   firestore: Firestore = inject(Firestore);
   currentChat!: Channel | undefined;
   @ViewChild('thread') threadDrawer!: MatDrawer;
@@ -33,16 +34,16 @@ export class MainChatComponent implements OnInit {
       if (openChat) {
         this.currentChat = openChat as Channel;
         this.loadMessages();
+     
         console.log('currentChat updated: ', this.currentChat);
       }
     });
-
-    
   }
 
   ngOnDestroy() {
     this.unSubMessages;
   }
+
 
   openEditChannelDialog() {
     this.dialog.open(DialogEditChannelComponent, {
@@ -88,15 +89,19 @@ export class MainChatComponent implements OnInit {
   async loadMessages() {
     if (this.currentChat?.id) {
       const messageCollection = collection(this.firestore, `channels/${this.currentChat.id}/messages`);
-      this.unSubMessages = onSnapshot(messageCollection, (snapshot) => {
+      const q = query(messageCollection, orderBy('time', 'asc'));
+      console.log(q)
+      this.unSubMessages = onSnapshot(q, (snapshot) => {
         this.allMessages = snapshot.docs.map(doc => {
           const message = doc.data() as Message;
           message.id = doc.id;
           console.log('check Message', message);
-          
           return message;
-          });
+        });
+        this.scrollToBottom();
+        console.log('All messages:', this.allMessages); // Überprüfe die aktualisierte Liste
       });
+    
     }
   }
 
@@ -131,5 +136,14 @@ export class MainChatComponent implements OnInit {
   
   getChannelsRef() {
     return collection(this.firestore, 'channels');
+  }
+
+  scrollToBottom(): void {
+    try {
+      this.messageContainer.nativeElement.scrollTop = this.messageContainer.nativeElement.scrollHeight;
+      console.log('Scrolled to bottom');
+    } catch (err) {
+      console.error('Error scrolling to bottom:', err);
+    }
   }
 }

@@ -9,7 +9,27 @@ header {
 .profile-container {
     display: flex;
     align-items: center;
+    gap: 8px;
+    img {
+        width: 56px;
+        height: 56px;
+    }
 }
+.profile-picture {
+    position: relative;
+}
+
+.online-status {
+    bottom: 4px;
+    right: 4px;
+    height: 12px;
+    width: 12px;
+    position: absolute;
+    background-color: var(--online);
+    border-radius: 100%;
+    border: 2px solid white;
+}
+
 h1 {
     margin: 0;
 }
