@@ -18,16 +18,19 @@
       <h1 class="color-purple2-text padding-bottom">Login</h1>
       <p>We recommend using the email address that you use at work.</p>
       <form [formGroup]="login">
-        <div class="input-container margin-top">
+        <div class="input-container margin-top ">
           <img src="assets\img\icons\mail.svg">
-          <input [(ngModel)]="email"matInput placeholder="E-mail" [formControl]="loginemail" required>
-         
+          <input matInput [(ngModel)]="email" matInput placeholder="E-mail" [formControl]="loginemail" required>
+          <mat-error *ngIf="!loginemail.valid">{{getErrorMessageLogin()}}</mat-error>
         </div>
-        <mat-error *ngIf="!loginemail.valid">{{getErrorMessage()}}</mat-error>
-        <div class="input-container"><img src="assets\img\icons\lock.svg"><input type="password" [(ngModel)]="password" matInput placeholder="Password"
-          [formControl]="loginpassword" required></div>
+
+        <div class="placeholder"></div>
+        <div class="input-container margin-top"><img src="assets\img\icons\lock.svg"><input type="password"
+            [(ngModel)]="password" matInput placeholder="Password" [formControl]="loginpassword" required>
+          <mat-error>{{getErrorMessageNoUser()}}</mat-error></div>
+
         <span (click)="changeSwitchCase('resetPassword')"
-          class="margin-top color-purple2-text cursor-pointer transform">Forgot password ?</span>
+          class="margin-top25 color-purple2-text cursor-pointer transform">Forgot password ?</span>
         <div class="or-container margin-top">
           <div class="bottom-line"></div><span class="or">Or</span>
           <div class="bottom-line"></div>
@@ -38,8 +41,8 @@
         </div>
 
         <div class="submit-buttons margin-top">
-          <button (click)="loginUser()"  mat-button class="main-button primary mr-16" type="submit">Login</button>
-          <button  routerLink="home" mat-button class="main-button ">Guest login</button>
+          <button (click)="loginUser()" mat-button class="main-button primary mr-16" type="submit">Login</button>
+          <button routerLink="home" mat-button class="main-button ">Guest login</button>
         </div>
       </form>
     </div>
@@ -55,21 +58,32 @@
       <form [formGroup]="addUser" (ngSubmit)="createUser()">
         <div class="input-container margin-top">
           <img src="assets\img\icons\person.svg">
-          <input [formControl]="newName"  matInput placeholder="First and  Lastname" required>
+          <input minlength="5" [formControl]="newName" matInput placeholder="First and  Lastname" required>
+          <div class="placeholder"></div>
+          <mat-error *ngIf="this.newName?.hasError('minlength')">Your name need minimum 5 letters</mat-error>
         </div>
-        <div class="input-container margin-top">
+        <div class="input-container margin-top25">
           <img src="assets\img\icons\mail.svg">
           <input [formControl]="newEmail" matInput placeholder="E-mail" required>
+          <div class="placeholder"></div>
+          <mat-error *ngIf="!newEmail.valid">{{getErrorMessageNewEmail()}}</mat-error>
         </div>
-        <mat-error *ngIf="!newEmail.valid">{{getNewErrorMessage()}}</mat-error>
-        <div class="input-container"><img src="assets\img\icons\lock.svg"><input minlength="6" type="password" [formControl]="newPassword"  matInput placeholder="Password"
-         required></div>
-        <span class="margin-top gap  cursor-pointer align-center"><input [formControl]="disableSelect" class="cursor-pointer" type="checkbox">I accept
+
+        <div class="input-container margin-top25"><img src="assets\img\icons\lock.svg"><input minlength="6"
+            type="password" [formControl]="newPassword" matInput placeholder="Password" required>
+          <div class="placeholder"></div>
+          <mat-error *ngIf="this.newPassword?.hasError('minlength')">You need a password with minium 6
+            letters</mat-error> <mat-error *ngIf="this.userAlreadyInUse">This user already exists</mat-error>
+        </div>
+
+        <span class="margin-top gap  cursor-pointer align-center"><input [formControl]="disableSelect"
+            class="cursor-pointer" type="checkbox">I accept
           the <a class="color-purple2-text transform">privacy policy</a></span>
 
 
         <div class="submit-buttons margin-top justify-content-end">
-          <button mat-button  class="align-self main-button primary" type="submit"  [disabled]="!disableSelect.value || !addUser.valid">Next</button>
+          <button mat-button class="align-self main-button primary" type="submit"
+            [disabled]="!addUser.valid">Next</button>
         </div>
       </form>
     </div>
@@ -82,27 +96,28 @@
       <img (click)="changeSwitchCase('createAccount')" class="position-relative cursor-pointer transform"
         src="assets\img\icons\arrow_back.svg">
       <h1 class="color-purple2-text padding-bottom"> Choose your Avatar</h1>
-      <div class="big-profile-pic"><img class="userPic"
-        src="{{this.picSrc}}"></div>
-        <h2>{{newUser.name}}</h2>
+      <div class="big-profile-pic"><img class="userPic" src="{{this.picSrc}}"></div>
+      <h2>{{newUser.name}}</h2>
       <form [formGroup]="addUser">
         <div class="choose-profile-pic margin-top"><span class="font-size20 w100 ">Choose from list</span>
-          <div  class="picture-container w100"> <img class="transform cursor-pointer " *ngFor="let pic of profileImages ; index as i;" (click)="changePicSrc(pic)"   src="{{pic}}"></div>
+          <div class="picture-container w100"> <img class="transform cursor-pointer "
+              *ngFor="let pic of profileImages ; index as i;" (click)="changePicSrc(pic)" src="{{pic}}"></div>
         </div>
-        <div class="upload-picture margin-top align-center"><span class="font-size20"></span> <button mat-button class="main-button" type="submit">   <label class="custom-file-upload">
-          <input class="dataInput" (change)="onFileSelected($event)"  [(ngModel)]="uploadFile" type="file">
-          Upload file
-      </label>
-       </button></div>
-       
+        <div class="upload-picture margin-top align-center"><span class="font-size20"></span> <button mat-button
+            class="main-button" type="submit"> <label class="custom-file-upload">
+              <input class="dataInput" (change)="onFileSelected($event)" [(ngModel)]="uploadFile" type="file">
+              Upload file
+            </label>
+          </button></div>
+
         <div class="submit-buttons margin-top justify-content-end">
-        
+
           <button mat-button (click)="uploadUser()" class="align-self main-button primary" type="submit">Next</button>
         </div>
       </form>
 
-     
-    
+
+
     </div>
   </div>
 
@@ -113,21 +128,26 @@
       <img (click)="changeSwitchCase('login')" class="position-relative cursor-pointer transform"
         src="assets\img\icons\arrow_back.svg">
       <h1 class="color-purple2-text padding-bottom">Reset password</h1>
-      <p style="font-size:20px;">Create your account with your name and e-mail adress.</p>
+      <p style="font-size:20px;">Please enter your E-mail adress.</p>
       <form [formGroup]="getEmailForNewPassword">
         <div class="input-container margin-top">
           <img src="assets\img\icons\mail.svg">
           <input matInput placeholder="E-mail" [(ngModel)]="resetEmail" formControlName="emailForReset" required>
+          <div class="placeholder"></div>
+          <mat-error *ngIf="this.emailForReset?.hasError('email')">Enter a valid e-mail</mat-error>
+        
         </div>
-        <p class="margin-top grey-span-resetpw">Receive an e-mail to reset your password</p>
+        <p  *ngIf="!this.userService.resetEmailFound" class="margin-top25 grey-span-resetpw">Receive an e-mail to reset your password</p>
+        <p  *ngIf="this.userService.resetEmailFound"class="margin-top25 grey-span-resetpw">An e-mail to reset your passoword was sent !</p>
         <div class="submit-buttons margin-top justify-content-end">
-          <button mat-button (click)="sendResetEmail()" class="main-button" type="submit">Send Email</button>
+          <button mat-button (click)="sendResetEmail()" [disabled]="!this.emailForReset.valid" class="main-button primary"
+            type="submit">Send Email</button>
         </div>
       </form>
     </div>
   </div>
 
-  
+
 
 
   <!-- <div *ngSwitchCase="'newPassword'" class="login bg-white">

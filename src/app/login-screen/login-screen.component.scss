@@ -126,6 +126,26 @@ form {
     display: flex;
     flex-direction: column;
 }
+.placeholder {
+    width: 100%;
+    height: 20px;
+    visibility: hidden;
+  color: transparent; 
+  height: 20px; 
+  margin-top: 5px; 
+
+}
+
+mat-error {
+    position: absolute;
+    bottom: -25px; /* Positionieren Sie die Fehlermeldung unter dem Input-Feld */
+    left: 0;
+    width: 100%; /* Sollte die Breite des Input-Feldes haben */
+    font-size: 0.8em; /* Passen Sie die Größe an Ihre Fehlermeldung an */
+    color: red; /* Fehlermeldung Farbe */
+    visibility: visible; /* Jetzt sichtbar */
+   padding-top: 10px;
+  }
 
 .grey-span-resetpw{
     font-size: 20px;
@@ -150,9 +170,23 @@ form {
    font-size: 18px;
     color:  var(--textGray);
     margin-top: 20px;
+    position: relative;
 
     img {
         margin-left: 20px;
+    }
+
+    
+    &:hover {
+        border: 1px solid var(--purple2);
+        cursor: pointer;
+    }
+
+    &:focus {
+        border: 1px solid var(--purple1);
+    }
+    &:active {
+        border: 1px solid var(--purple1);
     }
     
 }
@@ -176,7 +210,9 @@ input{
     background-color: var(--primary);
     height: 30px;
     font-size: 20px;
-   
+    cursor: pointer;
+    
+
 }
 
 // .submit-buttons {
@@ -250,6 +286,10 @@ transition: background-color 0.2s ease, color 0.2s;
     }
 }
 
+.margin-top25 {
+    margin-top: 25px;
+}
+
 .cursor-pointer {
     cursor: pointer;
    
@@ -275,6 +315,14 @@ transition: background-color 0.2s ease, color 0.2s;
 }
 input[type="file"] {
     display: none;
+    
+}
+
+input[type="email"] {
+    background-image: url("/assets/img/icons/mail.svg");
+    background-repeat: no-repeat;
+    background-position: left;
+    padding-left: 50px;
     
 }
 

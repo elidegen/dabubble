@@ -138,6 +138,13 @@ a {
     &:hover {
         opacity: 0.8 !important;
     }
+
+    &:disabled {
+        color: var(--gray) !important; 
+        border: 1px solid var(--gray) !important;
+        cursor: not-allowed; 
+        opacity: 0.5; 
+    }
 }
 
 .primary {
