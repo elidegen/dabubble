@@ -60,20 +60,14 @@
 
                 <div class="reaction-container">
                   <div class="reaction-emoji-container">
-
                     <button class="reaction-emoji-button">
-                      <img src="assets/img/emojis/rocket.svg" alt="rocket" />
+                      <img src="{{reaction.content}}" alt="rocket" />
                       <span>1</span>
                     </button>
 
-                    <button class="reaction-emoji-button">
-                      <img src="assets/img/emojis/check.svg" alt="rocket" />
-                      <span>1</span>
-                    </button>
-
-                    <button class="add-reaction-button" mat-icon-button>
+                    <!-- <button class="add-reaction-button" mat-icon-button>d
                       <img src="assets/img/icons/add_reaction.svg" alt="" />
-                    </button>
+                    </button> -->
 
                   </div>
 
@@ -87,10 +81,10 @@
             </div>
 
             <div class="reaction" [ngClass]="{'own-message': message.creator == currentUser.name}">
-              <button mat-icon-button>
+              <button mat-icon-button (click)="addReaction('assets/img/emojis/checkGreen.svg', message.id)">
                 <img src="assets/img/emojis/checkGreen.svg" alt="">
               </button>
-              <button mat-icon-button>
+              <button mat-icon-button (click)="addReaction('assets/img/emojis/hands.svg', message.id)"> 
                 <img src="assets/img/emojis/hands.svg" alt="">
               </button>
               <button mat-icon-button>

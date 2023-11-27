@@ -8,9 +8,10 @@ import { Firestore, addDoc, arrayUnion, collection, doc, updateDoc } from '@angu
 import { ChatService } from '../chat.service';
 import { Channel } from 'src/models/channel.class';
 import { Message } from 'src/models/message.class';
-import { onSnapshot, orderBy, query } from 'firebase/firestore';
+import { DocumentData, DocumentReference, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { UserService } from '../user.service';
 import { UserData } from '../interfaces/user-interface';
+import { Reaction } from 'src/models/reaction.class';
 
 @Component({
   selector: 'app-main-chat',
@@ -23,16 +24,19 @@ export class MainChatComponent implements OnInit {
   currentChat!: Channel | undefined;
   @ViewChild('thread') threadDrawer!: MatDrawer;
   message: Message = new Message();
+  reaction: Reaction = new Reaction;
   allMessages: Message[] = [];
   unSubMessages: any;
+  unSubReactions: any;
   currentUser: UserData;
   messagesByDate: { [date: string]: Message[] } = {};
   organizedMessages: { date: string, messages: Message[] }[] = []
+  allReactionsByMessage: any;
 
   constructor(public dialog: MatDialog, private chatService: ChatService, private userService: UserService) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
-    console.log('currentuser: ', this.currentUser);
+    // console.log('currentuser: ', this.currentUser);
   }
 
   ngOnInit() {
@@ -40,13 +44,14 @@ export class MainChatComponent implements OnInit {
       if (openChat) {
         this.currentChat = openChat as Channel;
         this.loadMessages();
-        console.log('currentChat updated: ', this.currentChat);
+        // this.loadAllReactions();
       }
     });
   }
 
   ngOnDestroy() {
     this.unSubMessages;
+    this.unSubReactions;
   }
 
   openEditChannelDialog() {
@@ -81,14 +86,41 @@ export class MainChatComponent implements OnInit {
         .catch((err) => {
           console.log(err);
         })
-        .then((result: any) => {
-          this.message.content = '';
-          console.log('Message sent', result);
+        .then((docRef: void | DocumentReference<DocumentData, DocumentData>) => {
+          if (docRef && docRef instanceof DocumentReference) {
+            if (this.currentChat?.id) {
+              this.updateMessageId(`channels/${this.currentChat.id}/messages`, this.message, docRef.id);
+            }
+          }
+          this.message.content= '';
         });
     }
   }
 
-  async loadMessages() {
+  async updateMessageId(colId: string, message: Message, newId: string) {
+    message.id = newId;
+    await this.updateChannel(colId, message);
+  }
+  
+  async updateChannel(colId: string, message: Message) {
+    const docRef = doc(collection(this.firestore, colId), message.id);
+    await updateDoc(docRef, this.getUpdateData(message)).catch(
+      (error) => { console.log(error); }
+    );
+  }
+  
+  getUpdateData(message: Message) {
+    return {
+      creator: this.userService.currentUser.name,
+      content: message.content,
+      time: message.time,
+      date: message.date,
+      id: message.id,
+      profilePic : this.userService.currentUser.picture
+    };
+  }
+
+  loadMessages() {
     if (this.currentChat?.id) {
       const messageCollection = collection(this.firestore, `channels/${this.currentChat.id}/messages`);
       const q = query(messageCollection, orderBy('time', 'asc'));
@@ -97,15 +129,58 @@ export class MainChatComponent implements OnInit {
         this.allMessages = snapshot.docs.map(doc => {
           const message = doc.data() as Message;
           message.id = doc.id;
-          // console.log('check Message', message);
           return message;
         });
         console.log('all Messages:', this.allMessages);
         this.organizeMessagesByDate();
-        this.scrollToBottom();
       });
     }
   }
+
+  loadAllReactions() {
+    if (this.currentChat?.id && this.message?.id) {
+      this.allReactionsByMessage = {};
+      const reactionsCollection = collection(
+        this.firestore,
+        `channels/${this.currentChat.id}/messages/${this.message.id}/reactions`
+      );
+  
+      this.unSubReactions = onSnapshot(reactionsCollection, (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          const reaction = change.doc.data() as Reaction;
+          reaction.id = change.doc.id;
+  
+          // Stelle die Beziehung zwischen Reaktionen und Nachrichten her
+          const messageId = this.message.id;
+          if (messageId) {
+            this.allReactionsByMessage[messageId] = this.allReactionsByMessage[messageId] || [];
+            this.allReactionsByMessage[messageId].push(reaction);
+          }
+        });
+      });
+    }
+  }
+
+  async addReaction(emoji: any, messageId: any) {
+    if (this.currentChat?.id) {
+      console.log('welche naxhricht ist das?',messageId);
+      
+      this.reaction.content = emoji;
+      const subReactionColRef = collection(this.firestore, `channels/${this.currentChat.id}/messages/${messageId}/reactions`);
+      await addDoc(subReactionColRef, this.reaction.toJSON())
+        .catch((err) => {
+          console.log(err);
+        })
+        .then((result: any) => {
+          console.log('Dieser Nachricht wurde etwas hinzugefügt',subReactionColRef);
+          
+        });
+    }
+  }
+
+
+
+  
 
   getSentMessageDate() {
     const currentDate = new Date();
@@ -149,8 +224,6 @@ export class MainChatComponent implements OnInit {
 
   getCurrentDate(): string {
     const currentDate = new Date();
-    console.log(currentDate);
-    
     return currentDate.toDateString();
   }
 
@@ -179,5 +252,7 @@ export class MainChatComponent implements OnInit {
       }
     }
     this.organizedMessages = Object.entries(this.messagesByDate).map(([date, messages]) => ({ date, messages }));
+    console.log('Check organized messages', this.messagesByDate);
+    
   }
 }

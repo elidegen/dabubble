@@ -40,7 +40,6 @@ export class WorkspaceComponent implements OnInit {
   }
 
   renderChat(channel: Channel) {
-    // console.log('renderChat Channel: ', channel);
     this.chatservice.openChat = channel;
   }
 

@@ -12,6 +12,7 @@ export class Message {
         this.time = obj ? obj.time : '';
         this.date = obj ? obj.date : '';
         this.profilePic = obj ? obj.profilePic : '';
+        this.id = obj ? obj.id : '';
     }
 
     public toJSON() {
@@ -20,7 +21,8 @@ export class Message {
             content:  this.content,
             time:  this.time,
             date:  this.date,
-            profilePic:  this.profilePic
+            profilePic:  this.profilePic,
+            id: this.id
         }
     }
 }

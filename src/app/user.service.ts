@@ -154,11 +154,6 @@ export class UserService {
       });
   }
 
-
-
-
-
-
   setUserData(obj: any,) {
 
     return {
