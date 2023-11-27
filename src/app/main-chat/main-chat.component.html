@@ -31,80 +31,81 @@
     </mat-card-header>
 
     <mat-card-content #messageContainer class="p-0 main-chat-container">
-
-      <section>
-        <div class="date-container">
-          <div class="separator"></div>
-          <div class="time-box">Today</div>
-          <div class="separator"></div>
-        </div>
-
-        <div class="message-row-container" [ngClass]="{'my-messages': message.creator == currentUser.name}"
-          *ngFor="let message of allMessages">
-
-          <div class="message-box">
-            <div class="creator-picture-container">
-              <img src="{{message.profilePic}}" alt="" />
-            </div>
-
-            <div class="message-container">
-              <div class="message-data">
-                <span class="name">{{ message.creator }}</span>
-                <span class="date">{{message.time}}</span>
-              </div>
-
-              <div
-                [ngClass]="{'my-message-content': message.creator == currentUser.name, 'message-content': message.creator != currentUser.name}">
-                <span> {{message.content}}</span>
-              </div>
-
-              <div class="reaction-container">
-                <div class="reaction-emoji-container">
-
-                  <button class="reaction-emoji-button">
-                    <img src="assets/img/emojis/rocket.svg" alt="rocket" />
-                    <span>1</span>
-                  </button>
-
-                  <button class="reaction-emoji-button">
-                    <img src="assets/img/emojis/check.svg" alt="rocket" />
-                    <span>1</span>
-                  </button>
-
-                  <button class="add-reaction-button" mat-icon-button>
-                    <img src="assets/img/icons/add_reaction.svg" alt="" />
-                  </button>
-
-                </div>
-
-                <div class="comment-section" (click)="thread.toggle()">
-                  <span class="comments color-purple2-text">2 Answers</span>
-                  <span class="last-comment">Last Answer 14:55</span>
-                </div>
-
-              </div>
-            </div>
+      <ng-container *ngFor="let organizedMessage of organizedMessages.slice().reverse()">
+        <section>
+          <div class="date-container">
+            <div class="separator"></div>
+            <div class="time-box">{{  isToday(organizedMessage.date) ? 'Today' : organizedMessage.date }}</div>
+            <div class="separator"></div>
           </div>
 
-          <div class="reaction" [ngClass]="{'own-message': message.creator == currentUser.name}">
-            <button mat-icon-button>
-              <img src="assets/img/emojis/checkGreen.svg" alt="">
-            </button>
-            <button mat-icon-button>
-              <img src="assets/img/emojis/hands.svg" alt="">
-            </button>
-            <button mat-icon-button>
-              <img src="assets/img/icons/add_reaction.svg" alt="">
-            </button>
-            <button mat-icon-button>
-              <img src="assets/img/icons/comment.svg" alt="">
-            </button>
-            <button mat-icon-button *ngIf="message.creator == currentUser.name">
-              <img src="assets/img/icons/edit_square.svg" alt="">
-            </button>
+          <div class="message-row-container" [ngClass]="{'my-messages': message.creator == currentUser.name}"
+          *ngFor="let message of organizedMessage.messages">
+
+            <div class="message-box">
+              <div class="creator-picture-container">
+                <img src="{{message.profilePic}}" alt="" />
+              </div>
+
+              <div class="message-container">
+                <div class="message-data">
+                  <span class="name">{{ message.creator }}</span>
+                  <span class="date">{{message.time}}</span>
+                </div>
+
+                <div
+                  [ngClass]="{'my-message-content': message.creator == currentUser.name, 'message-content': message.creator != currentUser.name}">
+                  <span> {{message.content}}</span>
+                </div>
+
+                <div class="reaction-container">
+                  <div class="reaction-emoji-container">
+
+                    <button class="reaction-emoji-button">
+                      <img src="assets/img/emojis/rocket.svg" alt="rocket" />
+                      <span>1</span>
+                    </button>
+
+                    <button class="reaction-emoji-button">
+                      <img src="assets/img/emojis/check.svg" alt="rocket" />
+                      <span>1</span>
+                    </button>
+
+                    <button class="add-reaction-button" mat-icon-button>
+                      <img src="assets/img/icons/add_reaction.svg" alt="" />
+                    </button>
+
+                  </div>
+
+                  <div class="comment-section" (click)="thread.toggle()">
+                    <span class="comments color-purple2-text">2 Answers</span>
+                    <span class="last-comment">Last Answer 14:55</span>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="reaction" [ngClass]="{'own-message': message.creator == currentUser.name}">
+              <button mat-icon-button>
+                <img src="assets/img/emojis/checkGreen.svg" alt="">
+              </button>
+              <button mat-icon-button>
+                <img src="assets/img/emojis/hands.svg" alt="">
+              </button>
+              <button mat-icon-button>
+                <img src="assets/img/icons/add_reaction.svg" alt="">
+              </button>
+              <button mat-icon-button>
+                <img src="assets/img/icons/comment.svg" alt="">
+              </button>
+              <button mat-icon-button *ngIf="message.creator == currentUser.name">
+                <img src="assets/img/icons/edit_square.svg" alt="">
+              </button>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </ng-container>
     </mat-card-content>
 
     <mat-card-content class="textfield-content">
