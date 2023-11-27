@@ -26,6 +26,8 @@ export class MainChatComponent implements OnInit {
   allMessages: Message[] = [];
   unSubMessages: any;
   currentUser: UserData;
+  messagesByDate: { [date: string]: Message[] } = {};
+  organizedMessages: { date: string, messages: Message[] }[] = []
 
   constructor(public dialog: MatDialog, private chatService: ChatService, private userService: UserService) {
     userService.getCurrentUserFromLocalStorage();
@@ -98,6 +100,8 @@ export class MainChatComponent implements OnInit {
           // console.log('check Message', message);
           return message;
         });
+        console.log('all Messages:', this.allMessages);
+        this.organizeMessagesByDate();
         this.scrollToBottom();
       });
     }
@@ -133,5 +137,47 @@ export class MainChatComponent implements OnInit {
 
   scrollToBottom(): void {
     this.messageContainer.nativeElement.scrollTop = this.messageContainer.nativeElement.scrollHeight;
+  }
+
+  
+
+  isToday(date: string): boolean {
+    const currentDate = this.getCurrentDate();
+    const formattedDate = this.formatDate(currentDate); 
+    return date === formattedDate;
+  }
+
+  getCurrentDate(): string {
+    const currentDate = new Date();
+    console.log(currentDate);
+    
+    return currentDate.toDateString();
+  }
+
+  
+  formatDate(date: string): string {
+    const parts = date.split(' ');
+    return `${parts[2]}.${this.getMonthNumber(parts[1])}.${parts[3]}`;
+  }
+
+  
+  getMonthNumber(month: string): string {
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return (months.indexOf(month) + 1).toString().padStart(2, '0');
+  }
+
+
+  organizeMessagesByDate() {
+    this.messagesByDate = {};
+    for (const message of this.allMessages) {
+      const messageDate = message.date;
+      if (messageDate) {
+        if (!this.messagesByDate[messageDate]) {
+          this.messagesByDate[messageDate] = [];
+        }
+        this.messagesByDate[messageDate].push(message);
+      }
+    }
+    this.organizedMessages = Object.entries(this.messagesByDate).map(([date, messages]) => ({ date, messages }));
   }
 }
