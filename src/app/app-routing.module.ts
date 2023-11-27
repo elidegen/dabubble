@@ -3,11 +3,13 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { LoginScreenComponent } from './login-screen/login-screen.component';
 import { DialogViewProfileComponent } from './dialog-view-profile/dialog-view-profile.component';
+import { ImprintComponent } from './imprint/imprint.component';
 
 const routes: Routes = [
-  {path: 'home',  component: HomeComponent},
-  {path: '',  component: LoginScreenComponent},
-  {path: 'profile',  component: DialogViewProfileComponent},
+  { path: '', component: LoginScreenComponent },
+  { path: 'home', component: HomeComponent },
+  { path: 'profile', component: DialogViewProfileComponent },
+  { path: 'imprint', component: ImprintComponent },
 ];
 
 @NgModule({

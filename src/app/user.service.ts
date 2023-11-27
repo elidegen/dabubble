@@ -23,6 +23,8 @@ export class UserService {
   provider = new GoogleAuthProvider();
   signInSuccess = false;
   customPic: string ="";
+  userIsAvailable: boolean = false;
+  resetEmailFound: boolean = false;
   unsubList;
 
   ngOnInit() {
@@ -53,13 +55,13 @@ export class UserService {
         console.log(this.currentEmail, this.currentPassword);
         const user = userCredential.user;
         console.log("created User:", user)
-        this.signInUser(this.currentEmail, this.currentPassword);
+        this.userIsAvailable = true;
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(`Error Code: ${errorCode}`);
-        console.log(`Error Message: ${errorMessage}`);
+       
         // ..
       });
 
@@ -67,26 +69,23 @@ export class UserService {
 
 
   async signInUser(email: string, password: string) {
-    await signInWithEmailAndPassword(this.auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        console.log("created User:", user)
+    try {
+      const userCredential = await signInWithEmailAndPassword(this.auth, email, password);
+      console.log("User signed in:", userCredential.user);
+      
+      const activeUserIndex = this.findUserIndexWithEmail(email);
+      if (activeUserIndex !== -1) {
+        this.users[activeUserIndex].online = true;
         this.signInSuccess = true;
-        let activeUser = this.findUserIndexWithEmail(email);
-        console.log(activeUser);
-        this.users[activeUser].online = true;
-        this.currentUser = this.users[activeUser];
+        this.currentUser = this.users[activeUserIndex];
         this.setCurrentUserToLocalStorage();
-
-        if (this.signInSuccess) {
-          this.router.navigate(['home']);
-          console.log("CurrentUser", this.currentUser);
-        }
-      })
-      .catch((error) => {
-        console.error('Anmeldefehler:', error);
-      });
-
+        console.log("Current User:", this.currentUser);
+        await this.router.navigate(['home']);
+      }
+    } catch (error) {
+      this.signInSuccess = false;
+      console.log("Anmeldung Fehlgeschlagen");
+    }
   }
 
 
@@ -148,6 +147,7 @@ export class UserService {
     sendPasswordResetEmail(this.auth, emailAddress)
       .then(() => {
         console.log('Passwort-Reset-E-Mail gesendet.');
+        this.resetEmailFound = true;
       })
       .catch((error) => {
         console.error('Fehler beim Senden der Passwort-Reset-E-Mail:', error);
