@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { UserService } from '../user.service';
 import { UserData } from '../interfaces/user-interface';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-dialog-view-profile',
@@ -11,17 +12,20 @@ import { UserData } from '../interfaces/user-interface';
 export class DialogViewProfileComponent {
   editState: boolean = false;
   currentUser: UserData;
-  newUserName = ""
-  newEmail = "";
 
-  constructor(public dialogRef: MatDialogRef<DialogViewProfileComponent>, private userService: UserService) {
+
+  constructor(public dialogRef: MatDialogRef<DialogViewProfileComponent>, private userService: UserService, private authService: AuthService) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
     console.log('currentuser: ', this.currentUser);
   }
 
 
-  changeUser() {
-
+  editUser() {
+    this.userService.currentUser = this.currentUser;
+    this.userService.setCurrentUserToLocalStorage();
+    this.userService.updateUser("users", this.currentUser);
+    this.authService.updateUserEmail(this.currentUser.email);
+    this.dialogRef.close();
   }
 }

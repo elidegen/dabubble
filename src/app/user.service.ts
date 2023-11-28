@@ -97,6 +97,7 @@ export class UserService {
       (error) => { console.log(error); }
 
     );
+    console.log("User updated", user);
   }
 
   getUpdateData(user: UserData) {

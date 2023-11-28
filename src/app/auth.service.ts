@@ -5,6 +5,7 @@ import { getAuth, updateEmail,  createUserWithEmailAndPassword, signOut, GoogleA
 import { Router } from '@angular/router';
 import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { UserService } from './user.service';
+import { UserData } from './interfaces/user-interface';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,8 @@ export class AuthService {
   private auth = getAuth();
   provider = new GoogleAuthProvider();
   customPic: string ="";
+  
+  
 
   ngOnInit() {
  
@@ -94,6 +97,8 @@ export class AuthService {
 signInAnonymously(auth)
   .then(() => {
 console.log("Guest logged in");
+let  newguest = this.userService.createEmptyUser();
+
   })
   .catch((error) => {
     const errorCode = error.code;

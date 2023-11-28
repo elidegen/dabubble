@@ -54,21 +54,21 @@
                 <h2>Full Name</h2>
             </div>
 
-            <input [(ngModel)]="newUserName" type="text" value="{{currentUser.name}}" placeholder="Enter Name">
+            <input [(ngModel)]="currentUser.name" name="newUserName" type="text">
 
             <div class="display-flex">
                 <img class="mr-16" src="assets/img/icons/mail.svg">
                 <h2>E-Mail Adress</h2>
             </div>
 
-            <input [(ngModel)]="newEmail" type="email" value="{{currentUser.email}}" placeholder="Enter E-Mail">
+            <input [(ngModel)]="currentUser.email"  name="newEmail" type="email">
         </form>
 
         <div class="buttons w100">
             <button mat-button class="main-button mr-16" (click)="editState = false">
                 Cancel
             </button>
-            <button (click)="changeUser()" class="main-button primary" mat-button>
+            <button (click)="editUser()" class="main-button primary" mat-button>
                 Save
             </button>
         </div>
