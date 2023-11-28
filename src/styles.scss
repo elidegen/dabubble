@@ -1,14 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
 
+@font-face {
+    font-family: 'Nunito';
+    src: url('assets/fonts/Nunito-Regular.ttf');
+  }
+
+
+
 html,
 body {
     height: 100%;
+   
 }
 
-body {
+ body {
     margin: 0;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
     background-color: var(--primary);
+    font-family: 'Nunito', 'Roboto', sans-serif!important;
 }
 
 .color-main {
@@ -154,6 +162,15 @@ a {
     &:hover {
         background-color: var(--purple1) !important;
     }
+}
+
+
+h1 {
+    font-family: 'Nunito', 'Roboto', sans-serif!important;
+}
+
+h2 {
+    font-family: 'Nunito', 'Roboto', sans-serif!important;
 }
 
 :root {

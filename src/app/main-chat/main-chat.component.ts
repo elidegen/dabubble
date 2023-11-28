@@ -164,7 +164,6 @@ export class MainChatComponent implements OnInit {
   async addReaction(emoji: any, messageId: any) {
     if (this.currentChat?.id) {
       console.log('welche naxhricht ist das?', messageId);
-
       this.reaction.content = emoji;
       const subReactionColRef = collection(this.firestore, `channels/${this.currentChat.id}/messages/${messageId}/reactions`);
       await addDoc(subReactionColRef, this.reaction.toJSON())

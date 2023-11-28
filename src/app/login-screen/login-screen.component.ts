@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserData } from '../interfaces/user-interface';
 import { UserService } from '../user.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-login-screen',
@@ -25,9 +26,11 @@ export class LoginScreenComponent implements OnInit {
 
 
 
+  ngOnInit() {
+    this.hideContentAfterAnimation();
+  }
 
-
-  constructor(public userService: UserService, public router: Router) {
+  constructor(public userService: UserService, public router: Router, public authService : AuthService) {
     this.newUser = {
       name: "",
       email: "",
@@ -66,9 +69,11 @@ export class LoginScreenComponent implements OnInit {
   get newEmail() {
     return this.addUser.get('newEmail') as FormControl;
   }
+
   get newPassword() {
     return this.addUser.get('newPassword') as FormControl;
   }
+
   get loginemail() {
     return this.login.get('loginemail') as FormControl;
   }
@@ -137,15 +142,6 @@ export class LoginScreenComponent implements OnInit {
   }
 
   
-
-
-
-
-  ngOnInit() {
-
-    this.hideContentAfterAnimation();
-  }
-
   changePicSrc(pic: string) {
     this.picSrc = pic;
 
@@ -158,7 +154,7 @@ export class LoginScreenComponent implements OnInit {
     this.userService.currentEmail = this.newEmail.value;
     this.userService.currentPassword = this.newPassword.value;
     console.log("User wird vorbereitet:", this.newUser);
-   await this.userService.createUser();
+   await this.authService.createUser();
    setTimeout(() => {
     if (this.userService.userIsAvailable) {
       this.changeSwitchCase('avatar');
@@ -170,20 +166,19 @@ export class LoginScreenComponent implements OnInit {
      }
    }, 3000);
    
- 
   }
 
   async uploadUser() {
     this.newUser.picture = this.picSrc;
     this.newUser.online = true;
     this.userService.addUser('users', this.newUser as UserData);
-    this.userService.signInUser(this.userService.currentEmail, this.userService.currentPassword);
+    this.authService.signInUser(this.userService.currentEmail, this.userService.currentPassword);
     
   }
 
   async loginUser() {
 
-    await this.userService.signInUser(this.email, this.password);
+    await this.authService.signInUser(this.email, this.password);
     if (!this.userService.signInSuccess) {
       this.userNotFound = true;
       this.getErrorMessageNoUser();
@@ -191,11 +186,8 @@ export class LoginScreenComponent implements OnInit {
   }
 
   loginWithGoogle() {
-    this.userService.signInWithGoogle();
+    this.authService.signInWithGoogle();
   }
-
-
-
 
 
   hideContentAfterAnimation() {
@@ -214,13 +206,13 @@ export class LoginScreenComponent implements OnInit {
   }
 
   sendResetEmail() {
-    this.userService.sendResetEmail(this.resetEmail);
+    this.authService.sendResetEmail(this.resetEmail);
   }
 
   onFileSelected(event: any): void {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
-      this.userService.uploadProfileImage(file);
+      this.authService.uploadProfileImage(file);
     }
     setTimeout(() => {
       this.picSrc = this.userService.customPic;
@@ -228,13 +220,19 @@ export class LoginScreenComponent implements OnInit {
   }
 
   checkIfUserExists() {
-    let userIndex = this.userService.findUserIndexWithEmail(this.email);
+    let userIndex = this.authService.findUserIndexWithEmail(this.email);
 
     if (userIndex !== -1 && this.userService.users[userIndex].password == this.password) {
       this.userNotFound == false
     } else {
       this.userNotFound = true;
     }
+  }
+
+  loginGuest() {
+    this.authService.signOutUser();
+    this.authService.signInGuest();
+   this.router.navigate(['home']);
   }
 
 }

@@ -42,7 +42,7 @@
 
         <div class="submit-buttons margin-top">
           <button (click)="loginUser()" mat-button class="main-button primary mr-16" type="submit">Login</button>
-          <button routerLink="home" mat-button class="main-button ">Guest login</button>
+          <button (click)="loginGuest()" mat-button class="main-button ">Guest login</button>
         </div>
       </form>
     </div>
@@ -135,7 +135,6 @@
           <input matInput placeholder="E-mail" [(ngModel)]="resetEmail" formControlName="emailForReset" required>
           <div class="placeholder"></div>
           <mat-error *ngIf="this.emailForReset?.hasError('email')">Enter a valid e-mail</mat-error>
-        
         </div>
         <p  *ngIf="!this.userService.resetEmailFound" class="margin-top25 grey-span-resetpw">Receive an e-mail to reset your password</p>
         <p  *ngIf="this.userService.resetEmailFound"class="margin-top25 grey-span-resetpw">An e-mail to reset your passoword was sent !</p>

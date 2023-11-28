@@ -4,6 +4,7 @@ import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-p
 import { UserService } from '../user.service';
 import { Router } from '@angular/router';
 import { UserData } from '../interfaces/user-interface';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-home',
@@ -21,8 +22,8 @@ export class HomeComponent {
     online: false,
   }
 
-  constructor(public dialog: MatDialog, public userService: UserService, public router: Router) { 
-    userService.getCurrentUserFromLocalStorage();
+  constructor(public dialog: MatDialog, public auth: AuthService, public router: Router, public userService: UserService) { 
+    this.userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
   }
 
@@ -44,7 +45,7 @@ export class HomeComponent {
   }
 
   logOutUser() {
-    this.userService.signOutUser();
+    this.auth.signOutUser();
     this.router.navigate(['']);
   }
 
