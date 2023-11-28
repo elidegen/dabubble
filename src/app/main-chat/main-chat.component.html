@@ -104,7 +104,7 @@
 
     <mat-card-content class="textfield-content">
       <div class="text-field-container">
-        <textarea [(ngModel)]="message.content" placeholder="Message to #Entwicklerteam"></textarea>
+        <textarea (keyup.enter)="sendMessage()" [(ngModel)]="message.content" placeholder="Message to #Entwicklerteam"></textarea>
 
         <div class="message-buttons">
           <div class="attachments">
