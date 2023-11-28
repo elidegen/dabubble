@@ -60,8 +60,8 @@
 
                 <div class="reaction-container">
                   <div class="reaction-emoji-container">
-                    <button class="reaction-emoji-button">
-                      <img src="{{reaction.content}}" alt="rocket" />
+                    <button class="reaction-emoji-button" *ngFor="let emoji of message.reaction">
+                      <img src="assets/img/emojis/checkGreen.svg" alt="rocket" />
                       <span>1</span>
                     </button>
 

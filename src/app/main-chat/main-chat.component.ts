@@ -31,7 +31,8 @@ export class MainChatComponent implements OnInit {
   currentUser: UserData;
   messagesByDate: { [date: string]: Message[] } = {};
   organizedMessages: { date: string, messages: Message[] }[] = []
-  allReactionsByMessage: any;
+  allReactionsByMessage: [] = [];
+
 
   constructor(public dialog: MatDialog, private chatService: ChatService, private userService: UserService) {
     userService.getCurrentUserFromLocalStorage();
@@ -44,7 +45,6 @@ export class MainChatComponent implements OnInit {
       if (openChat) {
         this.currentChat = openChat as Channel;
         this.loadMessages();
-        // this.loadAllReactions();
       }
     });
   }
@@ -109,14 +109,16 @@ export class MainChatComponent implements OnInit {
     );
   }
 
-  getUpdateData(message: Message) {
+  getUpdateData(message: any) {
     return {
       creator: this.userService.currentUser.name,
+      creatorId: this.userService.currentUser.id,
       content: message.content,
       time: message.time,
       date: message.date,
       id: message.id,
-      profilePic: this.userService.currentUser.picture
+      profilePic: this.userService.currentUser.picture,
+      reaction: message.reaction
     };
   }
 
@@ -131,49 +133,48 @@ export class MainChatComponent implements OnInit {
           message.id = doc.id;
           return message;
         });
-        // console.log('all Messages:', this.allMessages);
+        console.log('all Messages:', this.allMessages);
         this.organizeMessagesByDate();
       });
     }
   }
 
-  loadAllReactions() {
-    if (this.currentChat?.id && this.message?.id) {
-      this.allReactionsByMessage = {};
-      const reactionsCollection = collection(
-        this.firestore,
-        `channels/${this.currentChat.id}/messages/${this.message.id}/reactions`
-      );
+  // loadAllReactions() {
+  //   if (this.currentChat?.id && this.message?.id) {
+  //     this.allReactionsByMessage = {};
+  //     const reactionsCollection = collection(
+  //       this.firestore,
+  //       `channels/${this.currentChat.id}/messages/${this.message.id}/reactions`
+  //     );
 
-      this.unSubReactions = onSnapshot(reactionsCollection, (snapshot) => {
-        snapshot.docChanges().forEach((change) => {
-          const reaction = change.doc.data() as Reaction;
-          reaction.id = change.doc.id;
+  //     this.unSubReactions = onSnapshot(reactionsCollection, (snapshot) => {
+  //       snapshot.docChanges().forEach((change) => {
+  //         const reaction = change.doc.data() as Reaction;
+  //         reaction.id = change.doc.id;
 
-          // Stelle die Beziehung zwischen Reaktionen und Nachrichten her
-          const messageId = this.message.id;
-          if (messageId) {
-            this.allReactionsByMessage[messageId] = this.allReactionsByMessage[messageId] || [];
-            this.allReactionsByMessage[messageId].push(reaction);
-          }
-        });
-      });
-    }
-  }
+  //         // Stelle die Beziehung zwischen Reaktionen und Nachrichten her
+  //         const messageId = this.message.id;
+  //         if (messageId) {
+  //           this.allReactionsByMessage[messageId] = this.allReactionsByMessage[messageId] || [];
+  //           this.allReactionsByMessage[messageId].push(reaction);
+  //         }
+  //       });
+  //     });
+  //   }
+  // }
 
   async addReaction(emoji: any, messageId: any) {
     if (this.currentChat?.id) {
       console.log('welche naxhricht ist das?', messageId);
-      this.reaction.content = emoji;
-      const subReactionColRef = collection(this.firestore, `channels/${this.currentChat.id}/messages/${messageId}/reactions`);
-      await addDoc(subReactionColRef, this.reaction.toJSON())
-        .catch((err) => {
-          console.log(err);
-        })
-        .then((result: any) => {
-          console.log('Dieser Nachricht wurde etwas hinzugefügt', subReactionColRef);
-        });
+      const subReactionColRef = doc(collection(this.firestore, `channels/${this.currentChat.id}/messages/`), messageId);
+      let messageIndex = this.allMessages.findIndex(message => message.id === messageId);
+      this.allMessages[messageIndex].reaction.push(emoji);
+      
+      
+      
+      updateDoc(subReactionColRef, this.getUpdateData(this.allMessages[messageIndex]))
     }
+  
   }
 
   getSentMessageDate() {
