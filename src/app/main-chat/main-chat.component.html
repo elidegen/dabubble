@@ -50,7 +50,7 @@
               <div class="message-container">
                 <div class="message-data">
                   <span class="name">{{ message.creator }}</span>
-                  <span class="date">{{message.time}}</span>
+                  <span class="date">{{ message.time }}</span>
                 </div>
 
                 <div
@@ -61,8 +61,8 @@
                 <div class="reaction-container">
                   <div class="reaction-emoji-container">
                     <button class="reaction-emoji-button" *ngFor="let emoji of message.reaction">
-                      <img src="assets/img/emojis/checkGreen.svg" alt="rocket" />
-                      <span>1</span>
+                      <img src="{{emoji}}"/>
+                      <span></span>
                     </button>
 
                     <!-- <button class="add-reaction-button" mat-icon-button>d

@@ -118,7 +118,7 @@ export class MainChatComponent implements OnInit {
       date: message.date,
       id: message.id,
       profilePic: this.userService.currentUser.picture,
-      reaction: message.reaction
+      reaction: []
     };
   }
 
@@ -163,18 +163,30 @@ export class MainChatComponent implements OnInit {
   //   }
   // }
 
-  async addReaction(emoji: any, messageId: any) {
+  async addReaction(emoji: string, messageId: any) {
     if (this.currentChat?.id) {
       console.log('welche naxhricht ist das?', messageId);
       const subReactionColRef = doc(collection(this.firestore, `channels/${this.currentChat.id}/messages/`), messageId);
       let messageIndex = this.allMessages.findIndex(message => message.id === messageId);
-      this.allMessages[messageIndex].reaction.push(emoji);
+      let currentMessage = this.allMessages[messageIndex];
+
+      if (currentMessage.reaction.includes(emoji)) {
+        let index = currentMessage.reaction.indexOf(emoji);
+        currentMessage.reaction.splice(index, 1)
+      } else {
+        currentMessage.reaction.push(emoji);
+      }
+    
       
-      
-      
-      updateDoc(subReactionColRef, this.getUpdateData(this.allMessages[messageIndex]))
+      updateDoc(subReactionColRef, this.updateMessage(this.allMessages[messageIndex]));
     }
   
+  }
+
+  updateMessage(message: any) {
+    return {
+      reaction: message.reaction
+    }
   }
 
   getSentMessageDate() {
