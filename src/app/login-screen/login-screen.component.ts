@@ -221,7 +221,6 @@ export class LoginScreenComponent implements OnInit {
 
   checkIfUserExists() {
     let userIndex = this.authService.findUserIndexWithEmail(this.email);
-
     if (userIndex !== -1 && this.userService.users[userIndex].password == this.password) {
       this.userNotFound == false
     } else {

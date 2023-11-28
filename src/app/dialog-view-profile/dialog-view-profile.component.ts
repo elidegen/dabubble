@@ -11,10 +11,17 @@ import { UserData } from '../interfaces/user-interface';
 export class DialogViewProfileComponent {
   editState: boolean = false;
   currentUser: UserData;
+  newUserName = ""
+  newEmail = "";
 
   constructor(public dialogRef: MatDialogRef<DialogViewProfileComponent>, private userService: UserService) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
     console.log('currentuser: ', this.currentUser);
+  }
+
+
+  changeUser() {
+
   }
 }
