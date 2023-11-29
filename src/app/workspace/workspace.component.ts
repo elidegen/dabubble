@@ -4,6 +4,7 @@ import { DialogAddChannelComponent } from '../dialog-add-channel/dialog-add-chan
 import { Firestore, collection, doc, onSnapshot, orderBy, query } from '@angular/fire/firestore';
 import { Channel } from 'src/models/channel.class';
 import { ChatService } from '../chat.service';
+import { ThreadService } from '../thread.service';
 
 @Component({
   selector: 'app-workspace',
@@ -16,7 +17,7 @@ export class WorkspaceComponent implements OnInit {
   allChannels: Channel[] = [];
   unsubscribeChannels: any;
 
-  constructor(public dialog: MatDialog, private chatservice: ChatService) {
+  constructor(public dialog: MatDialog, private chatservice: ChatService, public threadService: ThreadService) {
 
   }
 
@@ -41,6 +42,7 @@ export class WorkspaceComponent implements OnInit {
 
   renderChat(channel: Channel) {
     this.chatservice.openChat = channel;
+    this.threadService.currentChat = channel;
   }
 
   ngOnDestroy(): void {

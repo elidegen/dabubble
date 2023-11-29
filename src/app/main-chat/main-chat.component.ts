@@ -12,6 +12,7 @@ import { DocumentData, DocumentReference, onSnapshot, orderBy, query } from 'fir
 import { UserService } from '../user.service';
 import { UserData } from '../interfaces/user-interface';
 import { Reaction } from 'src/models/reaction.class';
+import { ThreadService } from '../thread.service';
 
 @Component({
   selector: 'app-main-chat',
@@ -34,7 +35,7 @@ export class MainChatComponent implements OnInit {
   allReactionsByMessage: [] = [];
 
 
-  constructor(public dialog: MatDialog, private chatService: ChatService, private userService: UserService) {
+  constructor(public dialog: MatDialog, private chatService: ChatService, private userService: UserService, public threadService: ThreadService) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
     console.log('conjstructor currentChat', this.currentChat);
@@ -46,6 +47,7 @@ export class MainChatComponent implements OnInit {
         const newChat = openChat as Channel;
         if (!this.currentChat || this.currentChat.id !== newChat.id) {
           this.currentChat = newChat;
+          this.threadService.currentChat = newChat;
           if (this.unSubMessages) {
             this.unSubMessages(); // Bestehendes Abonnement kündigen
           }
@@ -267,5 +269,11 @@ export class MainChatComponent implements OnInit {
       }
     }
     this.organizedMessages = Object.entries(this.messagesByDate).map(([date, messages]) => ({ date, messages }));
+  }
+
+
+  openThread(message: Message) {
+    this.threadDrawer.toggle();
+   this.threadService.currentMessage = message;
   }
 }

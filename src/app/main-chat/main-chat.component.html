@@ -71,7 +71,7 @@
 
                   </div>
 
-                  <div class="comment-section" (click)="thread.toggle()">
+                  <div class="comment-section" (click)="openThread(message)">
                     <span class="comments color-purple2-text">2 Answers</span>
                     <span class="last-comment">Last Answer 14:55</span>
                   </div>
@@ -90,8 +90,8 @@
               <button mat-icon-button>
                 <img src="assets/img/icons/add_reaction.svg" alt="">
               </button>
-              <button mat-icon-button>
-                <img src="assets/img/icons/comment.svg" alt="">
+              <button (click)="openThread(message)"mat-icon-button>
+                <img  src="assets/img/icons/comment.svg" alt="">
               </button>
               <button mat-icon-button *ngIf="message.creator == currentUser.name">
                 <img src="assets/img/icons/edit_square.svg" alt="">

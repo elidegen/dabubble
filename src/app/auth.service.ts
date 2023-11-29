@@ -122,7 +122,7 @@ signInAnonymously(auth)
   .then(() => {
 console.log("Guest logged in");
 this.userService.currentUser = this.newGuest;
-this.userService.currentUser.id= this.createid(10);
+this.userService.currentUser.id= this.createId(10);
 this.userService.setCurrentUserToLocalStorage();
 this.userService.getCurrentUserFromLocalStorage();
 console.log("Guest ist eingeloggt", this.userService.currentUser);
@@ -236,7 +236,7 @@ console.log("User email updatet")
   }
 
 
-createid(length:number) {
+createId(length:number) {
     let result = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     const charactersLength = characters.length;

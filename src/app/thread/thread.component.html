@@ -3,7 +3,7 @@
       <header>
         <div class="header">
           <span class="title">Thread</span>
-          <span class="channel-title color-purple2-text"># Entwicklerteam</span>
+          <span class="channel-title color-purple2-text">{{this.threadService.currentChat.name}}</span>
         </div>
         <button mat-icon-button class="close-thread" (click)="onCloseClick()">
           <img class="close-icon" src="assets/img/icons/close.svg" alt="close">
@@ -17,16 +17,16 @@
         <div class="message-row-container">
           <div class="message-box-received">
             <div class="message-avatar-container">
-              <img src="assets/img/avatars/avatar_male2.svg" alt="" />
+              <img src="{{this.threadService.currentMessage.profilePic}}" alt="" />
             </div>
             <div class="received-message-container ml-16">
               <div class="message-data">
-                <span class="name">Maximillian Schneider</span>
-                <span class="date">15:06</span>
+                <span class="name">{{this.threadService.currentMessage.creator}}</span>
+                <span class="date">{{this.threadService.currentMessage.time}}</span>
               </div>
 
               <div class="received-message color-main">
-                <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</span>
+                <span>{{this.threadService.currentMessage.content}}</span>
               </div>
             </div>
           </div>
@@ -47,7 +47,7 @@
           <div class="separator"></div>
         </div>
 
-        <section> <!-- Alle Antworten -->
+        <section   *ngFor="let thread of this.threadService.threads ; index as i;" > <!-- Alle Antworten -->
 
           <div class="message-row-container">
             <div class="message-box-received">
@@ -56,12 +56,12 @@
               </div>
               <div class="received-message-container ml-16">
                 <div class="message-data">
-                  <span class="name">Maximillian Schneider</span>
-                  <span class="date">15:06</span>
+                  <span class="name">{{thread.creator}}</span>
+                  <span class="date">{{thread.time}}</span>
                 </div>
 
                 <div class="received-message color-main">
-                  <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</span>
+                  <span>{{thread.content}}</span>
                 </div>
               </div>
             </div>
@@ -123,7 +123,7 @@
 
     <mat-card-content class="textfield-content">
       <div class="text-field-container">
-        <textarea placeholder="Comment"></textarea>
+        <textarea  [(ngModel)]="threadContent" placeholder="Comment"></textarea>
 
         <div class="message-buttons">
           <div class="attachments">
@@ -142,7 +142,7 @@
             </button>
           </div>
 
-          <button mat-icon-button class="textfield-buttons">
+          <button (click)="addThread()" mat-icon-button class="textfield-buttons">
             <img src="assets/img/icons/send.svg" alt="" />
           </button>
         </div>
