@@ -56,10 +56,14 @@ export class MainChatComponent implements OnInit {
   }
 
   ngOnDestroy() {
-      this.unSubMessages(); 
-      this.unSubReactions(); 
+    if (this.unSubMessages) {
+      this.unSubMessages(); // Bestehendes Abonnement kündigen
+    }
+    if (this.unSubReactions) {
+      this.unSubReactions(); // Bestehendes Abonnement kündigen
+    }
   }
-  
+
 
   openEditChannelDialog() {
     this.dialog.open(DialogEditChannelComponent, {
@@ -84,16 +88,18 @@ export class MainChatComponent implements OnInit {
   }
 
   async sendMessage() {
-    console.log('sm begin curch', this.currentChat);
+    // console.log('sm begin curch', this.currentChat);
 
     if (this.currentChat?.id) {
       this.getSentMessageTime();
       this.getSentMessageDate();
       this.getSentMessageCreator();
+      console.log('log message', this.message);
+      
       const subColRef = collection(this.firestore, `channels/${this.currentChat.id}/messages`);
 
-      console.log('sm mid curch', this.currentChat);
-      console.log('sm mid subcolref', subColRef);
+      // console.log('sm mid curch', this.currentChat);
+      // console.log('sm mid subcolref', subColRef);
       await addDoc(subColRef, this.message.toJSON())
         .catch((err) => {
           console.log(err);
@@ -107,7 +113,7 @@ export class MainChatComponent implements OnInit {
           this.message.content = '';
         });
     }
-    console.log('sm end curch', this.currentChat);
+    // console.log('sm end curch', this.currentChat);
   }
 
   async updateMessageId(colId: string, message: Message, newId: string) {
@@ -150,7 +156,7 @@ export class MainChatComponent implements OnInit {
           return message;
         });
         console.log('organizedmsg', this.organizedMessages);
-        
+
         this.organizeMessagesByDate();
       });
     }
@@ -213,11 +219,7 @@ export class MainChatComponent implements OnInit {
   }
 
   getSentMessageCreator() {
-    const name = this.userService.currentUser.name;
-    const profilePic = this.userService.currentUser.picture;
-
-    this.message.creator = name;
-    this.message.profilePic = profilePic;
+    this.message.creator = this.userService.currentUser.id;
   }
 
   getSingleDocRef(colId: string, docId: string) {
