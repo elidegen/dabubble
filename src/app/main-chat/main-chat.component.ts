@@ -43,22 +43,27 @@ export class MainChatComponent implements OnInit {
   ngOnInit() {
     this.chatService.openChat$.subscribe((openChat) => {
       if (openChat) {
-
         const newChat = openChat as Channel;
-
         if (!this.currentChat || this.currentChat.id !== newChat.id) {
           this.currentChat = newChat;
-          this.loadMessages();
-          console.log('ngOninit if currentChat', this.currentChat);
+          if (this.unSubMessages) {
+            this.unSubMessages(); // Bestehendes Abonnement kündigen
+          }
+          this.loadMessages(); // Nachrichten für den neuen Channel laden
         }
       }
     });
   }
 
   ngOnDestroy() {
-    this.unSubMessages;
-    this.unSubReactions;
+    if (this.unSubMessages) {
+      this.unSubMessages(); // Abonnements kündigen
+    }
+    if (this.unSubReactions) {
+      this.unSubReactions(); // Abonnements kündigen
+    }
   }
+  
 
   openEditChannelDialog() {
     this.dialog.open(DialogEditChannelComponent, {
@@ -144,7 +149,7 @@ export class MainChatComponent implements OnInit {
           const message = doc.data() as Message;
           message.id = doc.id;
           message.reactionCount = this.setEmojiCount(message.reaction);
-          // console.log('loadmsg snapshot currentchat', this.currentChat);
+          console.log('Testconsole log load Messages', this.currentChat);
 
           return message;
         });
