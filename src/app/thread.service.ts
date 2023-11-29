@@ -20,24 +20,14 @@ export class ThreadService {
 
   currentChat = new Channel();
   currentMessage = new Message();
-  unsubList: any;
+  unsubList;
 
   constructor(public router: Router, public userService: UserService, public chatService: ChatService) {
-    this.chatService.openChat$.subscribe(chat => {
-      if (chat) {
-        this.currentChat = chat as Channel;
-        console.log("der currentchat ist:::", this.currentChat);
-        console.log("die currentmessage ist ", this.currentMessage);
-        if (this.currentChat.id && this.currentMessage.id) {
-          this.unsubList = this.subThreadList();
-        }
-      }
-    });
+    this.unsubList = this.subThreadList();
   }
-  
 
   ngOnInit() {
-    this.unsubList = this.subThreadList();
+  
     console.log("der currentchat ist:::", this.currentChat);
     console.log("die currentmessage ist ", this.currentMessage);
   }
