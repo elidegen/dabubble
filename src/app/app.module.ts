@@ -40,7 +40,7 @@ import { DialogAddToGroupComponent } from './dialog-add-to-group/dialog-add-to-g
 import { DialogShowGroupMemberComponent } from './dialog-show-group-member/dialog-show-group-member.component';
 import { FormsModule } from '@angular/forms';
 import { ImprintComponent } from './imprint/imprint.component';
-
+import { DialogAddChannelMembersComponent } from './dialog-add-channel-members/dialog-add-channel-members.component';
 
 
 
@@ -58,6 +58,7 @@ import { ImprintComponent } from './imprint/imprint.component';
     DialogAddToGroupComponent,
     DialogShowGroupMemberComponent,
     ImprintComponent,
+    DialogAddChannelMembersComponent,
   ],
   imports: [
     BrowserModule,

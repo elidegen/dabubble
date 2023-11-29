@@ -37,7 +37,7 @@ export class WorkspaceComponent implements OnInit {
   }
 
   openDialog() {
-    this.dialog.open(DialogAddChannelComponent, { panelClass: 'dialog-container' });
+    this.dialog.open(DialogAddChannelComponent, { panelClass: 'dialog-container'});
   }
 
   renderChat(channel: Channel) {
