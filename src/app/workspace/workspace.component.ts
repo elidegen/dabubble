@@ -13,26 +13,14 @@ import { ChatService } from '../chat.service';
 export class WorkspaceComponent implements OnInit {
   firestore: Firestore = inject(Firestore);
   panelOpenState: boolean = true;
-  allChannels: Channel[] = [];
-  unsubscribeChannels: any;
+  
 
-  constructor(public dialog: MatDialog, private chatservice: ChatService) {
+  constructor(public dialog: MatDialog, public chatservice: ChatService) {
 
   }
 
   ngOnInit(): void {
-    this.unsubscribeChannels = onSnapshot(
-      query(collection(this.firestore, "channels"), orderBy("name")),
-      (snapshot) => {
-        this.allChannels = snapshot.docs.map((doc) => {
-          const channel = doc.data() as Channel;
-          channel.id = doc.id;
-          return channel;
-        });
-
-        console.log('workspace allchannels: ', this.allChannels);
-      }
-    );
+   
   }
 
   openDialog() {
@@ -44,6 +32,6 @@ export class WorkspaceComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.unsubscribeChannels;
+   
   }
 }
