@@ -144,11 +144,12 @@ export class MainChatComponent implements OnInit {
           const message = doc.data() as Message;
           message.id = doc.id;
           message.reactionCount = this.setEmojiCount(message.reaction);
-          console.log('loadmsg snapshot currentchat', this.currentChat);
+          // console.log('loadmsg snapshot currentchat', this.currentChat);
 
           return message;
         });
-
+        console.log('organizedmsg', this.organizedMessages);
+        
         this.organizeMessagesByDate();
       });
     }
