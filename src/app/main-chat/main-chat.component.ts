@@ -56,12 +56,8 @@ export class MainChatComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    if (this.unSubMessages) {
-      this.unSubMessages(); // Abonnements kündigen
-    }
-    if (this.unSubReactions) {
-      this.unSubReactions(); // Abonnements kündigen
-    }
+      this.unSubMessages(); 
+      this.unSubReactions(); 
   }
   
 
