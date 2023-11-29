@@ -29,7 +29,7 @@ export class WorkspaceComponent implements OnInit {
           channel.id = doc.id;
           return channel;
         });
-  
+
         console.log('workspace allchannels: ', this.allChannels);
       }
     );
