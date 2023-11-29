@@ -37,14 +37,17 @@ export class MainChatComponent implements OnInit {
   constructor(public dialog: MatDialog, private chatService: ChatService, private userService: UserService) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
-    // console.log('currentuser: ', this.currentUser);
   }
 
   ngOnInit() {
     this.chatService.openChat$.subscribe((openChat) => {
       if (openChat) {
-        this.currentChat = openChat as Channel;
-        this.loadMessages();
+        const newChat = openChat as Channel;
+
+        if (!this.currentChat || this.currentChat.id !== newChat.id) {
+          this.currentChat = newChat;
+          this.loadMessages();
+        }
       }
     });
   }
@@ -131,37 +134,36 @@ export class MainChatComponent implements OnInit {
         this.allMessages = snapshot.docs.map(doc => {
           const message = doc.data() as Message;
           message.id = doc.id;
+          message.reactionCount = this.setEmojiCount(message.reaction);
+          // console.log('msg react count', message.reactionCount);
+
           return message;
         });
         console.log('all Messages:', this.allMessages);
+
         this.organizeMessagesByDate();
       });
     }
   }
 
-  // loadAllReactions() {
-  //   if (this.currentChat?.id && this.message?.id) {
-  //     this.allReactionsByMessage = {};
-  //     const reactionsCollection = collection(
-  //       this.firestore,
-  //       `channels/${this.currentChat.id}/messages/${this.message.id}/reactions`
-  //     );
+  setEmojiCount(reactions: any[]) {
+    let counter: { [key: string]: number } = {};
+    reactions.forEach(react => {
 
-  //     this.unSubReactions = onSnapshot(reactionsCollection, (snapshot) => {
-  //       snapshot.docChanges().forEach((change) => {
-  //         const reaction = change.doc.data() as Reaction;
-  //         reaction.id = change.doc.id;
-
-  //         // Stelle die Beziehung zwischen Reaktionen und Nachrichten her
-  //         const messageId = this.message.id;
-  //         if (messageId) {
-  //           this.allReactionsByMessage[messageId] = this.allReactionsByMessage[messageId] || [];
-  //           this.allReactionsByMessage[messageId].push(reaction);
-  //         }
-  //       });
-  //     });
-  //   }
-  // }
+      let key = JSON.stringify(react.emoji);
+      if (key) {
+        key = key.substring(1);
+        key = key.substring(0, key.length - 1);
+      }
+      if (counter[key]) {
+        counter[key]++;
+      } else {
+        if(key != undefined)
+        counter[key] = 1;
+      }
+    });
+    return counter;
+  }
 
   async addReaction(emoji: string, messageId: any) {
     if (this.currentChat?.id) {
@@ -170,17 +172,15 @@ export class MainChatComponent implements OnInit {
       let messageIndex = this.allMessages.findIndex(message => message.id === messageId);
       let currentMessage = this.allMessages[messageIndex];
 
-      if (currentMessage.reaction.includes(emoji)) {
-        let index = currentMessage.reaction.indexOf(emoji);
-        currentMessage.reaction.splice(index, 1)
+      const reactionItem = { emoji, creatorId: this.currentUser.id };
+
+      if (currentMessage.reaction.some((emojiArray: { emoji: string; creatorId: string; }) => emojiArray.emoji === emoji && emojiArray.creatorId === this.currentUser.id)) {
+        currentMessage.reaction = currentMessage.reaction.filter((emojiArray: { emoji: string; creatorId: string; }) => !(emojiArray.emoji === emoji && emojiArray.creatorId === this.currentUser.id));
       } else {
-        currentMessage.reaction.push(emoji);
+        currentMessage.reaction.push(reactionItem);
       }
-    
-      
       updateDoc(subReactionColRef, this.updateMessage(this.allMessages[messageIndex]));
     }
-  
   }
 
   updateMessage(message: any) {

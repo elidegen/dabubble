@@ -31,7 +31,7 @@
     </mat-card-header>
 
     <mat-card-content #messageContainer class="p-0 main-chat-container">
-      <ng-container *ngFor="let organizedMessage of organizedMessages.slice().reverse()">
+      <ng-container *ngFor="let organizedMessage of organizedMessages.slice()">
         <section>
           <div class="date-container">
             <div class="separator"></div>
@@ -60,9 +60,9 @@
 
                 <div class="reaction-container">
                   <div class="reaction-emoji-container">
-                    <button class="reaction-emoji-button" *ngFor="let emoji of message.reaction">
-                      <img src="{{emoji}}"/>
-                      <span></span>
+                    <button class="reaction-emoji-button" *ngFor="let emoji of message.reactionCount | keyvalue">
+                      <img src="{{emoji.key}}"/>
+                      <span>{{ emoji.value }}</span>
                     </button>
 
                     <!-- <button class="add-reaction-button" mat-icon-button>d

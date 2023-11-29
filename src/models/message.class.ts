@@ -8,6 +8,7 @@ export class Message {
     id: string | undefined;
     profilePic: string | undefined;
     reaction: any = [];
+    reactionCount: any;
 
     constructor(obj?: any) {
         this.creator = obj ? obj.creator : '';
@@ -18,6 +19,7 @@ export class Message {
         this.timeInMs = obj ? obj.timeInMs : '';
         this.profilePic = obj ? obj.profilePic : '';
         this.id = obj ? obj.id : '';
+        this.reactionCount = obj ? obj.reactionCount : '';
         this.reaction = obj ? obj.reaction : [];
     }
 
@@ -30,7 +32,8 @@ export class Message {
             date: this.date,
             timeInMs: this.timeInMs,
             profilePic: this.profilePic,
-            reaction: this.reaction
+            reaction: this.reaction,
+            reactionCount: this.reactionCount
            
         }
     }
