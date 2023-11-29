@@ -21,7 +21,7 @@ export class ThreadComponent implements OnInit {
 
 
 ngOnInit() {
- this.threadService.subThreadList();
+
 }
 
 addThread() {
@@ -35,6 +35,7 @@ addThread() {
   this.newThread.reactionCount = 0;
   this.threadService.addThread(this.newThread);
   console.log("New Thread ", this.newThread);
+  this.threadService.subThreadList();
 }
 
 

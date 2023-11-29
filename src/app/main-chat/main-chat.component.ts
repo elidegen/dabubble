@@ -275,5 +275,7 @@ export class MainChatComponent implements OnInit {
   openThread(message: Message) {
     this.threadDrawer.toggle();
    this.threadService.currentMessage = message;
+   console.log("Das ist die akutelle Currentmessage die im thread dargestellt wird",this.threadService.currentMessage);
+   this.threadService.subThreadList();
   }
 }

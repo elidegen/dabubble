@@ -20,13 +20,21 @@ export class ThreadService {
 
   currentChat = new Channel();
   currentMessage = new Message();
-  unsubList;
+  unsubList: any;
 
   constructor(public router: Router, public userService: UserService, public chatService: ChatService) {
-    this.unsubList = this.subThreadList();
-    console.log("der currentchat ist:::", this.currentChat);
-    console.log("die currentmessage ist ", this.currentMessage);
+    this.chatService.openChat$.subscribe(chat => {
+      if (chat) {
+        this.currentChat = chat as Channel;
+        console.log("der currentchat ist:::", this.currentChat);
+        console.log("die currentmessage ist ", this.currentMessage);
+        if (this.currentChat.id && this.currentMessage.id) {
+          this.unsubList = this.subThreadList();
+        }
+      }
+    });
   }
+  
 
   ngOnInit() {
     this.unsubList = this.subThreadList();
@@ -66,11 +74,10 @@ if (this.unsubList) {
 
 
   subThreadList() {
-    if (this.currentChat && this.currentChat.id && this.currentMessage && this.currentMessage.id) {
+    if (this.currentChat.id && this.currentMessage.id) {
       return onSnapshot(this.getThreadRef(this.currentMessage.id), (list) => {
         this.threads = [];
         list.forEach(element => {
-
           const threadData = element.data() as Thread; 
           const thread = new Thread(threadData); 
           this.threads.push(thread);
