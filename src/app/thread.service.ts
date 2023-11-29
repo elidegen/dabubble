@@ -56,7 +56,8 @@ if (this.unsubList) {
       (docRef) => {
         console.log()
      
-        console.log("New user with id", docRef!.id)
+        console.log("Neuer Thread für die Message Id", this.currentMessage.id);
+        console.log(item);
       }
     )
   }
