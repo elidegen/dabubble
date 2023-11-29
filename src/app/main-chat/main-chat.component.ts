@@ -43,8 +43,12 @@ export class MainChatComponent implements OnInit {
   ngOnInit() {
     this.chatService.openChat$.subscribe((openChat) => {
       if (openChat) {
-        this.currentChat = openChat as Channel;
-        this.loadMessages();
+        const newChat = openChat as Channel;
+
+        if (!this.currentChat || this.currentChat.id !== newChat.id) {
+          this.currentChat = newChat;
+          this.loadMessages();
+        }
       }
     });
   }
