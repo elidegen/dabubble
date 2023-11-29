@@ -1,31 +1,68 @@
-<mat-card class="pr-pl-8">
-    <mat-card-header class="w100">
-        <div class="w100 dialog-header">
-            <h2>Create a channel</h2>
-            <button mat-icon-button (click)="dialogRef.close()">
-                <mat-icon>close</mat-icon>
-            </button>
-        </div>
-    </mat-card-header>
-    <mat-card-content>
-        <p>Channels serve your team for communication. Ideally, they should be topic-specific, for example, #marketing.
-        </p>
-        <div class="channel-name w100">
-            <h3>Channel name</h3>
-            <input [(ngModel)]="channel.name" type="text" placeholder="e.g. Corporation Projects">
-        </div>
-        <div class="w100 description-container">
-            <div class="description">
-                <h3>Description</h3>
-                <span>(optional)</span>
+<div [ngSwitch]="switch_expression">
+    <mat-card *ngSwitchCase="'channel'" class="pr-pl-8">
+        <mat-card-header class="w100">
+            <header class="w100">
+                <h2>Create a channel</h2>
+                <button mat-icon-button (click)="dialogRef.close()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </header>
+        </mat-card-header>
+        <mat-card-content>
+            <p>Channels serve your team for communication. Ideally, they should be topic-specific, for example, #marketing.
+            </p>
+            <div class="channel-name w100">
+                <h3>Channel name</h3>
+                <input class="input-add-channel" [(ngModel)]="channel.name" type="text" placeholder="e.g. Corporation Projects">
             </div>
-            <input [(ngModel)]="channel.description" type="text" placeholder="Your message">
-        </div>
+            <div class="w100 description-container">
+                <div class="description">
+                    <h3>Description</h3>
+                    <span>(optional)</span>
+                </div>
+                <input class="input-add-channel" [(ngModel)]="channel.description" type="text" placeholder="Your message">
+            </div>
 
-        <div class="create-container">
-            <button mat-button class="main-button primary" (click)="createChannel()">
-                Create
-            </button>
-        </div>
-    </mat-card-content>
-</mat-card>
+            <div class="create-container">
+                <button mat-button class="main-button primary" (click)="changeSwitchCase('members')">
+                    Create
+                </button>
+            </div>
+        </mat-card-content>
+    </mat-card>
+
+    <mat-card *ngSwitchCase="'members'" class="pr-pl-8">
+        <mat-card-header class="w100">
+            <header class="w100">
+                <h2>Add Members</h2>
+                <button mat-icon-button (click)="dialogRef.close()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </header>
+        </mat-card-header>
+        <mat-card-content>
+            <mat-radio-group class="radio-button-container" [(ngModel)]="selectedOption">
+                <mat-radio-button [value]="'allMembers'">Add all members of Office Team</mat-radio-button>
+                <mat-radio-button [value]="'certainMembers'">Add certain members</mat-radio-button>
+            </mat-radio-group>
+            <div class="add-members-container" *ngIf="selectedOption === 'certainMembers'" [ngClass]="{'show': selectedOption === 'certainMembers'}">
+                <input class="w100" type="text" placeholder="Enter name" [(ngModel)]="searchInput" (input)="filterUsers()" (focus)="isInputFocused = true" >
+                
+                <div class="user-search-container" *ngIf="isInputFocused" (click)="userSelected($event)">
+                    <button #userContainer class="user-container" *ngFor="let user of filteredUsers; let i = index" (click)="highlightButton(i)">
+                        <div class="profile-container">
+                            <img src="{{user.picture}}" alt="profile">
+                            <div class="online-status"></div>
+                        </div>
+                        <span>{{user.name}}</span>
+                    </button>
+                </div>
+            </div>
+            <div class="create-container">
+                <button mat-button class="main-button primary" [disabled]="selectedOption === 'certainMembers'">
+                    Create
+                </button>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

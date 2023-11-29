@@ -1,4 +1,4 @@
-input {
+.input-add-channel {
     background-image: url('../../assets/img/icons/tag.svg');
     background-repeat: no-repeat;
     background-position: 4%;
@@ -9,7 +9,7 @@ mat-card {
     width: 700px;
 }
 
-.dialog-header {
+header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -52,4 +52,85 @@ mat-card {
 p {
     margin-top: 8px !important;
     margin-bottom: 16px !important;
+}
+
+.radio-button-container {
+    display: flex;
+    flex-direction: column;
+}
+
+mat-radio-group {
+    margin-top: 40px;
+}
+
+.add-members-container {
+    margin-top: 24px;
+    position: relative;
+}
+.user-search-container {
+    position: absolute;
+    min-height: 180px;
+    max-height: 200px;
+    overflow-y: scroll;
+    background-color: white;
+    z-index: 0;
+    left: 50px;
+    top: 56px;
+    border-radius: 0 32px 32px 32px;
+    box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.4);
+    padding: 16px 50px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+    gap: 16px;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.user-container {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    gap: 16px;
+    border-radius: 32px;
+    padding: 6px 24px;
+    background-color: white;
+    outline: 0;
+    border: 0;
+    cursor: pointer;
+    img {
+        height: 50px;
+    }
+    &:hover {
+        background-color: var(--primary);
+    }
+}
+
+.user-container-highlighted {
+    background-color: var(--primary);
+    color: var(--purple3);
+    font-weight: 700;
+}
+
+.profile-container {
+    position: relative;
+}
+.online-status {
+    width: 10px;
+    height: 10px;
+    background-color: var(--online);
+    border-radius: 100%;
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    border: 2px solid white;
+}
+
+.online {
+    background-color: var(--online);
+}
+
+.offline {
+    background-color: var(--textGray);
 }
