@@ -88,7 +88,7 @@
 
         <div class="submit-buttons margin-top justify-content-end">
           <button mat-button class="align-self main-button primary" type="submit"
-            [disabled]="!addUser.valid">Next</button>
+            [disabled]= "!disableSelect.value || !addUser.valid ">Next</button>
         </div>
       </form>
     </div>

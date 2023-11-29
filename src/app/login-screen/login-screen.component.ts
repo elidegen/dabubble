@@ -190,7 +190,7 @@ export class LoginScreenComponent implements OnInit {
   }
 
   loginWithApple() {
-    
+
   }
 
 

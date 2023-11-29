@@ -149,7 +149,6 @@ export class MainChatComponent implements OnInit {
   setEmojiCount(reactions: any[]) {
     let counter: { [key: string]: number } = {};
     reactions.forEach(react => {
-
       let key = JSON.stringify(react.emoji);
       if (key) {
         key = key.substring(1);

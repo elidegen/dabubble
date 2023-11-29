@@ -139,7 +139,7 @@ console.log("Guest ist eingeloggt", this.userService.currentUser);
   
   async signOutUser() {
     if (this.userService.currentUser.name == "Guest") {
-      this.signOutGuest();
+      this.userService.removeCurrentUserFromLocalStorage();
     } else {
     let userIndexToLogout = this.findUserIndexWithEmail(this.userService.currentUser.email);
     if (userIndexToLogout != -1) {
@@ -149,7 +149,6 @@ console.log("Guest ist eingeloggt", this.userService.currentUser);
   }
 }
 this.userService.currentUser = this.userService.createEmptyUser();
-this.userService.removeCurrentUserFromLocalStorage();
     await signOut(this.auth).then(() => {
       console.log('Benutzer erfolgreich abgemeldet');
     }).catch((error) => {
@@ -158,14 +157,7 @@ this.userService.removeCurrentUserFromLocalStorage();
   }
 
 
-  signOutGuest() {
-    let userToRemove = this.findUserIndexWithId(this.userService.currentUser.id);
-    if (userToRemove !== -1) {
-      this.userService.users.splice(userToRemove, 1);
-      console.log("Guest wurde gelöscht",userToRemove );
-    }
-  }
-
+  
 
   async addGoogleUser() {
     if (!this.userService.userExists(this.userService.currentUser.email)) {
