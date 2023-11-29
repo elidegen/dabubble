@@ -16,6 +16,14 @@ export class AuthService {
   private auth = getAuth();
   provider = new GoogleAuthProvider();
   customPic: string ="";
+  newGuest: UserData = {
+    name: "Guest",
+    email: "",
+    password: "",
+    id: "",
+    picture: "assets/img/avatars/profile.svg",
+    online: true,
+  }
   
   
 
@@ -92,13 +100,32 @@ export class AuthService {
   }
 
 
+//  signInWithApple() {
+//     const appleAuthRequestResponse = await appleAuth.performRequest({
+//       requestedOperation: appleAuth.Operation.LOGIN,
+//       requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+//     });
+  
+//     // Erstellt eine Firebase-Anmeldeinformation
+//     const credential = auth.AppleAuthProvider.credential(
+//       appleAuthRequestResponse.identityToken
+//     );
+  
+//     // Anmeldung bei Firebase
+//     return auth().signInWithCredential(credential);
+//   }
+
+
   signInGuest() {
     const auth = getAuth();
 signInAnonymously(auth)
   .then(() => {
 console.log("Guest logged in");
-let  newguest = this.userService.createEmptyUser();
-
+this.userService.currentUser = this.newGuest;
+this.userService.currentUser.id= this.createid(10);
+this.userService.setCurrentUserToLocalStorage();
+this.userService.getCurrentUserFromLocalStorage();
+console.log("Guest ist eingeloggt", this.userService.currentUser);
   })
   .catch((error) => {
     const errorCode = error.code;
@@ -109,21 +136,34 @@ let  newguest = this.userService.createEmptyUser();
   });
   }
 
+  
   async signOutUser() {
+    if (this.userService.currentUser.name == "Guest") {
+      this.signOutGuest();
+    } else {
+    let userIndexToLogout = this.findUserIndexWithEmail(this.userService.currentUser.email);
+    if (userIndexToLogout != -1) {
+    console.log("Index to Logout", userIndexToLogout);
+    this.userService.users[userIndexToLogout].online = false;
+   this.userService.updateUser('users', this.userService.users[userIndexToLogout]);
+  }
+}
+this.userService.currentUser = this.userService.createEmptyUser();
+this.userService.removeCurrentUserFromLocalStorage();
     await signOut(this.auth).then(() => {
       console.log('Benutzer erfolgreich abgemeldet');
     }).catch((error) => {
       console.error('Fehler beim Abmelden:', error);
     });
-    let userIndexToLogout = this.findUserIndexWithEmail(this.userService.currentUser.email);
-    if (userIndexToLogout != -1) {
-    console.log("Index to Logout", userIndexToLogout);
-    this.userService.users[userIndexToLogout].online = false;
-    await this.userService.updateUser('users', this.userService.users[userIndexToLogout]);
-    console.log(this.userService.users[userIndexToLogout]);
-    this.userService.currentUser = this.userService.createEmptyUser();
-    await this.userService.removeCurrentUserFromLocalStorage();
   }
+
+
+  signOutGuest() {
+    let userToRemove = this.findUserIndexWithId(this.userService.currentUser.id);
+    if (userToRemove !== -1) {
+      this.userService.users.splice(userToRemove, 1);
+      console.log("Guest wurde gelöscht",userToRemove );
+    }
   }
 
 
@@ -168,6 +208,10 @@ console.log("User email updatet")
     return this.userService.users.findIndex(user => user.email === email);
   }
 
+  findUserIndexWithId(Id: string) {
+    return this.userService.users.findIndex(user => user.id === Id);
+  }
+
 
   async uploadProfileImage(file: File,) {
     const storage = getStorage();
@@ -198,6 +242,21 @@ console.log("User email updatet")
       }
     );
   }
+
+
+createid(length:number) {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < length) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      counter += 1;
+    }
+    return result;
+}
+
+
 }
 
 

@@ -189,6 +189,10 @@ export class LoginScreenComponent implements OnInit {
     this.authService.signInWithGoogle();
   }
 
+  loginWithApple() {
+    
+  }
+
 
   hideContentAfterAnimation() {
     setTimeout(() => {
