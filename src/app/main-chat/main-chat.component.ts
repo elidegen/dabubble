@@ -134,6 +134,7 @@ export class MainChatComponent implements OnInit {
           return message;
         });
         console.log('all Messages:', this.allMessages);
+
         this.organizeMessagesByDate();
       });
     }
@@ -163,6 +164,7 @@ export class MainChatComponent implements OnInit {
   //   }
   // }
 
+
   async addReaction(emoji: string, messageId: any) {
     if (this.currentChat?.id) {
       console.log('welche naxhricht ist das?', messageId);
@@ -170,15 +172,20 @@ export class MainChatComponent implements OnInit {
       let messageIndex = this.allMessages.findIndex(message => message.id === messageId);
       let currentMessage = this.allMessages[messageIndex];
 
-      if (currentMessage.reaction.includes(emoji)) {
-        let index = currentMessage.reaction.indexOf(emoji);
-        currentMessage.reaction.splice(index, 1)
+      const reactionItem = { emoji, creatorId: this.currentUser.id };
+      
+
+      if (currentMessage.reaction.some((emojiArray: { emoji: string; creatorId: string; }) => emojiArray.emoji === emoji && emojiArray.creatorId === this.currentUser.id)) {
+        currentMessage.reaction = currentMessage.reaction.filter((emojiArray: { emoji: string; creatorId: string; }) => !(emojiArray.emoji === emoji && emojiArray.creatorId === this.currentUser.id));
       } else {
-        currentMessage.reaction.push(emoji);
+        currentMessage.reaction.push(reactionItem);
       }
+
+
     
       
       updateDoc(subReactionColRef, this.updateMessage(this.allMessages[messageIndex]));
+
     }
   
   }
