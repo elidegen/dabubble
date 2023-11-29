@@ -29,7 +29,7 @@ export class WorkspaceComponent implements OnInit {
           channel.id = doc.id;
           return channel;
         });
-  
+
         console.log('workspace allchannels: ', this.allChannels);
       }
     );
@@ -40,11 +40,7 @@ export class WorkspaceComponent implements OnInit {
   }
 
   renderChat(channel: Channel) {
-    console.log('welcher',channel);
-    
     this.chatservice.openChat = channel;
-    console.log('welcher channel 2', channel);
-    
   }
 
   ngOnDestroy(): void {
