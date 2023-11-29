@@ -42,6 +42,8 @@ export class MainChatComponent implements OnInit {
   ngOnInit() {
     this.chatService.openChat$.subscribe((openChat) => {
       if (openChat) {
+        console.log('show channel', openChat);
+        
         const newChat = openChat as Channel;
 
         if (!this.currentChat || this.currentChat.id !== newChat.id) {
