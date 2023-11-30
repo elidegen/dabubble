@@ -22,14 +22,22 @@ export class DialogAddChannelComponent {
   switch_expression: string = 'channel';
   selectedOption: string = 'allMembers';
   searchInput: string = '';
-  users: User[] = []; 
-  filteredUsers: User[] = []; 
+  users: User[] = [];
+  filteredUsers: User[] = [];
   isInputFocused: boolean = false;
+  touched: boolean = false;
+  selcetedUsers = [];
   constructor(public dialogRef: MatDialogRef<DialogAddChannelComponent>, public chatService: ChatService, public userService: UserService) {
     this.loadUsers();
   }
 
-
+  @HostListener('document:click', ['$event'])
+  checkClick(event: Event) {
+    const clickedElement = event.target as HTMLElement;
+    if (!clickedElement.classList.contains('user-search-container') && !clickedElement.classList.contains('user-container') && this.isInputFocused && !clickedElement.classList.contains('input-members')) {
+      this.isInputFocused = false;
+    }
+  }
 
   async loadUsers() {
     try {
@@ -41,13 +49,10 @@ export class DialogAddChannelComponent {
   }
 
   filterUsers(): void {
-    if (this.isInputFocused) {
-      this.filteredUsers = this.users.filter(user =>
-        user.name?.toLowerCase().startsWith(this.searchInput.toLowerCase())
-      );
-    } else {
-      this.filteredUsers = [];
-    }
+    this.isInputFocused = true;
+    this.filteredUsers = this.users.filter(user =>
+      user.name?.toLowerCase().includes(this.searchInput.toLowerCase())
+    );
   }
 
   async createChannel() {
@@ -64,19 +69,19 @@ export class DialogAddChannelComponent {
         }
       });
   }
-  
+
   async updateChannelId(colId: string, channel: Channel, newId: string) {
     channel.id = newId;
     await this.updateChannel(colId, channel);
   }
-  
+
   async updateChannel(colId: string, channel: Channel) {
     const docRef = doc(collection(this.firestore, colId), channel.id);
     await updateDoc(docRef, this.getUpdateData(channel)).catch(
       (error) => { console.log(error); }
     );
   }
-  
+
   getUpdateData(channel: Channel) {
     return {
       name: channel.name,
@@ -90,19 +95,13 @@ export class DialogAddChannelComponent {
     this.switch_expression = newSwitchCase;
   }
 
-  
+
   userSelected(event: Event) {
     event.stopPropagation();
   }
 
 
-  highlightButton(index: number) {
-    const userContainer = this.userContainers.toArray()[index];
-    if (userContainer) {
-      userContainer.nativeElement.classList.toggle('user-container-highlighted');
-    }
+  selectUser(user: User) {
+    // this.selcetedUsers.push(user)
   }
-
-
-
 }

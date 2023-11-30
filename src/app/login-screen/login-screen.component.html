@@ -20,7 +20,7 @@
       <form [formGroup]="login">
         <div class="input-container margin-top ">
           <img src="assets\img\icons\mail.svg">
-          <input matInput [(ngModel)]="email" matInput placeholder="E-mail" [formControl]="loginemail" required>
+          <input matInput [(ngModel)]="email" placeholder="E-mail" [formControl]="loginemail" required>
           <mat-error *ngIf="!loginemail.valid">{{getErrorMessageLogin()}}</mat-error>
         </div>
 
