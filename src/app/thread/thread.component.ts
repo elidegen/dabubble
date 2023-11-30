@@ -5,7 +5,7 @@ import { UserService } from '../user.service';
 import { AuthService } from '../auth.service';
 import { UserData } from '../interfaces/user-interface';
 import { ChatService } from '../chat.service';
-import { Firestore, addDoc, arrayUnion, collection, doc,updateDoc } from '@angular/fire/firestore';
+import { Firestore, addDoc, arrayUnion, collection, doc, updateDoc } from '@angular/fire/firestore';
 import { DocumentData, DocumentReference, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { Channel } from 'src/models/channel.class';
 import { Reaction } from 'src/models/reaction.class';
@@ -24,27 +24,22 @@ export class ThreadComponent implements OnInit {
   currentChat!: Channel | undefined;
   message: Message = new Message();
   reaction: Reaction = new Reaction;
-  allMessages: Message[] = [];
-  messagesByDate: { [date: string]: Message[] } = {};
-  organizedMessages: { date: string, messages: Message[] }[] = []
+  allThreadMessages: Message[] = [];
+  threadMessagesByDate: { [date: string]: Message[] } = {};
+  sortedThreadMessages: { date: string, messages: Message[] }[] = []
   allReactionsByMessage: [] = [];
   currentMessage: any = [];
-
   unSubMessages: any;
   unSubReactions: any;
   currentUser: UserData;
-
 
   @Output() closeThread: EventEmitter<void> = new EventEmitter<void>();
   constructor(public threadService: ThreadService, public userService: UserService, public authService: AuthService, public chatService: ChatService) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
-  
   }
 
-
   ngOnInit() {
-
     this.chatService.openChat$.subscribe((openChat) => {
       if (openChat) {
         const newChat = openChat as Channel;
@@ -69,8 +64,8 @@ export class ThreadComponent implements OnInit {
     }
   }
 
-  addMessageToThread(messageId: any ) {
-    console.log("das ist die id von der Message die in den Thread gepusht werden soll", messageId)
+  addMessageToThread(messageId: any) {
+    console.log("thread msg id", messageId)
     this.newThread.creator = this.userService.currentUser.name;
     this.newThread.creatorId = this.userService.currentUser.id;
     this.newThread.content = this.threadContent;
@@ -81,69 +76,72 @@ export class ThreadComponent implements OnInit {
     this.newThread.profilePic = this.userService.currentUser.picture;
     this.newThread.reaction = [];
     this.newThread.reactionCount = 0;
-    console.log("New Thread ", this.newThread);
+    console.log("New Thread", this.newThread);
     this.pushMessageToThread(messageId);
   }
 
-
   loadMessages() {
-    console.log('loadmessages anfang currentChat', this.currentChat);
     if (this.currentChat?.id) {
       const messageCollection = collection(this.firestore, `channels/${this.currentChat.id}/messages`);
       const q = query(messageCollection, orderBy('timeInMs', 'asc'));
       this.unSubMessages = onSnapshot(q, (snapshot) => {
-        this.allMessages = snapshot.docs.map(doc => {
+        this.allThreadMessages = snapshot.docs.map(doc => {
           const message = doc.data() as Message;
           message.id = doc.id;
+
+          message.thread = this.getThread(message);
           message.reactionCount = this.setEmojiCount(message.reaction);
-          console.log('Testconsole log load Messages', this.currentChat);
 
           return message;
         });
         this.organizeMessagesByDate();
-        console.log('organizedmsg', this.organizedMessages);
       });
     }
-    console.log('loadmessages ende currentChat', this.currentChat);
-  
   }
 
+  getThread(msg: Message) {
+    let parsedThread: any[] = [];
+    msg.thread.forEach((threadMsg: string) => {
+      parsedThread.push(JSON.parse(threadMsg));
+    });
+    return parsedThread;
+  }
 
   organizeMessagesByDate() {
-    this.messagesByDate = {};
-    for (const message of this.allMessages) {
-      const messageDate = message.date;
-      if (messageDate) {
-        if (!this.messagesByDate[messageDate]) {
-          this.messagesByDate[messageDate] = [];
-        }
-        this.messagesByDate[messageDate].push(message);
-        
-      }
-    }
-    this.organizedMessages = Object.entries(this.messagesByDate).map(([date, messages]) => ({ date, messages }));
-    this.organizedMessages = this.organizedMessages;
-  }
+    this.threadMessagesByDate = {};
 
+    for (const thread of this.allThreadMessages) {
+      const threadMessageDate = thread.date;
+
+      if (threadMessageDate) {
+        if (!this.threadMessagesByDate[threadMessageDate]) {
+          this.threadMessagesByDate[threadMessageDate] = [];
+        }
+        this.threadMessagesByDate[threadMessageDate].push(thread);
+      }
+
+    }
+    this.sortedThreadMessages = Object.entries(this.threadMessagesByDate).map(([date, messages]) => ({ date, messages }));
+    this.sortedThreadMessages = this.sortedThreadMessages;
+    console.log('srtthrdmsg', this.sortedThreadMessages);
+
+  }
 
   pushMessageToThread(messageId: string) {
     const subReactionColRef = doc(collection(this.firestore, `channels/${this.threadService.currentChat.id}/messages/`), messageId);
     let messageIndex = this.getIndexFromMessageId(messageId);
-    console.log("das ist die id von der Message die in den Thread gepusht werden soll", messageId);
-    this.allMessages[messageIndex].thread.push(this.newThread);
-    console.log("das ist die id von der Message die in den Thread gepusht werden soll",   this.allMessages[messageIndex]);
-    updateDoc(subReactionColRef, this.updateMessage(this.allMessages[messageIndex]));
 
-  
+    const threadString = JSON.stringify(this.newThread);
+
+    this.allThreadMessages[messageIndex].thread.push(threadString);
+    updateDoc(subReactionColRef, this.updateMessage(this.allThreadMessages[messageIndex]));
   }
 
-  
   updateMessage(message: any) {
     return {
       thread: message.thread,
     }
   }
-
 
   setEmojiCount(reactions: any[]) {
     let counter: { [key: string]: number } = {};
@@ -163,10 +161,6 @@ export class ThreadComponent implements OnInit {
     return counter;
   }
 
-
-
-
-
   getSentMessageDate() {
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleDateString();
@@ -182,8 +176,7 @@ export class ThreadComponent implements OnInit {
   }
 
   getIndexFromMessageId(messageId: string) {
-
-    let messageIndex = this.allMessages.findIndex(message => message.id === messageId)
+    let messageIndex = this.allThreadMessages.findIndex(message => message.id === messageId)
     return messageIndex;
   }
 

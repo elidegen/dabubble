@@ -11,7 +11,7 @@ export class Message {
     profilePic: string | undefined;
     reaction: any = [];
     reactionCount: any;
-    thread: Thread[] = [];
+    thread: any[] = [];
 
       
 

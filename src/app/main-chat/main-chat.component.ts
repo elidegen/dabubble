@@ -38,7 +38,6 @@ export class MainChatComponent implements OnInit {
   constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public threadService: ThreadService) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
-    console.log('conjstructor currentChat', this.currentChat);
   }
 
   ngOnInit() {
@@ -91,13 +90,13 @@ export class MainChatComponent implements OnInit {
 
   async sendMessage() {
     // console.log('sm begin curch', this.currentChat);
-console.log("Dieser Chat ist ausgewählt",this.currentChat);
+    console.log("Dieser Chat ist ausgewählt", this.currentChat);
     if (this.currentChat?.id && this.message.content?.trim() !== '') {
       this.getSentMessageTime();
       this.getSentMessageDate();
       this.getSentMessageCreator();
       console.log('log message', this.message);
-      
+
       const subColRef = collection(this.firestore, `channels/${this.currentChat.id}/messages`);
 
       // console.log('sm mid curch', this.currentChat);
@@ -141,7 +140,7 @@ console.log("Dieser Chat ist ausgewählt",this.currentChat);
       profilePic: this.userService.currentUser.picture,
       reaction: [],
       reactionCount: message.reactionCount,
-      thread : [],
+      thread: [],
 
     };
   }
@@ -158,12 +157,9 @@ console.log("Dieser Chat ist ausgewählt",this.currentChat);
 
           return message;
         });
-        console.log('organizedmsg', this.organizedMessages);
-
         this.organizeMessagesByDate();
       });
     }
-    console.log('loadmessages ende currentChat', this.currentChat);
   }
 
   setEmojiCount(reactions: any[]) {
@@ -267,7 +263,7 @@ console.log("Dieser Chat ist ausgewählt",this.currentChat);
           this.messagesByDate[messageDate] = [];
         }
         this.messagesByDate[messageDate].push(message);
-        
+
       }
     }
     this.organizedMessages = Object.entries(this.messagesByDate).map(([date, messages]) => ({ date, messages }));
@@ -277,8 +273,6 @@ console.log("Dieser Chat ist ausgewählt",this.currentChat);
 
   openThread(message: Message) {
     this.threadDrawer.toggle();
-   this.threadService.currentMessage = message;
-
-  
+    this.threadService.currentMessage = message;
   }
 }

@@ -43,10 +43,10 @@
     <section> <!-- Oberste section für Kommentar_bereich -->
       <!-- separator -->
       <div class="comments-container">
-        <span *ngIf="this.threadService.currentMessage.thread.length == 1" class="comments">{{this.currentMessage.thread.length}}
+        <!-- <span *ngIf="this.threadService.currentMessage.thread.length == 1" class="comments">{{this.currentMessage.thread.length}}
           Answer</span>
         <span *ngIf="this.threadService.currentMessage.thread.length >= 1" class="comments">{{this.currentMessage.thread.length}}
-          Answers</span>
+          Answers</span> -->
         <div class="separator"></div>
       </div>
 
@@ -54,7 +54,7 @@
         [ngClass]="{'my-messages': thread.creator == currentUser.name}">
         <div class="message-box">
           <div class="message-avatar-container">
-            <img src="assets/img/avatars/avatar_male2.svg" alt="" />
+            <img src="assets/img/avatars/avatar_male2.svg"/>
           </div>
           <div class="message-container">
             <div class="message-data">

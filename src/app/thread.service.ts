@@ -1,14 +1,12 @@
 import { Injectable } from '@angular/core';
-import { UserData } from './interfaces/user-interface';
 import { inject } from '@angular/core';
-import { Firestore, collection, doc, collectionData, onSnapshot, addDoc, deleteDoc, updateDoc, } from '@angular/fire/firestore';
+import { Firestore, collection, doc, onSnapshot, addDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { Thread } from 'src/models/thread.class';
 import { Channel } from 'src/models/channel.class';
 import { UserService } from './user.service';
 import { ChatService } from './chat.service';
 import { Message } from 'src/models/message.class';
-
 
 @Injectable({
   providedIn: 'root'
@@ -20,95 +18,50 @@ export class ThreadService {
   allMessages: Message[] = [];
   currentChat = new Channel();
   currentMessage = new Message();
-  threadMessage: any  = []
+  threadMessage: any = []
   messagesByDate: { [date: string]: Message[] } = {};
   organizedMessages: { date: string, messages: Message[] }[] = []
   unsubList;
- 
 
   constructor(public router: Router, public userService: UserService, public chatService: ChatService) {
     this.unsubList = this.subThreadList();
   }
 
   ngOnInit() {
-  
     console.log("der currentchat ist:::", this.currentChat);
     console.log("die currentmessage ist ", this.currentMessage);
   }
 
-
-
   ngOnDestroy() {
-if (this.unsubList) {
-  this.unsubList();
-}
-
-
-      
-      
-    
-    
+    if (this.unsubList) {
+      this.unsubList();
+    }
   }
-
-
- 
 
   async addThread(item: Thread) {
     if (this.currentMessage.id) {
-    await addDoc(this.getThreadRef(this.currentMessage.id), item.toJSON()).catch(
-      (err) => { console.log(err) }
-    ).then(
-      (docRef) => {
-        console.log()
-     
-        console.log("Neuer Thread für die Message Id", this.currentMessage.id);
-        console.log(item);
-      }
-    )
+      await addDoc(this.getThreadRef(this.currentMessage.id), item.toJSON()).catch(
+        (err) => { console.log(err) }
+      ).then(
+        (docRef) => {
+          console.log()
+
+          console.log("Neuer Thread für die Message Id", this.currentMessage.id);
+          console.log(item);
+        }
+      )
+    }
   }
-  }
-
-
-
- 
-  
-
-// //   subscribeToAllMessagesAndThreads() {
-// //     if (!this.currentChat || !this.currentChat.id) {
-// //       throw new Error('Current chat is not defined');
-// //     }
-// //     const messagesRef = collection(this.firestore, `channels/${this.currentChat.id}/messages`);
-// //     return onSnapshot(messagesRef, (querySnapshot) => {
-// //       querySnapshot.forEach((doc) => {
-// //         const messageId = doc.id;
-// //         this.subscribeToThreadsForMessage(messageId); // Abonnieren Sie Threads für jede Nachricht
-// //       });
-// //     });
-// //   }
-
-// //  subscribeToThreadsForMessage(messageId: string) {
-// //     const threadsRef = this.getAllThreadsRef(messageId);
-// //     return onSnapshot(threadsRef, (querySnapshot) => {
-// //       this.allThreadsCollection = [];
-// //       querySnapshot.forEach((doc) => {
-// //         const threadData = doc.data() as Thread; // Passen Sie dies an Ihr Thread-Modell an
-// //         this.allThreadsCollection.push(new Thread(threadData));
-//       });
-//       this.allThreadsCollection = [...this.allThreadsCollection, ...threadData as Thread];
-   
-//     });
-//   }
-
 
   subThreadList() {
     if (this.currentChat.id && this.currentMessage.id) {
       return onSnapshot(this.getThreadRef(this.currentMessage.id), (list) => {
         this.threads = [];
         list.forEach(element => {
-          const threadData = element.data() as Thread; 
-          const thread = new Thread(threadData); 
+          const threadData = element.data() as Thread;
+          const thread = new Thread(threadData);
           this.threads.push(thread);
-          console.log("threads sind vorhanden für  currentChat und currentMesage", this.currentChat.id,this.currentMessage);
+          console.log("threads sind vorhanden für  currentChat und currentMesage", this.currentChat.id, this.currentMessage);
           console.log("Thread", thread);
         });
       });
@@ -119,7 +72,6 @@ if (this.unsubList) {
   }
 
   setObjectData(obj: any,) {
-
     return {
       name: obj.name || "",
       email: obj.email || "",
@@ -129,21 +81,11 @@ if (this.unsubList) {
       online: obj.online || false,
     }
   }
- 
-
-  // async updateThread(colId: string, thread: Thread) {
-  //   let docRef = this.getSingleDocRef(colId, thread);
-  //   await updateDoc(docRef, this.getThreadData(thread)).catch(
-  //     (error) => { console.log(error); }
-
-  //   );
-  //   console.log("User updated", thread);
-  // }
 
   getThreadData(thread: Thread) {
     // Erstellen Sie eine neue Instanz von Thread, falls erforderlich
     const threadInstance = new Thread(thread);
-  
+
     // Aktualisieren Sie die Eigenschaften des Thread-Objekts
     threadInstance.creator = thread.creator || "";
     threadInstance.creatorId = thread.creatorId || "";
@@ -155,24 +97,9 @@ if (this.unsubList) {
     threadInstance.id = thread.id || "";
     threadInstance.reactionCount = thread.reactionCount || "";
     threadInstance.reaction = thread.reaction || [];
-  
+
     return threadInstance;
   }
-
-  // async updateThreadId(colId: string, thread: Thread, newId: string,) {
-  //   thread.id = newId;
-  //   await this.updateThread(colId, thread);
-  // }
-
-  // async deleteUser(colId: string, docId: string) {
-  //   await deleteDoc(this.getSingleDocRef(colId, docId)).catch(
-
-  //     (err) => { console.log(err); }
-  //   )
-  // }
-
-
-
 
   getAllThreadsRef(messageId: string) {
     if (!this.currentChat || !this.currentChat.id) {
@@ -183,7 +110,6 @@ if (this.unsubList) {
     }
     return collection(this.firestore, `channels/${this.currentChat.id}/messages/${messageId}/threads`);
   }
- 
 
   getThreadRef(messageId: string) {
     if (!this.currentChat || !this.currentChat.id) {
@@ -194,8 +120,7 @@ if (this.unsubList) {
     }
     return collection(this.firestore, `channels/${this.currentChat.id}/messages/${messageId}/threads`);
   }
-  
- 
+
   getSingleDocRef(messageId: string, docId: string) {
     if (!this.currentChat || !this.currentChat.id) {
       throw new Error('Current chat is not defined');
@@ -203,10 +128,9 @@ if (this.unsubList) {
     if (!messageId) {
       throw new Error('Message ID is not defined');
     }
-      return doc(collection(this.firestore, `channels/${this.currentChat.id}/messages/${messageId}/threads`), docId);
-    }
-  
+    return doc(collection(this.firestore, `channels/${this.currentChat.id}/messages/${messageId}/threads`), docId);
   }
+}
 
 
 
