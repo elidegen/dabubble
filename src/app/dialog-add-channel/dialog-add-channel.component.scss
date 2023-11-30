@@ -101,6 +101,7 @@ mat-radio-group {
     cursor: pointer;
     img {
         height: 50px;
+        border-radius: 100%;
     }
     &:hover {
         background-color: var(--primary);
@@ -133,4 +134,10 @@ mat-radio-group {
 
 .offline {
     background-color: var(--textGray);
+}
+
+.user-selection-container {
+    height: 49px;
+    border: 1px solid var(--border);
+    border-radius: 32px;
 }

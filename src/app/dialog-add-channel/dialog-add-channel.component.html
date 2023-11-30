@@ -47,7 +47,7 @@
             </mat-radio-group>
             <div class="add-members-container" *ngIf="selectedOption === 'certainMembers'" [ngClass]="{'show': selectedOption === 'certainMembers'}">
                 <input class="w100" type="text" placeholder="Enter name" [(ngModel)]="searchInput" (input)="filterUsers()" (focus)="isInputFocused = true" >
-                
+                <div class="w100 user-selection-container"></div>
                 <div class="user-search-container" *ngIf="isInputFocused" (click)="userSelected($event)">
                     <button #userContainer class="user-container" *ngFor="let user of filteredUsers; let i = index" (click)="highlightButton(i)">
                         <div class="profile-container">
