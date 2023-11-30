@@ -143,7 +143,6 @@ export class MainChatComponent implements OnInit {
   }
 
   loadMessages() {
-    console.log('loadmessages anfang currentChat', this.currentChat);
     if (this.currentChat?.id) {
       const messageCollection = collection(this.firestore, `channels/${this.currentChat.id}/messages`);
       const q = query(messageCollection, orderBy('timeInMs', 'asc'));
@@ -152,16 +151,13 @@ export class MainChatComponent implements OnInit {
           const message = doc.data() as Message;
           message.id = doc.id;
           message.reactionCount = this.setEmojiCount(message.reaction);
-          console.log('Testconsole log load Messages', this.currentChat);
 
           return message;
         });
-        console.log('organizedmsg', this.organizedMessages);
 
         this.organizeMessagesByDate();
       });
     }
-    console.log('loadmessages ende currentChat', this.currentChat);
   }
 
   setEmojiCount(reactions: any[]) {

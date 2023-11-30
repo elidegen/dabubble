@@ -26,7 +26,7 @@ export class DialogAddChannelComponent {
   filteredUsers: User[] = [];
   isInputFocused: boolean = false;
   touched: boolean = false;
-  selcetedUsers = [];
+  selectedUsers: any[] = [];
   constructor(public dialogRef: MatDialogRef<DialogAddChannelComponent>, public chatService: ChatService, public userService: UserService) {
     this.loadUsers();
   }
@@ -95,13 +95,36 @@ export class DialogAddChannelComponent {
     this.switch_expression = newSwitchCase;
   }
 
-
   userSelected(event: Event) {
     event.stopPropagation();
   }
 
+  removeUser(user: User) {
+    let index = this.selectedUsers.findIndex(obj => obj.id === user.id);
 
-  selectUser(user: User) {
-    // this.selcetedUsers.push(user)
+    if (index !== -1) {
+      this.selectedUsers.splice(index, 1);
+    }
+    console.log(this.selectedUsers);
+
+  }
+
+  selectUser(user: User, i: number) {
+    this.highlightButton(i);
+    let index = this.selectedUsers.findIndex(obj => obj.id === user.id);
+    console.log(index);
+    
+    if (index == -1) {
+      this.selectedUsers.push(user);
+    } else {
+      this.removeUser(user)
+    }
+  }
+
+  highlightButton(index: number) {
+    const userContainer = this.userContainers.toArray()[index];
+    if (userContainer) {
+      userContainer.nativeElement.classList.toggle('user-container-highlighted');
+    }
   }
 }
