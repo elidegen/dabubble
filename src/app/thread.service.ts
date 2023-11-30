@@ -17,7 +17,6 @@ import { Message } from 'src/models/message.class';
 export class ThreadService {
   firestore: Firestore = inject(Firestore);
   threads: Thread[] = [];
-
   currentChat = new Channel();
   currentMessage = new Message();
   unsubList;

@@ -43,7 +43,8 @@
       <section> <!-- Oberste section für Kommentar_bereich -->
                 <!-- separator -->
         <div class="comments-container">
-          <span class="comments">2 Antworten</span>
+          <span *ngIf="this.threadService.threads.length == 1" class="comments">{{this.threadService.threads.length}} Answer</span>
+          <span *ngIf="this.threadService.threads.length >= 2" class="comments">{{this.threadService.threads.length}} Answers</span>
           <div class="separator"></div>
         </div>
 
