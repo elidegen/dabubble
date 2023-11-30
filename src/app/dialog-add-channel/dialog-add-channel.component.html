@@ -1,5 +1,5 @@
-<div [ngSwitch]="switch_expression">
-    <mat-card *ngSwitchCase="'channel'" class="pr-pl-8">
+<div [ngSwitch]="addMembers">
+    <mat-card *ngSwitchCase="false" class="pr-pl-8">
         <mat-card-header class="w100">
             <header class="w100">
                 <h2>Create a channel</h2>
@@ -9,29 +9,32 @@
             </header>
         </mat-card-header>
         <mat-card-content>
-            <p>Channels serve your team for communication. Ideally, they should be topic-specific, for example, #marketing.
+            <p>Channels serve your team for communication. Ideally, they should be topic-specific, for example,
+                #marketing.
             </p>
             <div class="channel-name w100">
                 <h3>Channel name</h3>
-                <input class="input-add-channel" [(ngModel)]="channel.name" type="text" placeholder="e.g. Corporation Projects">
+                <input class="input-add-channel" [(ngModel)]="channel.name" type="text"
+                    placeholder="e.g. Corporation Projects">
             </div>
             <div class="w100 description-container">
                 <div class="description">
                     <h3>Description</h3>
                     <span>(optional)</span>
                 </div>
-                <input class="input-add-channel" [(ngModel)]="channel.description" type="text" placeholder="Your message">
+                <input class="input-add-channel" [(ngModel)]="channel.description" type="text"
+                    placeholder="Your message">
             </div>
 
             <div class="create-container">
-                <button mat-button class="main-button primary" (click)="changeSwitchCase('members')">
+                <button mat-button class="main-button primary" (click)="addMembers = true;" [disabled]="!channel.name || !channel.description">
                     Create
                 </button>
             </div>
         </mat-card-content>
     </mat-card>
 
-    <mat-card *ngSwitchCase="'members'" class="pr-pl-8">
+    <mat-card *ngSwitchCase="true" class="pr-pl-8">
         <mat-card-header class="w100">
             <header class="w100">
                 <h2>Add Members</h2>
@@ -41,25 +44,40 @@
             </header>
         </mat-card-header>
         <mat-card-content>
-            <mat-radio-group class="radio-button-container" [(ngModel)]="selectedOption">
-                <mat-radio-button [value]="'allMembers'">Add all members of Office Team</mat-radio-button>
-                <mat-radio-button [value]="'certainMembers'">Add certain members</mat-radio-button>
+            <mat-radio-group class="radio-button-container" [(ngModel)]="allMembers">
+                <mat-radio-button [value]="true">Add all members of Office Team</mat-radio-button>
+                <mat-radio-button [value]="false">Add certain members</mat-radio-button>
             </mat-radio-group>
-            <div class="add-members-container" *ngIf="selectedOption === 'certainMembers'" [ngClass]="{'show': selectedOption === 'certainMembers'}">
-                <input class="w100" type="text" placeholder="Enter name" [(ngModel)]="searchInput" (input)="filterUsers()" (focus)="isInputFocused = true" >
-                
+
+
+            <div class="add-members-container" *ngIf="allMembers == false"
+                [ngClass]="{'show': allMembers === false}">
+                <input class="w100 input-members" type="text" placeholder="Enter name" [(ngModel)]="searchInput"
+                    (input)="filterUsers()" (click)="this.isInputFocused = true;">
+
                 <div class="user-search-container" *ngIf="isInputFocused" (click)="userSelected($event)">
-                    <button #userContainer class="user-container" *ngFor="let user of filteredUsers; let i = index" (click)="highlightButton(i)">
+                    <button #userContainer class="user-container" *ngFor="let user of filteredUsers; let i = index" (click)="selectUser(user, i)">
                         <div class="profile-container">
                             <img src="{{user.picture}}" alt="profile">
                             <div class="online-status"></div>
                         </div>
                         <span>{{user.name}}</span>
                     </button>
+                    <span *ngIf="filteredUsers.length <1">No matching contact</span>
+                </div>
+                <div class="w100 selected-user-container">
+                    <div class="selected-user" *ngFor="let item of this.selectedUsers">
+                        <img src="{{item.picture}}" alt="">
+                        <span>{{item.name}}</span>
+                        <button mat-icon-button (click)="removeUser(item)">
+                            <mat-icon> close </mat-icon>
+                        </button>
+                    </div>
                 </div>
             </div>
+
             <div class="create-container">
-                <button mat-button class="main-button primary" [disabled]="selectedOption === 'certainMembers'">
+                <button mat-button class="main-button primary" [disabled]="selectedUsers.length < 1 && allMembers == false" (click)="createChannel()">
                     Create
                 </button>
             </div>

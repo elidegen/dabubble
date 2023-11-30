@@ -5,6 +5,7 @@ import { Firestore, collection, doc, onSnapshot, orderBy, query } from '@angular
 import { Channel } from 'src/models/channel.class';
 import { ChatService } from '../chat.service';
 import { ThreadService } from '../thread.service';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-workspace',
@@ -15,10 +16,12 @@ export class WorkspaceComponent implements OnInit {
   firestore: Firestore = inject(Firestore);
   panelOpenState: boolean = true;
   allChannels: Channel[] = [];
+  yourChannels: Channel[] = [];
   unsubscribeChannels: any;
+  currentUser;
 
-  constructor(public dialog: MatDialog, private chatservice: ChatService, public threadService: ThreadService) {
-
+  constructor(public dialog: MatDialog, private chatservice: ChatService, public threadService: ThreadService, public userService: UserService) {
+    this.currentUser = userService.currentUser;
   }
 
   ngOnInit(): void {
@@ -28,16 +31,25 @@ export class WorkspaceComponent implements OnInit {
         this.allChannels = snapshot.docs.map((doc) => {
           const channel = doc.data() as Channel;
           channel.id = doc.id;
+          channel.members = JSON.parse(channel.members);
           return channel;
         });
-  
-        console.log('workspace allchannels: ', this.allChannels);
+        this.getPersonalChannels();
       }
     );
   }
 
+  getPersonalChannels() {
+    this.yourChannels = [];
+    this.allChannels.forEach(channel => {
+      if (channel.members.some((member: { id: string; }) => member.id === this.currentUser.id)) {
+        this.yourChannels.push(channel);
+      }
+    });
+  }
+
   openDialog() {
-    this.dialog.open(DialogAddChannelComponent, { panelClass: 'dialog-container'});
+    this.dialog.open(DialogAddChannelComponent, { panelClass: 'dialog-container' });
   }
 
   renderChat(channel: Channel) {
