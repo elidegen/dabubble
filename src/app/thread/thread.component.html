@@ -43,14 +43,14 @@
     <section> <!-- Oberste section für Kommentar_bereich -->
       <!-- separator -->
       <div class="comments-container">
-        <span *ngIf="this.threadService.threads.length == 1" class="comments">{{this.threadService.threads.length}}
+        <span *ngIf="this.threadService.currentMessage.thread.length == 1" class="comments">{{this.currentMessage.thread.length}}
           Answer</span>
-        <span *ngIf="this.threadService.threads.length>= 2" class="comments">{{this.threadService.threads.length}}
+        <span *ngIf="this.threadService.currentMessage.thread.length >= 1" class="comments">{{this.currentMessage.thread.length}}
           Answers</span>
         <div class="separator"></div>
       </div>
 
-      <div class="message-row-container" *ngFor="let thread of this.threadService.threads;"
+      <div class="message-row-container" *ngFor="let thread of this.currentMessage.thread;"
         [ngClass]="{'my-messages': thread.creator == currentUser.name}">
         <div class="message-box">
           <div class="message-avatar-container">
@@ -99,7 +99,7 @@
           </button>
         </div>
 
-        <button (click)="addThread()" mat-icon-button class="textfield-buttons">
+        <button (click)="addMessageToThread(this.threadService.currentMessage.id)" mat-icon-button class="textfield-buttons">
           <img src="assets/img/icons/send.svg" alt="" />
         </button>
       </div>

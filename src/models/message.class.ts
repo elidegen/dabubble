@@ -1,4 +1,4 @@
-
+import { Thread } from "./thread.class";
 
 export class Message {
     creator: string | undefined;
@@ -11,6 +11,7 @@ export class Message {
     profilePic: string | undefined;
     reaction: any = [];
     reactionCount: any;
+    thread: Thread[] = [];
 
       
 
@@ -26,6 +27,7 @@ export class Message {
         this.id = obj ? obj.id : '';
         this.reactionCount = obj ? obj.reactionCount : '';
         this.reaction = obj ? obj.reaction : [];
+        this.thread = obj ?  obj.thread: [];
        
     }
 
@@ -39,7 +41,8 @@ export class Message {
             timeInMs: this.timeInMs,
             profilePic: this.profilePic,
             reaction: this.reaction,
-            reactionCount: this.reactionCount
+            reactionCount: this.reactionCount,
+            thread: this.thread,
 
         }
     }

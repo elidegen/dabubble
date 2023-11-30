@@ -1,7 +1,6 @@
 
 
 export class Thread {
-    messageId: string | undefined;
     creator: string | undefined;
     creatorId: string | undefined;
     content: string | undefined;
@@ -14,7 +13,6 @@ export class Thread {
     reactionCount: any;
 
     constructor(obj?: any) {
-        this.messageId = obj ? obj.messageId : "";
         this.creator = obj ? obj.creator : '';
         this.creatorId = obj ? obj.creatorId : '';
         this.content = obj ? obj.content : '';
@@ -29,7 +27,6 @@ export class Thread {
 
     public toJSON() {
         return {
-            messageId: this.messageId,
             creator: this.creator,
             creatorId: this.creatorId,
             content: this.content,
@@ -37,6 +34,7 @@ export class Thread {
             date: this.date,
             timeInMs: this.timeInMs,
             profilePic: this.profilePic,
+            id: this.id,
             reaction: this.reaction,
             reactionCount: this.reactionCount
         }

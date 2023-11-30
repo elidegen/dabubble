@@ -31,7 +31,7 @@
     </mat-card-header>
 
     <mat-card-content #messageContainer class="p-0 main-chat-container">
-      <ng-container *ngFor="let organizedMessage of organizedMessages.slice()">
+      <ng-container  *ngFor="let organizedMessage of this.organizedMessages.slice()">
         <section>
           <div class="date-container">
             <div class="separator"></div>
@@ -67,17 +67,17 @@
                   </div>
 
                   <div class="comment-section" (click)="openThread(message)">
-                    <span  class="comments color-purple2-text" *ngIf="this.threadService.threads.length == 0">Reply</span>
-                    <span  class="comments color-purple2-text" *ngIf="this.threadService.threads.length == 1">{{this.threadService.threads.length}} Answer</span>
-                    <span  class="comments color-purple2-text" *ngIf="this.threadService.threads.length >= 2">{{this.threadService.threads.length}} Answers</span>
-                    <span class="last-comment">Last Answer 14:55</span>
+                    <span *ngIf="message.thread.length == 0" class="comments color-purple2-text">Reply</span>
+                    <span *ngIf="message.thread.length == 1"  class="comments color-purple2-text" > Answer</span>
+                    <span  *ngIf="message.thread.length >= 2"  class="comments color-purple2-text"> Answers</span>
+                    <span class="last-comment">Last Answer</span>
                   </div>
 
                 </div>
               </div>
             </div>
 
-            <div class="reaction" [ngClass]="{'own-message': message.creator == currentUser.name}">
+            <div class="reaction" [ngClass]="{'own-message': message.creator == this.userService.currentUser.name}">
               <button mat-icon-button (click)="addReaction('assets/img/emojis/checkGreen.svg', message.id)">
                 <img src="assets/img/emojis/checkGreen.svg" alt="">
               </button>

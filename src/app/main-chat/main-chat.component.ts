@@ -35,13 +35,14 @@ export class MainChatComponent implements OnInit {
   allReactionsByMessage: [] = [];
 
 
-  constructor(public dialog: MatDialog, private chatService: ChatService, private userService: UserService, public threadService: ThreadService) {
+  constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public threadService: ThreadService) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
     console.log('conjstructor currentChat', this.currentChat);
   }
 
   ngOnInit() {
+
     this.chatService.openChat$.subscribe((openChat) => {
       if (openChat) {
         const newChat = openChat as Channel;
@@ -90,7 +91,7 @@ export class MainChatComponent implements OnInit {
 
   async sendMessage() {
     // console.log('sm begin curch', this.currentChat);
-
+console.log("Dieser Chat ist ausgewählt",this.currentChat);
     if (this.currentChat?.id && this.message.content?.trim() !== '') {
       this.getSentMessageTime();
       this.getSentMessageDate();
@@ -129,7 +130,7 @@ export class MainChatComponent implements OnInit {
     );
   }
 
-  getUpdateData(message: any) {
+  getUpdateData(message: Message) {
     return {
       creator: this.userService.currentUser.name,
       creatorId: this.userService.currentUser.id,
@@ -138,7 +139,10 @@ export class MainChatComponent implements OnInit {
       date: message.date,
       id: message.id,
       profilePic: this.userService.currentUser.picture,
-      reaction: []
+      reaction: [],
+      reactionCount: message.reactionCount,
+      thread : [],
+
     };
   }
 
@@ -156,12 +160,12 @@ export class MainChatComponent implements OnInit {
 
           return message;
         });
-        console.log('organizedmsg', this.organizedMessages);
-
         this.organizeMessagesByDate();
+        console.log('organizedmsg', this.organizedMessages);
       });
     }
     console.log('loadmessages ende currentChat', this.currentChat);
+  
   }
 
   setEmojiCount(reactions: any[]) {
@@ -265,16 +269,18 @@ export class MainChatComponent implements OnInit {
           this.messagesByDate[messageDate] = [];
         }
         this.messagesByDate[messageDate].push(message);
+        
       }
     }
     this.organizedMessages = Object.entries(this.messagesByDate).map(([date, messages]) => ({ date, messages }));
+    this.organizedMessages = this.organizedMessages;
   }
 
 
   openThread(message: Message) {
     this.threadDrawer.toggle();
    this.threadService.currentMessage = message;
-   console.log("Das ist die akutelle Currentmessage die im thread dargestellt wird",this.threadService.currentMessage);
-   this.threadService.subThreadList();
+
+  
   }
 }
