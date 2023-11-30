@@ -15,6 +15,7 @@ export class ThreadComponent implements OnInit {
   newThread = new Thread();
   threadContent = "";
   currentUser: UserData;
+  
   @Output() closeThread: EventEmitter<void> = new EventEmitter<void>();
   constructor(public threadService: ThreadService, public userService: UserService, public authService: AuthService) {
     userService.getCurrentUserFromLocalStorage();

@@ -67,7 +67,9 @@
                   </div>
 
                   <div class="comment-section" (click)="openThread(message)">
-                    <span class="comments color-purple2-text">2 Answers</span>
+                    <span  class="comments color-purple2-text" *ngIf="this.threadService.threads.length == 0">Reply</span>
+                    <span  class="comments color-purple2-text" *ngIf="this.threadService.threads.length == 1">{{this.threadService.threads.length}} Answer</span>
+                    <span  class="comments color-purple2-text" *ngIf="this.threadService.threads.length >= 2">{{this.threadService.threads.length}} Answers</span>
                     <span class="last-comment">Last Answer 14:55</span>
                   </div>
 
