@@ -66,7 +66,6 @@ export class MainChatComponent implements OnInit {
     }
   }
 
-
   openEditChannelDialog() {
     this.dialog.open(DialogEditChannelComponent, {
       panelClass: 'dialog-container'
@@ -92,7 +91,7 @@ export class MainChatComponent implements OnInit {
   async sendMessage() {
     // console.log('sm begin curch', this.currentChat);
 
-    if (this.currentChat?.id) {
+    if (this.currentChat?.id && this.message.content?.trim() !== '') {
       this.getSentMessageTime();
       this.getSentMessageDate();
       this.getSentMessageCreator();
@@ -115,7 +114,7 @@ export class MainChatComponent implements OnInit {
           this.message.content = '';
         });
     }
-    // console.log('sm end curch', this.currentChat);
+    console.log('aktueller nutzer', this.currentUser);
   }
 
   async updateMessageId(colId: string, message: Message, newId: string) {

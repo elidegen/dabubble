@@ -64,11 +64,6 @@
                       <img src="{{emoji.key}}"/>
                       <span>{{ emoji.value }}</span>
                     </button>
-
-                    <!-- <button class="add-reaction-button" mat-icon-button>d
-                      <img src="assets/img/icons/add_reaction.svg" alt="" />
-                    </button> -->
-
                   </div>
 
                   <div class="comment-section" (click)="openThread(message)">
@@ -123,7 +118,7 @@
             </button>
           </div>
 
-          <button mat-icon-button (click)="sendMessage()">
+          <button mat-icon-button (click)="sendMessage()" [disabled]="!message.content" >
             <img src="assets/img/icons/send.svg" alt="" />
           </button>
         </div>
