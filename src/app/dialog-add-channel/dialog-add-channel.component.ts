@@ -24,8 +24,12 @@ export class DialogAddChannelComponent {
   isInputFocused: boolean = false;
   touched: boolean = false;
   selectedUsers: any[] = [];
+  currentUser;
+
+
   constructor(public dialogRef: MatDialogRef<DialogAddChannelComponent>, public chatService: ChatService, public userService: UserService) {
     this.loadUsers();
+    this.currentUser = this.userService.currentUser;
   }
 
   @HostListener('document:click', ['$event'])
@@ -56,7 +60,7 @@ export class DialogAddChannelComponent {
     this.getMembers();
     this.channel.creator = this.userService.currentUser.name;
     console.log('channel', this.channel);
-    
+
     await addDoc(collection(this.firestore, 'channels'), this.channel.toJSON())
       .catch((err) => {
         console.log(err);
@@ -73,9 +77,15 @@ export class DialogAddChannelComponent {
   getMembers() {
     if (this.allMembers) {
       this.channel.members = this.users;
-      console.log(this.users);      
     } else {
+      this.addCurrentUser();
       this.channel.members = this.selectedUsers;
+    }
+  }
+
+  addCurrentUser() {
+    if (this.selectedUsers.some(user => user.id != this.currentUser.id)) {
+      this.selectedUsers.push(this.currentUser);
     }
   }
 

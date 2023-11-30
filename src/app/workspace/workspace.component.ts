@@ -31,7 +31,6 @@ export class WorkspaceComponent implements OnInit {
         this.allChannels = snapshot.docs.map((doc) => {
           const channel = doc.data() as Channel;
           channel.id = doc.id;
-          // console.log('ngoninit channel', channel);
           channel.members = JSON.parse(channel.members);
           return channel;
         });
@@ -41,6 +40,7 @@ export class WorkspaceComponent implements OnInit {
   }
 
   getPersonalChannels() {
+    this.yourChannels = [];
     this.allChannels.forEach(channel => {
       if (channel.members.some((member: { id: string; }) => member.id === this.currentUser.id)) {
         this.yourChannels.push(channel);
