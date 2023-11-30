@@ -29,35 +29,41 @@ export class ThreadComponent implements OnInit {
   sortedThreadMessages: { date: string, messages: Message[] }[] = []
   allReactionsByMessage: [] = [];
   currentMessage: any = [];
-  unSubMessages: any;
+  unSubThread: any;
   unSubReactions: any;
   currentUser: UserData;
 
   @Output() closeThread: EventEmitter<void> = new EventEmitter<void>();
+
   constructor(public threadService: ThreadService, public userService: UserService, public authService: AuthService, public chatService: ChatService) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
   }
 
-  ngOnInit() {
-    this.chatService.openChat$.subscribe((openChat) => {
-      if (openChat) {
-        const newChat = openChat as Channel;
-        if (!this.currentChat || this.currentChat.id !== newChat.id) {
-          this.currentChat = newChat;
-          this.threadService.currentChat = newChat;
-          if (this.unSubMessages) {
-            this.unSubMessages(); // Bestehendes Abonnement kündigen
+  ngOnInit() {    
+    this.threadService.openMessage$.subscribe((openMessage) => {
+      console.log('open', openMessage);
+      
+      if (openMessage) {
+        console.log('openmsg',openMessage);
+        
+        const message = openMessage as Message;
+        if (!this.currentMessage || this.currentMessage.id !== message.id) {
+          this.currentMessage = message;
+          this.threadService.currentMessage = message;
+          if (this.unSubThread) {
+            this.unSubThread();
           }
-          this.loadMessages(); // Nachrichten für den neuen Channel laden
+          
+          this.loadThread();
         }
       }
     });
   }
 
   ngOnDestroy() {
-    if (this.unSubMessages) {
-      this.unSubMessages(); // Bestehendes Abonnement kündigen
+    if (this.unSubThread) {
+      this.unSubThread(); // Bestehendes Abonnement kündigen
     }
     if (this.unSubReactions) {
       this.unSubReactions(); // Bestehendes Abonnement kündigen
@@ -80,14 +86,20 @@ export class ThreadComponent implements OnInit {
     this.pushMessageToThread(messageId);
   }
 
-  loadMessages() {
+  loadThread() {
+    console.log('ct',this.currentChat);
+    
     if (this.currentChat?.id) {
+      console.log('wird ausgeführt', this.currentChat);
+      
       const messageCollection = collection(this.firestore, `channels/${this.currentChat.id}/messages`);
       const q = query(messageCollection, orderBy('timeInMs', 'asc'));
-      this.unSubMessages = onSnapshot(q, (snapshot) => {
+      this.unSubThread = onSnapshot(q, (snapshot) => {
         this.allThreadMessages = snapshot.docs.map(doc => {
           const message = doc.data() as Message;
           message.id = doc.id;
+          console.log('message load thread', message);
+          
 
           message.thread = this.getThread(message);
           message.reactionCount = this.setEmojiCount(message.reaction);

@@ -34,14 +34,12 @@ export class MainChatComponent implements OnInit {
   organizedMessages: { date: string, messages: Message[] }[] = []
   allReactionsByMessage: [] = [];
 
-
   constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public threadService: ThreadService) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
   }
 
   ngOnInit() {
-
     this.chatService.openChat$.subscribe((openChat) => {
       if (openChat) {
         const newChat = openChat as Channel;
@@ -49,9 +47,9 @@ export class MainChatComponent implements OnInit {
           this.currentChat = newChat;
           this.threadService.currentChat = newChat;
           if (this.unSubMessages) {
-            this.unSubMessages(); // Bestehendes Abonnement kündigen
+            this.unSubMessages();
           }
-          this.loadMessages(); // Nachrichten für den neuen Channel laden
+          this.loadMessages();
         }
       }
     });
@@ -59,10 +57,10 @@ export class MainChatComponent implements OnInit {
 
   ngOnDestroy() {
     if (this.unSubMessages) {
-      this.unSubMessages(); // Bestehendes Abonnement kündigen
+      this.unSubMessages();
     }
     if (this.unSubReactions) {
-      this.unSubReactions(); // Bestehendes Abonnement kündigen
+      this.unSubReactions();
     }
   }
 
@@ -89,18 +87,13 @@ export class MainChatComponent implements OnInit {
   }
 
   async sendMessage() {
-    // console.log('sm begin curch', this.currentChat);
-    console.log("Dieser Chat ist ausgewählt", this.currentChat);
     if (this.currentChat?.id && this.message.content?.trim() !== '') {
       this.getSentMessageTime();
       this.getSentMessageDate();
       this.getSentMessageCreator();
-      console.log('log message', this.message);
 
       const subColRef = collection(this.firestore, `channels/${this.currentChat.id}/messages`);
 
-      // console.log('sm mid curch', this.currentChat);
-      // console.log('sm mid subcolref', subColRef);
       await addDoc(subColRef, this.message.toJSON())
         .catch((err) => {
           console.log(err);
@@ -114,7 +107,6 @@ export class MainChatComponent implements OnInit {
           this.message.content = '';
         });
     }
-    console.log('aktueller nutzer', this.currentUser);
   }
 
   async updateMessageId(colId: string, message: Message, newId: string) {
@@ -274,5 +266,7 @@ export class MainChatComponent implements OnInit {
   openThread(message: Message) {
     this.threadDrawer.toggle();
     this.threadService.currentMessage = message;
+    console.log('message', message);
+
   }
 }

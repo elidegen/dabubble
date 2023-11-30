@@ -7,6 +7,7 @@ import { Channel } from 'src/models/channel.class';
 import { UserService } from './user.service';
 import { ChatService } from './chat.service';
 import { Message } from 'src/models/message.class';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -18,17 +19,35 @@ export class ThreadService {
   allMessages: Message[] = [];
   currentChat = new Channel();
   currentMessage = new Message();
-  threadMessage: any = []
+  threadMessage: any = [];
   messagesByDate: { [date: string]: Message[] } = {};
-  organizedMessages: { date: string, messages: Message[] }[] = []
+  organizedMessages: { date: string, messages: Message[] }[] = [];
   unsubList;
 
   constructor(public router: Router, public userService: UserService, public chatService: ChatService) {
     this.unsubList = this.subThreadList();
   }
 
+  public _openMessageSubject: BehaviorSubject<Message | null> = new BehaviorSubject<Message | null>(null);
+  
+
+  get openMessage$(): Observable<Message | null> {
+    return this._openMessageSubject.asObservable();
+  }
+
+  set openMessage(value: Message | null) {
+    this._openMessageSubject.next(value);
+  }
+
+  // private currentMessageSubject = new BehaviorSubject<Message | null>(null);
+  // currentMessage$ = this.currentMessageSubject.asObservable();
+
+  // setCurrentMessage(message: Message): void {
+  //   this.currentMessageSubject.next(message);
+  // }
+
   ngOnInit() {
-    console.log("der currentchat ist:::", this.currentChat);
+    console.log("der currentchat ist:", this.currentChat);
     console.log("die currentmessage ist ", this.currentMessage);
   }
 

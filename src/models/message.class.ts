@@ -1,5 +1,3 @@
-import { Thread } from "./thread.class";
-
 export class Message {
     creator: string | undefined;
     creatorId: string | undefined;
@@ -13,9 +11,6 @@ export class Message {
     reactionCount: any;
     thread: any[] = [];
 
-      
-
-
     constructor(obj?: any) {
         this.creator = obj ? obj.creator : '';
         this.creatorId = obj ? obj.creatorId : '';
@@ -27,8 +22,7 @@ export class Message {
         this.id = obj ? obj.id : '';
         this.reactionCount = obj ? obj.reactionCount : '';
         this.reaction = obj ? obj.reaction : [];
-        this.thread = obj ?  obj.thread: [];
-       
+        this.thread = obj ? obj.thread : [];
     }
 
     public toJSON() {
@@ -43,7 +37,6 @@ export class Message {
             reaction: this.reaction,
             reactionCount: this.reactionCount,
             thread: this.thread,
-
         }
     }
 }
