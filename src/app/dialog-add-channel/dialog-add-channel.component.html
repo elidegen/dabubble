@@ -1,5 +1,5 @@
-<div [ngSwitch]="switch_expression">
-    <mat-card *ngSwitchCase="'channel'" class="pr-pl-8">
+<div [ngSwitch]="addMembers">
+    <mat-card *ngSwitchCase="false" class="pr-pl-8">
         <mat-card-header class="w100">
             <header class="w100">
                 <h2>Create a channel</h2>
@@ -27,14 +27,14 @@
             </div>
 
             <div class="create-container">
-                <button mat-button class="main-button primary" (click)="changeSwitchCase('members')">
+                <button mat-button class="main-button primary" (click)="addMembers = true;" [disabled]="!channel.name || !channel.description">
                     Create
                 </button>
             </div>
         </mat-card-content>
     </mat-card>
 
-    <mat-card *ngSwitchCase="'members'" class="pr-pl-8">
+    <mat-card *ngSwitchCase="true" class="pr-pl-8">
         <mat-card-header class="w100">
             <header class="w100">
                 <h2>Add Members</h2>
@@ -44,14 +44,14 @@
             </header>
         </mat-card-header>
         <mat-card-content>
-            <mat-radio-group class="radio-button-container" [(ngModel)]="selectedOption">
-                <mat-radio-button [value]="'allMembers'">Add all members of Office Team</mat-radio-button>
-                <mat-radio-button [value]="'certainMembers'">Add certain members</mat-radio-button>
+            <mat-radio-group class="radio-button-container" [(ngModel)]="allMembers">
+                <mat-radio-button [value]="true">Add all members of Office Team</mat-radio-button>
+                <mat-radio-button [value]="false">Add certain members</mat-radio-button>
             </mat-radio-group>
 
 
-            <div class="add-members-container" *ngIf="selectedOption === 'certainMembers'"
-                [ngClass]="{'show': selectedOption === 'certainMembers'}">
+            <div class="add-members-container" *ngIf="allMembers == false"
+                [ngClass]="{'show': allMembers === false}">
                 <input class="w100 input-members" type="text" placeholder="Enter name" [(ngModel)]="searchInput"
                     (input)="filterUsers()" (click)="this.isInputFocused = true;">
 
@@ -77,7 +77,7 @@
             </div>
 
             <div class="create-container">
-                <button mat-button class="main-button primary" [disabled]="selectedOption === 'certainMembers'">
+                <button mat-button class="main-button primary" [disabled]="selectedUsers.length < 1 && allMembers == false" (click)="createChannel()">
                     Create
                 </button>
             </div>
