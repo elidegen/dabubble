@@ -29,12 +29,29 @@
               <span>{{this.threadService.currentMessage.content}}</span>
             </div>
           </div>
+        
+        </div>
+        <div class="reaction-emoji-container">
+          <button class="reaction-emoji-button" *ngFor="let emoji of this.threadService.currentMessage.reactionCount | keyvalue">
+            <img src="assets/img/emojis/checkGreen.svg"/>
+            <span>1</span>
+          </button>
         </div>
 
         <div class="reaction">
-          <button mat-icon-button>
-            <img src="assets/img/icons/add_reaction.svg" alt="">
-          </button>
+            <button mat-icon-button (click)="addReaction('assets/img/emojis/checkGreen.svg', this.threadService.currentMessage.id)">
+              <img src="assets/img/emojis/checkGreen.svg" alt="">
+            </button>
+            <button mat-icon-button (click)="addReaction('assets/img/emojis/hands.svg', this.threadService.currentMessage.id)"> 
+              <img src="assets/img/emojis/hands.svg" alt="">
+            </button>
+            <button mat-icon-button>
+              <img src="assets/img/icons/add_reaction.svg" alt="">
+            </button>
+            <button mat-icon-button *ngIf="message.creator == currentUser.name">
+              <img src="assets/img/icons/edit_square.svg" alt="">
+            </button>
+       
         </div>
       </div>
     </section>
@@ -66,14 +83,31 @@
               <span>{{thread.content}}</span>
             </div>
           </div>
+          
+        </div>
+        <div class="reaction-emoji-container">
+          <button class="reaction-emoji-button" *ngFor="let emoji of thread.reactionCount | keyvalue" >
+            <img src="{{emoji.key}}"/>
+            <img src="assets/img/emojis/checkGreen.svg" alt="">
+            <span>1</span>
+          </button>
         </div>
         <div class="reaction" [ngClass]="{'own-message': thread.creator == currentUser.name}">
+          <button mat-icon-button (click)="addReaction('assets/img/emojis/checkGreen.svg', thread.id)">
+            <img src="assets/img/emojis/checkGreen.svg" alt="">
+          </button>
+          <button mat-icon-button (click)="addReaction('assets/img/emojis/hands.svg', thread.id)"> 
+            <img src="assets/img/emojis/hands.svg" alt="">
+          </button>
           <button mat-icon-button>
             <img src="assets/img/icons/add_reaction.svg" alt="">
           </button>
+          <button mat-icon-button *ngIf="message.creator == currentUser.name">
+            <img src="assets/img/icons/edit_square.svg" alt="">
+          </button>
         </div>
       </div>
-
+      
     </section>
 
   </mat-card-content>

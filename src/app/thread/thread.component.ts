@@ -89,6 +89,33 @@ export class ThreadComponent implements OnInit {
   this.threadService.updateThreadCount(this.threadService.currentMessage);
   }
 
+
+
+  
+  async addReaction(emoji: string, messageId: any) {
+    if (this.currentChat?.id) {
+      const subReactionColRef = doc(collection(this.firestore, `threads/${this.currentMessage.id}/messages/`), messageId);
+      let messageIndex = this.allThreadMessages.findIndex(message => message.id === messageId);
+      let currentMessage = this.allThreadMessages[messageIndex];
+
+      const reactionItem = { emoji, creatorId: this.currentUser.id };
+
+      if (currentMessage.reaction.some((emojiArray: { emoji: string; creatorId: string; }) => emojiArray.emoji === emoji && emojiArray.creatorId === this.currentUser.id)) {
+        currentMessage.reaction = currentMessage.reaction.filter((emojiArray: { emoji: string; creatorId: string; }) => !(emojiArray.emoji === emoji && emojiArray.creatorId === this.currentUser.id));
+      } else {
+        currentMessage.reaction.push(reactionItem);
+      }
+      updateDoc(subReactionColRef, this.updateMessage(this.allThreadMessages[messageIndex]));
+    }
+  }
+
+  updateMessage(message: any) {
+    return {
+      reaction: message.reaction
+    }
+  }
+
+
   getSentMessageDate() {
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleDateString();

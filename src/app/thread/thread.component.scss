@@ -68,6 +68,30 @@ header {
     }
 }
 
+
+
+.reaction-emoji-button {
+    background-color: white;
+    outline: none;
+    border: 1px solid;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 2px 6px;
+    font-size: 10px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: white !important;
+    }
+
+    img {
+        height: 16px;
+        width: 15px;
+    }
+}
+
 .main-chat-container {
     overflow-y: scroll;
     padding: 10px 0 0 0 !important;
@@ -264,12 +288,15 @@ header {
 
 .reaction-emoji-container {
     display: flex;
+    padding-left: 25px;
     gap: 8px;
     margin-top: 4px;
+
 }
 
 
 .reaction-emoji-button {
+
     background-color: white;
     outline: none;
     border: 1px solid;
