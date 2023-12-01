@@ -190,10 +190,7 @@ export class ThreadComponent implements OnInit {
     return counter;
   }
 
-  getIndexFromMessageId(messageId: string) {
-    let messageIndex = this.allThreadMessages.findIndex(message => message.id === messageId)
-    return messageIndex;
-  }
+
 
   onCloseClick() {
     this.closeThread.emit();
