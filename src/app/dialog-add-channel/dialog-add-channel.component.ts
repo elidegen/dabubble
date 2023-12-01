@@ -83,12 +83,6 @@ export class DialogAddChannelComponent {
     }
   }
 
-  addCurrentUser() {
-    if (this.selectedUsers.some(user => user.id != this.currentUser.id)) {
-      this.selectedUsers.push(this.currentUser);
-    }
-  }
-
   async updateChannelId(colId: string, channel: Channel, newId: string) {
     channel.id = newId;
     await this.updateChannel(colId, channel);
@@ -112,6 +106,13 @@ export class DialogAddChannelComponent {
 
   userSelected(event: Event) {
     event.stopPropagation();
+  }
+
+  addCurrentUser() {
+    const userAlreadySelected = this.selectedUsers.some(user => user.id === this.currentUser.id);
+    if (!userAlreadySelected) {
+      this.selectedUsers.push(this.currentUser);
+    }
   }
 
   removeUser(user: User) {

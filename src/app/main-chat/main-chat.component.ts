@@ -36,6 +36,9 @@ export class MainChatComponent implements OnInit {
   allReactionsByMessage: [] = [];
   newThread = new Thread();
   threadCount: any = 0;
+  chatWindow = 'empty';
+  allChannelMembers: any[] = [];
+  firstThreeItems: any[] = [];
   showEmojiPick: boolean = false;
   toggled: boolean = false;
 
@@ -55,6 +58,7 @@ export class MainChatComponent implements OnInit {
             this.unSubMessages();
           }
           this.loadMessages();
+          this.getAllChannelMembers();
         }
       }
     });
@@ -203,8 +207,8 @@ export class MainChatComponent implements OnInit {
   }
 
   getSentMessageDate() {
-    const currentDate = new Date();
-    const formattedDate = currentDate.toLocaleDateString();
+    const currentDate = this.getCurrentDate();
+    const formattedDate = this.formatDate(currentDate);
     this.message.date = formattedDate;
   }
 
@@ -233,10 +237,14 @@ export class MainChatComponent implements OnInit {
   }
 
   isToday(date: string): boolean {
+    console.log('Datum', date);
     const currentDate = this.getCurrentDate();
     const formattedDate = this.formatDate(currentDate);
+    console.log(formattedDate);
+    
     return date === formattedDate;
   }
+
 
   getCurrentDate(): string {
     const currentDate = new Date();
@@ -267,6 +275,7 @@ export class MainChatComponent implements OnInit {
     }
     this.organizedMessages = Object.entries(this.messagesByDate).map(([date, messages]) => ({ date, messages }));
     this.organizedMessages = this.organizedMessages;
+    console.log('Show',this.organizedMessages)
   }
 
 
@@ -302,6 +311,35 @@ export class MainChatComponent implements OnInit {
     } catch (err) {
       console.error('Fehler beim Hinzufügen oder Aktualisieren des Threads:', err);
     }
+  }
+
+  async getAllChannelMembers() {
+    if (this.currentChat?.id) {
+      const channelDocRef = doc(this.firestore, `channels/${this.currentChat.id}`);
+      try {
+        const channelDocSnap = await getDoc(channelDocRef);
+  
+        if (channelDocSnap.exists()) {
+          const channelData = channelDocSnap.data();
+          const channelMembersJson = channelData?.['members'] || [];
+          const channelMembers = JSON.parse(channelMembersJson);
+  
+          console.log('Channel Members:', channelMembers);
+          
+          this.allChannelMembers = channelMembers;
+          this.firstThreeItems = this.allChannelMembers.slice(0, 3);
+          
+        } else {
+          console.log('Channel document does not exist.');
+        }
+      } catch (error) {
+        console.error('Error getting channel document:', error);
+      }
+    }
+    console.log('all',this.allChannelMembers);
+    console.log('3', this.firstThreeItems);
+    
+    
   }
 
 

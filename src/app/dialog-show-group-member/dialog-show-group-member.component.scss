@@ -1,4 +1,4 @@
-mat-card-content {
+.member-view {
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -9,6 +9,7 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 0 8px;
 }
 
 .member {
@@ -38,4 +39,10 @@ h3 {
             height: 30px;
         }
     }
+}
+
+.add-member-container {
+    margin: 16px 0;
+    display: flex;
+    justify-content: center;
 }

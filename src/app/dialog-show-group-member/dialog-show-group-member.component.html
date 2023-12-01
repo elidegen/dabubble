@@ -1,27 +1,21 @@
 <mat-card>
-    <mat-card-content>
-        <header>
+    <mat-card-header>
+        <header class="w100">
             <h1>Member</h1>
             <button mat-icon-button (click)="dialogRef.close()">
                 <mat-icon>close</mat-icon>
             </button>
         </header>
-
-        <div class="member">
-            <img class="mr-16" src="assets/img/avatars/avatar_male2.svg" alt="">
-            <h3>Frederik Beck</h3>
+    </mat-card-header>
+    <mat-card-content class="member-view">
+        <div *ngFor="let member of allChannelMembers">
+            <div class="member">
+                <img class="mr-16" src="{{member.picture}}" alt="">
+                <h3>{{member.name}}</h3>
+            </div>
         </div>
-
-        <div class="member">
-            <img class="mr-16" src="assets/img/avatars/avatar_male2.svg" alt="">
-            <h3>Maximilian Schneider</h3>
-        </div>
-
-        <div class="member">
-            <img class="mr-16" src="assets/img/avatars/avatar_male2.svg" alt="">
-            <h3>Johan Wolfgang von Goethe</h3>
-        </div>
-
+    </mat-card-content>
+    <mat-card-content class="add-member-container">
         <button mat-button class="add-member" (click)="openDialog()">
             <div class="display-flex">
                 <img class="mr-16" src="assets/img/icons/add-person.svg" alt="" />
