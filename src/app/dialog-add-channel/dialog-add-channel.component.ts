@@ -5,6 +5,7 @@ import { Channel } from 'src/models/channel.class';
 import { ChatService } from '../chat.service';
 import { UserService } from '../user.service';
 import { User } from 'src/models/user.class';
+import { LoginScreenComponent } from '../login-screen/login-screen.component';
 
 @Component({
   selector: 'app-dialog-add-channel',
@@ -80,6 +81,7 @@ export class DialogAddChannelComponent {
     } else {
       this.addCurrentUser();
       this.channel.members = this.selectedUsers;
+      
     }
   }
 
@@ -129,6 +131,8 @@ export class DialogAddChannelComponent {
 
     if (index == -1) {
       this.selectedUsers.push(user);
+      console.log('select', this.selectedUsers);
+      
     } else {
       this.removeUser(user)
     }
