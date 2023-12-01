@@ -8,7 +8,7 @@ import { Firestore, addDoc, arrayUnion, collection, doc, updateDoc } from '@angu
 import { ChatService } from '../chat.service';
 import { Channel } from 'src/models/channel.class';
 import { Message } from 'src/models/message.class';
-import { DocumentData, DocumentReference, getDoc, onSnapshot, orderBy, query, setDoc } from 'firebase/firestore';
+import { DocumentData, DocumentReference, getDoc, getDocs, onSnapshot, orderBy, query, setDoc } from 'firebase/firestore';
 import { UserService } from '../user.service';
 import { UserData } from '../interfaces/user-interface';
 import { Reaction } from 'src/models/reaction.class';
@@ -148,7 +148,6 @@ export class MainChatComponent implements OnInit {
           const message = doc.data() as Message;
           message.id = doc.id;
           message.reactionCount = this.setEmojiCount(message.reaction);
-
           return message;
         });
         this.organizeMessagesByDate();
@@ -265,6 +264,7 @@ export class MainChatComponent implements OnInit {
   }
 
 
+
  async openThread(message: Message) {
     let messageId = message.id;
     await this.createThread(messageId)
@@ -289,7 +289,12 @@ export class MainChatComponent implements OnInit {
     } catch (err) {
       console.error('Fehler beim Hinzufügen oder Aktualisieren des Threads:', err);
     }
-  
+  }
+
+  countReplySection(messageId: any) {
+    console.log('Funktion wurde aufgerufen');
+    const threadCollection = collection(this.firestore, `threads/${messageId}/threadMessages`);
+    // const docRef = await getDocs(threadCollection);
 
   }
 }

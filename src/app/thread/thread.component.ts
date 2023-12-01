@@ -68,6 +68,7 @@ export class ThreadComponent implements OnInit {
     }
   }
 
+
   async addMessageToThread() {
     if (this.currentMessage.id && this.message.content?.trim() !== '') {
       this.getSentMessageTime();
@@ -165,6 +166,10 @@ export class ThreadComponent implements OnInit {
     return {
       thread: message.thread,
     }
+  }
+
+  countAllMessagesinThread() {
+    
   }
 
   setEmojiCount(reactions: any[]) {

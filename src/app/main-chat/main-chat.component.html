@@ -67,9 +67,9 @@
                   </div>
 
                   <div class="comment-section" (click)="openThread(message)">
-                    <span *ngIf="message.thread.length == 0" class="comments color-purple2-text">Reply</span>
-                    <span *ngIf="message.thread.length == 1"  class="comments color-purple2-text" > Answer</span>
-                    <span  *ngIf="message.thread.length >= 2"  class="comments color-purple2-text"> Answers</span>
+                    <span *ngIf="countReplySection(message.id)" class="comments color-purple2-text">Reply</span>
+                    <span *ngIf=""  class="comments color-purple2-text" > Answer</span>
+                    <span  *ngIf=""  class="comments color-purple2-text"> Answers</span>
                     <span class="last-comment">Last Answer</span>
                   </div>
 

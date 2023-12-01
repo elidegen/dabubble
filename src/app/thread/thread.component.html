@@ -43,10 +43,10 @@
     <section> <!-- Oberste section für Kommentar_bereich -->
       <!-- separator -->
       <div class="comments-container">
-        <span *ngIf="this.threadService.currentMessage.thread.length == 1" class="comments">{{this.currentMessage.thread.length}}
-          Answer</span>
-        <span *ngIf="this.threadService.currentMessage.thread.length >= 1" class="comments">{{this.currentMessage.thread.length}}
-          Answers</span>
+        <span *ngIf="allThreadMessages.length == 1" class="comments">{{allThreadMessages.length}}
+          Reply</span>
+        <span *ngIf="allThreadMessages.length >= 1" class="comments">{{allThreadMessages.length}}
+          Replies</span>
         <div class="separator"></div>
       </div>
 
