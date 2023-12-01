@@ -52,7 +52,6 @@
                   <span class="name">{{ message.creator }}</span>
                   <span class="date">{{ message.time }}</span>
                 </div>
-
                 <div
                   [ngClass]="{'my-message-content': message.creator == currentUser.name, 'message-content': message.creator != currentUser.name}">
                   <span> {{message.content}}</span>
@@ -67,9 +66,9 @@
                   </div>
 
                   <div class="comment-section" (click)="openThread(message)">
-                    <span *ngIf="countReplySection(message.id)" class="comments color-purple2-text">Reply</span>
-                    <span *ngIf=""  class="comments color-purple2-text" > Answer</span>
-                    <span  *ngIf=""  class="comments color-purple2-text"> Answers</span>
+                    <span *ngIf="message.threadCount == 0" class="comments color-purple2-text">Reply</span>
+                    <span *ngIf="message.threadCount == 1" class="comments color-purple2-text" > 1 Answer</span>
+                    <span  *ngIf="message.threadCount >= 2"   class="comments color-purple2-text"> {{message.threadCount}} Answers</span>
                     <span class="last-comment">Last Answer</span>
                   </div>
 

@@ -35,6 +35,7 @@ export class MainChatComponent implements OnInit {
   organizedMessages: { date: string, messages: Message[] }[] = []
   allReactionsByMessage: [] = [];
   newThread = new Thread();
+  threadCount: any = 0;
 
   constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public threadService: ThreadService) {
     userService.getCurrentUserFromLocalStorage();
@@ -134,27 +135,30 @@ export class MainChatComponent implements OnInit {
       profilePic: this.userService.currentUser.picture,
       reaction: [],
       reactionCount: message.reactionCount,
-      thread: [],
+      threadCount: message.threadCount,
 
     };
   }
-
+ 
+  
   loadMessages() {
     if (this.currentChat?.id) {
       const messageCollection = collection(this.firestore, `channels/${this.currentChat.id}/messages`);
       const q = query(messageCollection, orderBy('timeInMs', 'asc'));
-      this.unSubMessages = onSnapshot(q, (snapshot) => {
-        this.allMessages = snapshot.docs.map(doc => {
+      this.unSubMessages = onSnapshot(q, async (snapshot) => {
+        this.allMessages = await Promise.all(snapshot.docs.map(async doc => {
           const message = doc.data() as Message;
           message.id = doc.id;
+          message.threadCount = await this.threadService.countThreadMessages(message.id);
+          console.log("Anzahl der Nachrichten im Thread", message.threadCount);
+          console.log("Das ist die Nachricht mit dem Threadcount", message);
           message.reactionCount = this.setEmojiCount(message.reaction);
           return message;
-        });
+        }));
         this.organizeMessagesByDate();
       });
     }
   }
-
   setEmojiCount(reactions: any[]) {
     let counter: { [key: string]: number } = {};
     reactions.forEach(react => {
@@ -265,7 +269,7 @@ export class MainChatComponent implements OnInit {
 
 
 
- async openThread(message: Message) {
+  async openThread(message: Message) {
     let messageId = message.id;
     await this.createThread(messageId)
     this.threadDrawer.open();
@@ -273,12 +277,12 @@ export class MainChatComponent implements OnInit {
   }
 
 
-   async createThread(messageId: any) {
+  async createThread(messageId: any) {
     const threadCollectionRef = collection(this.firestore, 'threads');
     const specificDocRef: DocumentReference<DocumentData> = doc(threadCollectionRef, messageId);
 
     try {
-      const docSnapshot = await getDoc(specificDocRef)  
+      const docSnapshot = await getDoc(specificDocRef)
       if (!docSnapshot.exists()) {
         await setDoc(specificDocRef, {
           ...this.newThread.toJSON(),
@@ -291,10 +295,5 @@ export class MainChatComponent implements OnInit {
     }
   }
 
-  countReplySection(messageId: any) {
-    console.log('Funktion wurde aufgerufen');
-    const threadCollection = collection(this.firestore, `threads/${messageId}/threadMessages`);
-    // const docRef = await getDocs(threadCollection);
 
-  }
 }

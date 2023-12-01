@@ -86,6 +86,7 @@ export class ThreadComponent implements OnInit {
           console.log('Message sent to thread');
         });  
     }
+  this.threadService.updateThreadCount(this.threadService.currentMessage);
   }
 
   getSentMessageDate() {
@@ -153,24 +154,6 @@ export class ThreadComponent implements OnInit {
     }
   }
 
-  getThread(msg: Message) {
-    let parsedThread: any[] = [];
-    msg.thread.forEach((threadMsg: string) => {
-      parsedThread.push(JSON.parse(threadMsg));
-    });
-    return parsedThread;
-  }
-
-
-  updateMessage(message: any) {
-    return {
-      thread: message.thread,
-    }
-  }
-
-  countAllMessagesinThread() {
-    
-  }
 
   setEmojiCount(reactions: any[]) {
     let counter: { [key: string]: number } = {};

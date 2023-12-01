@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { inject } from '@angular/core';
-import { Firestore, collection, doc, onSnapshot, addDoc } from '@angular/fire/firestore';
+import { Firestore, collection, doc, onSnapshot, addDoc,getDocs,updateDoc} from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { Thread } from 'src/models/thread.class';
 import { Channel } from 'src/models/channel.class';
@@ -22,6 +22,7 @@ export class ThreadService {
   threadMessage: any = [];
   messagesByDate: { [date: string]: Message[] } = {};
   organizedMessages: { date: string, messages: Message[] }[] = [];
+
   unsubList;
 
   constructor(public router: Router, public userService: UserService, public chatService: ChatService) {
@@ -72,6 +73,26 @@ export class ThreadService {
     }
   }
 
+
+
+  updateThreadCount(message: Message) {
+    const subReactionColRef = doc(collection(this.firestore, `channels/${this.currentChat.id}/messages/`), message.id);
+    updateDoc(subReactionColRef, this.updateMessage(message));
+    console.log("MessageCount wird geupdated",message);
+  }
+
+
+
+  
+
+
+updateMessage(message: any) {
+return {
+  threadCount: message.threadCount
+}
+}
+
+
   subThreadList() {
     if (this.currentChat.id && this.currentMessage.id) {
       return onSnapshot(this.getThreadRef(this.currentMessage.id), (list) => {
@@ -99,6 +120,16 @@ export class ThreadService {
       picture: obj.picture || "",
       online: obj.online || false,
     }
+  }
+
+
+  async countThreadMessages(messageId: string) {
+    const threadCollection = collection(this.firestore, `threads/${messageId}/threadMessages`);
+    return getDocs(threadCollection)
+      .then(snapshot => {
+        let threadCount = snapshot.size;
+        return threadCount;
+      });
   }
 
   getThreadData(thread: Thread) {

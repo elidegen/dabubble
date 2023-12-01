@@ -9,7 +9,7 @@ export class Message {
     profilePic: string | undefined;
     reaction: any = [];
     reactionCount: any;
-    thread: any[] = [];
+    threadCount: any;
 
     constructor(obj?: any) {
         this.creator = obj ? obj.creator : '';
@@ -22,7 +22,7 @@ export class Message {
         this.id = obj ? obj.id : '';
         this.reactionCount = obj ? obj.reactionCount : '';
         this.reaction = obj ? obj.reaction : [];
-        this.thread = obj ? obj.thread : [];
+        this.threadCount = obj ? obj.threadCount : "";
     }
 
     public toJSON() {
@@ -36,7 +36,7 @@ export class Message {
             profilePic: this.profilePic,
             reaction: this.reaction,
             reactionCount: this.reactionCount,
-            thread: this.thread,
+            threadCount: this.threadCount,
         }
     }
 }
