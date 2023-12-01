@@ -23,7 +23,7 @@ export class DialogAddChannelMembersComponent implements OnInit{
   addMembers: boolean = false;
   allMembers: boolean = true;
   channel: Channel = new Channel();
-
+  allChannelMembers: any[] = [];
 
   constructor(public chatService: ChatService, public userService: UserService) {
     this.loadUsers();
@@ -37,10 +37,12 @@ export class DialogAddChannelMembersComponent implements OnInit{
         const newChat = openChat as Channel;
         if (!this.currentChat || this.currentChat.id !== newChat.id) {
           this.currentChat = newChat;
+          this.getAllChannelMembers();
         }
       }
     });
   }
+
 
   @HostListener('document:click', ['$event'])
   checkClick(event: Event) {
@@ -49,6 +51,7 @@ export class DialogAddChannelMembersComponent implements OnInit{
       this.isInputFocused = false;
     }
   }
+
 
   async loadUsers() {
     try {
@@ -59,6 +62,7 @@ export class DialogAddChannelMembersComponent implements OnInit{
     }
   }
 
+  
   filterUsers(): void {
     this.isInputFocused = true;
     this.filteredUsers = this.users.filter(user =>
@@ -82,7 +86,6 @@ export class DialogAddChannelMembersComponent implements OnInit{
     console.log('selUs', this.selectedUsers);
     this.highlightButtons();
     let index = this.selectedUsers.findIndex((obj: { id: string | undefined; }) => obj.id === user.id);
-
     if (index == -1) {
       this.selectedUsers.push(user);
     } else {
@@ -108,6 +111,7 @@ export class DialogAddChannelMembersComponent implements OnInit{
     }
   }
 
+
   addHighlight(user: User) {    
     let index = this.filteredUsers.findIndex((obj => obj === user));
     const userContainer = this.userContainers.toArray()[index];
@@ -115,43 +119,43 @@ export class DialogAddChannelMembersComponent implements OnInit{
       userContainer.nativeElement.classList.add('user-container-highlighted');
     }
   }
+
+
+  async getAllChannelMembers() {
+    if (this.currentChat?.id) {
+      const channelDocRef = doc(this.firestore, `channels/${this.currentChat.id}`);
+      try {
+        const channelDocSnap = await getDoc(channelDocRef);
+        if (channelDocSnap.exists()) {
+          const channelData = channelDocSnap.data();
+          const channelMembersJson = channelData?.['members'] || [];
+          const channelMembers = JSON.parse(channelMembersJson);
+          console.log('Channel Members:', channelMembers);
+          this.allChannelMembers = channelMembers;
+        } else {
+          console.log('Channel document does not exist.');
+        }
+      } catch (error) {
+        console.error('Error getting channel document:', error);
+      }
+    }
+  }
+
+
+  getMembers() {
+    if (this.allChannelMembers) {
+      this.channel.members = this.users;
+    } else {
+      this.addCurrentUser();
+      this.channel.members = this.selectedUsers;
+    }
+  }
+
   
-
-  // async updateChannel() {
-  //   if (this.currentChat) {
-  //     const channelDocRef = doc(this.firestore, `channels/${this.currentChat.id}`);
-  //     await updateDoc(channelDocRef, this.updateMembers()).catch(
-  //       (error) => { console.log(error); }
-  //     );
-  //   }
-  // }
-
-  // updateMembers() {
-  //   this.channel.members = this.selectedUsers;
-  // }
-
- 
-
- 
-
-
-
-  // async updateChannelId(colId: string, channel: Channel, newId: string) {
-  //   channel.id = newId;
-  //   await this.updateChannel(colId, channel);
-  // }
-
-  // async updateChannel(colId: string, channel: Channel) {
-  //   const docRef = doc(collection(this.firestore, colId), channel.id);
-    
-  // }
-
-  // getMembers() {
-  //   if (this.allChannelMembers) {
-  //     this.channel.members = this.users;
-  //   } else {
-  //     this.addCurrentUser();
-  //     this.channel.members = this.selectedUsers;
-  //   }
-  // }
+  addCurrentUser() {
+    const userAlreadySelected = this.selectedUsers.some(user => user.id === this.currentUser.id);
+    if (!userAlreadySelected) {
+      this.selectedUsers.push(this.currentUser);
+    }
+  }
 }

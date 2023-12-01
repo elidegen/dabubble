@@ -100,9 +100,7 @@ export class MainChatComponent implements OnInit {
       this.getSentMessageTime();
       this.getSentMessageDate();
       this.getSentMessageCreator();
-
       const subColRef = collection(this.firestore, `channels/${this.currentChat.id}/messages`);
-
       await addDoc(subColRef, this.message.toJSON())
         .catch((err) => {
           console.log(err);
@@ -115,6 +113,7 @@ export class MainChatComponent implements OnInit {
           }
           this.message.content = '';
         });
+        
     }
   }
 
