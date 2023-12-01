@@ -33,6 +33,7 @@ export class ThreadComponent implements OnInit {
   unSubReactions: any;
   currentUser: UserData;
   currentThread: [] = [];
+  toggled: boolean = false;
 
   @Output() closeThread: EventEmitter<void> = new EventEmitter<void>();
 
@@ -92,6 +93,13 @@ export class ThreadComponent implements OnInit {
 
 
   
+  addEmoji($event:any) {
+    console.log($event);
+    this.toggled = false;
+  }
+
+
+
   async addReaction(emoji: string, messageId: any) {
     if (this.currentMessage?.id) {
       const subReactionColRef = doc(collection(this.firestore, `threads/${this.currentMessage.id}/threadMessages/`), messageId);

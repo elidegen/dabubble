@@ -39,8 +39,10 @@ export class MainChatComponent implements OnInit {
   chatWindow = 'empty';
   allChannelMembers: any[] = [];
   firstThreeItems: any[] = [];
+  showEmojiPick: boolean = false;
+  toggled: boolean = false;
 
-  constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public threadService: ThreadService) {
+  constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public threadService: ThreadService, ) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
   }
@@ -277,6 +279,13 @@ export class MainChatComponent implements OnInit {
   }
 
 
+  showEmojiPicker() {
+    this.showEmojiPick= true;
+  }
+  addEmoji($event:any) {
+    console.log($event);
+    this.toggled = false;
+  }
 
   async openThread(message: Message) {
     let messageId = message.id;

@@ -78,7 +78,7 @@
           <button mat-icon-button (click)="addReaction('assets/img/emojis/hands.svg', thread.id)"> 
             <img src="assets/img/emojis/hands.svg" alt="">
           </button>
-          <button mat-icon-button>
+          <button mat-icon-button (click)="toggled = true" >
             <img src="assets/img/icons/add_reaction.svg" alt="">
           </button>
           <button mat-icon-button *ngIf="message.creator == currentUser.name">
@@ -86,7 +86,7 @@
           </button>
         </div>
       </div>
-      
+      <emoji-mart *ngIf="toggled" class="emojiPicker" (emojiClick)="addEmoji($event)"></emoji-mart>
     </section>
 
   </mat-card-content>

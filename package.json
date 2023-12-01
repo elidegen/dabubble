@@ -21,6 +21,7 @@
     "@angular/platform-browser": "^16.2.0",
     "@angular/platform-browser-dynamic": "^16.2.0",
     "@angular/router": "^16.2.0",
+    "@ctrl/ngx-emoji-mart": "^9.2.0",
     "firebase": "^10.6.0",
     "firebaseui": "^6.1.0",
     "rxjs": "~7.8.0",

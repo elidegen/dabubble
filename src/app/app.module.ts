@@ -41,6 +41,10 @@ import { DialogShowGroupMemberComponent } from './dialog-show-group-member/dialo
 import { FormsModule } from '@angular/forms';
 import { ImprintComponent } from './imprint/imprint.component';
 import { DialogAddChannelMembersComponent } from './dialog-add-channel-members/dialog-add-channel-members.component';
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+
+
+
 
 
 
@@ -89,6 +93,10 @@ import { DialogAddChannelMembersComponent } from './dialog-add-channel-members/d
     MatSelectModule,
     MatExpansionModule,
     ReactiveFormsModule,
+    PickerComponent,
+   
+    
+  
   ],
   providers: [],
   bootstrap: [AppComponent]
