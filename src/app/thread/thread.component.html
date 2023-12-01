@@ -51,6 +51,7 @@
           <div class="message-avatar-container">
             <img src="assets/img/avatars/avatar_male2.svg"/>
           </div>
+
           <div class="message-container">
             <div class="message-data">
               <span class="name">{{thread.creator}}</span>
@@ -60,15 +61,16 @@
             <div class="message" [ngClass]="{'my-message-content': thread.creator == currentUser.name, 'message-content': thread.creator != currentUser.name}">
               <span>{{thread.content}}</span>
             </div>
+
+            <div class="reaction-emoji-container">
+              <button class="reaction-emoji-button" *ngFor="let emoji of thread.reactionCount | keyvalue" >
+                <img src="{{emoji.key}}"/>
+                <span>{{emoji.value}}</span>
+              </button>
+            </div>
           </div>
-          
         </div>
-        <div class="reaction-emoji-container">
-          <button class="reaction-emoji-button" *ngFor="let emoji of thread.reactionCount | keyvalue" >
-            <img src="{{emoji.key}}"/>
-            <span>{{emoji.value}}</span>
-          </button>
-        </div>
+        
         <div class="reaction" [ngClass]="{'own-message': thread.creator == currentUser.name}">
           <button mat-icon-button (click)="addReaction('assets/img/emojis/checkGreen.svg', thread.id)">
             <img src="assets/img/emojis/checkGreen.svg" alt="">

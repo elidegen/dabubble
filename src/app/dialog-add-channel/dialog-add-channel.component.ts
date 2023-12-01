@@ -78,14 +78,7 @@ export class DialogAddChannelComponent {
     if (this.allMembers) {
       this.channel.members = this.users;
     } else {
-      this.addCurrentUser();
       this.channel.members = this.selectedUsers;
-    }
-  }
-
-  addCurrentUser() {
-    if (this.selectedUsers.some(user => user.id != this.currentUser.id)) {
-      this.selectedUsers.push(this.currentUser);
     }
   }
 

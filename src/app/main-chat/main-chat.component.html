@@ -1,6 +1,65 @@
 <mat-drawer-container autosize>
-  <mat-card class="mr-16">
-    <mat-card-header>
+  <mat-card class="mr-16" [ngSwitch]="chatWindow">
+
+    <mat-card-header *ngSwitchCase="'empty'">
+      <div class="header">
+        <button (click)="openEditChannelDialog()" mat-button>
+          <div class="chat-title">
+            <img src="assets/img/icons/tag.svg" alt="" class="mr-16" />
+            <span class="mr-16">{{ currentChat?.name || '' }}</span>
+            <mat-icon>expand_more</mat-icon>
+          </div>
+        </button>
+        <div class="group-members-container">
+
+          <button mat-button class="group-members-button" (click)="openMemberDialog()">
+            <div class="group-members-container">
+              <div class="group-members">
+                <div *ngFor="let member of firstThreeItems">
+                  <img src="{{member.picture}}"/>
+                </div>
+              </div> 
+              <h3 *ngIf="allChannelMembers.length > 3" class="member-count"> + {{allChannelMembers.length -3}}</h3>
+            </div>
+          </button>
+
+          <button mat-icon-button class="add-user" (click)="openDialog()">
+            <img src="assets/img/icons/add-person.svg" alt="" />
+          </button>
+        </div>
+      </div>
+    </mat-card-header>
+
+    <mat-card-header *ngSwitchCase="'channel'">
+      <div class="header">
+        <button (click)="openEditChannelDialog()" mat-button>
+          <div class="chat-title">
+            <img src="assets/img/icons/tag.svg" alt="" class="mr-16" />
+            <span class="mr-16">{{ currentChat?.name || '' }}</span>
+            <mat-icon>expand_more</mat-icon>
+          </div>
+        </button>
+
+        <div class="group-members-container">
+
+          <button mat-button class="group-members-button" (click)="openMemberDialog()">
+            <div class="group-members-container">
+              <div class="group-members">
+                <img src="assets/img/avatars/avatar_male2.svg" alt="" />
+              </div>
+
+              <h3 class="member-count">5</h3>
+            </div>
+          </button>
+
+          <button mat-icon-button class="add-user" (click)="openDialog()">
+            <img src="assets/img/icons/add-person.svg" alt="" />
+          </button>
+        </div>
+      </div>
+    </mat-card-header>
+
+    <mat-card-header *ngSwitchCase="'direct'">
       <div class="header">
         <button (click)="openEditChannelDialog()" mat-button>
           <div class="chat-title">
