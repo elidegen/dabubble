@@ -86,20 +86,18 @@ export class ThreadComponent implements OnInit {
           console.log('Message sent to thread');
         });  
     }
-  this.threadService.updateThreadCount(this.threadService.currentMessage);
+  this.threadService.updateThreadCount(this.threadService.currentMessage, this.message.time);
   }
 
 
 
   
   async addReaction(emoji: string, messageId: any) {
-    if (this.currentChat?.id) {
-      const subReactionColRef = doc(collection(this.firestore, `threads/${this.currentMessage.id}/messages/`), messageId);
+    if (this.currentMessage?.id) {
+      const subReactionColRef = doc(collection(this.firestore, `threads/${this.currentMessage.id}/threadMessages/`), messageId);
       let messageIndex = this.allThreadMessages.findIndex(message => message.id === messageId);
       let currentMessage = this.allThreadMessages[messageIndex];
-
       const reactionItem = { emoji, creatorId: this.currentUser.id };
-
       if (currentMessage.reaction.some((emojiArray: { emoji: string; creatorId: string; }) => emojiArray.emoji === emoji && emojiArray.creatorId === this.currentUser.id)) {
         currentMessage.reaction = currentMessage.reaction.filter((emojiArray: { emoji: string; creatorId: string; }) => !(emojiArray.emoji === emoji && emojiArray.creatorId === this.currentUser.id));
       } else {

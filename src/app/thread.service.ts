@@ -75,10 +75,12 @@ export class ThreadService {
 
 
 
-  updateThreadCount(message: Message) {
+  updateThreadCount(message: Message,time: any) {
     const subReactionColRef = doc(collection(this.firestore, `channels/${this.currentChat.id}/messages/`), message.id);
-    updateDoc(subReactionColRef, this.updateMessage(message));
+    updateDoc(subReactionColRef, this.updateMessage(message, time));
     console.log("MessageCount wird geupdated",message);
+    console.log("MessageCount wird geupdated mit der Zeit",time);
+
   }
 
 
@@ -86,9 +88,10 @@ export class ThreadService {
   
 
 
-updateMessage(message: any) {
+updateMessage(message:any,time: any) {
 return {
-  threadCount: message.threadCount
+  threadCount: message.threadCount,
+  lastThreadTime: time
 }
 }
 

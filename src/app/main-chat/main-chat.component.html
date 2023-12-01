@@ -67,9 +67,9 @@
 
                   <div class="comment-section" (click)="openThread(message)">
                     <span *ngIf="message.threadCount == 0" class="comments color-purple2-text">Reply</span>
-                    <span *ngIf="message.threadCount == 1" class="comments color-purple2-text" > 1 Answer</span>
-                    <span  *ngIf="message.threadCount >= 2"   class="comments color-purple2-text"> {{message.threadCount}} Answers</span>
-                    <span class="last-comment">Last Answer</span>
+                    <span *ngIf="message.threadCount == 1" class="comments color-purple2-text" > 1 Comment</span>
+                    <span  *ngIf="message.threadCount >= 2"   class="comments color-purple2-text"> {{message.threadCount}} Comments</span>
+                    <span *ngIf="message.threadCount > 0" class="last-comment">Last Comment {{message.lastThreadTime}}</span>
                   </div>
 
                 </div>
