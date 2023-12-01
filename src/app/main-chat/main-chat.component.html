@@ -1,65 +1,6 @@
 <mat-drawer-container autosize>
-  <mat-card class="mr-16" [ngSwitch]="chatWindow">
-
-    <mat-card-header *ngSwitchCase="'empty'">
-      <div class="header">
-        <button (click)="openEditChannelDialog()" mat-button class="br-32">
-          <div class="chat-title">
-            <img src="assets/img/icons/tag.svg" alt="" class="mr-16"/>
-            <span class="mr-16">{{ currentChat?.name}}</span>
-            <mat-icon>expand_more</mat-icon>
-          </div>
-        </button>
-        <div class="group-members-container">
-
-          <button mat-button class="group-members-button" (click)="openMemberDialog()">
-            <div class="group-members-container">
-              <div class="group-members">
-                <div class="d-flex" *ngFor="let member of firstThreeItems">
-                  <img src="{{member.picture}}"/>
-                </div>
-              </div> 
-              <h3 *ngIf="allChannelMembers.length > 3" class="member-count"> + {{allChannelMembers.length -3}}</h3>
-            </div>
-          </button>
-
-          <button mat-icon-button class="add-user" (click)="openDialog()">
-            <img src="assets/img/icons/add-person.svg" alt="" />
-          </button>
-        </div>
-      </div>
-    </mat-card-header>
-
-    <mat-card-header *ngSwitchCase="'channel'">
-      <div class="header">
-        <button (click)="openEditChannelDialog()" mat-button class="br-32">
-          <div class="chat-title">
-            <img src="assets/img/icons/tag.svg" alt="" class="mr-16" />
-            <span class="mr-16">{{ currentChat?.name}}</span>
-            <mat-icon>expand_more</mat-icon>
-          </div>
-        </button>
-
-        <div class="group-members-container">
-
-          <button mat-button class="group-members-button" (click)="openMemberDialog()">
-            <div class="group-members-container">
-              <div class="group-members">
-                <img src="assets/img/avatars/avatar_male2.svg" alt="" />
-              </div>
-
-              <h3 class="member-count">5</h3>
-            </div>
-          </button>
-
-          <button mat-icon-button class="add-user" (click)="openDialog()">
-            <img src="assets/img/icons/add-person.svg" alt="" />
-          </button>
-        </div>
-      </div>
-    </mat-card-header>
-
-    <mat-card-header *ngSwitchCase="'direct'">
+  <mat-card class="mr-16">
+    <mat-card-header>
       <div class="header">
         <button (click)="openEditChannelDialog()" mat-button>
           <div class="chat-title">
@@ -119,7 +60,7 @@
                 <div class="reaction-container">
                   <div class="reaction-emoji-container">
                     <button class="reaction-emoji-button" *ngFor="let emoji of message.reactionCount | keyvalue">
-                      <img src="{{emoji.key}}"/>
+                     <div class="emoji-fit">{{emoji.key}}</div>
                       <span>{{ emoji.value }}</span>
                     </button>
                   </div>
@@ -136,10 +77,10 @@
             </div>
 
             <div class="reaction" [ngClass]="{'own-message': message.creator == this.userService.currentUser.name}">
-              <button mat-icon-button (click)="addReaction('assets/img/emojis/checkGreen.svg', message.id)">
+              <button mat-icon-button (click)="addReaction('✅',message.id)">
                 <img src="assets/img/emojis/checkGreen.svg" alt="">
               </button>
-              <button mat-icon-button (click)="addReaction('assets/img/emojis/hands.svg', message.id)"> 
+              <button mat-icon-button (click)="addReaction('🙌', message.id)"> 
                 <img src="assets/img/emojis/hands.svg" alt="">
               </button>
               <button (click)="toggled = true" mat-icon-button>
@@ -157,7 +98,7 @@
          
       
         </section>
-        <emoji-mart *ngIf="toggled" class="emojiPicker" (emojiClick)="addEmoji($event)"></emoji-mart>
+        <emoji-mart *ngIf="toggled" class="emojiPicker" (emojiClick)="addEmoji($event,message.id)"></emoji-mart>
       </ng-container>
     </mat-card-content>
 

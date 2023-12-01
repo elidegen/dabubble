@@ -42,6 +42,7 @@ export class MainChatComponent implements OnInit {
   showEmojiPick: boolean = false;
   toggled: boolean = false;
 
+
   constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public threadService: ThreadService, ) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
@@ -237,11 +238,8 @@ export class MainChatComponent implements OnInit {
   }
 
   isToday(date: string): boolean {
-    console.log('Datum', date);
     const currentDate = this.getCurrentDate();
     const formattedDate = this.formatDate(currentDate);
-    console.log(formattedDate);
-    
     return date === formattedDate;
   }
 
@@ -282,9 +280,13 @@ export class MainChatComponent implements OnInit {
   showEmojiPicker() {
     this.showEmojiPick= true;
   }
-  addEmoji($event:any) {
-    console.log($event);
+  addEmoji(event:any, messageId: any) {
+    console.log(event);
+    let emojiString;
+   emojiString =  event["emoji"].native
+    console.log(emojiString);
     this.toggled = false;
+    this.addReaction(emojiString, messageId)
   }
 
   async openThread(message: Message) {
