@@ -3,10 +3,10 @@
 
     <mat-card-header *ngSwitchCase="'empty'">
       <div class="header">
-        <button (click)="openEditChannelDialog()" mat-button>
+        <button (click)="openEditChannelDialog()" mat-button class="br-32">
           <div class="chat-title">
-            <img src="assets/img/icons/tag.svg" alt="" class="mr-16" />
-            <span class="mr-16">{{ currentChat?.name || '' }}</span>
+            <img src="assets/img/icons/tag.svg" alt="" class="mr-16"/>
+            <span class="mr-16">{{ currentChat?.name}}</span>
             <mat-icon>expand_more</mat-icon>
           </div>
         </button>
@@ -15,7 +15,7 @@
           <button mat-button class="group-members-button" (click)="openMemberDialog()">
             <div class="group-members-container">
               <div class="group-members">
-                <div *ngFor="let member of firstThreeItems">
+                <div class="d-flex" *ngFor="let member of firstThreeItems">
                   <img src="{{member.picture}}"/>
                 </div>
               </div> 
@@ -32,10 +32,10 @@
 
     <mat-card-header *ngSwitchCase="'channel'">
       <div class="header">
-        <button (click)="openEditChannelDialog()" mat-button>
+        <button (click)="openEditChannelDialog()" mat-button class="br-32">
           <div class="chat-title">
             <img src="assets/img/icons/tag.svg" alt="" class="mr-16" />
-            <span class="mr-16">{{ currentChat?.name || '' }}</span>
+            <span class="mr-16">{{ currentChat?.name}}</span>
             <mat-icon>expand_more</mat-icon>
           </div>
         </button>

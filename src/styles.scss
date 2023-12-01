@@ -157,6 +157,15 @@ a {
     }
 }
 
+.delete-button {
+    border: 1px solid red !important;
+    color: red !important;
+    &:hover {
+        background-color: red !important;
+        color: white !important;
+    }
+}
+
 .primary {
     background-color: var(--purple1) !important;
     color: white !important;
@@ -183,4 +192,12 @@ h2 {
     --purple3: #535AF1;
     --textGray: #686868;
     --online: #92C83E;
+}
+
+.br-32 {
+    border-radius: 32px !important;
+}
+
+.d-flex {
+    display: flex;
 }

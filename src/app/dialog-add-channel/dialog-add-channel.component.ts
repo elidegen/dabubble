@@ -78,6 +78,7 @@ export class DialogAddChannelComponent {
     if (this.allMembers) {
       this.channel.members = this.users;
     } else {
+      this.addCurrentUser();
       this.channel.members = this.selectedUsers;
     }
   }
@@ -105,6 +106,13 @@ export class DialogAddChannelComponent {
 
   userSelected(event: Event) {
     event.stopPropagation();
+  }
+
+  addCurrentUser() {
+    const userAlreadySelected = this.selectedUsers.some(user => user.id === this.currentUser.id);
+    if (!userAlreadySelected) {
+      this.selectedUsers.push(this.currentUser);
+    }
   }
 
   removeUser(user: User) {
