@@ -21,11 +21,6 @@ export class ChatService {
     this._openChatSubject.next(value);
   }
 
-
-
-  
-
-
   getChannelsRef() {
     return collection(this.firestore, 'channels');
   }

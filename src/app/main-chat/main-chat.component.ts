@@ -8,11 +8,12 @@ import { Firestore, addDoc, arrayUnion, collection, doc, updateDoc } from '@angu
 import { ChatService } from '../chat.service';
 import { Channel } from 'src/models/channel.class';
 import { Message } from 'src/models/message.class';
-import { DocumentData, DocumentReference, onSnapshot, orderBy, query } from 'firebase/firestore';
+import { DocumentData, DocumentReference, getDoc, onSnapshot, orderBy, query, setDoc } from 'firebase/firestore';
 import { UserService } from '../user.service';
 import { UserData } from '../interfaces/user-interface';
 import { Reaction } from 'src/models/reaction.class';
 import { ThreadService } from '../thread.service';
+import { Thread } from 'src/models/thread.class';
 
 @Component({
   selector: 'app-main-chat',
@@ -33,6 +34,7 @@ export class MainChatComponent implements OnInit {
   messagesByDate: { [date: string]: Message[] } = {};
   organizedMessages: { date: string, messages: Message[] }[] = []
   allReactionsByMessage: [] = [];
+  newThread = new Thread();
 
   constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public threadService: ThreadService) {
     userService.getCurrentUserFromLocalStorage();
@@ -263,10 +265,31 @@ export class MainChatComponent implements OnInit {
   }
 
 
-  openThread(message: Message) {
-    this.threadDrawer.toggle();
-    this.threadService.currentMessage = message;
-    console.log('message', message);
+ async openThread(message: Message) {
+    let messageId = message.id;
+    await this.createThread(messageId)
+    this.threadDrawer.open();
+    this.threadService.openMessage = message;
+  }
+
+
+   async createThread(messageId: any) {
+    const threadCollectionRef = collection(this.firestore, 'threads');
+    const specificDocRef: DocumentReference<DocumentData> = doc(threadCollectionRef, messageId);
+
+    try {
+      const docSnapshot = await getDoc(specificDocRef)  
+      if (!docSnapshot.exists()) {
+        await setDoc(specificDocRef, {
+          ...this.newThread.toJSON(),
+        });
+      } else {
+        console.log('Dokument mit der angegebenen ID existiert bereits. Überspringe das Erstellen.');
+      }
+    } catch (err) {
+      console.error('Fehler beim Hinzufügen oder Aktualisieren des Threads:', err);
+    }
+  
 
   }
 }

@@ -104,18 +104,18 @@ export class ThreadService {
   getThreadData(thread: Thread) {
     // Erstellen Sie eine neue Instanz von Thread, falls erforderlich
     const threadInstance = new Thread(thread);
-
+    
     // Aktualisieren Sie die Eigenschaften des Thread-Objekts
-    threadInstance.creator = thread.creator || "";
-    threadInstance.creatorId = thread.creatorId || "";
-    threadInstance.content = thread.content || "";
-    threadInstance.time = thread.time || "";
-    threadInstance.date = thread.date || "";
-    threadInstance.timeInMs = thread.timeInMs || 0;
-    threadInstance.profilePic = thread.profilePic || "";
-    threadInstance.id = thread.id || "";
-    threadInstance.reactionCount = thread.reactionCount || "";
-    threadInstance.reaction = thread.reaction || [];
+    // threadInstance.creator = thread.creator || "";
+    // threadInstance.creatorId = thread.creatorId || "";
+    // threadInstance.content = thread.content || "";
+    // threadInstance.time = thread.time || "";
+    // threadInstance.date = thread.date || "";
+    // threadInstance.timeInMs = thread.timeInMs || 0;
+    // threadInstance.profilePic = thread.profilePic || "";
+    // threadInstance.id = thread.id || "";
+    // threadInstance.reactionCount = thread.reactionCount || "";
+    // threadInstance.reaction = thread.reaction || [];
 
     return threadInstance;
   }
