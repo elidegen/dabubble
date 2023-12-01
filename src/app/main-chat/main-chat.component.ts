@@ -183,7 +183,7 @@ export class MainChatComponent implements OnInit {
     return counter;
   }
 
-  async addReaction(emoji: string, messageId: any) {
+  async addReaction(emoji: any, messageId: any) {
     if (this.currentChat?.id) {
       const subReactionColRef = doc(collection(this.firestore, `channels/${this.currentChat.id}/messages/`), messageId);
       let messageIndex = this.allMessages.findIndex(message => message.id === messageId);
