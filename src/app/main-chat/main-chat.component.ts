@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, inject, HostListener } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, inject, HostListener, ViewChildren, QueryList } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogEditChannelComponent } from '../dialog-edit-channel/dialog-edit-channel.component';
 import { DialogAddToGroupComponent } from '../dialog-add-to-group/dialog-add-to-group.component';
@@ -8,7 +8,7 @@ import { Firestore, addDoc, collection, doc, updateDoc } from '@angular/fire/fir
 import { ChatService } from '../chat.service';
 import { Channel } from 'src/models/channel.class';
 import { Message } from 'src/models/message.class';
-import { DocumentData, DocumentReference, getDoc, onSnapshot, orderBy, query, setDoc } from 'firebase/firestore';
+import { DocumentData, DocumentReference, getDoc, getDocs, onSnapshot, orderBy, query, setDoc } from 'firebase/firestore';
 import { UserService } from '../user.service';
 import { UserData } from '../interfaces/user-interface';
 import { Reaction } from 'src/models/reaction.class';
@@ -16,6 +16,7 @@ import { ThreadService } from '../thread.service';
 import { Thread } from 'src/models/thread.class';
 import { AuthService } from '../auth.service';
 import { EmojiService } from '../emoji.service';
+import { User } from 'src/models/user.class';
 
 @Component({
   selector: 'app-main-chat',
@@ -48,10 +49,22 @@ export class MainChatComponent implements OnInit {
   @ViewChild('emojiPicker') emojiPickerElementRef!: ElementRef;
   editingMessage: string | undefined;
 
+  // ------------------ search Input ---------------
+  searchInput: string = '';
+  isInputFocused: boolean = false;
+  filteredUsers: User[] = [];
+  users: User[] = [];
+  selectedUsers: any[] = [];
+  @ViewChildren('userContainer') userContainers!: QueryList<any>;
+
+  // ----------------------------------------------------
+
+
 
   constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public threadService: ThreadService, public authService: AuthService, public emojiService: EmojiService) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
+    this.loadUsers();
   }
 
   ngOnInit() {
@@ -415,4 +428,51 @@ export class MainChatComponent implements OnInit {
     this.message.timeInMs = message.timeInMs;
     this.message.content = this.editor.nativeElement.value;
   }
+
+  // ---------------- search Input -------------------------
+
+  async loadUsers() {
+    try {
+      const querySnapshot = await getDocs(collection(this.firestore, 'users'));
+      this.users = querySnapshot.docs.map((doc: { data: () => any; }) => new User(doc.data()));
+    } catch (error) {
+      console.error('Error loading users:', error);
+    }
+  }
+  
+  filterUsers(): void {
+    this.isInputFocused = true;
+    this.filteredUsers = this.users.filter(user =>
+      user.name?.toLowerCase().includes(this.searchInput.toLowerCase())
+    );
+  }
+
+  userSelected(event: Event) {
+    event.stopPropagation();
+  }
+
+  selectUser(user: User, i: number) {
+    this.highlightButton(i);
+    let index = this.selectedUsers.findIndex(obj => obj.id === user.id);
+    if (index == -1) {
+      this.selectedUsers.push(user);
+    }
+  }
+
+  highlightButton(index: number) {
+    const userContainer = this.userContainers.toArray()[index];
+    if (userContainer) {
+      userContainer.nativeElement.classList.toggle('user-container-highlighted');
+    }
+  }
+
+  @HostListener('document:click', ['$event'])
+  checkClick(event: Event) {
+    const clickedElement = event.target as HTMLElement;
+    if (!clickedElement.classList.contains('user-search-container') && !clickedElement.classList.contains('user-container') && this.isInputFocused && !clickedElement.classList.contains('input-members')) {
+      this.isInputFocused = false;
+    }
+  }
+
+  // -------------------------------------------------------------
 }

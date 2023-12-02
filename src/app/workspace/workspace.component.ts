@@ -67,4 +67,8 @@ export class WorkspaceComponent implements OnInit {
   ngOnDestroy(): void {
     this.unsubscribeChannels;
   }
+
+  startNewMessage() {
+    this.chatservice.chatWindow = 'newMessage';
+  }
 }
