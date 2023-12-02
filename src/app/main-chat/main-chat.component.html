@@ -64,6 +64,27 @@
       </div>
     </mat-card-header>
 
+    <mat-card-header *ngSwitchCase="'newMessage'">
+      <div class="w100 headline">
+        <h1>New Message</h1>
+         <div class="add-members-container">
+                <input class="w100 input-members" type="text" placeholder="To: @someone" [(ngModel)]="searchInput"
+                    (input)="filterUsers()" (click)="this.isInputFocused = true;">
+
+                <div class="user-search-container" *ngIf="isInputFocused" (click)="userSelected($event)">
+                    <button #userContainer class="user-container" *ngFor="let user of filteredUsers; let i = index" (click)="selectUser(user, i)">
+                        <div class="profile-container">
+                            <img src="{{user.picture}}" alt="profile">
+                            <div class="online-status"></div>
+                        </div>
+                        <span>{{user.name}}</span>
+                    </button>
+                    <span *ngIf="filteredUsers.length <1">No matching contact</span>
+                </div>
+            </div>
+      </div>
+    </mat-card-header>
+
     <mat-card-content #messageContainer class="p-0 main-chat-container" *ngSwitchCase="'channel' || 'direct'">
       <ng-container  *ngFor="let organizedMessage of this.organizedMessages.slice()">
         <section>
