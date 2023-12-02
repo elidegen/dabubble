@@ -117,7 +117,7 @@
                 <div class="reaction-container">
                   <div class="reaction-emoji-container">
                     <button class="reaction-emoji-button" *ngFor="let emoji of message.reactionCount | keyvalue">
-                     <div class="emoji-fit">{{emoji.key}}</div>
+                     <div (click)='addReaction(emoji.key,message.id)' class="emoji-fit">{{emoji.key}}</div>
                       <span>{{ emoji.value }}</span>
                     </button>
                   </div>
@@ -140,9 +140,8 @@
               <button mat-icon-button (click)="addReaction('🙌', message.id)"> 
                 <img src="assets/img/emojis/hands.svg" alt="">
               </button>
-              <button (click)="toggled = true" mat-icon-button>
-                <img  src="assets/img/icons/add_reaction.svg"  alt="" >
-             
+              <button class="hostlistener-dont-trigger" (click)="toggled = true" mat-icon-button>
+                <img  src="assets/img/icons/add_reaction.svg"  alt="" >             
               </button>
               <button (click)="openThread(message)"mat-icon-button>
                 <img  src="assets/img/icons/comment.svg" alt="">
@@ -151,11 +150,12 @@
                 <img src="assets/img/icons/edit_square.svg" alt="">
               </button>
             </div>
+            <emoji-mart *ngIf="toggled" class="emojiPicker" (emojiClick)="addEmoji($event,message.id)"></emoji-mart>
           </div>
-         
+       
       
         </section>
-        <emoji-mart *ngIf="toggled" class="emojiPicker" (emojiClick)="addEmoji($event,message.id)"></emoji-mart>
+      
       </ng-container>
     </mat-card-content>
 
