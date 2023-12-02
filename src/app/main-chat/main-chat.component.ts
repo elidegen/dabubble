@@ -324,6 +324,7 @@ export class MainChatComponent implements OnInit {
       this.addReaction(this.emojiService.emojiString, this.emojiService.messageId)
       this.emojiService.showMainChatEmojiPicker = false;
     }
+    this.emojiService.addEmojiMainChat(event);
   console.log("das ist das Emoji für die Textnachricht",this.emojiService.emojiString);
   }
 
