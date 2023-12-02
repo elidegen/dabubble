@@ -72,14 +72,14 @@
                     (input)="filterUsers()" (click)="this.isInputFocused = true;">
 
                 <div class="user-search-container" *ngIf="isInputFocused" (click)="userSelected($event)">
-                    <button #userContainer class="user-container" *ngFor="let user of filteredUsers; let i = index" (click)="selectUser(user, i)">
+                    <button #userContainer class="user-container" *ngFor="let user of filteredUsers" (click)="selectUser(user)">
                         <div class="profile-container">
                             <img src="{{user.picture}}" alt="profile">
                             <div class="online-status"></div>
                         </div>
                         <span>{{user.name}}</span>
                     </button>
-                    <span *ngIf="filteredUsers.length <1">No matching contact</span>
+                    <span *ngIf="filteredUsers.length < 1">No matching contact</span>
                 </div>
             </div>
       </div>

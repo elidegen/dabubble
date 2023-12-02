@@ -4,6 +4,7 @@ import { collection, doc } from 'firebase/firestore';
 import { Channel } from 'src/models/channel.class';
 import { Chat } from 'src/models/chat.class';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { User } from 'src/models/user.class';
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +36,12 @@ export class ChatService {
   
   getSingleDocRef(colId: string, docId: string) {
     return doc(collection(this.firestore, colId), docId);
+  }
+
+  createDirectMessage(user: User) {
+   console.log('new User', user);
+   this.chatWindow = 'directMessage'
+   
   }
 
 }
