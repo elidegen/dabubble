@@ -11,7 +11,7 @@
             </div>
             <span>{{user.name}}</span>
         </button>
-        <span *ngIf="filteredUsers.length <1">No matching contact</span>
+        <span *ngIf="filteredUsers.length < 1">No matching contact</span>
     </div>
     <div class="w100 selected-user-container">
         <div class="selected-user" *ngFor="let item of this.selectedUsers">

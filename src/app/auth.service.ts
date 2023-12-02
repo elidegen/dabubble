@@ -65,7 +65,9 @@ export class AuthService {
       const activeUserIndex = this.findUserIndexWithEmail(email);
       if (activeUserIndex !== -1) {
         this.userService.users[activeUserIndex].online = true;
+        console.log("Online Status von user",this.userService.users[activeUserIndex]);
         this.userService.signInSuccess = true;
+        this.userService.updateUser('users', this.userService.users[activeUserIndex]);
         this.userService.currentUser = this.userService.users[activeUserIndex];
         this.userService.setCurrentUserToLocalStorage();
         console.log("Current User:", this.userService.currentUser);

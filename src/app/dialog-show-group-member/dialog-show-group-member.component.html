@@ -11,7 +11,9 @@
         <div *ngFor="let member of allChannelMembers">
             <div class="member">
                 <img class="mr-16" src="{{member.picture}}" alt="">
+                <div [ngClass]="{'offline-status': member.online === false}" class="online-status"></div>
                 <h3>{{member.name}}</h3>
+               
             </div>
         </div>
     </mat-card-content>

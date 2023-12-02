@@ -14,6 +14,8 @@ import { UserData } from '../interfaces/user-interface';
 import { Reaction } from 'src/models/reaction.class';
 import { ThreadService } from '../thread.service';
 import { Thread } from 'src/models/thread.class';
+import { AuthService } from '../auth.service';
+import { EmojiService } from '../emoji.service';
 
 @Component({
   selector: 'app-main-chat',
@@ -43,10 +45,11 @@ export class MainChatComponent implements OnInit {
   placeholder: any;
   edit: boolean = false;
   @ViewChild('editor') editor!: ElementRef;
+  @ViewChild('emojiPicker') emojiPickerElementRef!: ElementRef;
   editingMessage: string | undefined;
 
 
-  constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public threadService: ThreadService,) {
+  constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public threadService: ThreadService, public authService: AuthService, public emojiService: EmojiService) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
   }
@@ -68,10 +71,10 @@ export class MainChatComponent implements OnInit {
       } else {
         this.currentChat = undefined;
       }
-  
+
     });
 
-    
+
   }
 
   // @HostListener('document:click', ['$event'])
@@ -81,7 +84,7 @@ export class MainChatComponent implements OnInit {
   //     this.toggled = false;
   //   }
   // }
-  
+
   ngOnDestroy() {
     if (this.unSubMessages) {
       this.unSubMessages();
@@ -288,16 +291,27 @@ export class MainChatComponent implements OnInit {
     console.log('Show', this.organizedMessages)
   }
 
+  openEmojiPicker(messageId: any) {
+    setTimeout(() => {
+      this.emojiService.showMainChatEmojiPicker = true;
+    }, 500);
 
-  showEmojiPicker() {
-    this.showEmojiPick = true;
+    this.emojiService.messageId = messageId;
+  }
+
+  closeEmojiPicker() {
+    if (this.emojiService.showMainChatEmojiPicker == true && this.emojiService.emojiString == "") {
+      this.emojiService.showMainChatEmojiPicker = false;
+    }
+
   }
 
 
-  addEmoji(event: any, messageId: any) {
-    let emojiString = event["emoji"].native;
-    this.toggled = false;
-    this.addReaction(emojiString, messageId)
+
+  addEmoji(event: any) {
+    this.emojiService.addEmojiMainChat(event);
+    this.addReaction(this.emojiService.emojiString, this.emojiService.messageId)
+    this.emojiService.showMainChatEmojiPicker = false;
   }
 
 
@@ -335,12 +349,21 @@ export class MainChatComponent implements OnInit {
           const channelMembersJson = channelData?.['members'] || [];
           const channelMembers = JSON.parse(channelMembersJson);
           this.allChannelMembers = channelMembers;
+          this.updateOnlineStatus();
           this.firstThreeItems = this.allChannelMembers.slice(0, 3);
         }
       } catch (error) {
         console.error('Error getting channel document:', error);
       }
     }
+  }
+
+  updateOnlineStatus() {
+    this.allChannelMembers.forEach(member => {
+      let userIndex = this.authService.findUserIndexWithEmail(member.email);
+      member.online = this.userService.users[userIndex].online;
+      console.log("Online Status geupdated", member.online);
+    });
   }
 
   editMessage(message: Message) {

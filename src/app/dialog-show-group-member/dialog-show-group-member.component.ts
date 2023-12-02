@@ -4,6 +4,8 @@ import { DialogAddToGroupComponent } from '../dialog-add-to-group/dialog-add-to-
 import { ChatService } from '../chat.service';
 import { Channel } from 'src/models/channel.class';
 import { Firestore, doc, getDoc } from '@angular/fire/firestore';
+import { AuthService } from '../auth.service';
+import { UserService } from '../user.service';
 
 
 @Component({
@@ -16,7 +18,7 @@ export class DialogShowGroupMemberComponent implements OnInit {
   allChannelMembers: any[] = [];
   firestore: Firestore = inject(Firestore);
 
-  constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<DialogAddToGroupComponent>, public chatService: ChatService) { }
+  constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<DialogAddToGroupComponent>, public chatService: ChatService, public authService: AuthService, public userService: UserService) { }
 
   openDialog() {
     this.dialog.open(DialogAddToGroupComponent, {
@@ -48,6 +50,7 @@ export class DialogShowGroupMemberComponent implements OnInit {
           const channelMembers = JSON.parse(channelMembersJson);
           console.log('Channel Members:', channelMembers);
           this.allChannelMembers = channelMembers;
+          this.updateOnlineStatus();
         } else {
           console.log('Channel document does not exist.');
         }
@@ -55,5 +58,14 @@ export class DialogShowGroupMemberComponent implements OnInit {
         console.error('Error getting channel document:', error);
       }
     }
+  }
+
+
+  updateOnlineStatus() {
+    this.allChannelMembers.forEach(member => {
+     let userIndex = this.authService.findUserIndexWithEmail(member.email);
+    member.online = this.userService.users[userIndex].online;
+    console.log("Online Status geupdated", member.online);
+    });
   }
 }

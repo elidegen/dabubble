@@ -12,9 +12,27 @@ header {
     padding: 0 8px;
 }
 
+
+.online-status {
+    width: 10px;
+    height: 10px;
+    background-color: var(--online);
+    background-color: green;
+    border-radius: 100%;
+    position: absolute;
+    bottom: 1px;
+    left: 35px;
+    border: 2px solid white;
+}
+
+.offline-status {
+    background-color: grey;
+}
+
 .member {
     display: flex;
     align-items: center;
+    position: relative;
 
     img {
         height: 50px;
