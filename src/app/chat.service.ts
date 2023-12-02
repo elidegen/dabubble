@@ -11,6 +11,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class ChatService {
   private _openChatSubject: BehaviorSubject<Channel | Chat | null> = new BehaviorSubject<Channel | Chat | null>(null);
   firestore: Firestore = Inject(Firestore)
+  chatWindow = 'empty';
+
   constructor() { }
 
   get openChat$(): Observable<Channel | Chat | null> {
@@ -20,6 +22,8 @@ export class ChatService {
   set openChat(value: Channel | Chat | null) {
     this._openChatSubject.next(value);
   }
+
+
 
   getChannelsRef() {
     return collection(this.firestore, 'channels');

@@ -20,8 +20,9 @@ export class DialogEditChannelComponent implements OnInit {
   firestore: Firestore = inject(Firestore);
   currentUser;
   newChannelMembers: any[] = [];
+  unSubChannel: any;
 
-  constructor(private chatService: ChatService, public dialogRef: MatDialogRef<DialogEditChannelComponent>, public userService: UserService) {
+  constructor(public chatService: ChatService, public dialogRef: MatDialogRef<DialogEditChannelComponent>, public userService: UserService) {
     this.currentUser = this.userService.currentUser;
    }
 
@@ -30,6 +31,9 @@ export class DialogEditChannelComponent implements OnInit {
       if (openChat) {
         this.currentChat = openChat as Channel;
         this.getAllChannelMembers();
+        if (this.unSubChannel) {
+          this.unSubChannel();
+        }
       }
     });
   }
@@ -55,9 +59,14 @@ export class DialogEditChannelComponent implements OnInit {
     }
   }
 
+  ngOnDestroy() {
+    if (this.unSubChannel) {
+      this.unSubChannel();
+    }
+  }
+
   async deleteCurrentUserFromChannel() {
     this.deleteCurrentUser();
-
     if (this.currentChat) {
       const channelDocRef = doc(collection(this.firestore, 'channels'), this.currentChat.id);
       this.channel.members = this.newChannelMembers;
@@ -69,6 +78,8 @@ export class DialogEditChannelComponent implements OnInit {
       });
     }
     this.dialogRef.close();
+    this.chatService.chatWindow = 'empty'
+    this.chatService.openChat = null;
   }
 
 
@@ -78,7 +89,6 @@ export class DialogEditChannelComponent implements OnInit {
       this.allChannelMembers = this.allChannelMembers.filter(user => user.id !== this.currentUser.id);
       this.newChannelMembers = this.allChannelMembers;
       console.log('no currentUser', this.newChannelMembers );
-      
     }
   }
 

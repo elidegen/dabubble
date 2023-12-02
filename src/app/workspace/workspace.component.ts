@@ -20,7 +20,7 @@ export class WorkspaceComponent implements OnInit {
   unsubscribeChannels: any;
   currentUser;
 
-  constructor(public dialog: MatDialog, private chatservice: ChatService, public threadService: ThreadService, public userService: UserService) {
+  constructor(public dialog: MatDialog, public chatservice: ChatService, public threadService: ThreadService, public userService: UserService) {
     this.currentUser = userService.currentUser;
   }
 
@@ -61,6 +61,7 @@ export class WorkspaceComponent implements OnInit {
   renderChat(channel: Channel) {
     this.chatservice.openChat = channel;
     this.threadService.currentChat = channel;
+    this.chatservice.chatWindow = 'channel'
   }
 
   ngOnDestroy(): void {

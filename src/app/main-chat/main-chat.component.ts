@@ -4,11 +4,11 @@ import { DialogEditChannelComponent } from '../dialog-edit-channel/dialog-edit-c
 import { DialogAddToGroupComponent } from '../dialog-add-to-group/dialog-add-to-group.component';
 import { DialogShowGroupMemberComponent } from '../dialog-show-group-member/dialog-show-group-member.component';
 import { MatDrawer } from '@angular/material/sidenav';
-import { Firestore, addDoc, arrayUnion, collection, doc, updateDoc } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, doc, updateDoc } from '@angular/fire/firestore';
 import { ChatService } from '../chat.service';
 import { Channel } from 'src/models/channel.class';
 import { Message } from 'src/models/message.class';
-import { DocumentData, DocumentReference, getDoc, getDocs, onSnapshot, orderBy, query, setDoc } from 'firebase/firestore';
+import { DocumentData, DocumentReference, getDoc, onSnapshot, orderBy, query, setDoc } from 'firebase/firestore';
 import { UserService } from '../user.service';
 import { UserData } from '../interfaces/user-interface';
 import { Reaction } from 'src/models/reaction.class';
@@ -36,11 +36,13 @@ export class MainChatComponent implements OnInit {
   allReactionsByMessage: [] = [];
   newThread = new Thread();
   threadCount: any = 0;
-  chatWindow = 'empty';
   allChannelMembers: any[] = [];
   firstThreeItems: any[] = [];
   showEmojiPick: boolean = false;
   toggled: boolean = false;
+  placeholder: any;
+  edit: boolean = false;
+  @ViewChild('editor') editor!: ElementRef;
 
 
   constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public threadService: ThreadService,) {
@@ -54,6 +56,7 @@ export class MainChatComponent implements OnInit {
         const newChat = openChat as Channel;
         if (!this.currentChat || this.currentChat.id !== newChat.id) {
           this.currentChat = newChat;
+          console.log('currentChat', this.currentChat);
           this.threadService.currentChat = newChat;
           if (this.unSubMessages) {
             this.unSubMessages();
@@ -61,17 +64,22 @@ export class MainChatComponent implements OnInit {
           this.loadMessages();
           this.getAllChannelMembers();
         }
+      } else {
+        this.currentChat = undefined;
       }
+  
     });
+
+    
   }
 
-  @HostListener('document:click', ['$event'])
-  checkClick(event: Event) {
-    const clickedElement = event.target as HTMLElement;
-    if (!clickedElement.classList.contains('reaction') && !clickedElement.classList.contains('hostlistener-dont-trigger') && !clickedElement.classList.contains('emojiPicker') && this.toggled) {
-      this.toggled = false;
-    }
-  }
+  // @HostListener('document:click', ['$event'])
+  // checkClick(event: Event) {
+  //   const clickedElement = event.target as HTMLElement;
+  //   if (!clickedElement.classList.contains('reaction') && !clickedElement.classList.contains('hostlistener-dont-trigger') && !clickedElement.classList.contains('emojiPicker') && this.toggled) {
+  //     this.toggled = false;
+  //   }
+  // }
   
   ngOnDestroy() {
     if (this.unSubMessages) {
@@ -197,9 +205,7 @@ export class MainChatComponent implements OnInit {
       const subReactionColRef = doc(collection(this.firestore, `channels/${this.currentChat.id}/messages/`), messageId);
       let messageIndex = this.allMessages.findIndex(message => message.id === messageId);
       let currentMessage = this.allMessages[messageIndex];
-
       const reactionItem = { emoji, creatorId: this.currentUser.id };
-
       if (currentMessage.reaction.some((emojiArray: { emoji: string; creatorId: string; }) => emojiArray.emoji === emoji && emojiArray.creatorId === this.currentUser.id)) {
         currentMessage.reaction = currentMessage.reaction.filter((emojiArray: { emoji: string; creatorId: string; }) => !(emojiArray.emoji === emoji && emojiArray.creatorId === this.currentUser.id));
       } else {
@@ -208,6 +214,7 @@ export class MainChatComponent implements OnInit {
       updateDoc(subReactionColRef, this.updateMessage(this.allMessages[messageIndex]));
     }
   }
+
 
   updateMessage(message: any) {
     return {
@@ -224,26 +231,20 @@ export class MainChatComponent implements OnInit {
   getSentMessageTime() {
     const currentTime = new Date();
     this.message.timeInMs = currentTime.getTime();
-
     const formattedTime = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     this.message.time = formattedTime;
   }
+
 
   getSentMessageCreator() {
     this.message.creator = this.userService.currentUser.id;
   }
 
-  getSingleDocRef(colId: string, docId: string) {
-    return doc(collection(this.firestore, colId), docId);
-  }
-
-  getChannelsRef() {
-    return collection(this.firestore, 'channels');
-  }
 
   scrollToBottom(): void {
     this.messageContainer.nativeElement.scrollTop = this.messageContainer.nativeElement.scrollHeight;
   }
+
 
   isToday(date: string): boolean {
     const currentDate = this.getCurrentDate();
@@ -251,20 +252,24 @@ export class MainChatComponent implements OnInit {
     return date === formattedDate;
   }
 
+
   getCurrentDate(): string {
     const currentDate = new Date();
     return currentDate.toDateString();
   }
+
 
   formatDate(date: string): string {
     const parts = date.split(' ');
     return `${parts[2]}.${this.getMonthNumber(parts[1])}.${parts[3]}`;
   }
 
+
   getMonthNumber(month: string): string {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     return (months.indexOf(month) + 1).toString().padStart(2, '0');
   }
+
 
   organizeMessagesByDate() {
     this.messagesByDate = {};
@@ -275,7 +280,6 @@ export class MainChatComponent implements OnInit {
           this.messagesByDate[messageDate] = [];
         }
         this.messagesByDate[messageDate].push(message);
-
       }
     }
     this.organizedMessages = Object.entries(this.messagesByDate).map(([date, messages]) => ({ date, messages }));
@@ -283,15 +287,18 @@ export class MainChatComponent implements OnInit {
     console.log('Show', this.organizedMessages)
   }
 
+
   showEmojiPicker() {
     this.showEmojiPick = true;
   }
+
 
   addEmoji(event: any, messageId: any) {
     let emojiString = event["emoji"].native;
     this.toggled = false;
     this.addReaction(emojiString, messageId)
   }
+
 
   async openThread(message: Message) {
     let messageId = message.id;
@@ -300,48 +307,73 @@ export class MainChatComponent implements OnInit {
     this.threadService.openMessage = message;
   }
 
+
   async createThread(messageId: any) {
     const threadCollectionRef = collection(this.firestore, 'threads');
     const specificDocRef: DocumentReference<DocumentData> = doc(threadCollectionRef, messageId);
-
     try {
       const docSnapshot = await getDoc(specificDocRef)
       if (!docSnapshot.exists()) {
         await setDoc(specificDocRef, {
           ...this.newThread.toJSON(),
         });
-      } else {
-        console.log('Dokument mit der angegebenen ID existiert bereits. Überspringe das Erstellen.');
       }
     } catch (err) {
       console.error('Fehler beim Hinzufügen oder Aktualisieren des Threads:', err);
     }
   }
 
+
   async getAllChannelMembers() {
     if (this.currentChat?.id) {
       const channelDocRef = doc(this.firestore, `channels/${this.currentChat.id}`);
       try {
         const channelDocSnap = await getDoc(channelDocRef);
-
         if (channelDocSnap.exists()) {
           const channelData = channelDocSnap.data();
           const channelMembersJson = channelData?.['members'] || [];
           const channelMembers = JSON.parse(channelMembersJson);
-
-          console.log('Channel Members:', channelMembers);
-
           this.allChannelMembers = channelMembers;
           this.firstThreeItems = this.allChannelMembers.slice(0, 3);
-
-        } else {
-          console.log('Channel document does not exist.');
         }
       } catch (error) {
         console.error('Error getting channel document:', error);
       }
     }
-    console.log('all', this.allChannelMembers);
-    console.log('3', this.firstThreeItems);
+  }
+
+  editMessage(message: Message) {
+    console.log('Nachricht', message);
+    if (this.currentChat) {
+      if (message.creator == this.currentUser.name) {
+        this.edit = true;
+      }
+    }
+  }
+
+  async updateMessageContent(message: Message) {
+    let messageId = message.id
+    const messageColRef = doc(collection(this.firestore, `channels/${this.currentChat?.id}/messages/`), messageId);
+    this.setMessageValues(message);
+    await updateDoc(messageColRef, this.message.toJSON()).catch((error) => {
+      console.error('Error updating document:', error);
+    });
+    this.edit = false;
+  }
+
+
+  setMessageValues(message: Message) {
+    this.message.id = message.id;
+    this.message.creator = message.creator
+    this.message.creatorId = message.creatorId;
+    this.message.date = message.date;
+    this.message.lastThreadTime = message.lastThreadTime;
+    this.message.profilePic = message.profilePic;
+    this.message.reaction = message.reaction;
+    this.message.reactionCount = message.reactionCount;
+    this.message.time = message.time;
+    this.message.threadCount = message.threadCount;
+    this.message.timeInMs = message.timeInMs;
+    this.message.content = this.editor.nativeElement.value;
   }
 }

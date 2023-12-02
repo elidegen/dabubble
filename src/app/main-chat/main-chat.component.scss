@@ -9,6 +9,7 @@
     justify-content: space-between;
     width: 100%;
     padding-bottom: 16px;
+    min-height: 64px;
 }
 
 .group-members-container {
@@ -59,19 +60,22 @@ mat-card-header {
     border: 1px solid lightgrey;
     border-radius: 24px;
     width: 100%;
-    padding: 16px 0 8px 0;
-
+    padding: 16px 0;
+    background-color: white;
     textarea {
         outline: 0;
         border: 0;
         width: 100%;
-        padding-left: 16px;
+        padding: 0 16px;
         resize: none;
         height: 64px;
         border-radius: 24px;
 
         &::-webkit-scrollbar {
             display: none;
+        }
+        &:disabled {
+            background-color: white;
         }
     }
 }
@@ -360,4 +364,25 @@ mat-drawer {
 
 .textfield-content {
     margin-top: 16px;
+}
+
+.send-button {
+    &:disabled {
+        svg path {
+            fill: var(--textGray);
+        }
+    } 
+}
+
+.empty-chat-container {
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 32px;
+    span {
+        font-size: 24px;
+        font-weight: bold;
+        color: var(--textGray);
+    }
 }
