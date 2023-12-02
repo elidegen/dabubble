@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, inject, HostListener } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogEditChannelComponent } from '../dialog-edit-channel/dialog-edit-channel.component';
 import { DialogAddToGroupComponent } from '../dialog-add-to-group/dialog-add-to-group.component';
@@ -65,6 +65,14 @@ export class MainChatComponent implements OnInit {
     });
   }
 
+  @HostListener('document:click', ['$event'])
+  checkClick(event: Event) {
+    const clickedElement = event.target as HTMLElement;
+    if (!clickedElement.classList.contains('reaction') && !clickedElement.classList.contains('hostlistener-dont-trigger') && !clickedElement.classList.contains('emojiPicker') && this.toggled) {
+      this.toggled = false;
+    }
+  }
+  
   ngOnDestroy() {
     if (this.unSubMessages) {
       this.unSubMessages();
@@ -280,10 +288,7 @@ export class MainChatComponent implements OnInit {
   }
 
   addEmoji(event: any, messageId: any) {
-    console.log(event);
-    let emojiString;
-    emojiString = event["emoji"].native
-    console.log(emojiString);
+    let emojiString = event["emoji"].native;
     this.toggled = false;
     this.addReaction(emojiString, messageId)
   }

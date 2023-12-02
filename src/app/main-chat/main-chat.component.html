@@ -83,7 +83,7 @@
               <button mat-icon-button (click)="addReaction('🙌', message.id)"> 
                 <img src="assets/img/emojis/hands.svg" alt="">
               </button>
-              <button (click)="toggled = true" mat-icon-button>
+              <button class="hostlistener-dont-trigger" (click)="toggled = true" mat-icon-button>
                 <img  src="assets/img/icons/add_reaction.svg"  alt="" >             
               </button>
               <button (click)="openThread(message)"mat-icon-button>
