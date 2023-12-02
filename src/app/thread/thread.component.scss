@@ -3,6 +3,7 @@ mat-card {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    width: 30vw;
 }
 
 mat-card-header {
@@ -10,6 +11,9 @@ mat-card-header {
     padding-bottom: 8px;
 }
 
+.emoji-fit {
+    font-size: 20px;
+}
 
 header {
     display: flex;

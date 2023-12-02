@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card (click)="closeEmojiPicker()">
   <mat-card-header>
     <header>
       <div class="header">
@@ -78,7 +78,7 @@
 
             <div class="reaction-emoji-container">
               <button class="reaction-emoji-button" *ngFor="let emoji of thread.reactionCount | keyvalue" >
-                <img src="{{emoji.key}}"/>
+                <span class="emoji-fit">{{emoji.key}}</span>
                 <span>{{emoji.value}}</span>
               </button>
             </div>
@@ -94,7 +94,7 @@
           </button>
         </div>
       </div>
-      <emoji-mart *ngIf="toggled" class="emojiPicker" (emojiClick)="addEmoji($event)"></emoji-mart>
+      <emoji-mart *ngIf="this.emojiService.showThreadEmojiPicker == true" class="emojiPicker" (emojiClick)="addEmoji($event)"></emoji-mart>
     </section>
 
   </mat-card-content>
