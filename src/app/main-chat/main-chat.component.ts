@@ -4,11 +4,11 @@ import { DialogEditChannelComponent } from '../dialog-edit-channel/dialog-edit-c
 import { DialogAddToGroupComponent } from '../dialog-add-to-group/dialog-add-to-group.component';
 import { DialogShowGroupMemberComponent } from '../dialog-show-group-member/dialog-show-group-member.component';
 import { MatDrawer } from '@angular/material/sidenav';
-import { Firestore, addDoc, arrayUnion, collection, doc, updateDoc } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, doc, updateDoc } from '@angular/fire/firestore';
 import { ChatService } from '../chat.service';
 import { Channel } from 'src/models/channel.class';
 import { Message } from 'src/models/message.class';
-import { DocumentData, DocumentReference, getDoc, getDocs, onSnapshot, orderBy, query, setDoc } from 'firebase/firestore';
+import { DocumentData, DocumentReference, getDoc, onSnapshot, orderBy, query, setDoc } from 'firebase/firestore';
 import { UserService } from '../user.service';
 import { UserData } from '../interfaces/user-interface';
 import { Reaction } from 'src/models/reaction.class';
@@ -42,7 +42,6 @@ export class MainChatComponent implements OnInit {
   showEmojiPick: boolean = false;
   toggled: boolean = false;
 
-
   constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public threadService: ThreadService,) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
@@ -68,11 +67,11 @@ export class MainChatComponent implements OnInit {
   @HostListener('document:click', ['$event'])
   checkClick(event: Event) {
     const clickedElement = event.target as HTMLElement;
-    if (!clickedElement.classList.contains('reaction') && !clickedElement.classList.contains('hostlistener-dont-trigger') && !clickedElement.classList.contains('emojiPicker') && this.toggled) {
-      this.toggled = false;
+    if (!clickedElement.classList.contains('reaction') && !clickedElement.classList.contains('hostlistener-dont-trigger') && !clickedElement.classList.contains('emojiPicker')) {
+      console.log('warum gehts noicht?');
     }
   }
-  
+
   ngOnDestroy() {
     if (this.unSubMessages) {
       this.unSubMessages();

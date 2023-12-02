@@ -71,7 +71,6 @@
                     <span  *ngIf="message.threadCount >= 2"   class="comments color-purple2-text"> {{message.threadCount}} Comments</span>
                     <span *ngIf="message.threadCount > 0" class="last-comment">Last Comment {{message.lastThreadTime}}</span>
                   </div>
-
                 </div>
               </div>
             </div>
@@ -95,10 +94,7 @@
             </div>
             <emoji-mart *ngIf="toggled" class="emojiPicker" (emojiClick)="addEmoji($event,message.id)"></emoji-mart>
           </div>
-       
-      
         </section>
-      
       </ng-container>
     </mat-card-content>
 
@@ -130,7 +126,6 @@
       </div>
     </mat-card-content>
   </mat-card>
-
 
   <mat-drawer #thread mode="side" position="end">
     <app-thread (closeThread)="onCloseThread()"></app-thread>
