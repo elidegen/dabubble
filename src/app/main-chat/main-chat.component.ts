@@ -214,24 +214,28 @@ export class MainChatComponent implements OnInit {
       if (existingReaction) {
         // Prüfe, ob der aktuelle Benutzer der Ersteller der Reaktion ist
         if (existingReaction.creatorId === this.currentUser.id) {
-          // Der Benutzer möchte seine eigene Reaktion entfernen
-          currentMessage.reaction = currentMessage.reaction.filter((r: { emoji: any; }) => r.emoji !== emoji);
+          // Wenn ja, und der Benutzer möchte seine eigene Reaktion entfernen
+          existingReaction.count -= 1; // Dekrementiere den Zähler
+          // Wenn der Zähler 0 erreicht, entferne die Reaktion komplett
+          if (existingReaction.count === 0) {
+            currentMessage.reaction = currentMessage.reaction.filter((r: { emoji: any; }) => r.emoji !== emoji);
+          }
         } else {
-          // Reaktion existiert bereits, und der aktuelle Benutzer ist nicht der Ersteller
-          // Nichts tun oder Feedback geben, dass nur der Ersteller die Reaktion entfernen kann
+          // Der aktuelle Benutzer ist nicht der Ersteller, erhöhe den Zähler
+          existingReaction.count += 1; // Inkrementiere den Zähler
         }
       } else {
-        // Emoji-Reaktion existiert noch nicht, erstelle eine neue mit dem aktuellen Benutzer als Ersteller
+        // Emoji-Reaktion existiert noch nicht, erstelle eine neue
         currentMessage.reaction.push({
           emoji: emoji,
-          creatorId: this.currentUser.id, // Speichere die ID des Benutzers, der die Reaktion erstellt
-          creatorName: this.currentUser.name, // Optional: Speichere den Namen des Benutzers
+          creatorId: this.currentUser.id, // Der Benutzer, der die Reaktion erstellt
+          creatorName: this.currentUser.name, // Optional: Der Name des Benutzers
           count: 1 // Starte den Zähler bei 1
         });
       }
   
       // Aktualisiere das Dokument in Firestore
-      updateDoc(subReactionColRef, {
+      await updateDoc(subReactionColRef, {
         reaction: currentMessage.reaction
       });
     }
@@ -324,7 +328,7 @@ export class MainChatComponent implements OnInit {
 
   openEmojiPickerChat() {
     setTimeout(() => {
-      this.emojiService.showMainChatEmojiPicker = true;
+      this.emojiService.showTextChatEmojiPicker = true;
     }, 1);
   }
 
@@ -333,6 +337,7 @@ export class MainChatComponent implements OnInit {
   closeEmojiPicker() {
     if (this.emojiService.showMainChatEmojiPicker == true && this.emojiService.emojiString == "") {
       this.emojiService.showMainChatEmojiPicker = false;
+      this.emojiService.showTextChatEmojiPicker = false;
     }
   }
 
@@ -344,11 +349,15 @@ export class MainChatComponent implements OnInit {
       this.addReaction(this.emojiService.emojiString, this.emojiService.messageId)
       this.emojiService.showMainChatEmojiPicker = false;
     }
-    this.emojiService.addEmojiMainChat(event);
-  console.log("das ist das Emoji für die Textnachricht",this.emojiService.emojiString);
-   this.message.content += this.emojiService.emojiString;
+   
   }
 
+
+  addEmojiTextField($event: any) {
+    this.emojiService.addEmojiTextChat($event);
+    console.log("das ist das Emoji für die Textnachricht",this.emojiService.emojiString);
+     this.message.content += this.emojiService.emojiString;
+  }
 
   async openThread(message: Message) {
     let messageId = message.id;

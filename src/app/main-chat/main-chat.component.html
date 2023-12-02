@@ -145,6 +145,7 @@
       </ng-container>
     </mat-card-content>
     <emoji-mart #emojiPicker *ngIf="this.emojiService.showMainChatEmojiPicker == true"  class="emojiPicker" (emojiClick)="addEmoji($event)"></emoji-mart>
+    <emoji-mart #emojiPicker *ngIf="this.emojiService.showTextChatEmojiPicker == true"  class="emojiPicker" (emojiClick)="addEmojiTextField($event)"></emoji-mart>
     <mat-card-content class="empty-chat-container" *ngSwitchCase="'empty'">
       <span>Du hast keinen Channel ausgewählt</span>
     </mat-card-content>
