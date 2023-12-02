@@ -68,11 +68,11 @@
       <div class="w100 headline">
         <h1>New Message</h1>
          <div class="add-members-container">
-                <input class="w100 input-members" type="text" placeholder="To: @someone" [(ngModel)]="searchInput"
+                <input #search class="w100 input-members" type="text" placeholder="To: @someone" [(ngModel)]="searchInput"
                     (input)="filterUsers()" (click)="this.isInputFocused = true;">
 
                 <div class="user-search-container" *ngIf="isInputFocused" (click)="userSelected($event)">
-                    <button #userContainer class="user-container" *ngFor="let user of filteredUsers" (click)="selectUser(user)">
+                    <button class="user-container" *ngFor="let user of filteredUsers" (click)="selectUser(user)">
                         <div class="profile-container">
                             <img src="{{user.picture}}" alt="profile">
                             <div class="online-status"></div>

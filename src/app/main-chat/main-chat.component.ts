@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, inject, HostListener, ViewChildren, QueryList } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, inject, HostListener } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogEditChannelComponent } from '../dialog-edit-channel/dialog-edit-channel.component';
 import { DialogAddToGroupComponent } from '../dialog-add-to-group/dialog-add-to-group.component';
@@ -55,7 +55,7 @@ export class MainChatComponent implements OnInit {
   filteredUsers: User[] = [];
   users: User[] = [];
   selectedUsers: any[] = [];
-
+  @ViewChild('search') search!: ElementRef;
   // ----------------------------------------------------
 
 
@@ -482,6 +482,7 @@ export class MainChatComponent implements OnInit {
 
   selectUser(user: User) {
       this.chatService.createDirectMessage(user);
+      this.search.nativeElement.value = '';
   }
 
   @HostListener('document:click', ['$event'])
