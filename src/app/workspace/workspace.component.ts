@@ -40,12 +40,18 @@ export class WorkspaceComponent implements OnInit {
   }
 
   getPersonalChannels() {
+    console.log('allch', this.allChannels);
+    console.log('curentuser', this.currentUser);
+    
     this.yourChannels = [];
     this.allChannels.forEach(channel => {
       if (channel.members.some((member: { id: string; }) => member.id === this.currentUser.id)) {
+        console.log(channel);
+        
         this.yourChannels.push(channel);
       }
     });
+    console.log('yourchannels', this.yourChannels);
   }
 
   openDialog() {

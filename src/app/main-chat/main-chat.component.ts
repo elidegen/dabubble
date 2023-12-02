@@ -43,7 +43,7 @@ export class MainChatComponent implements OnInit {
   toggled: boolean = false;
 
 
-  constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public threadService: ThreadService, ) {
+  constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public threadService: ThreadService,) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
   }
@@ -114,7 +114,7 @@ export class MainChatComponent implements OnInit {
           }
           this.message.content = '';
         });
-        
+
     }
   }
 
@@ -145,8 +145,8 @@ export class MainChatComponent implements OnInit {
 
     };
   }
- 
-  
+
+
   loadMessages() {
     if (this.currentChat?.id) {
       const messageCollection = collection(this.firestore, `channels/${this.currentChat.id}/messages`);
@@ -165,6 +165,7 @@ export class MainChatComponent implements OnInit {
       });
     }
   }
+
   setEmojiCount(reactions: any[]) {
     let counter: { [key: string]: number } = {};
     reactions.forEach(react => {
@@ -242,7 +243,6 @@ export class MainChatComponent implements OnInit {
     return date === formattedDate;
   }
 
-
   getCurrentDate(): string {
     const currentDate = new Date();
     return currentDate.toDateString();
@@ -272,17 +272,17 @@ export class MainChatComponent implements OnInit {
     }
     this.organizedMessages = Object.entries(this.messagesByDate).map(([date, messages]) => ({ date, messages }));
     this.organizedMessages = this.organizedMessages;
-    console.log('Show',this.organizedMessages)
+    console.log('Show', this.organizedMessages)
   }
-
 
   showEmojiPicker() {
-    this.showEmojiPick= true;
+    this.showEmojiPick = true;
   }
-  addEmoji(event:any, messageId: any) {
+
+  addEmoji(event: any, messageId: any) {
     console.log(event);
     let emojiString;
-   emojiString =  event["emoji"].native
+    emojiString = event["emoji"].native
     console.log(emojiString);
     this.toggled = false;
     this.addReaction(emojiString, messageId)
@@ -294,7 +294,6 @@ export class MainChatComponent implements OnInit {
     this.threadDrawer.open();
     this.threadService.openMessage = message;
   }
-
 
   async createThread(messageId: any) {
     const threadCollectionRef = collection(this.firestore, 'threads');
@@ -319,17 +318,17 @@ export class MainChatComponent implements OnInit {
       const channelDocRef = doc(this.firestore, `channels/${this.currentChat.id}`);
       try {
         const channelDocSnap = await getDoc(channelDocRef);
-  
+
         if (channelDocSnap.exists()) {
           const channelData = channelDocSnap.data();
           const channelMembersJson = channelData?.['members'] || [];
           const channelMembers = JSON.parse(channelMembersJson);
-  
+
           console.log('Channel Members:', channelMembers);
-          
+
           this.allChannelMembers = channelMembers;
           this.firstThreeItems = this.allChannelMembers.slice(0, 3);
-          
+
         } else {
           console.log('Channel document does not exist.');
         }
@@ -337,11 +336,7 @@ export class MainChatComponent implements OnInit {
         console.error('Error getting channel document:', error);
       }
     }
-    console.log('all',this.allChannelMembers);
+    console.log('all', this.allChannelMembers);
     console.log('3', this.firstThreeItems);
-    
-    
   }
-
-
 }
