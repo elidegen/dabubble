@@ -343,3 +343,35 @@ header {
 .textfield-content {
     margin-top: 16px;
 }
+
+.text-field-container {
+    border: 1px solid lightgrey;
+    border-radius: 24px;
+    width: 100%;
+    padding: 16px 0;
+    background-color: white;
+    textarea {
+        outline: 0;
+        border: 0;
+        width: 100%;
+        padding: 0 16px;
+        resize: none;
+        height: 64px;
+        border-radius: 24px;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+        &:disabled {
+            background-color: white;
+        }
+    }
+}
+
+.send-button {
+    &:disabled {
+        svg path {
+            fill: var(--textGray);
+        }
+    } 
+}
