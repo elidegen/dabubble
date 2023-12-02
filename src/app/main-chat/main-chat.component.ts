@@ -191,7 +191,6 @@ export class MainChatComponent implements OnInit {
           message.threadCount = await this.threadService.countThreadMessages(message.id);
           console.log("Anzahl der Nachrichten im Thread", message.threadCount);
           console.log("Das ist die Nachricht mit dem Threadcount", message);
-          message.reactionCount = this.setEmojiCount(message.reaction);
           return message;
         }));
         this.organizeMessagesByDate();
@@ -219,20 +218,41 @@ export class MainChatComponent implements OnInit {
 
   async addReaction(emoji: any, messageId: any) {
     if (this.currentChat?.id) {
-      console.log('emoji', emoji);
-      
       const subReactionColRef = doc(collection(this.firestore, `channels/${this.currentChat.id}/messages/`), messageId);
       let messageIndex = this.allMessages.findIndex(message => message.id === messageId);
       let currentMessage = this.allMessages[messageIndex];
-      const reactionItem = { emoji, creatorId: this.currentUser.id, creator: this.currentUser.name };
-      if (currentMessage.reaction.some((emojiArray: { emoji: string; creatorId: string; }) => emojiArray.emoji === emoji && emojiArray.creatorId === this.currentUser.id)) {
-        currentMessage.reaction = currentMessage.reaction.filter((emojiArray: { emoji: string; creatorId: string; }) => !(emojiArray.emoji === emoji && emojiArray.creatorId === this.currentUser.id));
+  
+      let existingReaction = currentMessage.reaction.find((r: { emoji: any; }) => r.emoji === emoji);
+      
+      if (existingReaction) {
+        // Prüfe, ob der aktuelle Benutzer der Ersteller der Reaktion ist
+        if (existingReaction.creatorId === this.currentUser.id) {
+          // Der Benutzer möchte seine eigene Reaktion entfernen
+          currentMessage.reaction = currentMessage.reaction.filter((r: { emoji: any; }) => r.emoji !== emoji);
+        } else {
+          // Reaktion existiert bereits, und der aktuelle Benutzer ist nicht der Ersteller
+          // Nichts tun oder Feedback geben, dass nur der Ersteller die Reaktion entfernen kann
+        }
       } else {
-        currentMessage.reaction.push(reactionItem);
+        // Emoji-Reaktion existiert noch nicht, erstelle eine neue mit dem aktuellen Benutzer als Ersteller
+        currentMessage.reaction.push({
+          emoji: emoji,
+          creatorId: this.currentUser.id, // Speichere die ID des Benutzers, der die Reaktion erstellt
+          creatorName: this.currentUser.name, // Optional: Speichere den Namen des Benutzers
+          count: 1 // Starte den Zähler bei 1
+        });
       }
-      updateDoc(subReactionColRef, this.updateMessage(currentMessage));
+  
+      // Aktualisiere das Dokument in Firestore
+      updateDoc(subReactionColRef, {
+        reaction: currentMessage.reaction
+      });
     }
   }
+  
+  
+    
+  
 
 
   updateMessage(message: any) {
@@ -339,6 +359,7 @@ export class MainChatComponent implements OnInit {
     }
     this.emojiService.addEmojiMainChat(event);
   console.log("das ist das Emoji für die Textnachricht",this.emojiService.emojiString);
+   this.message.content += this.emojiService.emojiString;
   }
 
 
