@@ -161,7 +161,7 @@
               </button>
             </div>
 
-            <button [disabled]="!currentChat" mat-icon-button>
+            <button [disabled]="!currentChat"  (click)="openEmojiPicker()"mat-icon-button>
               <img src="assets/img/icons/smiley.svg" alt="" />
             </button>
 
@@ -182,7 +182,7 @@
   </mat-card>
 
   <mat-drawer #thread mode="side" position="end">
-    <app-thread (closeThread)="onCloseThread()"></app-thread>
+    <app-thread style="width: 25%" (closeThread)="onCloseThread()"></app-thread>
   </mat-drawer>
 
 </mat-drawer-container>

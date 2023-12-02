@@ -6,10 +6,11 @@ import { AuthService } from '../auth.service';
 import { UserData } from '../interfaces/user-interface';
 import { ChatService } from '../chat.service';
 import { Firestore, addDoc, arrayUnion, collection, doc, updateDoc } from '@angular/fire/firestore';
-import { DocumentData, DocumentReference, getDoc, onSnapshot, orderBy, query} from 'firebase/firestore';
+import { DocumentData, DocumentReference, getDoc, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { Channel } from 'src/models/channel.class';
 import { Reaction } from 'src/models/reaction.class';
 import { Message } from 'src/models/message.class';
+import { EmojiService } from '../emoji.service';
 
 @Component({
   selector: 'app-thread',
@@ -37,12 +38,12 @@ export class ThreadComponent implements OnInit {
 
   @Output() closeThread: EventEmitter<void> = new EventEmitter<void>();
 
-  constructor(public threadService: ThreadService, public userService: UserService, public authService: AuthService, public chatService: ChatService) {
+  constructor(public threadService: ThreadService, public userService: UserService, public authService: AuthService, public chatService: ChatService, public emojiService: EmojiService) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
   }
 
-  ngOnInit() {   
+  ngOnInit() {
     this.threadService.openMessage$.subscribe((openMessage) => {
       console.log('open', openMessage);
       if (openMessage) {
@@ -85,18 +86,36 @@ export class ThreadComponent implements OnInit {
         .then(() => {
           this.message.content = '';
           console.log('Message sent to thread');
-        });  
+        });
     }
-  this.threadService.updateThreadCount(this.threadService.currentMessage, this.message.time);
+    this.threadService.updateThreadCount(this.threadService.currentMessage, this.message.time);
   }
 
 
 
-  
-  addEmoji($event:any) {
-    console.log($event);
-    this.toggled = false;
+
+  openEmojiPicker(messageId: any) {
+    setTimeout(() => {
+      this.emojiService.showThreadEmojiPicker = true;
+    }, 1);
+    this.emojiService.messageId = messageId;
+    console.log("thread id in der openEmojiPicker Funktion",messageId);
   }
+
+
+  closeEmojiPicker() {
+    if (this.emojiService.showThreadEmojiPicker == true && this.emojiService.emojiString == "") {
+      this.emojiService.showThreadEmojiPicker = false;
+    }
+  }
+
+ addEmoji($event: any) {
+  this.emojiService.addEmojiThread($event);
+  this.addReaction(this.emojiService.emojiString, this.emojiService.messageId)
+  console.log(this.emojiService.emojiString, this.emojiService.messageId)
+  this.emojiService.showThreadEmojiPicker = false;
+ }
+
 
 
 

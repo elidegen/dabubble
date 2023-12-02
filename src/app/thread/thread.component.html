@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card (click)="closeEmojiPicker()">
   <mat-card-header>
     <header>
       <div class="header">
@@ -64,7 +64,7 @@
 
             <div class="reaction-emoji-container">
               <button class="reaction-emoji-button" *ngFor="let emoji of thread.reactionCount | keyvalue" >
-                <img src="{{emoji.key}}"/>
+                <span class="emoji-fit">{{emoji.key}}</span>
                 <span>{{emoji.value}}</span>
               </button>
             </div>
@@ -72,13 +72,13 @@
         </div>
         
         <div class="reaction" [ngClass]="{'own-message': thread.creator == currentUser.name}">
-          <button mat-icon-button (click)="addReaction('assets/img/emojis/checkGreen.svg', thread.id)">
+          <button mat-icon-button (click)="addReaction('✅', thread.id)">
             <img src="assets/img/emojis/checkGreen.svg" alt="">
           </button>
-          <button mat-icon-button (click)="addReaction('assets/img/emojis/hands.svg', thread.id)"> 
+          <button mat-icon-button (click)="addReaction('🙌', thread.id)"> 
             <img src="assets/img/emojis/hands.svg" alt="">
           </button>
-          <button mat-icon-button (click)="toggled = true" >
+          <button mat-icon-button (click)="openEmojiPicker(thread.id)" >
             <img src="assets/img/icons/add_reaction.svg" alt="">
           </button>
           <button mat-icon-button *ngIf="message.creator == currentUser.name">
@@ -86,7 +86,7 @@
           </button>
         </div>
       </div>
-      <emoji-mart *ngIf="toggled" class="emojiPicker" (emojiClick)="addEmoji($event)"></emoji-mart>
+      <emoji-mart *ngIf="this.emojiService.showThreadEmojiPicker == true" class="emojiPicker" (emojiClick)="addEmoji($event)"></emoji-mart>
     </section>
 
   </mat-card-content>

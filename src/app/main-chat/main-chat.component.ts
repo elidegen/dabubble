@@ -294,24 +294,35 @@ export class MainChatComponent implements OnInit {
   openEmojiPicker(messageId: any) {
     setTimeout(() => {
       this.emojiService.showMainChatEmojiPicker = true;
-    }, 500);
+    }, 1);
 
     this.emojiService.messageId = messageId;
   }
+
+
+  openEmojiPickerChat() {
+    setTimeout(() => {
+      this.emojiService.showMainChatEmojiPicker = true;
+    }, 1);
+  }
+
+ 
 
   closeEmojiPicker() {
     if (this.emojiService.showMainChatEmojiPicker == true && this.emojiService.emojiString == "") {
       this.emojiService.showMainChatEmojiPicker = false;
     }
-
   }
 
 
 
   addEmoji(event: any) {
-    this.emojiService.addEmojiMainChat(event);
-    this.addReaction(this.emojiService.emojiString, this.emojiService.messageId)
-    this.emojiService.showMainChatEmojiPicker = false;
+    if (this.emojiService.messageId != "") {
+      this.emojiService.addEmojiMainChat(event);
+      this.addReaction(this.emojiService.emojiString, this.emojiService.messageId)
+      this.emojiService.showMainChatEmojiPicker = false;
+    }
+  console.log("das ist das Emoji für die Textnachricht",this.emojiService.emojiString);
   }
 
 
