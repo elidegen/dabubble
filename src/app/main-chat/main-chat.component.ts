@@ -55,7 +55,6 @@ export class MainChatComponent implements OnInit {
   filteredUsers: User[] = [];
   users: User[] = [];
   selectedUsers: any[] = [];
-  @ViewChildren('userContainer') userContainers!: QueryList<any>;
 
   // ----------------------------------------------------
 
@@ -483,19 +482,8 @@ export class MainChatComponent implements OnInit {
     event.stopPropagation();
   }
 
-  selectUser(user: User, i: number) {
-    this.highlightButton(i);
-    let index = this.selectedUsers.findIndex(obj => obj.id === user.id);
-    if (index == -1) {
-      this.selectedUsers.push(user);
-    }
-  }
-
-  highlightButton(index: number) {
-    const userContainer = this.userContainers.toArray()[index];
-    if (userContainer) {
-      userContainer.nativeElement.classList.toggle('user-container-highlighted');
-    }
+  selectUser(user: User) {
+      this.chatService.createDirectMessage(user);
   }
 
   @HostListener('document:click', ['$event'])
