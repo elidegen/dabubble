@@ -206,16 +206,18 @@ export class MainChatComponent implements OnInit {
 
   async addReaction(emoji: any, messageId: any) {
     if (this.currentChat?.id) {
+      console.log('emoji', emoji);
+      
       const subReactionColRef = doc(collection(this.firestore, `channels/${this.currentChat.id}/messages/`), messageId);
       let messageIndex = this.allMessages.findIndex(message => message.id === messageId);
       let currentMessage = this.allMessages[messageIndex];
-      const reactionItem = { emoji, creatorId: this.currentUser.id };
+      const reactionItem = { emoji, creatorId: this.currentUser.id, creator: this.currentUser.name };
       if (currentMessage.reaction.some((emojiArray: { emoji: string; creatorId: string; }) => emojiArray.emoji === emoji && emojiArray.creatorId === this.currentUser.id)) {
         currentMessage.reaction = currentMessage.reaction.filter((emojiArray: { emoji: string; creatorId: string; }) => !(emojiArray.emoji === emoji && emojiArray.creatorId === this.currentUser.id));
       } else {
         currentMessage.reaction.push(reactionItem);
       }
-      updateDoc(subReactionColRef, this.updateMessage(this.allMessages[messageIndex]));
+      updateDoc(subReactionColRef, this.updateMessage(currentMessage));
     }
   }
 

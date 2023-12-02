@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, OnInit, inject } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit, inject, ViewChild, ElementRef } from '@angular/core';
 import { ThreadService } from '../thread.service';
 import { Thread } from 'src/models/thread.class';
 import { UserService } from '../user.service';
@@ -19,7 +19,6 @@ import { EmojiService } from '../emoji.service';
 })
 
 export class ThreadComponent implements OnInit {
-  newThread = new Thread();
   threadContent = "";
   firestore: Firestore = inject(Firestore);
   currentChat!: Channel | undefined;
@@ -35,8 +34,11 @@ export class ThreadComponent implements OnInit {
   currentUser: UserData;
   currentThread: [] = [];
   toggled: boolean = false;
+  @ViewChild('editorThread') editorThread!: ElementRef;
 
   @Output() closeThread: EventEmitter<void> = new EventEmitter<void>();
+  edit: boolean = false;
+  editingThreadMessage: string | undefined;
 
   constructor(public threadService: ThreadService, public userService: UserService, public authService: AuthService, public chatService: ChatService, public emojiService: EmojiService) {
     userService.getCurrentUserFromLocalStorage();
@@ -229,6 +231,46 @@ export class ThreadComponent implements OnInit {
 
   onCloseClick() {
     this.closeThread.emit();
+  }
+
+  editThreadMessage(message: Message) {
+    console.log('Nachricht', message);
+    console.log('channel is', this.currentChat);
+    
+    if (this.currentMessage) {
+      if (message.creator == this.currentUser.name) {
+        this.edit = true;
+        this.editingThreadMessage = message.id;
+        console.log('bearbeitet', this.editingThreadMessage);
+        
+      }
+    }
+  }
+
+  async updateMessageContent(message: Message) {
+    let messageId = message.id
+    const messageColRef = doc(collection(this.firestore, `threads/${this.currentMessage?.id}/threadMessages/`), messageId);
+    this.setMessageValues(message);
+    await updateDoc(messageColRef, this.message.toJSON()).catch((error) => {
+      console.error('Error updating document:', error);
+    });
+    this.edit = false;
+  }
+
+
+  setMessageValues(message: Message) {
+    this.message.id = message.id;
+    this.message.creator = message.creator
+    this.message.creatorId = message.creatorId;
+    this.message.date = message.date;
+    this.message.lastThreadTime = message.lastThreadTime;
+    this.message.profilePic = message.profilePic;
+    this.message.reaction = message.reaction;
+    this.message.reactionCount = message.reactionCount;
+    this.message.time = message.time;
+    this.message.threadCount = message.threadCount;
+    this.message.timeInMs = message.timeInMs;
+    this.message.content = this.editorThread.nativeElement.value;
   }
 
 
