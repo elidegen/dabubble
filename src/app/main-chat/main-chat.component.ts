@@ -234,7 +234,9 @@ export class MainChatComponent implements OnInit {
           }
         } else {
           // Der aktuelle Benutzer ist nicht der Ersteller, erhöhe den Zähler
-          existingReaction.count += 1; // Inkrementiere den Zähler
+          existingReaction.count += 1; 
+          existingReaction.creatorName = this.currentUser.name;
+          // Inkrementiere den Zähler
         }
       } else {
         // Emoji-Reaktion existiert noch nicht, erstelle eine neue
