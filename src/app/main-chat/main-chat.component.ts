@@ -43,6 +43,7 @@ export class MainChatComponent implements OnInit {
   placeholder: any;
   edit: boolean = false;
   @ViewChild('editor') editor!: ElementRef;
+  editingMessage: string | undefined;
 
 
   constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public threadService: ThreadService,) {
@@ -347,6 +348,7 @@ export class MainChatComponent implements OnInit {
     if (this.currentChat) {
       if (message.creator == this.currentUser.name) {
         this.edit = true;
+        this.editingMessage = message.id; // Speichern Sie die ID der bearbeiteten Nachricht
       }
     }
   }
