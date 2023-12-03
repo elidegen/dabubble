@@ -22,7 +22,7 @@
           <div class="channel-container">
 
             <div class="channel-button-container" *ngFor="let channel of this.yourChannels;">
-              <button (click)="renderChat(channel)" mat-button># {{channel.name}}</button>
+              <button (click)="renderChannel(channel)" mat-button># {{channel.name}}</button>
             </div>
 
             <button (click)="openDialog()" class="add_channel_button">
@@ -51,64 +51,20 @@
               </svg>Direct messages
             </mat-panel-title>
           </mat-expansion-panel-header>
+
           <div class="direct-message-container">
-            <div class="contact-container">
+
+            <button class="direct-message-button br-32" *ngFor="let directMessage of personalDirectMessages" (click)="renderDirectMessage(directMessage)">
               <div class="profile-message-container">
-                <img src="assets/img/avatars/avatar_male2.svg" alt="male2">
+                <img class="d-flex" src="{{ getUserProfileForDirectMessage(directMessage.members) }}" alt="male2">
                 <div class="online-status"></div>
               </div>
-              <h3>Maximillian Schneider</h3>
-            </div>
-            <div class="contact-container">
-              <div class="profile-message-container">
-                <img src="assets/img/avatars/avatar_male2.svg" alt="male2">
-                <div class="online-status"></div>
-              </div>
-              <h3>Maximillian Schneider</h3>
-            </div>
-            <div class="contact-container">
-              <div class="profile-message-container">
-                <img src="assets/img/avatars/avatar_male2.svg" alt="male2">
-                <div class="online-status"></div>
-              </div>
-              <h3>Maximillian Schneider</h3>
-            </div>
-            <div class="contact-container">
-              <div class="profile-message-container">
-                <img src="assets/img/avatars/avatar_male2.svg" alt="male2">
-                <div class="online-status"></div>
-              </div>
-              <h3>Maximillian Schneider</h3>
-            </div>
-            <div class="contact-container">
-              <div class="profile-message-container">
-                <img src="assets/img/avatars/avatar_male2.svg" alt="male2">
-                <div class="online-status"></div>
-              </div>
-              <h3>Maximillian Schneider</h3>
-            </div>
-            <div class="contact-container">
-              <div class="profile-message-container">
-                <img src="assets/img/avatars/avatar_male2.svg" alt="male2">
-                <div class="online-status-direct"></div>
-              </div>
-              <h3>Maximillian Schneider</h3>
-            </div>
-            <div class="contact-container">
-              <div class="profile-message-container">
-                <img src="assets/img/avatars/avatar_male2.svg" alt="male2">
-                <div class=" online-status-direct"></div>
-              </div>
-              <h3>Maximillian Schneider</h3>
-            </div>
-            <div class="contact-container">
-              <div class="profile-message-container">
-                <img src="assets/img/avatars/avatar_male2.svg" alt="male2">
-                <div class="online-status-direct"></div>
-              </div>
-              <h3>Maximillian Schneider</h3>
-            </div>
+
+              <h3>{{ getOtherUserName(directMessage.members) }}</h3>
+            </button>
+
           </div>
+
         </mat-expansion-panel>
       </mat-accordion>
     </div>

@@ -104,9 +104,13 @@ mat-card-header {
 
 mat-card {
     height: calc(100vh - 110px);
+}
+
+.chat-window-container {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    height: 100%;
 }
 
 .date-container {

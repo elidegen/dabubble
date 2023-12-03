@@ -1,25 +1,108 @@
-<div class="add-members-container">
-    <input class="w100 input-members" type="text" placeholder="Enter name" [(ngModel)]="searchInput"
-        (input)="filterUsers()" (click)="this.isInputFocused = true;">
-
-    <div class="user-search-container" *ngIf="isInputFocused" (click)="userSelected($event)">
-        <button #userContainer class="user-container" *ngFor="let user of filteredUsers; let i = index"
-            (click)="selectUser(user, i)">
-            <div class="profile-container">
-                <img src="{{user.picture}}" alt="profile">
-                <div class="online-status"></div>
-            </div>
-            <span>{{user.name}}</span>
-        </button>
-        <span *ngIf="filteredUsers.length < 1">No matching contact</span>
-    </div>
-    <div class="w100 selected-user-container">
-        <div class="selected-user" *ngFor="let item of this.selectedUsers">
-            <img src="{{item.picture}}" alt="">
-            <span>{{item.name}}</span>
-            <button mat-icon-button (click)="removeUser(item)">
-                <mat-icon> close </mat-icon>
-            </button>
+<mat-card-content #messageContainer class="p-0 main-chat-container">
+    <ng-container  *ngFor="let organizedMessage of this.organizedMessages.slice()">
+      <section>
+        <div class="date-container">
+          <div class="separator"></div>
+          <div class="time-box">{{  isToday(organizedMessage.date) ? 'Today' : organizedMessage.date }}</div>
+          <div class="separator"></div>
         </div>
+
+        <div class="message-row-container" [ngClass]="{'my-messages': message.creator == currentUser.name}"
+        *ngFor="let message of organizedMessage.messages">
+
+          <div class="message-box">
+            <div class="creator-picture-container">
+              <img src="{{message.profilePic}}" alt="" />
+            </div>
+
+            <div class="message-container">
+              <div class="message-data">
+                <span class="name">{{ message.creator }}</span>
+                <span class="date">{{ message.time }}</span>
+              </div>
+
+              <div [ngSwitch]="edit && message.creator == currentUser.name && editingMessage === message.id">
+                <div
+                  [ngClass]="{'my-message-content': message.creator == currentUser.name, 'message-content': message.creator != currentUser.name}" *ngSwitchCase="false">
+                  <span> {{message.content}}</span>
+                </div>
+                <div *ngIf="message.creator == currentUser.name && editingMessage === message.id">
+                  <div *ngSwitchCase="true" class="text-field-container j-flex-end">
+                    <textarea #editor cols="30" rows="10">{{message.content}}</textarea>
+                    <button class="send-button" mat-icon-button (click)="updateMessageContent(message)" [disabled]="editor.value.length < 1" >
+                      <svg width="23" height="20" viewBox="0 0 23 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2.5 19.2812C2.08333 19.4479 1.6875 19.4112 1.3125 19.1712C0.9375 18.9321 0.75 18.5833 0.75 18.125V13.4687C0.75 13.1771 0.833333 12.9167 1 12.6875C1.16667 12.4583 1.39583 12.3125 1.6875 12.25L10.75 9.99999L1.6875 7.74999C1.39583 7.68749 1.16667 7.54166 1 7.31249C0.833333 7.08333 0.75 6.82291 0.75 6.53124V1.87499C0.75 1.41666 0.9375 1.06749 1.3125 0.827493C1.6875 0.588327 2.08333 0.552076 2.5 0.718743L21.75 8.84374C22.2708 9.07291 22.5312 9.45833 22.5312 9.99999C22.5312 10.5417 22.2708 10.9271 21.75 11.1562L2.5 19.2812Z" fill="#444DF2"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="reaction-container">
+                <div class="reaction-emoji-container">
+                  <button  matTooltip="{{reaction.creatorName}}" class="reaction-emoji-button"  *ngFor="let reaction of message.reaction">
+                    <div (click)="addReaction(reaction.emoji, message.id)" class="emoji-fit">{{ reaction.emoji }}</div>
+                    <span>{{ reaction.count }}</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="reaction" [ngClass]="{'own-message': message.creator == this.userService.currentUser.name}">
+            <button mat-icon-button (click)="addReaction('✅',message.id)">
+              <img src="assets/img/emojis/checkGreen.svg" alt="">
+            </button>
+            <button mat-icon-button (click)="addReaction('🙌', message.id)"> 
+              <img src="assets/img/emojis/hands.svg" alt="">
+            </button>
+            <button class="hostlistener-dont-trigger" (click)= "openEmojiPicker(message.id)" mat-icon-button>
+              <img  src="assets/img/icons/add_reaction.svg"  alt="" >             
+            </button>
+            <button mat-icon-button *ngIf="message.creator == currentUser.name" (click)="editMessage(message)">
+              <img src="assets/img/icons/edit_square.svg" alt="">
+            </button>
+          </div>
+
+        </div>
+      </section>
+    </ng-container>
+
+    <!-- <emoji-mart #emojiPicker *ngIf="this.emojiService.showMainChatEmojiPicker == true"  class="emojiPicker" (emojiClick)="addEmoji($event)"></emoji-mart>
+    <emoji-mart #emojiPicker *ngIf="this.emojiService.showTextChatEmojiPicker == true"  class="emojiPicker" (emojiClick)="addEmojiTextField($event)"></emoji-mart> -->
+
+
+  </mat-card-content>
+  
+  <mat-card-content>
+    <div class="textfield-content">
+      <div class="text-field-container">
+        <textarea [disabled]="!currentChat" (keyup.enter)="sendMessage()" [(ngModel)]="message.content" placeholder="Message to {{currentChat?.name}}"></textarea>
+
+        <div class="message-buttons">
+          <div class="attachments">
+            <div class="border-right">
+              <button [disabled]="!currentChat" mat-icon-button>
+                <img src="assets/img/icons/add.svg" alt="" />
+              </button>
+            </div>
+
+            <button [disabled]="!currentChat"  (click)="openEmojiPickerChat()"mat-icon-button>
+              <img src="assets/img/icons/smiley.svg" alt="" />
+            </button>
+
+            <button [disabled]="!currentChat" mat-icon-button>
+              <img src="assets/img/icons/@.svg" alt="" />
+            </button>
+          </div>
+
+          <button class="send-button" mat-icon-button (click)="sendMessage()" [disabled]="!message.content" >
+            <svg width="23" height="20" viewBox="0 0 23 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2.5 19.2812C2.08333 19.4479 1.6875 19.4112 1.3125 19.1712C0.9375 18.9321 0.75 18.5833 0.75 18.125V13.4687C0.75 13.1771 0.833333 12.9167 1 12.6875C1.16667 12.4583 1.39583 12.3125 1.6875 12.25L10.75 9.99999L1.6875 7.74999C1.39583 7.68749 1.16667 7.54166 1 7.31249C0.833333 7.08333 0.75 6.82291 0.75 6.53124V1.87499C0.75 1.41666 0.9375 1.06749 1.3125 0.827493C1.6875 0.588327 2.08333 0.552076 2.5 0.718743L21.75 8.84374C22.2708 9.07291 22.5312 9.45833 22.5312 9.99999C22.5312 10.5417 22.2708 10.9271 21.75 11.1562L2.5 19.2812Z" fill="#444DF2"/>
+            </svg>
+            
+          </button>
+        </div>
+      </div>
     </div>
-</div>
+  </mat-card-content>

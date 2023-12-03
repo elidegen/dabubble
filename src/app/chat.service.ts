@@ -32,9 +32,7 @@ export class ChatService {
     return collection(this.firestore, 'channels');
   }
 
-  getChatsRef() {
-    return collection(this.firestore, 'chats');
-  }
+
   
   getSingleDocRef(colId: string, docId: string) {
     return doc(collection(this.firestore, colId), docId);
@@ -59,8 +57,10 @@ export class ChatService {
         });
       }
     }
-    this.chatWindow = 'direct';
+    this.chatWindow = 'empty';
   }
+
+  
 
   convertUser(user: any): any {
     return {

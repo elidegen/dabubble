@@ -33,11 +33,15 @@ mat-expansion-panel {
     gap: 16px;
 }
 
-.contact-container {
-    display: flex;
+.direct-message-button {
+    display: flex !important;
     align-items: center;
     gap: 8px;
-    margin-bottom: 8px;
+    padding: 8px 0 8px 8px;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    background: none;
 }
 
 .profile-message-container {
@@ -65,8 +69,11 @@ mat-expansion-panel {
 }
 
 .direct-message-container {
-    max-height: 150px;
+    max-height: 200px;
     overflow: scroll;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 
     &::-webkit-scrollbar {
         display: none;
