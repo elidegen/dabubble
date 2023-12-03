@@ -1,4 +1,4 @@
-import { Component,ViewChild, ElementRef} from '@angular/core';
+import { Component,ViewChild, ElementRef, HostListener} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-profile.component';
 import { UserService } from '../user.service';
@@ -74,6 +74,14 @@ export class HomeComponent {
   logOutUser() {
     this.auth.signOutUser();
     this.router.navigate(['']);
+  }
+
+  @HostListener('document:click', ['$event'])
+  checkClick(event: Event) {
+    const clickedElement = event.target as HTMLElement;
+    if (!clickedElement.classList.contains('user-search-container') && !clickedElement.classList.contains('user-container') && this.isInputFocused && !clickedElement.classList.contains('input-members')) {
+      this.isInputFocused = false;
+    }
   }
 
 }
