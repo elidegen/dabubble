@@ -46,10 +46,7 @@ export class DialogShowGroupMemberComponent implements OnInit {
         const channelDocSnap = await getDoc(channelDocRef);
         if (channelDocSnap.exists()) {
           const channelData = channelDocSnap.data();
-          const channelMembersJson = channelData?.['members'] || [];
-          const channelMembers = JSON.parse(channelMembersJson);
-          console.log('Channel Members:', channelMembers);
-          this.allChannelMembers = channelMembers;
+          this.allChannelMembers =  channelData?.['members'];
           this.updateOnlineStatus();
         } else {
           console.log('Channel document does not exist.');

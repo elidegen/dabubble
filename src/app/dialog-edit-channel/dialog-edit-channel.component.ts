@@ -31,9 +31,6 @@ export class DialogEditChannelComponent implements OnInit {
       if (openChat) {
         this.currentChat = openChat as Channel;
         this.getAllChannelMembers();
-        if (this.unSubChannel) {
-          this.unSubChannel();
-        }
       }
     });
   }
@@ -46,10 +43,7 @@ export class DialogEditChannelComponent implements OnInit {
         const channelDocSnap = await getDoc(channelDocRef);
         if (channelDocSnap.exists()) {
           const channelData = channelDocSnap.data();
-          const channelMembersJson = channelData?.['members'] || [];
-          const channelMembers = JSON.parse(channelMembersJson);
-          console.log('Channel Members:', channelMembers);
-          this.allChannelMembers = channelMembers;
+          this.allChannelMembers = channelData?.['members'];
         } else {
           console.log('Channel document does not exist.');
         }

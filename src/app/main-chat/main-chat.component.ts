@@ -89,13 +89,7 @@ export class MainChatComponent implements OnInit {
 
   }
 
-  // @HostListener('document:click', ['$event'])
-  // checkClick(event: Event) {
-  //   const clickedElement = event.target as HTMLElement;
-  //   if (!clickedElement.classList.contains('reaction') && !clickedElement.classList.contains('hostlistener-dont-trigger') && !clickedElement.classList.contains('emojiPicker') && this.toggled) {
-  //     this.toggled = false;
-  //   }
-  // }
+
 
   ngOnDestroy() {
     if (this.unSubMessages) {
@@ -174,7 +168,7 @@ export class MainChatComponent implements OnInit {
       reaction: [],
       reactionCount: message.reactionCount,
       threadCount: message.threadCount,
-
+      channel: this.currentChat?.name
     };
   }
 
@@ -197,23 +191,24 @@ export class MainChatComponent implements OnInit {
     }
   }
 
-  setEmojiCount(reactions: any[]) {
-    let counter: { [key: string]: number } = {};
-    reactions.forEach(react => {
-      let key = JSON.stringify(react.emoji);
-      if (key) {
-        key = key.substring(1);
-        key = key.substring(0, key.length - 1);
-      }
-      if (counter[key]) {
-        counter[key]++;
-      } else {
-        if (key != undefined)
-          counter[key] = 1;
-      }
-    });
-    return counter;
-  }
+
+  // setEmojiCount(reactions: any[]) {
+  //   let counter: { [key: string]: number } = {};
+  //   reactions.forEach(react => {
+  //     let key = JSON.stringify(react.emoji);
+  //     if (key) {
+  //       key = key.substring(1);
+  //       key = key.substring(0, key.length - 1);
+  //     }
+  //     if (counter[key]) {
+  //       counter[key]++;
+  //     } else {
+  //       if (key != undefined)
+  //         counter[key] = 1;
+  //     }
+  //   });
+  //   return counter;
+  // }
 
   async addReaction(emoji: any, messageId: any) {
     if (this.currentChat?.id) {
@@ -404,9 +399,7 @@ export class MainChatComponent implements OnInit {
         const channelDocSnap = await getDoc(channelDocRef);
         if (channelDocSnap.exists()) {
           const channelData = channelDocSnap.data();
-          const channelMembersJson = channelData?.['members'] || [];
-          const channelMembers = JSON.parse(channelMembersJson);
-          this.allChannelMembers = channelMembers;
+          this.allChannelMembers = channelData?.['members'];
           this.updateOnlineStatus();
           this.firstThreeItems = this.allChannelMembers.slice(0, 3);
         }

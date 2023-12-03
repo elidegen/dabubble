@@ -77,13 +77,26 @@ export class DialogAddChannelComponent {
 
   getMembers() {
     if (this.allMembers) {
-      this.channel.members = this.users;
+      this.addSelectedUsersToChannel(this.users)
     } else {
       this.addCurrentUser();
-      this.channel.members = this.selectedUsers;
-      
+      this.addSelectedUsersToChannel(this.selectedUsers)
     }
   }
+
+  addSelectedUsersToChannel(selectedUsers: any[]) {
+    const formattedUsers = selectedUsers.map(user => {
+        return {
+            name: user.name,
+            email: user.email,
+            password: user.password,
+            id: user.id,
+            picture: user.picture,
+            online: user.online
+        };
+    });
+    this.channel.members.push(...formattedUsers);
+}
 
   async updateChannelId(colId: string, channel: Channel, newId: string) {
     channel.id = newId;

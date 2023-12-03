@@ -19,7 +19,7 @@ export class Channel {
             description: this.description,
             creator: this.creator,
             id: this.id,
-            members: JSON.stringify(this.members)
+            members: this.members,
         }
     }
 }

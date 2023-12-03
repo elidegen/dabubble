@@ -39,7 +39,6 @@ export class WorkspaceComponent implements OnInit {
         this.allChannels = snapshot.docs.map((doc) => {
           const channel = doc.data() as Channel;
           channel.id = doc.id;
-          channel.members = JSON.parse(channel.members);
           return channel;
         });
         this.getPersonalChannels();
@@ -53,7 +52,6 @@ export class WorkspaceComponent implements OnInit {
           const chat = doc.data() as Chat;
           return chat;
         });
-        console.log('All Chats', this.allDirectMessages);
         this.getPersonalDirectMessages();
       }
     );
@@ -64,25 +62,23 @@ export class WorkspaceComponent implements OnInit {
         this.allUsers = snapshot.docs.map((doc) => {
           const user = doc.data() as User;
           return user;
-        });
-        console.log(this.allUsers);
-        
+        });    
       }
     );
 
   }
+
 
   getPersonalChannels() {
     this.yourChannels = [];
     this.allChannels.forEach(channel => {
       if (channel.members.some((member: { id: string; }) => member.id === this.currentUser.id)) {
         console.log(channel);
-        
         this.yourChannels.push(channel);
       }
     });
-    console.log('yourchannels', this.yourChannels);
   }
+  
 
   getPersonalDirectMessages() {
     this.personalDirectMessages = [];

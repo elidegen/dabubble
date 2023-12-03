@@ -131,10 +131,7 @@ export class DialogAddToGroupComponent {
         const channelDocSnap = await getDoc(channelDocRef);
         if (channelDocSnap.exists()) {
           const channelData = channelDocSnap.data();
-          const channelMembersJson = channelData?.['members'] || [];
-          const channelMembers = JSON.parse(channelMembersJson);
-          console.log('Channel Members:', channelMembers);
-          this.allChannelMembers = channelMembers;
+          this.allChannelMembers = channelData?.['members'];
         } else {
           console.log('Channel document does not exist.');
         }
@@ -152,7 +149,6 @@ export class DialogAddToGroupComponent {
   async addChannelMember() {
     if (this.currentChat) {
       const channelDocRef = doc(collection(this.firestore, 'channels'), this.currentChat.id);
-      console.log('selected', this.selectedUsers);
       this.channel.members = this.selectedUsers;
       this.channel.name = this.currentChat.name;
       this.channel.id = this.currentChat.id;
@@ -167,13 +163,27 @@ export class DialogAddToGroupComponent {
   
   getMembers() {
     if (this.allChannelMembers) {
-      this.channel.members = this.users;
+      this.addSelectedUsersToChannel(this.users);
     } else {
       this.addCurrentUser();
-      this.channel.members = this.selectedUsers;
+      this.addSelectedUsersToChannel(this.selectedUsers);
     }
   }
 
+
+  addSelectedUsersToChannel(selectedUsers: any[]) {
+    const formattedUsers = selectedUsers.map(user => {
+        return {
+            name: user.name,
+            email: user.email,
+            password: user.password,
+            id: user.id,
+            picture: user.picture,
+            online: user.online
+        };
+    });
+    this.channel.members.push(...formattedUsers);
+  }
   
   addCurrentUser() {
     const userAlreadySelected = this.selectedUsers.some(user => user.id === this.currentUser.id);
