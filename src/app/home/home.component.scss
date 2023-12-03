@@ -91,3 +91,74 @@ mat-drawer {
     background-color: white;
     background-position: 98%;
 }
+
+.add-members-container {
+    margin-top: 8px;
+    position: relative;
+}
+
+.user-search-container {
+    position: relative;
+    height: fit-content;
+    max-height: 400px;
+    overflow-y: scroll;
+    background-color: white;
+    z-index: 2;
+    left: 50px;
+    top: 56px;
+    border-radius: 0 32px 32px 32px;
+    box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.4);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    width: 40vw;
+    gap: 16px;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.user-container {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    gap: 16px;
+    border-radius: 32px;
+    padding: 6px 24px;
+    background-color: white;
+    outline: 0;
+    border: 0;
+    max-width: 245px;
+    cursor: pointer;
+
+    img {
+        height: 50px;
+        border-radius: 100%;
+    }
+
+    &:hover {
+        background-color: var(--primary);
+    }
+
+    span {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}
+
+.user-container-highlighted {
+    background-color: var(--primary);
+    color: var(--purple3);
+    font-weight: 700;
+}
+
+.profile-container {
+    position: relative;
+}
+
+
+.headline {
+    padding: 0 16px 16px 16px;
+}

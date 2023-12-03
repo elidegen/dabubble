@@ -4,7 +4,26 @@
       <img src="assets/img/icons/logo-home.svg" alt="home" />
     </div>
 
-    <input class="search" placeholder="Search" />
+    <div class="add-members-container">
+      <input #search class="w100 input-members search" type="text" placeholder="Search" [(ngModel)]="searchInput"
+          (input)="filterEverything()" (click)="this.isInputFocused = true;">
+
+      <div class="user-search-container" *ngIf="isInputFocused" (click)="userSelected($event)">
+        <h1>Users:</h1>
+          <button class="user-container" *ngFor="let user of filteredUsers" (click)="selectUser(user)">
+              <div class="profile-container">
+                  <img src="{{user.picture}}" alt="profile">
+                  <div class="online-status"></div>
+              </div>
+              <span>{{user.name}}</span>
+          </button>
+          <span *ngIf="filteredUsers.length < 1">No matching contact</span>
+          <h1>Messages:</h1>
+      </div>
+      <div>
+       
+      </div>
+  </div>
 
     <div class="profile-container">
       <h1>{{this.userService.currentUser.name}}</h1>
