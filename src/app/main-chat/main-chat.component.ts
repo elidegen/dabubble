@@ -220,35 +220,20 @@ export class MainChatComponent implements OnInit {
       const subReactionColRef = doc(collection(this.firestore, `channels/${this.currentChat.id}/messages/`), messageId);
       let messageIndex = this.allMessages.findIndex(message => message.id === messageId);
       let currentMessage = this.allMessages[messageIndex];
-  
       let existingReaction = currentMessage.reaction.find((r: { emoji: any; }) => r.emoji === emoji);
-      
       if (existingReaction) {
-        // Prüfe, ob der aktuelle Benutzer der Ersteller der Reaktion ist
         if (existingReaction.creatorId === this.currentUser.id) {
-          // Wenn ja, und der Benutzer möchte seine eigene Reaktion entfernen
-          existingReaction.count -= 1; // Dekrementiere den Zähler
-          // Wenn der Zähler 0 erreicht, entferne die Reaktion komplett
+          existingReaction.count -= 1;
           if (existingReaction.count === 0) {
             currentMessage.reaction = currentMessage.reaction.filter((r: { emoji: any; }) => r.emoji !== emoji);
           }
         } else {
-          // Der aktuelle Benutzer ist nicht der Ersteller, erhöhe den Zähler
           existingReaction.count += 1; 
           existingReaction.creatorName = this.currentUser.name;
-          // Inkrementiere den Zähler
         }
       } else {
-        // Emoji-Reaktion existiert noch nicht, erstelle eine neue
-        currentMessage.reaction.push({
-          emoji: emoji,
-          creatorId: this.currentUser.id, // Der Benutzer, der die Reaktion erstellt
-          creatorName: this.currentUser.name, // Optional: Der Name des Benutzers
-          count: 1 // Starte den Zähler bei 1
-        });
-      }
-  
-      // Aktualisiere das Dokument in Firestore
+        currentMessage.reaction.push({emoji: emoji,  creatorId: this.currentUser.id,creatorName: this.currentUser.name,count: 1  });
+       }
       await updateDoc(subReactionColRef, {
         reaction: currentMessage.reaction
       });
