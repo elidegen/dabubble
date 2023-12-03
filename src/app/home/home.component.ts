@@ -48,15 +48,30 @@ export class HomeComponent {
 
   filterEverything(): void {
     this.isInputFocused = true;
+   this.filterUsers();
+   this.filterMessages();
+  }
+
+  filterUsers() {
     this.filteredUsers = this.userService.users.filter(user =>
       user.name?.toLowerCase().includes(this.searchInput.toLowerCase())
     );
   }
 
+  filterMessages() {
+    this.filteredMessages = this.chatService.allMessagesOfChannel.filter(message =>
+      message.content?.toLowerCase().includes(this.searchInput.toLowerCase()) ||
+      message.creator?.toLowerCase().includes(this.searchInput.toLowerCase())
+    );
+  }
 
   selectUser(user: any) {
     this.chatService.createDirectMessage(user);
     this.search.nativeElement.value = '';
+}
+
+selectMessage(message: any) {
+  console.log("Bei der Suchfunktion ausgewählte Nachricht",message)
 }
 
   openProfileDialog(): void {

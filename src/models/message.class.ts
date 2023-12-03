@@ -11,6 +11,7 @@ export class Message {
     reactionCount: any;
     threadCount: any;
     lastThreadTime: any;
+    channel: any;
 
     constructor(obj?: any) {
         this.creator = obj ? obj.creator : '';
@@ -25,6 +26,7 @@ export class Message {
         this.reaction = obj ? obj.reaction : [];
         this.threadCount = obj ? obj.threadCount : "";
         this.lastThreadTime = obj ? obj.lastThreadTime: "";
+        this.channel = obj = obj ? obj.channel: "";
     }
 
     public toJSON() {
@@ -40,6 +42,7 @@ export class Message {
             reactionCount: this.reactionCount,
             threadCount: this.threadCount,
             lastThreadTime: this.lastThreadTime,
+            channel: this.channel,
         }
     }
 }

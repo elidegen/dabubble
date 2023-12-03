@@ -94,8 +94,86 @@ mat-drawer {
 
 .add-members-container {
     margin-top: 8px;
-    position: relative;
+    position: absolute;
 }
+
+.date {
+    color: gray;
+    font-size: 10px;
+}
+
+.name {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+
+.message-container {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.my-messages {
+    .message-box {
+        flex-direction: row-reverse;
+    }
+
+    .message-data {
+        flex-direction: row-reverse;
+    }
+
+    .my-message-content {
+        border-radius: 24px 0 24px 24px;
+        background-color: var(--purple2);
+        color: white;
+    }
+
+    .message-container {
+        align-items: flex-end;
+    }
+
+    .reaction-container {
+        align-items: flex-end;
+    }
+}
+
+
+
+.message-row-container {
+        
+    &:hover {
+        background-color: var(--primary);
+
+        .my-message-content {
+            background-color: var(--purple2) !important;
+        }
+    }
+}
+
+
+.message-content,
+.my-message-content {
+    border-radius: 0 24px 24px 24px;
+    padding: 12px 16px;
+    width: fit-content;
+    max-width: 100%;
+    color: black;
+    background-color: var(--primary);
+}
+
+.message-data {
+    display: flex;
+    gap: 16px;
+}
+
+.message-box {
+    display: flex;
+    padding: 0 20px;
+    justify-content: flex-start;
+    gap: 16px;
+}
+
 
 .user-search-container {
     position: relative;

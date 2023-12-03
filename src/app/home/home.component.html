@@ -19,6 +19,30 @@
           </button>
           <span *ngIf="filteredUsers.length < 1">No matching contact</span>
           <h1>Messages:</h1>
+          <div class="message-row-container"[ngClass]="{'my-messages': message.creator == currentUser.name}" *ngFor="let message of filteredMessages" (click)="selectMessage(message)" >
+        <span>Found in {{message.channel}}</span>
+              <div class="message-box">
+                <div class="creator-picture-container">
+                  <img src="{{message.profilePic}}" alt="" />
+                </div>
+
+                <div class="message-container">
+                  <div class="message-data">
+                    <span class="name">{{ message.creator }}</span>
+                    <span class="date">{{ message.time }}</span>
+                  </div>
+
+  
+                    <div
+                      [ngClass]="{'my-message-content': message.creator == currentUser.name, 'message-content': message.creator != currentUser.name}">
+                      <span> {{message.content}}</span>
+                    </div>
+        
+                </div>
+              </div>
+
+  
+            </div>
       </div>
       <div>
        
