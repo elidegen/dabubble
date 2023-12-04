@@ -7,7 +7,6 @@ import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 import { AuthService } from '../auth.service';
 import { UserService } from '../user.service';
 
-
 @Component({
   selector: 'app-dialog-show-group-member',
   templateUrl: './dialog-show-group-member.component.html',
@@ -38,7 +37,6 @@ export class DialogShowGroupMemberComponent implements OnInit {
     });
   }
 
-
   async getAllChannelMembers() {
     if (this.currentChat?.id) {
       const channelDocRef = doc(this.firestore, `channels/${this.currentChat.id}`);
@@ -46,7 +44,7 @@ export class DialogShowGroupMemberComponent implements OnInit {
         const channelDocSnap = await getDoc(channelDocRef);
         if (channelDocSnap.exists()) {
           const channelData = channelDocSnap.data();
-          this.allChannelMembers =  channelData?.['members'];
+          this.allChannelMembers = channelData?.['members'];
           this.updateOnlineStatus();
         } else {
           console.log('Channel document does not exist.');
@@ -57,12 +55,11 @@ export class DialogShowGroupMemberComponent implements OnInit {
     }
   }
 
-
   updateOnlineStatus() {
     this.allChannelMembers.forEach(member => {
-     let userIndex = this.authService.findUserIndexWithEmail(member.email);
-    member.online = this.userService.users[userIndex].online;
-    console.log("Online Status geupdated", member.online);
+      let userIndex = this.authService.findUserIndexWithEmail(member.email);
+      member.online = this.userService.users[userIndex].online;
+      // console.log("Online Status geupdated", member.online);
     });
   }
 }

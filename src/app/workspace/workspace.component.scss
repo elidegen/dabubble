@@ -147,3 +147,17 @@ mat-expansion-panel-header {
         }
     }
 }
+
+.channel-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.unread-msg {
+    background-color: #3fa9f5;
+    height: 8px;
+    width: 8px;
+    border-radius: 50%;
+}

@@ -52,6 +52,7 @@ export class ChatService {
     this._openDirectMessageSubject.next(value);
   }
 
+  
 
 // Create direct messages ------------------------------
   async createDirectMessage(user: User) {
@@ -73,11 +74,13 @@ export class ChatService {
 
   
   checkUserForId(user: User) {
+    this.chat.members = []
     if (user.id !== this.userService.currentUser.id) {
       let sortedUserIds = [user.id, this.userService.currentUser.id].sort(); 
       let userId = sortedUserIds.join('');
       let userData = this.convertUser(user);
       let currentUserData = this.convertUser(this.userService.currentUser);
+     
       this.chat.members.push(userData, currentUserData);
       this.chat.id = userId;
       return userId
@@ -158,7 +161,7 @@ export class ChatService {
         }     
       );
     });
-    console.log('check', this.allMessagesOfChannel);
+    // console.log('check', this.allMessagesOfChannel);
   }
 
 
@@ -171,7 +174,7 @@ export class ChatService {
           });
         }     
       );
-    console.log('check Users', this.allUsers);
+    // console.log('check Users', this.allUsers);
   }
 
 

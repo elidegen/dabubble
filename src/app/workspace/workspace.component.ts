@@ -8,6 +8,7 @@ import { ThreadService } from '../thread.service';
 import { UserService } from '../user.service';
 import { Chat } from 'src/models/chat.class';
 import { User } from 'src/models/user.class';
+import { updateDoc } from 'firebase/firestore';
 
 @Component({
   selector: 'app-workspace',
@@ -22,7 +23,7 @@ export class WorkspaceComponent implements OnInit {
   unsubscribeChannels: any;
   currentUser;
   unsubscribeChats: any;
-  allDirectMessages : Chat[] = [];
+  allDirectMessages: Chat[] = [];
   personalDirectMessages: Chat[] = [];
   unsubscribeUsers: any;
   allUsers: User[] = [];
@@ -38,7 +39,6 @@ export class WorkspaceComponent implements OnInit {
     this.loadUsers();
   }
 
-
   loadChannels() {
     this.unsubscribeChannels = onSnapshot(
       query(collection(this.firestore, "channels"), orderBy("name")),
@@ -53,7 +53,6 @@ export class WorkspaceComponent implements OnInit {
     );
   }
 
-
   loadDirectMessages() {
     this.unsubscribeChats = onSnapshot(
       query(collection(this.firestore, "direct messages"), orderBy("name")),
@@ -67,7 +66,6 @@ export class WorkspaceComponent implements OnInit {
     );
   }
 
-
   loadUsers() {
     this.unsubscribeUsers = onSnapshot(
       query(collection(this.firestore, "users"), orderBy("name")),
@@ -75,11 +73,10 @@ export class WorkspaceComponent implements OnInit {
         this.allUsers = snapshot.docs.map((doc) => {
           const user = doc.data() as User;
           return user;
-        });    
+        });
       }
     );
   }
-
 
   getPersonalChannels() {
     this.yourChannels = [];
@@ -90,31 +87,27 @@ export class WorkspaceComponent implements OnInit {
       }
     });
   }
-  
 
   getPersonalDirectMessages() {
     this.personalDirectMessages = [];
     this.allDirectMessages.forEach(chat => {
-      if(chat.members.some((member: {id: string; }) => member.id === this.currentUser.id)) {
+      if (chat.members.some((member: { id: string; }) => member.id === this.currentUser.id)) {
         this.personalDirectMessages.push(chat);
       }
     });
-    console.log('own', this.personalDirectMessages);
+    // console.log('own', this.personalDirectMessages);
   }
-
 
   getOtherUserName(members: any[]) {
     let otherUser = members.find(member => member.email !== this.currentUser.email);
     return otherUser ? otherUser.name : '';
   }
 
-
   getUserProfileForDirectMessage(members: any[]) {
     let otherUser = members.find(member => member.email !== this.currentUser.email);
     let userProfile = this.allUsers.find(user => user.email == otherUser.email);
     return userProfile ? userProfile.picture : '';
   }
-
 
   // onlineStatus für später -----------------------------------------------------
 
@@ -124,16 +117,24 @@ export class WorkspaceComponent implements OnInit {
   }
   // -----------------------------------------------------------------------------
 
-
   openDialog() {
     this.dialog.open(DialogAddChannelComponent, { panelClass: 'dialog-container' });
   }
 
-
   renderChannel(channel: Channel) {
     this.chatservice.openChat = channel;
     this.threadService.currentChat = channel;
-    this.chatservice.chatWindow = 'channel'
+    this.chatservice.chatWindow = 'channel';
+  }
+
+  unreadMsg(channel: Channel) {
+    if (channel.viewedBy?.length > 0 && channel.viewedBy.includes(this.currentUser.id)) {
+      console.log('includes crnt usr', channel.viewedBy);
+      return false;
+    } else {
+      console.log('not crnt usr', channel.viewedBy);
+      return true;
+    }
   }
 
 
@@ -141,14 +142,12 @@ export class WorkspaceComponent implements OnInit {
     this.chatservice.openDirectMessage = chat;
     this.chatservice.chatWindow = 'direct';
   }
-  
 
   ngOnDestroy(): void {
     this.unsubscribeChannels;
     this.unsubscribeChats;
     this.unsubscribeUsers;
   }
-
 
   startNewMessage() {
     this.chatservice.chatWindow = 'newMessage';
