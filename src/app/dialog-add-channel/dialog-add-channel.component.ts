@@ -84,6 +84,7 @@ export class DialogAddChannelComponent {
     }
   }
 
+
   addSelectedUsersToChannel(selectedUsers: any[]) {
     const formattedUsers = selectedUsers.map(user => {
         return {
@@ -96,7 +97,7 @@ export class DialogAddChannelComponent {
         };
     });
     this.channel.members.push(...formattedUsers);
-}
+  }
 
   async updateChannelId(colId: string, channel: Channel, newId: string) {
     channel.id = newId;
