@@ -155,6 +155,7 @@ export class WorkspaceComponent implements OnInit {
     }
   }
 
+
   renderDirectMessage(chat: Chat) {
     this.chatservice.openDirectMessage = chat;
     this.chatservice.chatWindow = 'direct';

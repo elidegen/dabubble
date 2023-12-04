@@ -116,6 +116,7 @@ export class DialogAddChannelMembersComponent implements OnInit{
       this.getSentMessageDate();
       this.message.creator = this.userService.currentUser.id;
       this.message.channel = this.currentChat.name;
+      this.message.channelID = this.currentChat.id;
       const subColRef = collection(this.firestore, `direct messages/${this.currentChat.id}/messages`);
       await addDoc(subColRef, this.message.toJSON())
         .catch((err) => {
