@@ -53,7 +53,6 @@ export class ChatService {
 
 // Create direct messages ------------------------------
   async createDirectMessage(user: User) {
-    if (user.id !== this.userService.currentUser.id) {
       this.checkUserForDirectMessageName(user);
       const directMessageRef = collection(this.firestore, 'direct messages');
       const specificDocRef: DocumentReference<DocumentData> = doc(directMessageRef, this.checkUserForId(user));
@@ -66,8 +65,6 @@ export class ChatService {
           console.log(err);
         });
       }
-    }
-    this.chatWindow = 'empty';
   }
 
   
