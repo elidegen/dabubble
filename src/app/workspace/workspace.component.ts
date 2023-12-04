@@ -28,6 +28,8 @@ export class WorkspaceComponent implements OnInit {
   unsubscribeUsers: any;
   allUsers: User[] = [];
   usersOfDirectMessage: User[] = [];
+  currentChat: any;
+  unSubMessages: any;
 
   constructor(public dialog: MatDialog, public chatservice: ChatService, public threadService: ThreadService, public userService: UserService) {
     this.currentUser = userService.currentUser;
@@ -37,6 +39,20 @@ export class WorkspaceComponent implements OnInit {
     this.loadChannels();
     this.loadDirectMessages();
     this.loadUsers();
+    this.chatservice.openChat$.subscribe((openChat) => {
+      if (openChat) {
+        const newChat = openChat as Channel;
+        if (!this.currentChat || this.currentChat.id !== newChat.id) {
+          this.currentChat = newChat;
+          this.threadService.currentChat = newChat;
+          if (this.unSubMessages) {
+            this.unSubMessages();
+          }
+        }
+      } else {
+        this.currentChat = undefined;
+      }
+    });
   }
 
   loadChannels() {
@@ -82,7 +98,7 @@ export class WorkspaceComponent implements OnInit {
     this.yourChannels = [];
     this.allChannels.forEach(channel => {
       if (channel.members.some((member: { id: string; }) => member.id === this.currentUser.id)) {
-        console.log(channel);
+        // console.log(channel);
         this.yourChannels.push(channel);
       }
     });
@@ -122,32 +138,36 @@ export class WorkspaceComponent implements OnInit {
   }
 
   renderChannel(channel: Channel) {
+    console.log('show channel', channel);
+    
     this.chatservice.openChat = channel;
     this.threadService.currentChat = channel;
     this.chatservice.chatWindow = 'channel';
   }
 
   unreadMsg(channel: Channel) {
-    if (channel.viewedBy?.length > 0 && channel.viewedBy.includes(this.currentUser.id)) {
-      console.log('includes crnt usr', channel.viewedBy);
+    // console.log('chatserv', this.currentChat?.id);
+    // console.log('chanel unreadmsg', channel.id);
+    if (channel.viewedBy?.length > 0 && channel.viewedBy.includes(this.currentUser.id) || this.currentChat?.id == channel.id) {
+      // console.log('includes crnt usr', channel.name, channel.viewedBy);
       return false;
     } else {
-      console.log('not crnt usr', channel.viewedBy);
+      // console.log('not crnt usr', channel.name, channel.viewedBy);
       return true;
     }
   }
 
 
-  renderDirectMessage(chat: Chat) {
- this.chatservice.renderDirectMessage(chat);
-  }
-
- 
+  
 
   ngOnDestroy(): void {
     this.unsubscribeChannels;
     this.unsubscribeChats;
     this.unsubscribeUsers;
+
+    if (this.unSubMessages) {
+      this.unSubMessages();
+    }
   }
 
   startNewMessage() {

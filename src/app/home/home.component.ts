@@ -70,7 +70,7 @@ export class HomeComponent {
     this.chatService.chatWindow = 'direct';
    console.log("User wurde in der Suchfunktion ausgewählt für einen direct Chat", user);
     this.search.nativeElement.value = '';
-}
+  }
 
 selectMessage(message: any) {
   console.log("Bei der Suchfunktion ausgewählte Nachricht",message)

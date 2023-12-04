@@ -71,7 +71,7 @@ export class MainChatComponent implements OnInit {
         const newChat = openChat as Channel;
         if (!this.currentChat || this.currentChat.id !== newChat.id) {
           this.currentChat = newChat;
-          console.log('currentChat', this.currentChat);
+          // console.log('currentChat', this.currentChat);
           this.threadService.currentChat = newChat;
           if (this.unSubMessages) {
             this.unSubMessages();
@@ -123,7 +123,7 @@ export class MainChatComponent implements OnInit {
       const subColRef = collection(this.firestore, `channels/${this.currentChat.id}/messages`);
       await addDoc(subColRef, this.message.toJSON())
         .catch((err) => {
-          console.log(err);
+          console.log('Error', err);
         })
         .then((docRef: void | DocumentReference<DocumentData, DocumentData>) => {
           if (docRef && docRef instanceof DocumentReference) {
@@ -143,7 +143,10 @@ export class MainChatComponent implements OnInit {
   }
 
   setViewedByMe(channel: Channel) {
-    if (channel.viewedBy?.some((userid: string) => userid != this.currentUser.id)) {
+    console.log('viewedbyme', channel);
+
+    if (channel.viewedBy?.length < 1 || channel.viewedBy?.some((userid: string) => userid != this.currentUser.id)) {
+      console.log('viewedbyme positive');
       channel.viewedBy.push(this.currentUser.id);
       this.updateViewedBy(channel);
     }
@@ -165,7 +168,7 @@ export class MainChatComponent implements OnInit {
   async updateChannel(colId: string, message: Message) {
     const docRef = doc(collection(this.firestore, colId), message.id);
     await updateDoc(docRef, this.getUpdateData(message)).catch(
-      (error) => { console.log(error); }
+      (error) => { console.log('error', error); }
     );
   }
 
@@ -187,7 +190,6 @@ export class MainChatComponent implements OnInit {
 
   loadMessages() {
     if (this.currentChat?.id) {
-      this.updateViewedBy(this.currentChat);
       const messageCollection = collection(this.firestore, `channels/${this.currentChat.id}/messages`);
       const q = query(messageCollection, orderBy('timeInMs', 'asc'));
       this.unSubMessages = onSnapshot(q, async (snapshot) => {
@@ -196,6 +198,7 @@ export class MainChatComponent implements OnInit {
           message.id = doc.id;
           message.threadCount = await this.threadService.countThreadMessages(message.id);
           message.reactionCount = this.setEmojiCount(message.reaction);
+          this.setViewedByMe(this.currentChat as Channel);
           return message;
         }));
         this.organizeMessagesByDate();
@@ -298,7 +301,7 @@ export class MainChatComponent implements OnInit {
     }
     this.organizedMessages = Object.entries(this.messagesByDate).map(([date, messages]) => ({ date, messages }));
     this.organizedMessages = this.organizedMessages;
-    console.log('Show', this.organizedMessages)
+    // console.log('Show', this.organizedMessages)
   }
 
   openEmojiPicker(messageId: any) {
@@ -332,7 +335,7 @@ export class MainChatComponent implements OnInit {
 
   addEmojiTextField($event: any) {
     this.emojiService.addEmojiTextChat($event);
-    console.log("das ist das Emoji für die Textnachricht", this.emojiService.emojiString);
+    // console.log("das ist das Emoji für die Textnachricht", this.emojiService.emojiString);
     this.message.content += this.emojiService.emojiString;
     this.emojiService.emojiString = "";
   }
@@ -385,7 +388,7 @@ export class MainChatComponent implements OnInit {
   }
 
   editMessage(message: Message) {
-    console.log('Nachricht', message);
+    // console.log('Nachricht', message);
     if (this.currentChat) {
       if (message.creator == this.currentUser.name) {
         this.edit = true;
