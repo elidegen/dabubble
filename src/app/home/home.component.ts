@@ -68,7 +68,7 @@ export class HomeComponent {
   selectUser(user: any) {
     this.chatService.createDirectMessage(user);
     this.search.nativeElement.value = '';
-}
+  }
 
 selectMessage(message: any) {
   console.log("Bei der Suchfunktion ausgewählte Nachricht",message)

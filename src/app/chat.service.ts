@@ -24,7 +24,9 @@ export class ChatService {
   yourChannels: any[] = [];
   allMessagesOfChannel: any[] = [];
   unSubUsers: any;
+  unSubDirectMessages: any;
   allUsers: any[] = [];
+  allDirectMessages: any[] = [];
 
   constructor( public userService: UserService) { 
     this.getallChannels();
@@ -67,6 +69,7 @@ export class ChatService {
           console.log(err);
         });
       }
+      // this.compareNewDirectMessageWithExisting(user);
   }
 
   
@@ -143,7 +146,7 @@ export class ChatService {
   }
 
   ngOnDestroy() {
-
+    this.unSubDirectMessages();
   }
 
   getAllMessages() {
@@ -172,6 +175,57 @@ export class ChatService {
         }     
       );
     // console.log('check Users', this.allUsers);
+  }
+
+  compareNewDirectMessageWithExisting(user: User) {
+    this.getAllDirectMessages()
+      .then(() => {
+        this.findDirectMessage(user);
+      });
+}
+
+getAllDirectMessages(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+        this.allDirectMessages = [];
+        const directMessageCol = collection(this.firestore, 'direct messages');
+        this.unSubDirectMessages = onSnapshot(directMessageCol,
+            (list) => {
+                list.forEach(chat => {
+                    this.allDirectMessages.push(chat.data());
+                });
+                resolve();
+            },
+            (error) => {
+                reject(error); 
+            }
+        );
+    });
+}
+
+
+  findDirectMessage(user: User) {
+    let directId: any;
+    console.log('', user);
+    
+    if (user.id !== this.userService.currentUser.id) {
+      let sortedUserIds = [user.id, this.userService.currentUser.id].sort();
+      directId = sortedUserIds.join('');
+    } else {
+      directId = this.userService.currentUser.id;
+    }
+
+    console.log('user', directId);
+    
+    const foundDirectMessage = this.allDirectMessages.find(message => message.id === directId);
+    console.log('all directs', this.allDirectMessages);
+    // this.renderDirectMessage(foundDirectMessage);
+    
+  }
+  
+
+  renderDirectMessage(chat: Chat) {
+    this.openDirectMessage = chat;
+    this.chatWindow = 'direct';
   }
 
 

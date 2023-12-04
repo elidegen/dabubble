@@ -122,6 +122,8 @@ export class WorkspaceComponent implements OnInit {
   }
 
   renderChannel(channel: Channel) {
+    console.log('show channel', channel);
+    
     this.chatservice.openChat = channel;
     this.threadService.currentChat = channel;
     this.chatservice.chatWindow = 'channel';
@@ -129,19 +131,16 @@ export class WorkspaceComponent implements OnInit {
 
   unreadMsg(channel: Channel) {
     if (channel.viewedBy?.length > 0 && channel.viewedBy.includes(this.currentUser.id)) {
-      console.log('includes crnt usr', channel.viewedBy);
+      // console.log('includes crnt usr', channel.viewedBy);
       return false;
     } else {
-      console.log('not crnt usr', channel.viewedBy);
+      // console.log('not crnt usr', channel.viewedBy);
       return true;
     }
   }
 
 
-  renderDirectMessage(chat: Chat) {
-    this.chatservice.openDirectMessage = chat;
-    this.chatservice.chatWindow = 'direct';
-  }
+  
 
   ngOnDestroy(): void {
     this.unsubscribeChannels;
