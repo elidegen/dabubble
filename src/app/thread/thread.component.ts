@@ -207,9 +207,5 @@ export class ThreadComponent implements OnInit {
     return {
       content: this.editorThread.nativeElement.value
     }
-   
-    
   }
-
-
 }

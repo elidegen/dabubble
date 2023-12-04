@@ -68,14 +68,6 @@ getUpdateData(channel: Channel) {
   };
 }
 
-// loadMessages() {
-//   if (colId == 'channels') {
-    
-//   } else if (colId == 'threads') {
-    
-//   }
-// }
-
 loadChannelMessages(currentChatId: any) {
   if (currentChatId) {
     const messageCollection = collection(this.firestore, `channels/${currentChatId}/messages`);
@@ -208,7 +200,6 @@ loadChannelMessages(currentChatId: any) {
       });
     }
   }
-  
 
   async sendMessageInThread(threadId: any, message: Message) {
     const subColRef = collection(this.firestore, `threads/${threadId}/threadMessages`);
@@ -220,9 +211,6 @@ loadChannelMessages(currentChatId: any) {
           console.log('Message sent to thread');
         });
   }
-
-
-
 
   //----------- search Input Main Chat ----------------------------------
 
@@ -240,8 +228,12 @@ loadChannelMessages(currentChatId: any) {
       user.name?.toLowerCase().includes(this.searchInput.toLowerCase())
     );
   }
+
   //--------------------------------------------------------------------------------
 
+  // ToDo: Irgendwie zusammenfügen
+  // einziger Unterschied collection und arrays!
+  // Unterschiedliche Arrays beachten "allMessagesOfChannel" und "allThreadMessages"
 
   async addReaction(emoji: any, messageId: any, chatId: any) {
     if (chatId) {
@@ -258,11 +250,7 @@ loadChannelMessages(currentChatId: any) {
     }
   }
 
-  updateMessage(message: any) {
-    return {
-      reaction: message.reaction
-    }
-  }
+
 
 
   async addReactionInThread(emoji: string, messageId: any, threadId: any) {
@@ -279,6 +267,14 @@ loadChannelMessages(currentChatId: any) {
       updateDoc(subReactionColRef, this.updateMessage(this.allThreadMessages[messageIndex]));
     }
   }
+
+
+  updateMessage(message: any) {
+    return {
+      reaction: message.reaction
+    }
+  }
+
 
   setEmojiCount(reactions: any[]) {
     let counter: { [key: string]: number } = {};
