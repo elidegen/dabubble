@@ -8,10 +8,10 @@
       <input #search class="w100 input-members search" type="text" placeholder="Search" [(ngModel)]="searchInput"
           (input)="filterEverything()" (click)="this.isInputFocused = true;">
 
-      <div class="user-search-container" *ngIf="isInputFocused" (click)="userSelected($event)">
+      <div class="user-search-container" *ngIf="isInputFocused" >
         <h1>Users:</h1>
           <button class="user-container" *ngFor="let user of filteredUsers" (click)="selectUser(user)">
-              <div class="profile-container">
+              <div (click)="selectUser(user)" class="profile-container">
                   <img src="{{user.picture}}" alt="profile">
                   <div class="online-status"></div>
               </div>
@@ -19,10 +19,10 @@
           </button>
           <span *ngIf="filteredUsers.length < 1">No matching contact</span>
           <h1>Messages:</h1>
-          <div class="message-row-container"[ngClass]="{'my-messages': message.creator == currentUser.name}" *ngFor="let message of filteredMessages" (click)="selectMessage(message)" >
+          <div class="message-row-container"[ngClass]="{'my-messages': message.creator == currentUser.name}" *ngFor="let message of filteredMessages"  >
         <span>Found in {{message.channel}}</span>
               <div class="message-box">
-                <div class="creator-picture-container">
+                <div (click)="selectMessage(message)" class="creator-picture-container">
                   <img src="{{message.profilePic}}" alt="" />
                 </div>
 
