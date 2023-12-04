@@ -144,6 +144,7 @@ mat-drawer {
         
     &:hover {
         background-color: var(--primary);
+        cursor: pointer;
 
         .my-message-content {
             background-color: var(--purple2) !important;

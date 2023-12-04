@@ -104,19 +104,41 @@ export class ThreadComponent implements OnInit {
     console.log("thread id in der openEmojiPicker Funktion",messageId);
   }
 
+  openEmojiPickerChat() {
+    setTimeout(() => {
+      this.emojiService.showThreadTextChatEmojiPicker = true;
+    }, 1);
+  }
+
+
 
   closeEmojiPicker() {
-    if (this.emojiService.showThreadEmojiPicker == true && this.emojiService.emojiString == "") {
+    if (this.emojiService.showThreadEmojiPicker == true  || this.emojiService.showThreadTextChatEmojiPicker == true &&  this.emojiService.emojiString == "") {
       this.emojiService.showThreadEmojiPicker = false;
+      this.emojiService.showThreadTextChatEmojiPicker = false;
     }
   }
+
+
+
+ 
 
  addEmoji($event: any) {
   this.emojiService.addEmojiThread($event);
   this.addReaction(this.emojiService.emojiString, this.emojiService.messageId)
   console.log(this.emojiService.emojiString, this.emojiService.messageId)
   this.emojiService.showThreadEmojiPicker = false;
+  this.emojiService.emojiString = "";
  }
+
+ addEmojiTextField($event: any) {
+  this.emojiService.addEmojiTextChat($event);
+  console.log("das ist das Emoji für die Textnachricht",this.emojiService.emojiString);
+   this.message.content += this.emojiService.emojiString;
+   this.emojiService.showThreadTextChatEmojiPicker = false;
+   this.emojiService.emojiString = "";
+
+}
 
 
 

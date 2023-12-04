@@ -85,7 +85,7 @@
           </div>
         </div>
         
-        <div class="reaction" [ngClass]="{'own-message': thread.creator == currentUser.name}">
+        <div class="reaction" (click)="openEmojiPicker(thread.id)" [ngClass]="{'own-message': thread.creator == currentUser.name}">
           <button mat-icon-button (click)="toggled = true" >
             <img src="assets/img/icons/add_reaction.svg" alt="">
           </button>
@@ -95,6 +95,7 @@
         </div>
       </div>
       <emoji-mart *ngIf="this.emojiService.showThreadEmojiPicker == true" class="emojiPicker" (emojiClick)="addEmoji($event)"></emoji-mart>
+      <emoji-mart *ngIf="this.emojiService.showThreadTextChatEmojiPicker == true" class="emojiPicker" (emojiClick)="addEmojiTextField($event)"></emoji-mart>
     </section>
 
   </mat-card-content>
@@ -111,7 +112,7 @@
             </button>
           </div>
 
-          <button mat-icon-button class="textfield-buttons">
+          <button (click)="openEmojiPickerChat()" mat-icon-button class="textfield-buttons">
             <img src="assets/img/icons/smiley.svg" alt="" />
           </button>
 

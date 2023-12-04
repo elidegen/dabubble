@@ -231,7 +231,8 @@ export class MainChatComponent implements OnInit {
         } else {
           // Der aktuelle Benutzer ist nicht der Ersteller, erhöhe den Zähler
           existingReaction.count += 1; 
-          existingReaction.creatorName = this.currentUser.name;
+          existingReaction.id = this.currentUser.id;
+          existingReaction.name = this.currentUser.name;
           // Inkrementiere den Zähler
         }
       } else {
@@ -246,7 +247,7 @@ export class MainChatComponent implements OnInit {
   
       // Aktualisiere das Dokument in Firestore
       await updateDoc(subReactionColRef, {
-        reaction: currentMessage.reaction
+        reaction: existingReaction
       });
     }
   }
@@ -331,7 +332,6 @@ export class MainChatComponent implements OnInit {
     setTimeout(() => {
       this.emojiService.showMainChatEmojiPicker = true;
     }, 1);
-
     this.emojiService.messageId = messageId;
   }
 
@@ -345,7 +345,7 @@ export class MainChatComponent implements OnInit {
  
 
   closeEmojiPicker() {
-    if (this.emojiService.showMainChatEmojiPicker == true && this.emojiService.emojiString == "") {
+    if (this.emojiService.showMainChatEmojiPicker == true || this.emojiService.showTextChatEmojiPicker == true  && this.emojiService.emojiString == "") {
       this.emojiService.showMainChatEmojiPicker = false;
       this.emojiService.showTextChatEmojiPicker = false;
     }
@@ -358,6 +358,7 @@ export class MainChatComponent implements OnInit {
       this.emojiService.addEmojiMainChat(event);
       this.addReaction(this.emojiService.emojiString, this.emojiService.messageId)
       this.emojiService.showMainChatEmojiPicker = false;
+      this.emojiService.emojiString = "";
     }
    
   }
@@ -367,6 +368,7 @@ export class MainChatComponent implements OnInit {
     this.emojiService.addEmojiTextChat($event);
     console.log("das ist das Emoji für die Textnachricht",this.emojiService.emojiString);
      this.message.content += this.emojiService.emojiString;
+     this.emojiService.emojiString = "";
   }
 
   async openThread(message: Message) {
