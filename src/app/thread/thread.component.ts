@@ -47,7 +47,7 @@ export class ThreadComponent implements OnInit {
 
   ngOnInit() {
     this.threadService.openMessage$.subscribe((openMessage) => {
-      console.log('open', openMessage);
+      // console.log('open', openMessage);
       if (openMessage) {
         const message = openMessage as Message;
         if (!this.currentMessage || this.currentMessage.id !== message.id) {

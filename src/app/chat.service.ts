@@ -25,7 +25,7 @@ export class ChatService {
   unSubUsers: any;
   allUsers: any[] = [];
 
-  constructor( public userService: UserService) { 
+  constructor(public userService: UserService) {
     this.getallChannels();
     this.getAllUsers();
   }
@@ -51,26 +51,26 @@ export class ChatService {
   }
 
 
-// Create direct messages ------------------------------
+  // Create direct messages ------------------------------
   async createDirectMessage(user: User) {
-      this.checkUserForDirectMessageName(user);
-      const directMessageRef = collection(this.firestore, 'direct messages');
-      const specificDocRef: DocumentReference<DocumentData> = doc(directMessageRef, this.checkUserForId(user));
-      const docSnapshot = await getDoc(specificDocRef);
-      if (!docSnapshot.exists()) {
-        await setDoc(specificDocRef, {
-          ...this.chat.toJSON(),
-        })
+    this.checkUserForDirectMessageName(user);
+    const directMessageRef = collection(this.firestore, 'direct messages');
+    const specificDocRef: DocumentReference<DocumentData> = doc(directMessageRef, this.checkUserForId(user));
+    const docSnapshot = await getDoc(specificDocRef);
+    if (!docSnapshot.exists()) {
+      await setDoc(specificDocRef, {
+        ...this.chat.toJSON(),
+      })
         .catch((err) => {
-          console.log(err);
+          console.log('error', err);
         });
-      }
+    }
   }
 
-  
+
   checkUserForId(user: User) {
     if (user.id !== this.userService.currentUser.id) {
-      let sortedUserIds = [user.id, this.userService.currentUser.id].sort(); 
+      let sortedUserIds = [user.id, this.userService.currentUser.id].sort();
       let userId = sortedUserIds.join('');
       let userData = this.convertUser(user);
       let currentUserData = this.convertUser(this.userService.currentUser);
@@ -88,7 +88,7 @@ export class ChatService {
 
   checkUserForDirectMessageName(user: User) {
     if (user.id !== this.userService.currentUser.id) {
-      let sortedUserNames = [user.name, this.userService.currentUser.name].sort(); 
+      let sortedUserNames = [user.name, this.userService.currentUser.name].sort();
       let userChatName = sortedUserNames.join(' ');
       this.chat.name = userChatName;
     } else {
@@ -113,7 +113,7 @@ export class ChatService {
 
   // ---------------- Search function ---------------
   getallChannels() {
-    this.unSubChannels= onSnapshot(
+    this.unSubChannels = onSnapshot(
       query(collection(this.firestore, "channels"), orderBy("name")),
       (snapshot) => {
         this.allChannels = snapshot.docs.map((doc) => {
@@ -121,7 +121,7 @@ export class ChatService {
           channel.id = doc.id;
           return channel;
         });
-       console.log('all Channels', this.allChannels);
+        //  console.log('all Channels', this.allChannels);
         this.getPersonalChannels();
       }
     );
@@ -131,7 +131,7 @@ export class ChatService {
     this.yourChannels = [];
     this.allChannels.forEach(channel => {
       if (channel.members.some((member: { id: string; }) => member.id === this.userService.currentUser.id)) {
-        console.log(channel);
+        // console.log(channel);
         this.yourChannels.push(channel);
       }
     });
@@ -144,14 +144,14 @@ export class ChatService {
 
   getAllMessages() {
     this.yourChannels.forEach(channel => {
-      console.log('id', channel.id); 
+      // console.log('id', channel.id); 
       const messageCol = collection(this.firestore, `channels/${channel.id}/messages`);
-      this.unSubMessages = onSnapshot( messageCol,
+      this.unSubMessages = onSnapshot(messageCol,
         (list) => {
           list.forEach(message => {
             this.allMessagesOfChannel.push(message.data());
           });
-        }     
+        }
       );
     });
     // console.log('check', this.allMessagesOfChannel);
@@ -159,14 +159,14 @@ export class ChatService {
 
 
   getAllUsers() {
-      const userCol = collection(this.firestore, 'users');
-      this.unSubUsers = onSnapshot( userCol,
-        (list) => {
-          list.forEach(user => {
-            this.allUsers.push(user.data());
-          });
-        }     
-      );
+    const userCol = collection(this.firestore, 'users');
+    this.unSubUsers = onSnapshot(userCol,
+      (list) => {
+        list.forEach(user => {
+          this.allUsers.push(user.data());
+        });
+      }
+    );
     // console.log('check Users', this.allUsers);
   }
 
