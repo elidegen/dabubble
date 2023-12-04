@@ -121,6 +121,7 @@ export class WorkspaceComponent implements OnInit {
   }
 
   renderChannel(channel: Channel) {
+    console.log('show channel', channel);
     this.chatservice.openChat = channel;
     this.chatservice.chatWindow = 'channel';
   }

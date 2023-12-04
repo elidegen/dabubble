@@ -53,12 +53,14 @@ export class HomeComponent {
   }
 
   filterUsers() {
+    this.filteredUsers = [];
     this.filteredUsers = this.userService.users.filter(user =>
       user.name?.toLowerCase().includes(this.searchInput.toLowerCase())
     );
   }
 
   filterMessages() {
+    this.filteredMessages = [];
     this.filteredMessages = this.chatService.allMessagesOfChannel.filter(message =>
       message.content?.toLowerCase().includes(this.searchInput.toLowerCase()) ||
       message.creator?.toLowerCase().includes(this.searchInput.toLowerCase())
@@ -67,16 +69,18 @@ export class HomeComponent {
 
   selectUser(user: any) {
     this.chatService.createDirectMessage(user);
-    
-
+    this.chatService.chatWindow = 'direct';
    console.log("User wurde in der Suchfunktion ausgewählt für einen direct Chat", user);
     this.search.nativeElement.value = '';
   }
 
 selectMessage(message: any) {
   console.log("Bei der Suchfunktion ausgewählte Nachricht",message)
-  // this.chatService.getChannelByMessage(message);
+  this.chatService.getChannelByMessage(message);
 }
+
+
+
 
   openProfileDialog(): void {
     const dialogRef = this.dialog.open(DialogViewProfileComponent, {

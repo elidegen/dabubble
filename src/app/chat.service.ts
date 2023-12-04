@@ -71,6 +71,7 @@ export class ChatService {
         });
       }
       this.compareNewDirectMessageWithExisting(user);
+      this.compareNewDirectMessageWithExisting(user);
   }
   
 
@@ -221,7 +222,17 @@ getAllDirectMessages(): Promise<void> {
     const foundDirectMessage = this.allDirectMessages.find(message => message.id === directId);
     console.log('all directs', this.allDirectMessages);
     this.renderDirectMessage(foundDirectMessage);
+    
   }
+
+  getChannelByMessage(message: any) {
+    let channel = this.allChannels.find(channel => channel.id = message.channelID);
+    console.log( "Dieser channel wir ausgewählt in der suchfunktion",channel);
+    this.openChat = channel;
+    this.chatWindow = 'channel';
+  }
+
+ 
   
 
   renderDirectMessage(chat: Chat) {

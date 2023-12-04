@@ -141,10 +141,12 @@ mat-drawer {
 
 
 .message-row-container {
-        
+    padding: 10px;
     &:hover {
         background-color: var(--primary);
         cursor: pointer;
+        border-radius: 20px;
+       
 
         .my-message-content {
             background-color: var(--purple2) !important;
