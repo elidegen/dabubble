@@ -13,6 +13,7 @@ import { Message } from 'src/models/message.class';
 })
 export class ChatService {
   private _openChatSubject: BehaviorSubject<Channel | Chat | null> = new BehaviorSubject<Channel | Chat | null>(null);
+  private _openDirectMessageSubject: BehaviorSubject<Chat | null> = new BehaviorSubject<Chat | null>(null);
   firestore: Firestore = inject(Firestore)
   chatWindow = 'empty';
   chat: Chat = new Chat();
@@ -26,6 +27,9 @@ export class ChatService {
     this.getallChannels();
   }
 
+  // -------------- channel -----------------------
+
+
   get openChat$(): Observable<Channel | Chat | null> {
     return this._openChatSubject.asObservable();
   }
@@ -34,23 +38,22 @@ export class ChatService {
     this._openChatSubject.next(value);
   }
 
-// -------------- channel -----------------------
+  // ----------------- Direct Message --------------------------
+  get openDirectMessage$(): Observable<Chat | null> {
+    return this._openDirectMessageSubject.asObservable();
+  }
+
+  set openDirectMessage(value: Chat | null) {
+    this._openDirectMessageSubject.next(value);
+  }
 
 
-
-
-
-
-// Create direct Messages ------------------------------
+// Create direct messages ------------------------------
   async createDirectMessage(user: User) {
     if (user.id !== this.userService.currentUser.id) {
-      let sortedUserIds = [user.id, this.userService.currentUser.id].sort(); // ich lasse zunächst die beiden Ids sortieren und danach zusammenfügen. Dadurch entsteht eine individuelle ID, selbst wenn user und CurrentUser vertauscht sind. Somit werden keine zwei Chats mit denselben Membern erstellen
-      let userId = sortedUserIds.join('');
-      let userData = this.convertUser(user);
-      let currentUserData = this.convertUser(this.userService.currentUser);
-      this.chat.members.push(userData, currentUserData);
+      this.checkUserForDirectMessageName(user);
       const directMessageRef = collection(this.firestore, 'direct messages');
-      const specificDocRef: DocumentReference<DocumentData> = doc(directMessageRef, userId);
+      const specificDocRef: DocumentReference<DocumentData> = doc(directMessageRef, this.checkUserForId(user));
       const docSnapshot = await getDoc(specificDocRef);
       if (!docSnapshot.exists()) {
         await setDoc(specificDocRef, {
@@ -62,6 +65,35 @@ export class ChatService {
       }
     }
     this.chatWindow = 'empty';
+  }
+
+  
+  checkUserForId(user: User) {
+    if (user.id !== this.userService.currentUser.id) {
+      let sortedUserIds = [user.id, this.userService.currentUser.id].sort(); 
+      let userId = sortedUserIds.join('');
+      let userData = this.convertUser(user);
+      let currentUserData = this.convertUser(this.userService.currentUser);
+      this.chat.members.push(userData, currentUserData);
+      this.chat.id = userId;
+      return userId
+    } else {
+      let userId = this.userService.currentUser.id;
+      let currentUserData = this.convertUser(this.userService.currentUser);
+      this.chat.members.push(currentUserData);
+      this.chat.id = userId;
+      return userId
+    }
+  }
+
+  checkUserForDirectMessageName(user: User) {
+    if (user.id !== this.userService.currentUser.id) {
+      let sortedUserNames = [user.name, this.userService.currentUser.name].sort(); 
+      let userChatName = sortedUserNames.join(' ');
+      this.chat.name = userChatName;
+    } else {
+      this.chat.name = this.userService.currentUser.name;
+    }
   }
 
 

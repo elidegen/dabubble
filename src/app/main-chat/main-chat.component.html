@@ -255,7 +255,7 @@
 
     </div>
 
-    <div *ngSwitchCase="'direct'">
+    <div *ngSwitchCase="'direct'" class="test">
       <mat-card-header >
         <div class="header">
           <button (click)="openEditChannelDialog()" mat-button class="br-32">
@@ -285,7 +285,7 @@
         </div>
       </mat-card-header>
 
-      <app-dialog-add-channel-members class="chat-window-container"></app-dialog-add-channel-members>
+      <app-dialog-add-channel-members></app-dialog-add-channel-members>
 
     </div>
 

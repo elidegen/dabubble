@@ -1,5 +1,5 @@
 import { Component, ElementRef, HostListener, OnInit, QueryList, ViewChild, ViewChildren, inject } from '@angular/core';
-import { DocumentData, DocumentReference, Firestore, addDoc, collection, doc, getDoc, getDocs, updateDoc } from '@angular/fire/firestore';
+import { DocumentData, DocumentReference, Firestore, addDoc, collection, doc, getDoc, getDocs, onSnapshot, orderBy, query, updateDoc } from '@angular/fire/firestore';
 import { User } from 'src/models/user.class';
 import { ChatService } from '../chat.service';
 import { UserService } from '../user.service';
@@ -8,6 +8,7 @@ import { Message } from 'src/models/message.class';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '../auth.service';
 import { EmojiService } from '../emoji.service';
+import { Chat } from 'src/models/chat.class';
 
 
 @Component({
@@ -19,16 +20,18 @@ export class DialogAddChannelMembersComponent implements OnInit{
   @ViewChildren('userContainer') userContainers!: QueryList<any>;
   @ViewChild('messageContainer') messageContainer!: ElementRef;
   firestore: Firestore = inject(Firestore);
-  currentChat!: Channel | undefined;
+  currentChat!: Chat | undefined;
   currentUser;
   message: Message = new Message();
   organizedMessages: { date: string, messages: Message[] }[] = []
+  messagesByDate: { [date: string]: Message[] } = {};
+
   allMessages: Message[] = [];
   // ------------- for editing of message ----------------
   edit: boolean = false;
   editingMessage: string | undefined;
   @ViewChild('editor') editor!: ElementRef;
- 
+  unSubMessages: any;
 
   constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public authService: AuthService, public emojiService: EmojiService) {
     userService.getCurrentUserFromLocalStorage();
@@ -38,8 +41,92 @@ export class DialogAddChannelMembersComponent implements OnInit{
 
 
   ngOnInit() {
-   
+    this.chatService.openDirectMessage$.subscribe((openDirectMessage) => {
+      if (openDirectMessage) {
+        const newChat = openDirectMessage as Chat;
+        if (!this.currentChat || this.currentChat.id !== newChat.id) {
+          this.currentChat = newChat;
+          if (this.unSubMessages) {
+            this.unSubMessages();
+          }
+          this.loadMessages();
+          // this.getAllChannelMembers();
+        }
+      } else {
+        this.currentChat = undefined;
+      }
+
+    });
   }
+
+  loadMessages() {
+    if (this.currentChat?.id) {
+      const messageCollection = collection(this.firestore, `direct messages/${this.currentChat.id}/messages`);
+      const q = query(messageCollection, orderBy('timeInMs', 'asc'));
+      this.unSubMessages = onSnapshot(q, async (snapshot) => {
+        this.allMessages = await Promise.all(snapshot.docs.map(async doc => {
+          const message = doc.data() as Message;
+          message.id = doc.id;
+          return message;
+        }));
+        this.organizeMessagesByDate();
+      });
+    }
+  }
+
+  organizeMessagesByDate() {
+    this.messagesByDate = {};
+    for (const message of this.allMessages) {
+      const messageDate = message.date;
+      if (messageDate) {
+        if (!this.messagesByDate[messageDate]) {
+          this.messagesByDate[messageDate] = [];
+        }
+        this.messagesByDate[messageDate].push(message);
+      }
+    }
+    this.organizedMessages = Object.entries(this.messagesByDate).map(([date, messages]) => ({ date, messages }));
+    this.organizedMessages = this.organizedMessages;
+    console.log('Show', this.organizedMessages)
+  }
+
+
+  async sendMessage() {
+    if (this.currentChat?.id && this.message.content?.trim() !== '') {
+      this.getSentMessageTime();
+      this.getSentMessageDate();
+      this.message.creator = this.userService.currentUser.id;
+      this.message.channel = this.currentChat.name;
+      const subColRef = collection(this.firestore, `direct messages/${this.currentChat.id}/messages`);
+      await addDoc(subColRef, this.message.toJSON())
+        .catch((err) => {
+          console.log(err);
+        })
+        .then((docRef: void | DocumentReference<DocumentData, DocumentData>) => {
+          if (docRef && docRef instanceof DocumentReference) {
+            if (this.currentChat?.id) {
+              this.updateMessageId(`direct messages/${this.currentChat.id}/messages`, this.message, docRef.id);
+            }
+          }
+          this.message.content = '';
+        });
+    }
+  }
+
+
+  getSentMessageDate() {
+    const currentDate = this.getCurrentDate();
+    const formattedDate = this.formatDate(currentDate);
+    this.message.date = formattedDate;
+  }
+
+  getSentMessageTime() {
+    const currentTime = new Date();
+    this.message.timeInMs = currentTime.getTime();
+    const formattedTime = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    this.message.time = formattedTime;
+  }
+
 
   isToday(date: string): boolean {
     const currentDate = this.getCurrentDate();
@@ -66,7 +153,7 @@ export class DialogAddChannelMembersComponent implements OnInit{
 
   async updateMessageContent(message: Message) {
     let messageId = message.id
-    const messageColRef = doc(collection(this.firestore, `channels/${this.currentChat?.id}/messages/`), messageId);
+    const messageColRef = doc(collection(this.firestore, `direct messages/${this.currentChat?.id}/messages/`), messageId);
     this.setMessageValues(message);
     await updateDoc(messageColRef, this.message.toJSON()).catch((error) => {
       console.error('Error updating document:', error);
@@ -93,7 +180,7 @@ export class DialogAddChannelMembersComponent implements OnInit{
 
   async addReaction(emoji: any, messageId: any) {
     if (this.currentChat?.id) {
-      const subReactionColRef = doc(collection(this.firestore, `channels/${this.currentChat.id}/messages/`), messageId);
+      const subReactionColRef = doc(collection(this.firestore, `direct messages/${this.currentChat.id}/messages`), messageId);
       let messageIndex = this.allMessages.findIndex(message => message.id === messageId);
       let currentMessage = this.allMessages[messageIndex];
   
@@ -156,46 +243,10 @@ export class DialogAddChannelMembersComponent implements OnInit{
     }
   } 
 
-  async sendMessage() {
-    if (this.currentChat?.id && this.message.content?.trim() !== '') {
-      this.getSentMessageTime();
-      this.getSentMessageDate();
-      this.getSentMessageCreator();
-      this.message.channel = this.currentChat.name;
-      const subColRef = collection(this.firestore, `channels/${this.currentChat.id}/messages`);
-      await addDoc(subColRef, this.message.toJSON())
-        .catch((err) => {
-          console.log(err);
-        })
-        .then((docRef: void | DocumentReference<DocumentData, DocumentData>) => {
-          if (docRef && docRef instanceof DocumentReference) {
-            if (this.currentChat?.id) {
-              this.updateMessageId(`channels/${this.currentChat.id}/messages`, this.message, docRef.id);
-            }
-          }
-          this.message.content = '';
-        });
-
-    }
-  }
-
-  getSentMessageDate() {
-    const currentDate = this.getCurrentDate();
-    const formattedDate = this.formatDate(currentDate);
-    this.message.date = formattedDate;
-  }
-
-  getSentMessageTime() {
-    const currentTime = new Date();
-    this.message.timeInMs = currentTime.getTime();
-    const formattedTime = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    this.message.time = formattedTime;
-  }
+ 
 
 
-  getSentMessageCreator() {
-    this.message.creator = this.userService.currentUser.id;
-  }
+
 
 
   scrollToBottom(): void {

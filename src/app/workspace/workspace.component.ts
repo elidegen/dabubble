@@ -33,6 +33,13 @@ export class WorkspaceComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loadChannels();
+    this.loadDirectMessages();
+    this.loadUsers();
+  }
+
+
+  loadChannels() {
     this.unsubscribeChannels = onSnapshot(
       query(collection(this.firestore, "channels"), orderBy("name")),
       (snapshot) => {
@@ -44,7 +51,10 @@ export class WorkspaceComponent implements OnInit {
         this.getPersonalChannels();
       }
     );
+  }
 
+
+  loadDirectMessages() {
     this.unsubscribeChats = onSnapshot(
       query(collection(this.firestore, "direct messages"), orderBy("name")),
       (snapshot) => {
@@ -55,7 +65,10 @@ export class WorkspaceComponent implements OnInit {
         this.getPersonalDirectMessages();
       }
     );
+  }
 
+
+  loadUsers() {
     this.unsubscribeUsers = onSnapshot(
       query(collection(this.firestore, "users"), orderBy("name")),
       (snapshot) => {
@@ -65,7 +78,6 @@ export class WorkspaceComponent implements OnInit {
         });    
       }
     );
-
   }
 
 
@@ -124,14 +136,17 @@ export class WorkspaceComponent implements OnInit {
     this.chatservice.chatWindow = 'channel'
   }
 
+
   renderDirectMessage(chat: Chat) {
-    // this.chatservice.openChat = chat
+    this.chatservice.openDirectMessage = chat;
     this.chatservice.chatWindow = 'direct';
   }
   
+
   ngOnDestroy(): void {
     this.unsubscribeChannels;
     this.unsubscribeChats;
+    this.unsubscribeUsers;
   }
 
 

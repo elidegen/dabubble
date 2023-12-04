@@ -126,7 +126,8 @@ export class MainChatComponent implements OnInit {
     if (this.currentChat?.id && this.message.content?.trim() !== '') {
       this.getSentMessageTime();
       this.getSentMessageDate();
-      this.getSentMessageCreator();
+      this.message.creator = this.userService.currentUser.id;
+      this.message.channel = this.currentChat.name;
       const subColRef = collection(this.firestore, `channels/${this.currentChat.id}/messages`);
       await addDoc(subColRef, this.message.toJSON())
         .catch((err) => {
