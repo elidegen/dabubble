@@ -176,9 +176,9 @@
 
                   <div class="reaction-container">
                     <div class="reaction-emoji-container">
-                      <button  matTooltip="{{reaction.creatorName}}" class="reaction-emoji-button"  *ngFor="let reaction of message.reaction">
-                        <div (click)="addReaction(reaction.emoji, message.id)" class="emoji-fit">{{ reaction.emoji }}</div>
-                        <span>{{ reaction.count }}</span>
+                      <button class="reaction-emoji-button" *ngFor="let emoji of message.reactionCount | keyvalue">
+                        <div (click)='addReaction(emoji.key,message.id)' class="emoji-fit">{{emoji.key}}</div>
+                         <span>{{ emoji.value }}</span>
                       </button>
                     </div>
 
