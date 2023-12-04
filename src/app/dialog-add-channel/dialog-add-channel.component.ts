@@ -27,7 +27,6 @@ export class DialogAddChannelComponent {
   selectedUsers: any[] = [];
   currentUser;
 
-
   constructor(public dialogRef: MatDialogRef<DialogAddChannelComponent>, public chatService: ChatService, public userService: UserService) {
     this.loadUsers();
     this.currentUser = this.userService.currentUser;
@@ -60,6 +59,7 @@ export class DialogAddChannelComponent {
   async createChannel() {
     this.getMembers();
     this.channel.creator = this.userService.currentUser.name;
+    this.channel.viewedBy = [];
     console.log('channel', this.channel);
 
     await addDoc(collection(this.firestore, 'channels'), this.channel.toJSON())
@@ -84,17 +84,16 @@ export class DialogAddChannelComponent {
     }
   }
 
-
   addSelectedUsersToChannel(selectedUsers: any[]) {
     const formattedUsers = selectedUsers.map(user => {
-        return {
-            name: user.name,
-            email: user.email,
-            password: user.password,
-            id: user.id,
-            picture: user.picture,
-            online: user.online
-        };
+      return {
+        name: user.name,
+        email: user.email,
+        password: user.password,
+        id: user.id,
+        picture: user.picture,
+        online: user.online
+      };
     });
     this.channel.members.push(...formattedUsers);
   }
@@ -146,7 +145,7 @@ export class DialogAddChannelComponent {
     if (index == -1) {
       this.selectedUsers.push(user);
       console.log('select', this.selectedUsers);
-      
+
     } else {
       this.removeUser(user)
     }

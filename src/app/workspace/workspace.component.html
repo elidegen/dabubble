@@ -22,7 +22,12 @@
           <div class="channel-container">
 
             <div class="channel-button-container" *ngFor="let channel of this.yourChannels;">
-              <button (click)="renderChannel(channel)" mat-button># {{channel.name}}</button>
+              <button (click)="renderChannel(channel)" mat-button>
+                <div class="channel-btn">
+                  <b># {{channel.name}}</b>
+                  <div class="unread-msg" *ngIf="unreadMsg(channel)"></div>
+                </div>
+              </button>
             </div>
 
             <button (click)="openDialog()" class="add_channel_button">
@@ -54,7 +59,8 @@
 
           <div class="direct-message-container">
 
-            <button class="direct-message-button br-32" *ngFor="let directMessage of personalDirectMessages" (click)="renderDirectMessage(directMessage)">
+            <button class="direct-message-button br-32" *ngFor="let directMessage of personalDirectMessages"
+              (click)="renderDirectMessage(directMessage)">
               <div class="profile-message-container">
                 <img class="d-flex" src="{{ getUserProfileForDirectMessage(directMessage.members) }}" alt="male2">
                 <div [ngClass]="{'offline-status': currentUser.online === false}" class="online-status"></div>
