@@ -15,6 +15,7 @@ import { Message } from 'src/models/message.class';
 export class ChatService {
   private _openChatSubject: BehaviorSubject<Channel | Chat | null> = new BehaviorSubject<Channel | Chat | null>(null);
   private _openDirectMessageSubject: BehaviorSubject<Chat | null> = new BehaviorSubject<Chat | null>(null);
+  private _openThreadSubject: BehaviorSubject<Chat | null> = new BehaviorSubject<Chat | null>(null);
   firestore: Firestore = inject(Firestore)
   chatWindow = 'empty';
   chat: Chat = new Chat();
@@ -53,6 +54,7 @@ export class ChatService {
   set openDirectMessage(value: Chat | null) {
     this._openDirectMessageSubject.next(value);
   }
+
 
   
 

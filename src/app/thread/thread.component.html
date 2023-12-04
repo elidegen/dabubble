@@ -38,14 +38,14 @@
     <section> <!-- Oberste section für Kommentar_bereich -->
       <!-- separator -->
       <div class="comments-container">
-        <span *ngIf="allThreadMessages.length == 1" class="comments">{{allThreadMessages.length}}
-          Reply</span>
-        <span *ngIf="allThreadMessages.length >= 2" class="comments">{{allThreadMessages.length}}
-          Replies</span>
+        <span *ngIf="firestoreService.allThreadMessages.length == 1" class="comments">{{firestoreService.allThreadMessages.length}}
+          Comment</span>
+        <span *ngIf="firestoreService.allThreadMessages.length >= 2" class="comments">{{firestoreService.allThreadMessages.length}}
+          Comments</span>
         <div class="separator"></div>
       </div>
 
-      <div class="message-row-container" *ngFor="let thread of this.allThreadMessages;"
+      <div class="message-row-container" *ngFor="let thread of firestoreService.allThreadMessages;"
         [ngClass]="{'my-messages': thread.creatorId == currentUser.id}">
         <div class="message-box">
           <div class="message-avatar-container">

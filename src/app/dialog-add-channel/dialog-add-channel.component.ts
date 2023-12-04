@@ -5,7 +5,7 @@ import { Channel } from 'src/models/channel.class';
 import { ChatService } from '../chat.service';
 import { UserService } from '../user.service';
 import { User } from 'src/models/user.class';
-import { LoginScreenComponent } from '../login-screen/login-screen.component';
+import { FirestoreService } from '../firestore.service';
 
 @Component({
   selector: 'app-dialog-add-channel',
@@ -14,21 +14,19 @@ import { LoginScreenComponent } from '../login-screen/login-screen.component';
 })
 export class DialogAddChannelComponent {
   @ViewChildren('userContainer') userContainers!: QueryList<any>;
-
   channel: Channel = new Channel();
   firestore: Firestore = inject(Firestore);
   addMembers: boolean = false;
   allMembers: boolean = true;
   searchInput: string = '';
-  users: User[] = [];
-  filteredUsers: User[] = [];
   isInputFocused: boolean = false;
   touched: boolean = false;
   selectedUsers: any[] = [];
   currentUser;
 
-  constructor(public dialogRef: MatDialogRef<DialogAddChannelComponent>, public chatService: ChatService, public userService: UserService) {
-    this.loadUsers();
+  
+  constructor(public dialogRef: MatDialogRef<DialogAddChannelComponent>, public chatService: ChatService, public userService: UserService, public firestoreService: FirestoreService) {
+    firestoreService.loadUsers()
     this.currentUser = this.userService.currentUser;
   }
 
@@ -40,49 +38,31 @@ export class DialogAddChannelComponent {
     }
   }
 
-  async loadUsers() {
-    try {
-      const querySnapshot = await getDocs(collection(this.firestore, 'users'));
-      this.users = querySnapshot.docs.map((doc: { data: () => any; }) => new User(doc.data()));
-    } catch (error) {
-      console.error('Error loading users:', error);
-    }
-  }
 
   filterUsers(): void {
     this.isInputFocused = true;
-    this.filteredUsers = this.users.filter(user =>
-      user.name?.toLowerCase().includes(this.searchInput.toLowerCase())
-    );
+    this.firestoreService.filterAllUsers()
   }
+
 
   async createChannel() {
     this.getMembers();
     this.channel.creator = this.userService.currentUser.name;
     this.channel.viewedBy = [];
-    console.log('channel', this.channel);
-
-    await addDoc(collection(this.firestore, 'channels'), this.channel.toJSON())
-      .catch((err) => {
-        console.log(err);
-      })
-      .then((docRef: void | DocumentReference<DocumentData, DocumentData>) => {
-        if (docRef && docRef instanceof DocumentReference) {
-          this.updateChannelId('channels', this.channel, docRef.id);
-          this.dialogRef.close();
-          console.log('Added Channel', docRef);
-        }
-      });
+    await this.firestoreService.addChannel(this.channel);
+    this.dialogRef.close();
   }
+
 
   getMembers() {
     if (this.allMembers) {
-      this.addSelectedUsersToChannel(this.users)
+      this.addSelectedUsersToChannel(this.firestoreService.allUsers)
     } else {
       this.addCurrentUser();
       this.addSelectedUsersToChannel(this.selectedUsers)
     }
   }
+
 
   addSelectedUsersToChannel(selectedUsers: any[]) {
     const formattedUsers = selectedUsers.map(user => {
@@ -98,30 +78,11 @@ export class DialogAddChannelComponent {
     this.channel.members.push(...formattedUsers);
   }
 
-  async updateChannelId(colId: string, channel: Channel, newId: string) {
-    channel.id = newId;
-    await this.updateChannel(colId, channel);
-  }
-
-  async updateChannel(colId: string, channel: Channel) {
-    const docRef = doc(collection(this.firestore, colId), channel.id);
-    await updateDoc(docRef, this.getUpdateData(channel)).catch(
-      (error) => { console.log(error); }
-    );
-  }
-
-  getUpdateData(channel: Channel) {
-    return {
-      name: channel.name,
-      description: channel.description,
-      creator: channel.creator,
-      id: channel.id,
-    };
-  }
-
+  
   userSelected(event: Event) {
     event.stopPropagation();
   }
+
 
   addCurrentUser() {
     const userAlreadySelected = this.selectedUsers.some(user => user.id === this.currentUser.id);
@@ -129,6 +90,7 @@ export class DialogAddChannelComponent {
       this.selectedUsers.push(this.currentUser);
     }
   }
+
 
   removeUser(user: User) {
     let index = this.selectedUsers.findIndex(obj => obj.id === user.id);
@@ -138,18 +100,17 @@ export class DialogAddChannelComponent {
     }
   }
 
+
   selectUser(user: User, i: number) {
     this.highlightButton(i);
     let index = this.selectedUsers.findIndex(obj => obj.id === user.id);
-
     if (index == -1) {
       this.selectedUsers.push(user);
-      console.log('select', this.selectedUsers);
-
     } else {
       this.removeUser(user)
     }
   }
+
 
   highlightButton(index: number) {
     const userContainer = this.userContainers.toArray()[index];
