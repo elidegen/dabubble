@@ -33,6 +33,10 @@ mat-expansion-panel {
     gap: 16px;
 }
 
+.offline-status {
+    background-color: grey;
+}
+
 .direct-message-button {
     display: flex !important;
     align-items: center;
@@ -142,4 +146,18 @@ mat-expansion-panel-header {
             fill: var(--purple3);
         }
     }
+}
+
+.channel-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.unread-msg {
+    background-color: #3fa9f5;
+    height: 8px;
+    width: 8px;
+    border-radius: 50%;
 }

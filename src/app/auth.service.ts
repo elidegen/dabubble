@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { inject } from '@angular/core';
-import { Firestore,} from '@angular/fire/firestore';
-import { getAuth, updateEmail,  createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, sendPasswordResetEmail, signInAnonymously, } from "firebase/auth";
+import { Firestore, } from '@angular/fire/firestore';
+import { getAuth, updateEmail, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, sendPasswordResetEmail, signInAnonymously, } from "firebase/auth";
 import { Router } from '@angular/router';
 import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { UserService } from './user.service';
@@ -15,7 +15,7 @@ export class AuthService {
   firestore: Firestore = inject(Firestore);
   private auth = getAuth();
   provider = new GoogleAuthProvider();
-  customPic: string ="";
+  customPic: string = "";
   newGuest: UserData = {
     name: "Guest",
     email: "",
@@ -24,20 +24,12 @@ export class AuthService {
     picture: "assets/img/avatars/profile.svg",
     online: true,
   }
-  
-  
 
-  ngOnInit() {
- 
-  }
+  ngOnInit() { }
 
-  constructor(public router: Router, public userService: UserService) {
+  constructor(public router: Router, public userService: UserService) { }
 
-  }
-
-  ngOnDestroy() {
-  }
-
+  ngOnDestroy() { }
 
   createUser() {
     createUserWithEmailAndPassword(this.auth, this.userService.currentEmail, this.userService.currentPassword)
@@ -51,34 +43,31 @@ export class AuthService {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(`Error Code: ${errorCode}`);
-       
         // ..
       });
-
   }
 
   async signInUser(email: string, password: string) {
     try {
       const userCredential = await signInWithEmailAndPassword(this.auth, email, password);
       console.log("User signed in:", userCredential.user);
-      
+
       const activeUserIndex = this.findUserIndexWithEmail(email);
       if (activeUserIndex !== -1) {
         this.userService.users[activeUserIndex].online = true;
-        console.log("Online Status von user",this.userService.users[activeUserIndex]);
+        // console.log("Online Status von user", this.userService.users[activeUserIndex]);
         this.userService.signInSuccess = true;
         this.userService.updateUser('users', this.userService.users[activeUserIndex]);
         this.userService.currentUser = this.userService.users[activeUserIndex];
         this.userService.setCurrentUserToLocalStorage();
-        console.log("Current User:", this.userService.currentUser);
+        // console.log("Current User:", this.userService.currentUser);
         await this.router.navigate(['home']);
       }
     } catch (error) {
       this.userService.signInSuccess = false;
-      console.log("Anmeldung Fehlgeschlagen");
+      // console.log("Anmeldung Fehlgeschlagen");
     }
   }
-
 
   async signInWithGoogle() {
     await signInWithPopup(this.auth, this.provider)
@@ -98,59 +87,55 @@ export class AuthService {
       .catch((error) => {
         console.error('Fehler bei Google-Anmeldung:', error);
       });
-
   }
 
+  //  signInWithApple() {
+  //     const appleAuthRequestResponse = await appleAuth.performRequest({
+  //       requestedOperation: appleAuth.Operation.LOGIN,
+  //       requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+  //     });
 
-//  signInWithApple() {
-//     const appleAuthRequestResponse = await appleAuth.performRequest({
-//       requestedOperation: appleAuth.Operation.LOGIN,
-//       requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
-//     });
-  
-//     // Erstellt eine Firebase-Anmeldeinformation
-//     const credential = auth.AppleAuthProvider.credential(
-//       appleAuthRequestResponse.identityToken
-//     );
-  
-//     // Anmeldung bei Firebase
-//     return auth().signInWithCredential(credential);
-//   }
+  //     // Erstellt eine Firebase-Anmeldeinformation
+  //     const credential = auth.AppleAuthProvider.credential(
+  //       appleAuthRequestResponse.identityToken
+  //     );
 
+  //     // Anmeldung bei Firebase
+  //     return auth().signInWithCredential(credential);
+  //   }
 
   signInGuest() {
     const auth = getAuth();
-signInAnonymously(auth)
-  .then(() => {
-console.log("Guest logged in");
-this.userService.currentUser = this.newGuest;
-this.userService.currentUser.id= this.createId(10);
-this.userService.setCurrentUserToLocalStorage();
-this.userService.getCurrentUserFromLocalStorage();
-console.log("Guest ist eingeloggt", this.userService.currentUser);
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    console.log(error.code);
-    console.log(error.message);
-    // ...
-  });
+    signInAnonymously(auth)
+      .then(() => {
+        console.log("Guest logged in");
+        this.userService.currentUser = this.newGuest;
+        this.userService.currentUser.id = this.createId(10);
+        this.userService.setCurrentUserToLocalStorage();
+        this.userService.getCurrentUserFromLocalStorage();
+        console.log("Guest ist eingeloggt", this.userService.currentUser);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(error.code);
+        console.log(error.message);
+        // ...
+      });
   }
 
-  
   async signOutUser() {
     if (this.userService.currentUser.name == "Guest") {
       this.userService.removeCurrentUserFromLocalStorage();
     } else {
-    let userIndexToLogout = this.findUserIndexWithEmail(this.userService.currentUser.email);
-    if (userIndexToLogout != -1) {
-    console.log("Index to Logout", userIndexToLogout);
-    this.userService.users[userIndexToLogout].online = false;
-   this.userService.updateUser('users', this.userService.users[userIndexToLogout]);
-  }
-}
-this.userService.currentUser = this.userService.createEmptyUser();
+      let userIndexToLogout = this.findUserIndexWithEmail(this.userService.currentUser.email);
+      if (userIndexToLogout != -1) {
+        console.log("Index to Logout", userIndexToLogout);
+        this.userService.users[userIndexToLogout].online = false;
+        this.userService.updateUser('users', this.userService.users[userIndexToLogout]);
+      }
+    }
+    this.userService.currentUser = this.userService.createEmptyUser();
     await signOut(this.auth).then(() => {
       console.log('Benutzer erfolgreich abgemeldet');
     }).catch((error) => {
@@ -158,33 +143,25 @@ this.userService.currentUser = this.userService.createEmptyUser();
     });
   }
 
-
-  
-
   async addGoogleUser() {
     if (!this.userService.userExists(this.userService.currentUser.email)) {
-    await this.userService.addUser('users', this.userService.currentUser);
-  }
+      await this.userService.addUser('users', this.userService.currentUser);
+    }
     await this.userService.setCurrentUserToLocalStorage();
     await this.userService.getCurrentUserFromLocalStorage();
     await this.router.navigate(['home']);
   }
 
-async updateUserEmail(newEmail:string):Promise<void> {
-  const auth = getAuth();
-  updateEmail(auth.currentUser!, newEmail).then(() => {
-console.log("User email updatet")
-    // ...
-  }).catch((error) => {
- console.log(error)
-    // ...
-  });
+  async updateUserEmail(newEmail: string): Promise<void> {
+    const auth = getAuth();
+    updateEmail(auth.currentUser!, newEmail).then(() => {
+      console.log("User email updatet")
+      // ...
+    }).catch((error) => {
+      console.log(error)
+      // ...
+    });
   }
-
-
-
-  
-
 
   sendResetEmail(emailAddress: string) {
     sendPasswordResetEmail(this.auth, emailAddress)
@@ -197,7 +174,6 @@ console.log("User email updatet")
       });
   }
 
- 
   findUserIndexWithEmail(email: string) {
     return this.userService.users.findIndex(user => user.email === email);
   }
@@ -205,7 +181,6 @@ console.log("User email updatet")
   findUserIndexWithId(Id: string) {
     return this.userService.users.findIndex(user => user.id === Id);
   }
-
 
   async uploadProfileImage(file: File,) {
     const storage = getStorage();
@@ -231,14 +206,13 @@ console.log("User email updatet")
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           console.log('File available at', downloadURL);
           this.customPic = downloadURL;
-        
+
         });
       }
     );
   }
 
-
-createId(length:number) {
+  createId(length: number) {
     let result = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     const charactersLength = characters.length;
@@ -248,9 +222,5 @@ createId(length:number) {
       counter += 1;
     }
     return result;
+  }
 }
-
-
-}
-
-

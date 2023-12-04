@@ -158,7 +158,7 @@ export class ChatService {
         }     
       );
     });
-    console.log('check', this.allMessagesOfChannel);
+    // console.log('check', this.allMessagesOfChannel);
   }
 
 
@@ -171,7 +171,7 @@ export class ChatService {
           });
         }     
       );
-    console.log('check Users', this.allUsers);
+    // console.log('check Users', this.allUsers);
   }
 
 
