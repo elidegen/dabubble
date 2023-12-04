@@ -19,10 +19,10 @@
           </button>
           <span *ngIf="filteredUsers.length < 1">No matching contact</span>
           <h1>Messages:</h1>
-          <div class="message-row-container"[ngClass]="{'my-messages': message.creator == currentUser.name}" *ngFor="let message of filteredMessages"  >
+          <div class="message-row-container"[ngClass]="{'my-messages': message.creator == currentUser.name}" *ngFor="let message of filteredMessages" (click)="selectMessage(message)" >
         <span>Found in {{message.channel}}</span>
               <div class="message-box">
-                <div (click)="selectMessage(message)" class="creator-picture-container">
+                <div  class="creator-picture-container">
                   <img src="{{message.profilePic}}" alt="" />
                 </div>
 

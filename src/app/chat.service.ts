@@ -70,7 +70,7 @@ export class ChatService {
           console.log('error', err);
         });
       }
-      // this.compareNewDirectMessageWithExisting(user);
+      this.compareNewDirectMessageWithExisting(user);
   }
   
 
@@ -167,11 +167,6 @@ export class ChatService {
   }
 
 
-  renderDirectMessage(chat: Chat) {
-    this.openDirectMessage = chat;
-    this.chatWindow = 'direct';
-  }
-
   getAllUsers() {
     const userCol = collection(this.firestore, 'users');
     this.unSubUsers = onSnapshot(userCol,
@@ -225,9 +220,18 @@ getAllDirectMessages(): Promise<void> {
     
     const foundDirectMessage = this.allDirectMessages.find(message => message.id === directId);
     console.log('all directs', this.allDirectMessages);
-    // this.renderDirectMessage(foundDirectMessage);
+    this.renderDirectMessage(foundDirectMessage);
     
   }
+
+  getChannelByMessage(message: any) {
+    let channel = this.allChannels.find(channel => channel.id = message.channelID);
+    console.log( "Dieser channel wir ausgewählt in der suchfunktion",channel);
+    this.openChat = channel;
+    this.chatWindow = 'channel';
+  }
+
+ 
   
 
   renderDirectMessage(chat: Chat) {

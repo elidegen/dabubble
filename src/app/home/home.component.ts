@@ -53,12 +53,14 @@ export class HomeComponent {
   }
 
   filterUsers() {
+    this.filteredUsers = [];
     this.filteredUsers = this.userService.users.filter(user =>
       user.name?.toLowerCase().includes(this.searchInput.toLowerCase())
     );
   }
 
   filterMessages() {
+    this.filteredMessages = [];
     this.filteredMessages = this.chatService.allMessagesOfChannel.filter(message =>
       message.content?.toLowerCase().includes(this.searchInput.toLowerCase()) ||
       message.creator?.toLowerCase().includes(this.searchInput.toLowerCase())
@@ -74,8 +76,11 @@ export class HomeComponent {
 
 selectMessage(message: any) {
   console.log("Bei der Suchfunktion ausgewählte Nachricht",message)
-  // this.chatService.getChannelByMessage(message);
+  this.chatService.getChannelByMessage(message);
 }
+
+
+
 
   openProfileDialog(): void {
     const dialogRef = this.dialog.open(DialogViewProfileComponent, {
