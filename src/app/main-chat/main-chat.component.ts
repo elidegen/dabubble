@@ -71,7 +71,6 @@ export class MainChatComponent implements OnInit {
         const newChat = openChat as Channel;
         if (!this.currentChat || this.currentChat.id !== newChat.id) {
           this.currentChat = newChat;
-          // console.log('currentChat', this.currentChat);
           this.threadService.currentChat = newChat;
           if (this.unSubMessages) {
             this.unSubMessages();
@@ -91,11 +90,13 @@ export class MainChatComponent implements OnInit {
     }
   }
 
+
   openEditChannelDialog() {
     this.dialog.open(DialogEditChannelComponent, {
       panelClass: 'dialog-container'
     });
   }
+
 
   openDialog() {
     this.dialog.open(DialogAddToGroupComponent, {
@@ -103,16 +104,19 @@ export class MainChatComponent implements OnInit {
     });
   }
 
+
   openMemberDialog() {
     this.dialog.open(DialogShowGroupMemberComponent, {
       panelClass: 'dialog-container'
     });
   }
 
+
   onCloseThread() {
     this.threadDrawer.close();
   }
 
+  
   async sendMessage() {
     if (this.currentChat?.id && this.message.content?.trim() !== '') {
       this.getSentMessageTime();

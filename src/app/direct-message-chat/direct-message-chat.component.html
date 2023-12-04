@@ -1,4 +1,10 @@
-<div [ngSwitch]="messageIsExisting">
+<div [ngSwitch]="messageIsExisting" class="chat-window-container">
+  <mat-card-header>
+      <button class="br-32 profile-button">
+        <img src="{{ chatService.getUserProfileForDirectMessage(currentChat?.members)}}"/>
+        <span class="mr-16">{{ chatService.getOtherUserName(currentChat?.members) }}</span>
+      </button>
+  </mat-card-header>
   <mat-card-content #messageContainer class="p-0 main-chat-container" *ngSwitchCase="true">
     <ng-container
       *ngFor="let organizedMessage of this.organizedMessages.slice()"
@@ -139,13 +145,13 @@
     ></emoji-mart>
   </mat-card-content> 
   
-  <mat-card-content *ngSwitchCase="false">
-    <div>
-      <img src="" alt="">
-      <span></span>
+  <mat-card-content *ngSwitchCase="false" class="empty-direct-message-container">
+    <div class="chat-patner-container">
+      <img src="{{ chatService.getUserProfileForDirectMessage(currentChat?.members)}}" alt="">
+      <span>{{ chatService.getOtherUserName(currentChat?.members) }}</span>
     </div>
     <div>
-      <span>This conversation is only taking place between <span>@</span>Elias and you.</span>
+      <span>This conversation is only taking place between <span class="user-highlighted">@{{ chatService.getOtherUserName(currentChat?.members) }}</span> and you.</span>
     </div>
   </mat-card-content>
 
@@ -153,29 +159,27 @@
     <div class="textfield-content">
       <div class="text-field-container">
         <textarea
-          [disabled]="!currentChat"
           (keyup.enter)="sendMessage()"
           [(ngModel)]="message.content"
-          placeholder="Message to "
+          placeholder="Message to {{ chatService.getOtherUserName(currentChat?.members) }} "
         ></textarea>
 
         <div class="message-buttons">
           <div class="attachments">
             <div class="border-right">
-              <button [disabled]="!currentChat" mat-icon-button>
+              <button mat-icon-button>
                 <img src="assets/img/icons/add.svg" alt="" />
               </button>
             </div>
 
             <button
-              [disabled]="!currentChat"
               (click)="openEmojiPickerChat()"
               mat-icon-button
             >
               <img src="assets/img/icons/smiley.svg" alt="" />
             </button>
 
-            <button [disabled]="!currentChat" mat-icon-button>
+            <button mat-icon-button>
               <img src="assets/img/icons/@.svg" alt="" />
             </button>
           </div>

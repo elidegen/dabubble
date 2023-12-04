@@ -40,7 +40,7 @@ import { DialogAddToGroupComponent } from './dialog-add-to-group/dialog-add-to-g
 import { DialogShowGroupMemberComponent } from './dialog-show-group-member/dialog-show-group-member.component';
 import { FormsModule } from '@angular/forms';
 import { ImprintComponent } from './imprint/imprint.component';
-import { DialogAddChannelMembersComponent } from './dialog-add-channel-members/dialog-add-channel-members.component';
+import { DirectMessageChatComponent } from './direct-message-chat/direct-message-chat.component';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { PrivacyComponent } from './privacy/privacy.component';
 
@@ -63,7 +63,7 @@ import { PrivacyComponent } from './privacy/privacy.component';
     DialogAddToGroupComponent,
     DialogShowGroupMemberComponent,
     ImprintComponent,
-    DialogAddChannelMembersComponent,
+    DirectMessageChatComponent,
     PrivacyComponent,
   ],
   imports: [

@@ -39,6 +39,7 @@ export class WorkspaceComponent implements OnInit {
     this.loadChannels();
     this.loadDirectMessages();
     this.loadUsers();
+    
     this.chatservice.openChat$.subscribe((openChat) => {
       if (openChat) {
         const newChat = openChat as Channel;
@@ -69,6 +70,7 @@ export class WorkspaceComponent implements OnInit {
     );
   }
 
+
   loadDirectMessages() {
     this.unsubscribeChats = onSnapshot(
       query(collection(this.firestore, "direct messages"), orderBy("name")),
@@ -94,6 +96,7 @@ export class WorkspaceComponent implements OnInit {
     );
   }
 
+
   getPersonalChannels() {
     this.yourChannels = [];
     this.allChannels.forEach(channel => {
@@ -107,43 +110,21 @@ export class WorkspaceComponent implements OnInit {
   getPersonalDirectMessages() {
     this.personalDirectMessages = [];
     this.allDirectMessages.forEach(chat => {
-      if (chat.members.some((member: { id: string; }) => member.id === this.currentUser.id)) {
+      if (chat.members.find((member: { id: string; }) => member.id === this.currentUser.id)) {
         this.personalDirectMessages.push(chat);
       }
     });
-    // console.log('own', this.personalDirectMessages);
   }
-
-  getOtherUserName(members: any[]) {
-    let otherUser = members.find(member => member.email !== this.currentUser.email);
-    return otherUser ? otherUser.name : '';
-  }
-
-  getUserProfileForDirectMessage(members: any[]) {
-    let otherUser = members.find(member => member.email !== this.currentUser.email);
-    let userProfile = this.allUsers.find(user => user.email == otherUser.email);
-    return userProfile ? userProfile.picture : '';
-  }
-
-  // onlineStatus für später -----------------------------------------------------
-
-  getUserStatusForDirectMessage(otherUser: any) {
-    let userProfile = this.allUsers.find(user => user.email == otherUser.email);
-    return userProfile ? userProfile.online : '';
-  }
-  // -----------------------------------------------------------------------------
 
   openDialog() {
     this.dialog.open(DialogAddChannelComponent, { panelClass: 'dialog-container' });
   }
 
   renderChannel(channel: Channel) {
-    console.log('show channel', channel);
-    
     this.chatservice.openChat = channel;
-    this.threadService.currentChat = channel;
     this.chatservice.chatWindow = 'channel';
   }
+
 
   unreadMsg(channel: Channel) {
     // console.log('chatserv', this.currentChat?.id);
@@ -157,8 +138,6 @@ export class WorkspaceComponent implements OnInit {
     }
   }
 
-
-  
 
   ngOnDestroy(): void {
     this.unsubscribeChannels;

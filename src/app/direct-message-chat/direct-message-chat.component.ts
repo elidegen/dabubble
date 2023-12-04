@@ -10,11 +10,11 @@ import { Chat } from 'src/models/chat.class';
 
 
 @Component({
-  selector: 'app-dialog-add-channel-members',
-  templateUrl: './dialog-add-channel-members.component.html',
-  styleUrls: ['./dialog-add-channel-members.component.scss']
+  selector: 'app-direct-message-chat',
+  templateUrl: './direct-message-chat.component.html',
+  styleUrls: ['./direct-message-chat.component.scss']
 })
-export class DialogAddChannelMembersComponent implements OnInit{
+export class DirectMessageChatComponent implements OnInit{
   @ViewChildren('userContainer') userContainers!: QueryList<any>;
   @ViewChild('messageContainer') messageContainer!: ElementRef;
   firestore: Firestore = inject(Firestore);
@@ -74,8 +74,9 @@ export class DialogAddChannelMembersComponent implements OnInit{
           message.id = doc.id;
           return message;
         }));
+        console.log('chat',this.currentChat);
+        
         this.organizeMessagesByDate();
-        console.log('nachrichtenlänge',this.allMessages);
         this.checkMessageNumbers()
       });
     }
@@ -166,10 +167,12 @@ export class DialogAddChannelMembersComponent implements OnInit{
     return `${parts[2]}.${this.getMonthNumber(parts[1])}.${parts[3]}`;
   }
 
+
   getMonthNumber(month: string): string {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     return (months.indexOf(month) + 1).toString().padStart(2, '0');
   }
+
 
   async updateMessageContent(message: Message) {
     let messageId = message.id
@@ -180,6 +183,7 @@ export class DialogAddChannelMembersComponent implements OnInit{
     });
     this.edit = false;
   }
+
 
   setMessageValues(message: Message) {
     this.message.id = message.id;
@@ -195,7 +199,6 @@ export class DialogAddChannelMembersComponent implements OnInit{
     this.message.timeInMs = message.timeInMs;
     this.message.content = this.editor.nativeElement.value;
   }
-
 
 
   setEmojiCount(reactions: any[]) {
@@ -245,6 +248,7 @@ export class DialogAddChannelMembersComponent implements OnInit{
       this.emojiService.showTextChatEmojiPicker = true;
     }, 1);
   }
+
 
   editMessage(message: Message) {
     console.log('Nachricht', message);

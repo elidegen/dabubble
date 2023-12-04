@@ -255,38 +255,8 @@
 
     </div>
 
-    <div *ngSwitchCase="'direct'" class="chat-window-container">
-      <mat-card-header >
-        <div class="header">
-          <button (click)="openEditChannelDialog()" mat-button class="br-32">
-            <div class="chat-title">
-              <img src="assets/img/icons/tag.svg" alt="" class="mr-16" />
-              <span class="mr-16">{{ currentChat?.name}}</span>
-              <mat-icon>expand_more</mat-icon>
-            </div>
-          </button>
-
-          <div class="group-members-container">
-
-            <button mat-button class="group-members-button" (click)="openMemberDialog()">
-              <div class="group-members-container">
-                <div class="group-members">
-                  <img src="assets/img/avatars/avatar_male2.svg" alt="" />
-                </div>
-
-                <h3 class="member-count">5</h3>
-              </div>
-            </button>
-
-            <button mat-icon-button class="add-user" (click)="openDialog()">
-              <img src="assets/img/icons/add-person.svg" alt="" />
-            </button>
-          </div>
-        </div>
-      </mat-card-header>
-
-      <app-dialog-add-channel-members></app-dialog-add-channel-members>
-
+    <div *ngSwitchCase="'direct'" style="height: 100%;">
+      <app-direct-message-chat style="display: flex; flex-direction: column; height: 100%;"></app-direct-message-chat>
     </div>
 
   </mat-card>

@@ -70,7 +70,7 @@ export class ChatService {
           console.log('error', err);
         });
       }
-      // this.compareNewDirectMessageWithExisting(user);
+      this.compareNewDirectMessageWithExisting(user);
   }
   
 
@@ -220,14 +220,32 @@ getAllDirectMessages(): Promise<void> {
     
     const foundDirectMessage = this.allDirectMessages.find(message => message.id === directId);
     console.log('all directs', this.allDirectMessages);
-    // this.renderDirectMessage(foundDirectMessage);
-    
+    this.renderDirectMessage(foundDirectMessage);
   }
   
 
   renderDirectMessage(chat: Chat) {
     this.openDirectMessage = chat;
     this.chatWindow = 'direct';
+  }
+
+
+  getOtherUserName(members: any[]) {
+    let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
+    return otherUser ? otherUser.name : '';
+  }
+
+
+  getUserProfileForDirectMessage(members: any[]) {
+    let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
+    let userProfile = this.allUsers.find(user => user.email == otherUser.email);
+    return userProfile ? userProfile.picture : '';
+  }
+
+  getUserOnlineStatus(members: any[]) {
+    let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
+    let userStatus = this.allUsers.find(user => user.id == otherUser.id);
+    return userStatus ? userStatus.online : '';
   }
 
 
