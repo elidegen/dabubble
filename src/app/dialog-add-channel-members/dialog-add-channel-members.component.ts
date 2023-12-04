@@ -286,4 +286,19 @@ export class DialogAddChannelMembersComponent implements OnInit{
 
     };
   }
+
+  addEmoji(event: any) {
+    if (this.emojiService.messageId != "") {
+      this.emojiService.addEmojiMainChat(event);
+      this.addReaction(this.emojiService.emojiString, this.emojiService.messageId)
+      this.emojiService.showMainChatEmojiPicker = false;
+    }
+  }
+
+  
+  addEmojiTextField($event: any) {
+    this.emojiService.addEmojiTextChat($event);
+    console.log("das ist das Emoji für die Textnachricht",this.emojiService.emojiString);
+     this.message.content += this.emojiService.emojiString;
+  }
 }
