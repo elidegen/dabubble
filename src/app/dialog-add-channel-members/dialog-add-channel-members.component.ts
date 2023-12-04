@@ -105,6 +105,8 @@ export class DialogAddChannelMembersComponent implements OnInit{
     } else {
       this.messageIsExisting = false
     }
+    console.log(this.messageIsExisting);
+    
   }
 
 
@@ -311,4 +313,5 @@ export class DialogAddChannelMembersComponent implements OnInit{
     console.log("das ist das Emoji für die Textnachricht",this.emojiService.emojiString);
      this.message.content += this.emojiService.emojiString;
   }
+
 }
