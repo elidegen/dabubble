@@ -129,12 +129,12 @@ export class WorkspaceComponent implements OnInit {
     this.dialog.open(DialogAddChannelComponent, { panelClass: 'dialog-container' });
   }
 
-
   renderChannel(channel: Channel) {
     this.chatservice.openChat = channel;
     this.threadService.currentChat = channel;
     this.chatservice.chatWindow = 'channel'
   }
+
 
 
   renderDirectMessage(chat: Chat) {
