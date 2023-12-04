@@ -33,6 +33,10 @@ mat-expansion-panel {
     gap: 16px;
 }
 
+.offline-status {
+    background-color: grey;
+}
+
 .direct-message-button {
     display: flex !important;
     align-items: center;

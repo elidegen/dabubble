@@ -57,7 +57,7 @@
             <button class="direct-message-button br-32" *ngFor="let directMessage of personalDirectMessages" (click)="renderDirectMessage(directMessage)">
               <div class="profile-message-container">
                 <img class="d-flex" src="{{ getUserProfileForDirectMessage(directMessage.members) }}" alt="male2">
-                <div class="online-status"></div>
+                <div [ngClass]="{'offline-status': currentUser.online === false}" class="online-status"></div>
               </div>
 
               <h3>{{ getOtherUserName(directMessage.members) }}</h3>

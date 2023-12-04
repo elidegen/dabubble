@@ -57,7 +57,7 @@
                       <button class="user-container" *ngFor="let user of filteredUsers" (click)="selectUser(user)">
                           <div class="profile-container">
                               <img src="{{user.picture}}" alt="profile">
-                              <div class="online-status"></div>
+                              <div [ngClass]="{'offline-status': user.online === false}" class="online-status"></div>
                           </div>
                           <span>{{user.name}}</span>
                       </button>
