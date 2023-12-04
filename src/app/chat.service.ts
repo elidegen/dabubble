@@ -8,6 +8,7 @@ import { User } from 'src/models/user.class';
 import { UserService } from './user.service';
 import { Message } from 'src/models/message.class';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -24,6 +25,7 @@ export class ChatService {
   allMessagesOfChannel: any[] = [];
   unSubUsers: any;
   allUsers: any[] = [];
+
 
   constructor( public userService: UserService) { 
     this.getallChannels();
@@ -65,7 +67,9 @@ export class ChatService {
           console.log(err);
         });
       }
+
   }
+  
 
   
   checkUserForId(user: User) {
@@ -168,6 +172,17 @@ export class ChatService {
         }     
       );
     console.log('check Users', this.allUsers);
+  }
+
+
+  getChannelByMessage(message: any) {
+  let channel = this.getChannelByMessageID(message.channelID)
+    this.openChat = channel;
+    this.chatWindow = 'channel'
+  }
+
+  getChannelByMessageID(channelID: string) {
+    return this.yourChannels.find(channel => channel.id === channelID)
   }
 
 
