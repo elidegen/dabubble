@@ -313,17 +313,9 @@ section {
     } 
 }
 
-
-
-.empty-chat-container {
-    height: 100%;
+.chat-window-container {
     display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    padding-bottom: 32px;
-    span {
-        font-size: 24px;
-        font-weight: bold;
-        color: var(--textGray);
-    }
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
 }
