@@ -22,9 +22,12 @@ export class ChatService {
   allChannels: any[] = [];
   yourChannels: any[] = [];
   allMessagesOfChannel: any[] = [];
+  unSubUsers: any;
+  allUsers: any[] = [];
 
   constructor( public userService: UserService) { 
     this.getallChannels();
+    this.getAllUsers();
   }
 
   // -------------- channel -----------------------
@@ -155,6 +158,20 @@ export class ChatService {
       );
     });
     console.log('check', this.allMessagesOfChannel);
-    
   }
+
+
+  getAllUsers() {
+      const userCol = collection(this.firestore, 'users');
+      this.unSubUsers = onSnapshot( userCol,
+        (list) => {
+          list.forEach(user => {
+            this.allUsers.push(user.data());
+          });
+        }     
+      );
+    console.log('check Users', this.allUsers);
+  }
+
+
 }

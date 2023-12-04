@@ -1,5 +1,5 @@
 <div [ngSwitch]="messageIsExisting">
-  <mat-card-content #messageContainer class="p-0 main-chat-container" *ngSwitchCase="messageIsExisting">
+  <mat-card-content #messageContainer class="p-0 main-chat-container" *ngSwitchCase="true">
     <ng-container
       *ngFor="let organizedMessage of this.organizedMessages.slice()"
     >
@@ -147,7 +147,8 @@
       (emojiClick)="addEmojiTextField($event)"
     ></emoji-mart>
   </mat-card-content> 
-  <mat-card-content *ngSwitchCase="!messageIsExisting">
+  
+  <mat-card-content *ngSwitchCase="false">
     <div>
       <img src="" alt="">
       <span></span>
