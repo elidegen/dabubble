@@ -165,6 +165,11 @@ export class ChatService {
   }
 
 
+  renderDirectMessage(chat: Chat) {
+    this.openDirectMessage = chat;
+    this.chatWindow = 'direct';
+  }
+
   getAllUsers() {
       const userCol = collection(this.firestore, 'users');
       this.unSubUsers = onSnapshot( userCol,
