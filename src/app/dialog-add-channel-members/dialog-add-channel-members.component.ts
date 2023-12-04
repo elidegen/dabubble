@@ -70,6 +70,7 @@ export class DialogAddChannelMembersComponent implements OnInit{
       this.unSubMessages = onSnapshot(q, async (snapshot) => {
         this.allMessages = await Promise.all(snapshot.docs.map(async doc => {
           const message = doc.data() as Message;
+          message.reactionCount = this.setEmojiCount(message.reaction);
           message.id = doc.id;
           return message;
         }));
@@ -79,6 +80,8 @@ export class DialogAddChannelMembersComponent implements OnInit{
       });
     }
   }
+
+
 
   organizeMessagesByDate() {
     this.messagesByDate = {};
@@ -194,43 +197,36 @@ export class DialogAddChannelMembersComponent implements OnInit{
 
 
 
+  setEmojiCount(reactions: any[]) {
+    let counter: { [key: string]: number } = {};
+    reactions.forEach(react => {
+      let key = JSON.stringify(react.emoji);
+      if (key) {
+        key = key.substring(1);
+        key = key.substring(0, key.length - 1);
+      }
+      if (counter[key]) {
+        counter[key]++;
+      } else {
+        if (key != undefined)
+          counter[key] = 1;
+      }
+    });
+    return counter;
+  }
+
   async addReaction(emoji: any, messageId: any) {
     if (this.currentChat?.id) {
       const subReactionColRef = doc(collection(this.firestore, `direct messages/${this.currentChat.id}/messages`), messageId);
       let messageIndex = this.allMessages.findIndex(message => message.id === messageId);
       let currentMessage = this.allMessages[messageIndex];
-  
-      let existingReaction = currentMessage.reaction.find((r: { emoji: any; }) => r.emoji === emoji);
-      
-      if (existingReaction) {
-        // Prüfe, ob der aktuelle Benutzer der Ersteller der Reaktion ist
-        if (existingReaction.creatorId === this.currentUser.id) {
-          // Wenn ja, und der Benutzer möchte seine eigene Reaktion entfernen
-          existingReaction.count -= 1; // Dekrementiere den Zähler
-          // Wenn der Zähler 0 erreicht, entferne die Reaktion komplett
-          if (existingReaction.count === 0) {
-            currentMessage.reaction = currentMessage.reaction.filter((r: { emoji: any; }) => r.emoji !== emoji);
-          }
-        } else {
-          // Der aktuelle Benutzer ist nicht der Ersteller, erhöhe den Zähler
-          existingReaction.count += 1; 
-          existingReaction.creatorName = this.currentUser.name;
-          // Inkrementiere den Zähler
-        }
+      const reactionItem = { emoji, creatorId: this.currentUser.id };
+      if (currentMessage.reaction.some((emojiArray: { emoji: string; creatorId: string; }) => emojiArray.emoji === emoji && emojiArray.creatorId === this.currentUser.id)) {
+        currentMessage.reaction = currentMessage.reaction.filter((emojiArray: { emoji: string; creatorId: string; }) => !(emojiArray.emoji === emoji && emojiArray.creatorId === this.currentUser.id));
       } else {
-        // Emoji-Reaktion existiert noch nicht, erstelle eine neue
-        currentMessage.reaction.push({
-          emoji: emoji,
-          creatorId: this.currentUser.id, // Der Benutzer, der die Reaktion erstellt
-          creatorName: this.currentUser.name, // Optional: Der Name des Benutzers
-          count: 1 // Starte den Zähler bei 1
-        });
+        currentMessage.reaction.push(reactionItem);
       }
-  
-      // Aktualisiere das Dokument in Firestore
-      await updateDoc(subReactionColRef, {
-        reaction: currentMessage.reaction
-      });
+      updateDoc(subReactionColRef, this.updateMessage(this.allMessages[messageIndex]));
     }
   }
 
