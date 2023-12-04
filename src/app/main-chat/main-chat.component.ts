@@ -32,7 +32,6 @@ export class MainChatComponent implements OnInit {
   reaction: Reaction = new Reaction;
   allMessages: Message[] = [];
   unSubMessages: any;
-  unSubReactions: any;
   currentUser: UserData;
   messagesByDate: { [date: string]: Message[] } = {};
   organizedMessages: { date: string, messages: Message[] }[] = []
@@ -94,9 +93,6 @@ export class MainChatComponent implements OnInit {
   ngOnDestroy() {
     if (this.unSubMessages) {
       this.unSubMessages();
-    }
-    if (this.unSubReactions) {
-      this.unSubReactions();
     }
   }
 

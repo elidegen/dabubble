@@ -1,9 +1,7 @@
 import { Component, ElementRef, HostListener, OnInit, QueryList, ViewChild, ViewChildren, inject } from '@angular/core';
 import { DocumentData, DocumentReference, Firestore, addDoc, collection, doc, getDoc, getDocs, onSnapshot, orderBy, query, updateDoc } from '@angular/fire/firestore';
-import { User } from 'src/models/user.class';
 import { ChatService } from '../chat.service';
 import { UserService } from '../user.service';
-import { Channel } from 'src/models/channel.class';
 import { Message } from 'src/models/message.class';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '../auth.service';
@@ -25,7 +23,7 @@ export class DialogAddChannelMembersComponent implements OnInit{
   message: Message = new Message();
   organizedMessages: { date: string, messages: Message[] }[] = []
   messagesByDate: { [date: string]: Message[] } = {};
-
+  messageIsExisting!: boolean;
   allMessages: Message[] = [];
   // ------------- for editing of message ----------------
   edit: boolean = false;
@@ -55,8 +53,14 @@ export class DialogAddChannelMembersComponent implements OnInit{
       } else {
         this.currentChat = undefined;
       }
-
+  
     });
+  }
+
+  ngOnDestroy() {
+    if (this.unSubMessages) {
+      this.unSubMessages();
+    }
   }
 
   loadMessages() {
@@ -70,6 +74,8 @@ export class DialogAddChannelMembersComponent implements OnInit{
           return message;
         }));
         this.organizeMessagesByDate();
+        console.log('nachrichtenlänge',this.allMessages);
+        this.checkMessageNumbers()
       });
     }
   }
@@ -88,6 +94,14 @@ export class DialogAddChannelMembersComponent implements OnInit{
     this.organizedMessages = Object.entries(this.messagesByDate).map(([date, messages]) => ({ date, messages }));
     this.organizedMessages = this.organizedMessages;
     console.log('Show', this.organizedMessages)
+  }
+
+  checkMessageNumbers() {
+    if(this.allMessages.length > 0){
+      this.messageIsExisting = true;
+    } else {
+      this.messageIsExisting = false
+    }
   }
 
 
@@ -295,7 +309,7 @@ export class DialogAddChannelMembersComponent implements OnInit{
     }
   }
 
-  
+
   addEmojiTextField($event: any) {
     this.emojiService.addEmojiTextChat($event);
     console.log("das ist das Emoji für die Textnachricht",this.emojiService.emojiString);
