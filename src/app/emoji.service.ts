@@ -8,6 +8,7 @@ export class EmojiService {
   showMainChatEmojiPicker: boolean = false;
   showThreadEmojiPicker: boolean = false;
   showTextChatEmojiPicker: boolean = false;
+  showThreadTextChatEmojiPicker: boolean = false;
   emojiString: any = "";
   messageId: any = "";
   constructor() { }
@@ -25,6 +26,7 @@ export class EmojiService {
     let emojiString = $event["emoji"].native;
     this.emojiString = emojiString;
     this.showThreadEmojiPicker == false;
+   
   }
 
   addEmojiTextChat(event: any) {
