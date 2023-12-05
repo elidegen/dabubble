@@ -127,7 +127,7 @@ return {
 
 
   async countThreadMessages(messageId: string) {
-    const threadCollection = collection(this.firestore, `threads/${messageId}/threadMessages`);
+    const threadCollection = collection(this.firestore, `threads/${messageId}/messages`);
     return getDocs(threadCollection)
       .then(snapshot => {
         let threadCount = snapshot.size;

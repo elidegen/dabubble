@@ -90,7 +90,6 @@ export class ThreadComponent implements OnInit {
       this.emojiService.showThreadEmojiPicker = true;
     }, 1);
     this.emojiService.messageId = messageId;
-    console.log("thread id in der openEmojiPicker Funktion",messageId);
   }
 
   openEmojiPickerChat() {
@@ -111,7 +110,7 @@ export class ThreadComponent implements OnInit {
 
  addEmoji($event: any) {
   this.emojiService.addEmojiThread($event);
-  this.firestoreService.addReactionInThread(this.emojiService.emojiString, this.emojiService.messageId, this.currentMessage.id);
+  this.firestoreService.addReaction(this.emojiService.emojiString, this.emojiService.messageId, this.currentMessage.id, 'threads');
   console.log(this.emojiService.emojiString, this.emojiService.messageId);
   this.emojiService.showThreadEmojiPicker = false;
   this.emojiService.emojiString = "";
@@ -195,7 +194,7 @@ export class ThreadComponent implements OnInit {
 
   async updateMessageContent(message: Message) {
     let messageId = message.id
-    const messageColRef = doc(collection(this.firestore, `threads/${this.currentMessage?.id}/threadMessages/`), messageId);
+    const messageColRef = doc(collection(this.firestore, `threads/${this.currentMessage?.id}/messages/`), messageId);
     await updateDoc(messageColRef, this.setMessageValues()).catch((error) => {
       console.error('Error updating document:', error);
     });

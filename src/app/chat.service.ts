@@ -235,8 +235,6 @@ getAllDirectMessages(): Promise<void> {
   }
 
  
-  
-
   renderDirectMessage(chat: Chat) {
     this.openDirectMessage = chat;
     this.chatWindow = 'direct';
