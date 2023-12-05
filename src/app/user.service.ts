@@ -17,7 +17,7 @@ export class UserService {
   currentEmail: string = "";
   currentPassword: string = "";
   signInSuccess = false;
-  customPic: string = "";
+  customPic: any = "";
   userIsAvailable: boolean = false;
   resetEmailFound: boolean = false;
   openUserContainerTextfield = new BehaviorSubject<boolean>(false);
