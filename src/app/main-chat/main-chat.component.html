@@ -50,18 +50,18 @@
         <div class="w100 headline">
           <h1>New Message</h1>
            <div class="add-members-container">
-                  <input #search class="w100 input-members" type="text" placeholder="To: @someone" [(ngModel)]="searchInput"
+                  <input #search class="w100 input-members" type="text" placeholder="To: @someone" [(ngModel)]="firestoreService.searchInput"
                       (input)="filterUsers()" (click)="this.isInputFocused = true;">
   
                   <div class="user-search-container" *ngIf="isInputFocused" (click)="userSelected($event)">
-                      <button class="user-container" *ngFor="let user of filteredUsers" (click)="selectUser(user)">
+                      <button class="user-container" *ngFor="let user of firestoreService.filteredUsers" (click)="selectUser(user)">
                           <div class="profile-container">
                               <img src="{{user.picture}}" alt="profile">
                               <div [ngClass]="{'offline-status': user.online === false}" class="online-status"></div>
                           </div>
                           <span>{{user.name}}</span>
                       </button>
-                      <span *ngIf="filteredUsers.length < 1">No matching contact</span>
+                      <span *ngIf=" firestoreService.filteredUsers.length < 1">No matching contact</span>
                   </div>
               </div>
         </div>
@@ -119,11 +119,11 @@
             <button mat-button class="group-members-button" (click)="openMemberDialog()">
               <div class="group-members-container">
                 <div class="group-members">
-                  <div class="d-flex" *ngFor="let member of firstThreeItems">
+                  <div class="d-flex" *ngFor="let member of firestoreService.firstThreeItems">
                     <img src="{{member.picture}}"/>
                   </div>
                 </div> 
-                <h3 *ngIf="allChannelMembers.length > 3" class="member-count"> + {{allChannelMembers.length -3}}</h3>
+                <h3 *ngIf="firestoreService.allChannelMembers.length > 3" class="member-count"> + {{firestoreService.allChannelMembers.length -3}}</h3>
               </div>
             </button>
 
@@ -135,7 +135,7 @@
       </mat-card-header>
 
       <mat-card-content #messageContainer class="p-0 main-chat-container" >
-        <ng-container  *ngFor="let organizedMessage of this.organizedMessages.slice()">
+        <ng-container  *ngFor="let organizedMessage of firestoreService.organizedMessages.slice()">
           <section>
             <div class="date-container">
               <div class="separator"></div>
@@ -177,7 +177,7 @@
                   <div class="reaction-container">
                     <div class="reaction-emoji-container">
                       <button class="reaction-emoji-button" *ngFor="let emoji of message.reactionCount | keyvalue">
-                        <div (click)='addReaction(emoji.key,message.id)' class="emoji-fit">{{emoji.key}}</div>
+                        <div (click)='firestoreService.addReaction(emoji.key, message.id, currentChat?.id)' class="emoji-fit">{{emoji.key}}</div>
                          <span>{{ emoji.value }}</span>
                       </button>
                     </div>
@@ -193,10 +193,10 @@
               </div>
 
               <div class="reaction" [ngClass]="{'own-message': message.creator == this.userService.currentUser.name}">
-                <button mat-icon-button (click)="addReaction('✅',message.id)">
+                <button mat-icon-button (click)="firestoreService.addReaction('✅',message.id, currentChat?.id)">
                   <img src="assets/img/emojis/checkGreen.svg" alt="">
                 </button>
-                <button mat-icon-button (click)="addReaction('🙌', message.id)"> 
+                <button mat-icon-button (click)="firestoreService.addReaction('🙌', message.id, currentChat?.id)"> 
                   <img src="assets/img/emojis/hands.svg" alt="">
                 </button>
                 <button class="hostlistener-dont-trigger" (click) = "openEmojiPicker(message.id)" mat-icon-button>
@@ -255,38 +255,8 @@
 
     </div>
 
-    <div *ngSwitchCase="'direct'" class="chat-window-container">
-      <mat-card-header >
-        <div class="header">
-          <button (click)="openEditChannelDialog()" mat-button class="br-32">
-            <div class="chat-title">
-              <img src="assets/img/icons/tag.svg" alt="" class="mr-16" />
-              <span class="mr-16">{{ currentChat?.name}}</span>
-              <mat-icon>expand_more</mat-icon>
-            </div>
-          </button>
-
-          <div class="group-members-container">
-
-            <button mat-button class="group-members-button" (click)="openMemberDialog()">
-              <div class="group-members-container">
-                <div class="group-members">
-                  <img src="assets/img/avatars/avatar_male2.svg" alt="" />
-                </div>
-
-                <h3 class="member-count">5</h3>
-              </div>
-            </button>
-
-            <button mat-icon-button class="add-user" (click)="openDialog()">
-              <img src="assets/img/icons/add-person.svg" alt="" />
-            </button>
-          </div>
-        </div>
-      </mat-card-header>
-
-      <app-dialog-add-channel-members></app-dialog-add-channel-members>
-
+    <div *ngSwitchCase="'direct'" style="height: 100%;">
+      <app-direct-message-chat style="display: flex; flex-direction: column; height: 100%;"></app-direct-message-chat>
     </div>
 
   </mat-card>

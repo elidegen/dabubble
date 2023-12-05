@@ -11,6 +11,7 @@ import { Channel } from 'src/models/channel.class';
 import { Reaction } from 'src/models/reaction.class';
 import { Message } from 'src/models/message.class';
 import { EmojiService } from '../emoji.service';
+import { FirestoreService } from '../firestore.service';
 
 @Component({
   selector: 'app-thread',
@@ -24,48 +25,45 @@ export class ThreadComponent implements OnInit {
   currentChat!: Channel | undefined;
   message: Message = new Message();
   reaction: Reaction = new Reaction;
-  allThreadMessages: Message[] = [];
   threadMessagesByDate: { [date: string]: Message[] } = {};
   sortedThreadMessages: { date: string, messages: Message[] }[] = []
   allReactionsByMessage: [] = [];
   currentMessage: any = [];
-  unSubThread: any;
+
   unSubReactions: any;
   currentUser: UserData;
   currentThread: [] = [];
   toggled: boolean = false;
   @ViewChild('editorThread') editorThread!: ElementRef;
-
   @Output() closeThread: EventEmitter<void> = new EventEmitter<void>();
   edit: boolean = false;
   editingThreadMessage: string | undefined;
 
-  constructor(public threadService: ThreadService, public userService: UserService, public authService: AuthService, public chatService: ChatService, public emojiService: EmojiService) {
+  constructor(public threadService: ThreadService, public userService: UserService, public authService: AuthService, public chatService: ChatService, public emojiService: EmojiService, public firestoreService: FirestoreService) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
   }
 
   ngOnInit() {
     this.threadService.openMessage$.subscribe((openMessage) => {
-      // console.log('open', openMessage);
       if (openMessage) {
         const message = openMessage as Message;
         if (!this.currentMessage || this.currentMessage.id !== message.id) {
           this.currentMessage = message;
           this.threadService.currentMessage = message;
           console.log('Welche Message', this.currentMessage.id);
-          if (this.unSubThread) {
-            this.unSubThread();
+          if (this.firestoreService.unSubThread) {
+            this.firestoreService.unSubThread();
           }
-          this.loadThread();
+          this.firestoreService.loadThread(this.currentMessage.id);
         }
       }
     });
   }
 
   ngOnDestroy() {
-    if (this.unSubThread) {
-      this.unSubThread(); // Bestehendes Abonnement kündigen
+    if (this.firestoreService.unSubThread()) {
+      this.firestoreService.unSubThread(); // Bestehendes Abonnement kündigen
     }
     if (this.unSubReactions) {
       this.unSubReactions(); // Bestehendes Abonnement kündigen
@@ -80,20 +78,11 @@ export class ThreadComponent implements OnInit {
       this.getSentMessageCreator();
       this.message.profilePic = this.userService.currentUser.picture;
       this.message.creatorId = this.userService.currentUser.id;
-      const subColRef = collection(this.firestore, `threads/${this.currentMessage.id}/threadMessages`);
-      await addDoc(subColRef, this.message.toJSON())
-        .catch((err) => {
-          console.log(err);
-        })
-        .then(() => {
-          this.message.content = '';
-          console.log('Message sent to thread');
-        });
+      await this.firestoreService.sendMessageInThread(this.currentMessage.id, this.message);
+      this.message.content = '';
     }
     this.threadService.updateThreadCount(this.threadService.currentMessage, this.message.time);
   }
-
-
 
 
   openEmojiPicker(messageId: any) {
@@ -120,48 +109,22 @@ export class ThreadComponent implements OnInit {
   }
 
 
-
- 
-
  addEmoji($event: any) {
   this.emojiService.addEmojiThread($event);
-  this.addReaction(this.emojiService.emojiString, this.emojiService.messageId)
-  console.log(this.emojiService.emojiString, this.emojiService.messageId)
+  this.firestoreService.addReactionInThread(this.emojiService.emojiString, this.emojiService.messageId, this.currentMessage.id);
+  console.log(this.emojiService.emojiString, this.emojiService.messageId);
   this.emojiService.showThreadEmojiPicker = false;
   this.emojiService.emojiString = "";
  }
 
+
+
  addEmojiTextField($event: any) {
-  this.emojiService.addEmojiTextChat($event);
-  console.log("das ist das Emoji für die Textnachricht",this.emojiService.emojiString);
-   this.message.content += this.emojiService.emojiString;
-   this.emojiService.showThreadTextChatEmojiPicker = false;
-   this.emojiService.emojiString = "";
-
-}
-
-
-
-
-  async addReaction(emoji: string, messageId: any) {
-    if (this.currentMessage?.id) {
-      const subReactionColRef = doc(collection(this.firestore, `threads/${this.currentMessage.id}/threadMessages/`), messageId);
-      let messageIndex = this.allThreadMessages.findIndex(message => message.id === messageId);
-      let currentMessage = this.allThreadMessages[messageIndex];
-      const reactionItem = { emoji, creatorId: this.currentUser.id };
-      if (currentMessage.reaction.some((emojiArray: { emoji: string; creatorId: string; }) => emojiArray.emoji === emoji && emojiArray.creatorId === this.currentUser.id)) {
-        currentMessage.reaction = currentMessage.reaction.filter((emojiArray: { emoji: string; creatorId: string; }) => !(emojiArray.emoji === emoji && emojiArray.creatorId === this.currentUser.id));
-      } else {
-        currentMessage.reaction.push(reactionItem);
-      }
-      updateDoc(subReactionColRef, this.updateMessage(this.allThreadMessages[messageIndex]));
-    }
-  }
-
-  updateMessage(message: any) {
-    return {
-      reaction: message.reaction
-    }
+    this.emojiService.addEmojiTextChat($event);
+    console.log("das ist das Emoji für die Textnachricht",this.emojiService.emojiString);
+    this.message.content += this.emojiService.emojiString;
+    this.emojiService.showThreadTextChatEmojiPicker = false;
+    this.emojiService.emojiString = "";
   }
 
 
@@ -171,13 +134,14 @@ export class ThreadComponent implements OnInit {
     this.message.date = formattedDate;
   }
 
+
   getSentMessageTime() {
     const currentTime = new Date();
     this.message.timeInMs = currentTime.getTime();
-
     const formattedTime = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     this.message.time = formattedTime;
   }
+
 
   getSentMessageCreator() {
     this.message.creator = this.userService.currentUser.name;
@@ -189,12 +153,14 @@ export class ThreadComponent implements OnInit {
     await this.updateChannel(colId, message);
   }
 
+
   async updateChannel(colId: string, message: Message) {
     const docRef = doc(collection(this.firestore, colId), message.id);
     await updateDoc(docRef, this.getUpdateData(message)).catch(
       (error) => { console.log(error); }
     );
   }
+
 
   getUpdateData(message: Message) {
     return {
@@ -207,93 +173,39 @@ export class ThreadComponent implements OnInit {
       profilePic: this.userService.currentUser.picture,
       reaction: [],
       reactionCount: message.reactionCount,
-      thread: [],
-
     };
   }
-
-  loadThread() {
-    if (this.currentMessage.id) {
-      console.log('wird ausgeführt', this.currentMessage);
-      const threadCollection = collection(this.firestore, `threads/${this.currentMessage.id}/threadMessages`);
-      console.log('message', threadCollection);
-      const q = query(threadCollection, orderBy('timeInMs', 'asc'));
-      this.unSubThread = onSnapshot(q, (snapshot) => {
-        this.allThreadMessages = snapshot.docs.map(doc => {
-          const message = doc.data() as Message;
-          message.id = doc.id;
-          message.reactionCount = this.setEmojiCount(message.reaction);
-          console.log('show me', message);
-          return message;
-        });
-      });
-    }
-  }
-
-
-  setEmojiCount(reactions: any[]) {
-    let counter: { [key: string]: number } = {};
-    reactions.forEach(react => {
-      let key = JSON.stringify(react.emoji);
-      if (key) {
-        key = key.substring(1);
-        key = key.substring(0, key.length - 1);
-      }
-      if (counter[key]) {
-        counter[key]++;
-      } else {
-        if (key != undefined)
-          counter[key] = 1;
-      }
-    });
-    return counter;
-  }
-
 
 
   onCloseClick() {
     this.closeThread.emit();
   }
 
+
   editThreadMessage(message: Message) {
-    console.log('Nachricht', message);
-    console.log('channel is', this.currentChat);
-    
     if (this.currentMessage) {
       if (message.creator == this.currentUser.name) {
         this.edit = true;
         this.editingThreadMessage = message.id;
         console.log('bearbeitet', this.editingThreadMessage);
-        
       }
     }
   }
 
+
   async updateMessageContent(message: Message) {
     let messageId = message.id
     const messageColRef = doc(collection(this.firestore, `threads/${this.currentMessage?.id}/threadMessages/`), messageId);
-    this.setMessageValues(message);
-    await updateDoc(messageColRef, this.message.toJSON()).catch((error) => {
+    await updateDoc(messageColRef, this.setMessageValues()).catch((error) => {
       console.error('Error updating document:', error);
     });
     this.edit = false;
   }
 
 
-  setMessageValues(message: Message) {
-    this.message.id = message.id;
-    this.message.creator = message.creator
-    this.message.creatorId = message.creatorId;
-    this.message.date = message.date;
-    this.message.lastThreadTime = message.lastThreadTime;
-    this.message.profilePic = message.profilePic;
-    this.message.reaction = message.reaction;
-    this.message.reactionCount = message.reactionCount;
-    this.message.time = message.time;
-    this.message.threadCount = message.threadCount;
-    this.message.timeInMs = message.timeInMs;
-    this.message.content = this.editorThread.nativeElement.value;
+  setMessageValues() {
+    return {
+      content: this.editorThread.nativeElement.value
+    }
   }
-
-
 }

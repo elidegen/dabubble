@@ -1,4 +1,4 @@
-import { Component,ViewChild, ElementRef, HostListener} from '@angular/core';
+import { Component, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-profile.component';
 import { UserService } from '../user.service';
@@ -30,8 +30,8 @@ export class HomeComponent {
   searchInput: string = '';
   isInputFocused: boolean = false;
   filteredUsers: UserData[] = [];
-  filteredMessages: Message[] =[];
-  constructor(public dialog: MatDialog, public auth: AuthService, public router: Router, public userService: UserService, public chatService: ChatService) { 
+  filteredMessages: Message[] = [];
+  constructor(public dialog: MatDialog, public auth: AuthService, public router: Router, public userService: UserService, public chatService: ChatService) {
     this.userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
   }
@@ -40,7 +40,7 @@ export class HomeComponent {
   ngOnInit() {
 
   }
-  
+
   // userSelected(event: Event) {
   //   event.stopPropagation();
   // }
@@ -48,8 +48,8 @@ export class HomeComponent {
 
   filterEverything(): void {
     this.isInputFocused = true;
-   this.filterUsers();
-   this.filterMessages();
+    this.filterUsers();
+    this.filterMessages();
   }
 
   filterUsers() {
@@ -70,26 +70,26 @@ export class HomeComponent {
   selectUser(user: any) {
     this.chatService.createDirectMessage(user);
     this.chatService.chatWindow = 'direct';
-   console.log("User wurde in der Suchfunktion ausgewählt für einen direct Chat", user);
+    console.log("User wurde in der Suchfunktion ausgewählt für einen direct Chat", user);
     this.search.nativeElement.value = '';
   }
 
-selectMessage(message: any) {
-  console.log("Bei der Suchfunktion ausgewählte Nachricht",message)
-  this.chatService.getChannelByMessage(message);
-}
+  selectMessage(message: any) {
+    console.log("Bei der Suchfunktion ausgewählte Nachricht", message)
+    this.chatService.getChannelByMessage(message);
+  }
 
 
 
 
-  openProfileDialog(): void {
+  openProfileDialog(id: String): void {
     const dialogRef = this.dialog.open(DialogViewProfileComponent, {
       panelClass: 'dialog-container',
-      data: { userID: 'as8d5asd16a' },
+      data: { userID: id },
     });
 
     dialogRef.afterClosed().subscribe(result => {
-        console.log('The dialog was closed');
+      console.log('The dialog was closed');
       // this.animal = result;
     });
   }

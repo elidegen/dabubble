@@ -31,7 +31,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { WorkspaceComponent } from './workspace/workspace.component';
 import { MainChatComponent } from './main-chat/main-chat.component';
 import { ThreadComponent } from './thread/thread.component';
-import { MatExpansionModule } from '@angular/material/expansion';
+import {MatExpansionModule} from '@angular/material/expansion';
 import { DialogEditChannelComponent } from './dialog-edit-channel/dialog-edit-channel.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DialogViewProfileComponent } from './dialog-view-profile/dialog-view-profile.component';
@@ -40,7 +40,7 @@ import { DialogAddToGroupComponent } from './dialog-add-to-group/dialog-add-to-g
 import { DialogShowGroupMemberComponent } from './dialog-show-group-member/dialog-show-group-member.component';
 import { FormsModule } from '@angular/forms';
 import { ImprintComponent } from './imprint/imprint.component';
-import { DialogAddChannelMembersComponent } from './dialog-add-channel-members/dialog-add-channel-members.component';
+import { DirectMessageChatComponent } from './direct-message-chat/direct-message-chat.component';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { PrivacyComponent } from './privacy/privacy.component';
 
@@ -63,7 +63,7 @@ import { PrivacyComponent } from './privacy/privacy.component';
     DialogAddToGroupComponent,
     DialogShowGroupMemberComponent,
     ImprintComponent,
-    DialogAddChannelMembersComponent,
+    DirectMessageChatComponent,
     PrivacyComponent,
   ],
   imports: [

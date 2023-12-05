@@ -15,6 +15,7 @@ import { Message } from 'src/models/message.class';
 export class ChatService {
   private _openChatSubject: BehaviorSubject<Channel | Chat | null> = new BehaviorSubject<Channel | Chat | null>(null);
   private _openDirectMessageSubject: BehaviorSubject<Chat | null> = new BehaviorSubject<Chat | null>(null);
+  private _openThreadSubject: BehaviorSubject<Chat | null> = new BehaviorSubject<Chat | null>(null);
   firestore: Firestore = inject(Firestore)
   chatWindow = 'empty';
   chat: Chat = new Chat();
@@ -54,6 +55,7 @@ export class ChatService {
     this._openDirectMessageSubject.next(value);
   }
 
+
   
 
   // Create direct messages ------------------------------
@@ -70,6 +72,7 @@ export class ChatService {
           console.log('error', err);
         });
       }
+      this.compareNewDirectMessageWithExisting(user);
       this.compareNewDirectMessageWithExisting(user);
   }
   
@@ -239,5 +242,29 @@ getAllDirectMessages(): Promise<void> {
     this.chatWindow = 'direct';
   }
 
+
+  getOtherUserName(members: any[]) {
+    let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
+    return otherUser ? otherUser.name : '';
+  }
+
+
+  getUserProfileForDirectMessage(members: any[]) {
+    let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
+    let userProfile = this.allUsers.find(user => user.email == otherUser.email);
+    return userProfile ? userProfile.picture : '';
+  }
+
+  getUserOnlineStatus(members: any[]) {
+    let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
+    let userStatus = this.allUsers.find(user => user.id == otherUser.id);
+    return userStatus ? userStatus.online : '';
+  }
+
+  getOtherUser(members: any[]) {
+    let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
+    // let userStatus = this.allUsers.find(user => user.id == otherUser.id);
+    return otherUser as User;
+  }
 
 }

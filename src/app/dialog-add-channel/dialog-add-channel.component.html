@@ -52,18 +52,18 @@
 
             <div class="add-members-container" *ngIf="allMembers == false"
                 [ngClass]="{'show': allMembers === false}">
-                <input class="w100 input-members" type="text" placeholder="Enter name" [(ngModel)]="searchInput"
+                <input class="w100 input-members" type="text" placeholder="Enter name" [(ngModel)]="firestoreService.searchInput"
                     (input)="filterUsers()" (click)="this.isInputFocused = true;">
 
                 <div class="user-search-container" *ngIf="isInputFocused" (click)="userSelected($event)">
-                    <button #userContainer class="user-container" *ngFor="let user of filteredUsers; let i = index" (click)="selectUser(user, i)">
+                    <button #userContainer class="user-container" *ngFor="let user of firestoreService.filteredUsers; let i = index" (click)="selectUser(user, i)">
                         <div class="profile-container">
                             <img src="{{user.picture}}" alt="profile">
                             <div class="online-status"></div>
                         </div>
                         <span>{{user.name}}</span>
                     </button>
-                    <span *ngIf="filteredUsers.length <1">No matching contact</span>
+                    <span *ngIf="firestoreService.filteredUsers.length <1">No matching contact</span>
                 </div>
                 <div class="w100 selected-user-container">
                     <div class="selected-user" *ngFor="let item of this.selectedUsers">

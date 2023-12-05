@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DialogAddChannelMembersComponent } from './dialog-add-channel-members.component';
+import { DirectMessageChatComponent } from './direct-message-chat.component';
 
 describe('DialogAddChannelMembersComponent', () => {
-  let component: DialogAddChannelMembersComponent;
-  let fixture: ComponentFixture<DialogAddChannelMembersComponent>;
+  let component: DirectMessageChatComponent;
+  let fixture: ComponentFixture<DirectMessageChatComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [DialogAddChannelMembersComponent]
+      declarations: [DirectMessageChatComponent]
     });
-    fixture = TestBed.createComponent(DialogAddChannelMembersComponent);
+    fixture = TestBed.createComponent(DirectMessageChatComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

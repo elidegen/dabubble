@@ -1,24 +1,23 @@
-<div [ngSwitch]="messageIsExisting">
+<div [ngSwitch]="messageIsExisting" class="chat-window-container">
+  <mat-card-header>
+    <button class="br-32 profile-button">
+      <img src="{{ interlocutor.picture}}" />
+      <span class="mr-16">{{ interlocutor.name }}</span>
+    </button>
+  </mat-card-header>
   <mat-card-content #messageContainer class="p-0 main-chat-container" *ngSwitchCase="true">
-    <ng-container
-      *ngFor="let organizedMessage of this.organizedMessages.slice()"
-    >
+    <ng-container *ngFor="let organizedMessage of this.organizedMessages.slice()">
       <section>
         <div class="date-container">
           <div class="separator"></div>
           <div class="time-box">
-            {{
-              isToday(organizedMessage.date) ? "Today" : organizedMessage.date
-            }}
+            {{ isToday(organizedMessage.date) ? "Today" : organizedMessage.date }}
           </div>
           <div class="separator"></div>
         </div>
 
-        <div
-          class="message-row-container"
-          [ngClass]="{ 'my-messages': message.creator == currentUser.name }"
-          *ngFor="let message of organizedMessage.messages"
-        >
+        <div class="message-row-container" [ngClass]="{ 'my-messages': message.creator == currentUser.name }"
+          *ngFor="let message of organizedMessage.messages">
           <div class="message-box">
             <div class="creator-picture-container">
               <img src="{{ message.profilePic }}" alt="" />
@@ -30,52 +29,31 @@
                 <span class="date">{{ message.time }}</span>
               </div>
 
-              <div
-                [ngSwitch]="
+              <div [ngSwitch]="
                   edit &&
                   message.creator == currentUser.name &&
                   editingMessage === message.id
-                "
-              >
-                <div
-                  [ngClass]="{
+                ">
+                <div [ngClass]="{
                     'my-message-content': message.creator == currentUser.name,
                     'message-content': message.creator != currentUser.name
-                  }"
-                  *ngSwitchCase="false"
-                >
+                  }" *ngSwitchCase="false">
                   <span> {{ message.content }}</span>
                 </div>
-                <div
-                  *ngIf="
+                <div *ngIf="
                     message.creator == currentUser.name &&
                     editingMessage === message.id
-                  "
-                >
-                  <div
-                    *ngSwitchCase="true"
-                    class="text-field-container j-flex-end"
-                  >
+                  ">
+                  <div *ngSwitchCase="true" class="text-field-container j-flex-end">
                     <textarea #editor cols="30" rows="10">{{
                       message.content
                     }}</textarea>
-                    <button
-                      class="send-button"
-                      mat-icon-button
-                      (click)="updateMessageContent(message)"
-                      [disabled]="editor.value.length < 1"
-                    >
-                      <svg
-                        width="23"
-                        height="20"
-                        viewBox="0 0 23 20"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
+                    <button class="send-button" mat-icon-button (click)="updateMessageContent(message)"
+                      [disabled]="editor.value.length < 1">
+                      <svg width="23" height="20" viewBox="0 0 23 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
                           d="M2.5 19.2812C2.08333 19.4479 1.6875 19.4112 1.3125 19.1712C0.9375 18.9321 0.75 18.5833 0.75 18.125V13.4687C0.75 13.1771 0.833333 12.9167 1 12.6875C1.16667 12.4583 1.39583 12.3125 1.6875 12.25L10.75 9.99999L1.6875 7.74999C1.39583 7.68749 1.16667 7.54166 1 7.31249C0.833333 7.08333 0.75 6.82291 0.75 6.53124V1.87499C0.75 1.41666 0.9375 1.06749 1.3125 0.827493C1.6875 0.588327 2.08333 0.552076 2.5 0.718743L21.75 8.84374C22.2708 9.07291 22.5312 9.45833 22.5312 9.99999C22.5312 10.5417 22.2708 10.9271 21.75 11.1562L2.5 19.2812Z"
-                          fill="#444DF2"
-                        />
+                          fill="#444DF2" />
                       </svg>
                     </button>
                   </div>
@@ -86,38 +64,27 @@
                 <div class="reaction-emoji-container">
                   <button class="reaction-emoji-button" *ngFor="let emoji of message.reactionCount | keyvalue">
                     <div (click)='addReaction(emoji.key,message.id)' class="emoji-fit">{{emoji.key}}</div>
-                     <span>{{ emoji.value }}</span>
+                    <span>{{ emoji.value }}</span>
                   </button>
                 </div>
               </div>
             </div>
           </div>
 
-          <div
-            class="reaction"
-            [ngClass]="{
+          <div class="reaction" [ngClass]="{
               'own-message':
                 message.creator == this.userService.currentUser.name
-            }"
-          >
+            }">
             <button mat-icon-button (click)="addReaction('✅', message.id)">
               <img src="assets/img/emojis/checkGreen.svg" alt="" />
             </button>
             <button mat-icon-button (click)="addReaction('🙌', message.id)">
               <img src="assets/img/emojis/hands.svg" alt="" />
             </button>
-            <button
-              class="hostlistener-dont-trigger"
-              (click)="openEmojiPicker(message.id)"
-              mat-icon-button
-            >
+            <button class="hostlistener-dont-trigger" (click)="openEmojiPicker(message.id)" mat-icon-button>
               <img src="assets/img/icons/add_reaction.svg" alt="" />
             </button>
-            <button
-              mat-icon-button
-              *ngIf="message.creator == currentUser.name"
-              (click)="editMessage(message)"
-            >
+            <button mat-icon-button *ngIf="message.creator == currentUser.name" (click)="editMessage(message)">
               <img src="assets/img/icons/edit_square.svg" alt="" />
             </button>
           </div>
@@ -125,78 +92,51 @@
       </section>
     </ng-container>
 
-    <emoji-mart
-      #emojiPicker
-      *ngIf="this.emojiService.showMainChatEmojiPicker == true"
-      class="emojiPicker"
-      (emojiClick)="addEmoji($event)"
-    ></emoji-mart>
-    <emoji-mart
-      #emojiPicker
-      *ngIf="this.emojiService.showTextChatEmojiPicker == true"
-      class="emojiPicker"
-      (emojiClick)="addEmojiTextField($event)"
-    ></emoji-mart>
-  </mat-card-content> 
-  
-  <mat-card-content *ngSwitchCase="false">
-    <div>
-      <img src="" alt="">
-      <span></span>
+    <emoji-mart #emojiPicker *ngIf="this.emojiService.showMainChatEmojiPicker == true" class="emojiPicker"
+      (emojiClick)="addEmoji($event)"></emoji-mart>
+    <emoji-mart #emojiPicker *ngIf="this.emojiService.showTextChatEmojiPicker == true" class="emojiPicker"
+      (emojiClick)="addEmojiTextField($event)"></emoji-mart>
+  </mat-card-content>
+
+  <mat-card-content *ngSwitchCase="false" class="empty-direct-message-container">
+    <div class="chat-patner-container">
+      <img src="{{ chatService.getUserProfileForDirectMessage(currentChat?.members)}}" alt="">
+      <span>{{ chatService.getOtherUserName(currentChat?.members) }}</span>
     </div>
     <div>
-      <span>This conversation is only taking place between <span>@</span>Elias and you.</span>
+      <span>This conversation is only taking place between <span class="user-highlighted">@{{
+          chatService.getOtherUserName(currentChat?.members) }}</span> and you.</span>
     </div>
   </mat-card-content>
 
   <mat-card-content>
     <div class="textfield-content">
       <div class="text-field-container">
-        <textarea
-          [disabled]="!currentChat"
-          (keyup.enter)="sendMessage()"
-          [(ngModel)]="message.content"
-          placeholder="Message to "
-        ></textarea>
+        <textarea (keyup.enter)="sendMessage()" [(ngModel)]="message.content"
+          placeholder="Message to {{ interlocutor.name }} "></textarea>
 
         <div class="message-buttons">
           <div class="attachments">
             <div class="border-right">
-              <button [disabled]="!currentChat" mat-icon-button>
+              <button mat-icon-button>
                 <img src="assets/img/icons/add.svg" alt="" />
               </button>
             </div>
 
-            <button
-              [disabled]="!currentChat"
-              (click)="openEmojiPickerChat()"
-              mat-icon-button
-            >
+            <button (click)="openEmojiPickerChat()" mat-icon-button>
               <img src="assets/img/icons/smiley.svg" alt="" />
             </button>
 
-            <button [disabled]="!currentChat" mat-icon-button>
+            <button mat-icon-button>
               <img src="assets/img/icons/@.svg" alt="" />
             </button>
           </div>
 
-          <button
-            class="send-button"
-            mat-icon-button
-            (click)="sendMessage()"
-            [disabled]="!message.content"
-          >
-            <svg
-              width="23"
-              height="20"
-              viewBox="0 0 23 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
+          <button class="send-button" mat-icon-button (click)="sendMessage()" [disabled]="!message.content">
+            <svg width="23" height="20" viewBox="0 0 23 20" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M2.5 19.2812C2.08333 19.4479 1.6875 19.4112 1.3125 19.1712C0.9375 18.9321 0.75 18.5833 0.75 18.125V13.4687C0.75 13.1771 0.833333 12.9167 1 12.6875C1.16667 12.4583 1.39583 12.3125 1.6875 12.25L10.75 9.99999L1.6875 7.74999C1.39583 7.68749 1.16667 7.54166 1 7.31249C0.833333 7.08333 0.75 6.82291 0.75 6.53124V1.87499C0.75 1.41666 0.9375 1.06749 1.3125 0.827493C1.6875 0.588327 2.08333 0.552076 2.5 0.718743L21.75 8.84374C22.2708 9.07291 22.5312 9.45833 22.5312 9.99999C22.5312 10.5417 22.2708 10.9271 21.75 11.1562L2.5 19.2812Z"
-                fill="#444DF2"
-              />
+                fill="#444DF2" />
             </svg>
           </button>
         </div>

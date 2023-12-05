@@ -7,14 +7,15 @@ import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '../auth.service';
 import { EmojiService } from '../emoji.service';
 import { Chat } from 'src/models/chat.class';
+import { User } from 'src/models/user.class';
 
 
 @Component({
-  selector: 'app-dialog-add-channel-members',
-  templateUrl: './dialog-add-channel-members.component.html',
-  styleUrls: ['./dialog-add-channel-members.component.scss']
+  selector: 'app-direct-message-chat',
+  templateUrl: './direct-message-chat.component.html',
+  styleUrls: ['./direct-message-chat.component.scss']
 })
-export class DialogAddChannelMembersComponent implements OnInit{
+export class DirectMessageChatComponent implements OnInit {
   @ViewChildren('userContainer') userContainers!: QueryList<any>;
   @ViewChild('messageContainer') messageContainer!: ElementRef;
   firestore: Firestore = inject(Firestore);
@@ -25,6 +26,7 @@ export class DialogAddChannelMembersComponent implements OnInit{
   messagesByDate: { [date: string]: Message[] } = {};
   messageIsExisting!: boolean;
   allMessages: Message[] = [];
+  interlocutor: User = new User();
   // ------------- for editing of message ----------------
   edit: boolean = false;
   editingMessage: string | undefined;
@@ -34,9 +36,7 @@ export class DialogAddChannelMembersComponent implements OnInit{
   constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public authService: AuthService, public emojiService: EmojiService) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
-
   }
-
 
   ngOnInit() {
     this.chatService.openDirectMessage$.subscribe((openDirectMessage) => {
@@ -53,8 +53,8 @@ export class DialogAddChannelMembersComponent implements OnInit{
       } else {
         this.currentChat = undefined;
       }
-  
-    });
+
+    });    
   }
 
   ngOnDestroy() {
@@ -74,11 +74,13 @@ export class DialogAddChannelMembersComponent implements OnInit{
           message.id = doc.id;
           return message;
         }));
+        console.log('chat', this.currentChat);
+
         this.organizeMessagesByDate();
-        console.log('nachrichtenlänge',this.allMessages);
         this.checkMessageNumbers()
       });
     }
+    this.interlocutor = this.chatService.getOtherUser(this.currentChat?.members);
   }
 
 
@@ -100,13 +102,13 @@ export class DialogAddChannelMembersComponent implements OnInit{
   }
 
   checkMessageNumbers() {
-    if(this.allMessages.length > 0){
+    if (this.allMessages.length > 0) {
       this.messageIsExisting = true;
     } else {
       this.messageIsExisting = false
     }
     console.log(this.messageIsExisting);
-    
+
   }
 
 
@@ -166,10 +168,12 @@ export class DialogAddChannelMembersComponent implements OnInit{
     return `${parts[2]}.${this.getMonthNumber(parts[1])}.${parts[3]}`;
   }
 
+
   getMonthNumber(month: string): string {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     return (months.indexOf(month) + 1).toString().padStart(2, '0');
   }
+
 
   async updateMessageContent(message: Message) {
     let messageId = message.id
@@ -180,6 +184,7 @@ export class DialogAddChannelMembersComponent implements OnInit{
     });
     this.edit = false;
   }
+
 
   setMessageValues(message: Message) {
     this.message.id = message.id;
@@ -195,7 +200,6 @@ export class DialogAddChannelMembersComponent implements OnInit{
     this.message.timeInMs = message.timeInMs;
     this.message.content = this.editor.nativeElement.value;
   }
-
 
 
   setEmojiCount(reactions: any[]) {
@@ -246,6 +250,7 @@ export class DialogAddChannelMembersComponent implements OnInit{
     }, 1);
   }
 
+
   editMessage(message: Message) {
     console.log('Nachricht', message);
     if (this.currentChat) {
@@ -254,13 +259,7 @@ export class DialogAddChannelMembersComponent implements OnInit{
         this.editingMessage = message.id; // Speichern Sie die ID der bearbeiteten Nachricht
       }
     }
-  } 
-
- 
-
-
-
-
+  }
 
   scrollToBottom(): void {
     this.messageContainer.nativeElement.scrollTop = this.messageContainer.nativeElement.scrollHeight;
@@ -311,8 +310,8 @@ export class DialogAddChannelMembersComponent implements OnInit{
 
   addEmojiTextField($event: any) {
     this.emojiService.addEmojiTextChat($event);
-    console.log("das ist das Emoji für die Textnachricht",this.emojiService.emojiString);
-     this.message.content += this.emojiService.emojiString;
+    console.log("das ist das Emoji für die Textnachricht", this.emojiService.emojiString);
+    this.message.content += this.emojiService.emojiString;
   }
 
 }
