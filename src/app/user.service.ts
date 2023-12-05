@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { UserData } from './interfaces/user-interface';
 import { inject } from '@angular/core';
-import { Firestore, collection, doc, collectionData, onSnapshot, addDoc, deleteDoc, updateDoc, } from '@angular/fire/firestore';
+import { Firestore, collection, doc, onSnapshot, addDoc, deleteDoc, updateDoc, } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
+import { User } from 'src/models/user.class';
 
 
 @Injectable({
@@ -11,8 +11,8 @@ import { Router } from '@angular/router';
 
 export class UserService {
   firestore: Firestore = inject(Firestore);
-  users: UserData[] = [];
-  currentUser = this.createEmptyUser();
+  users: User[] = [];
+  currentUser: User = new User;
   currentEmail: string = "";
   currentPassword: string = "";
   signInSuccess = false;
@@ -23,27 +23,17 @@ export class UserService {
 
   ngOnInit() {
     this.getCurrentUserFromLocalStorage();
-
   }
 
   constructor(public router: Router) {
     this.unsubList = this.subUserList('users');
-
-    // this.unsubSingle = onSnapshot(this.getSingleDocRef("users", "adsfasdf"), (element) => {
-    // });
-    // this.unsubSingle();
-
-
-
   }
 
   ngOnDestroy() {
     this.unsubList();
   }
 
-
   setUserData(obj: any,) {
-
     return {
       name: obj.name || "",
       email: obj.email || "",
@@ -54,29 +44,26 @@ export class UserService {
     }
   }
 
-  async addUser(colId: string, item: UserData) {
-    await addDoc(this.getUsersRef(colId), item).catch(
+  async addUser(item: User) {
+    await addDoc(this.getUsersRef(), item.toJSON()).catch(
       (err) => { console.log(err) }
     ).then(
       (docRef) => {
         console.log()
-        this.updateUserId(colId, item, docRef!.id);
-        console.log("New user with id", docRef!.id)
+        this.updateUserId('users', item, docRef!.id);
       }
     )
   }
 
   subUserList(coldId: string) {
-    return onSnapshot(this.getUsersRef(coldId), (list) => {
+    return onSnapshot(this.getUsersRef(), (list) => {
       this.users = [];
       list.forEach(element => {
-        this.users.push(this.setUserData(element.data()));
+        this.users.push(element.data() as User);
         // console.log("Available users", element.data());
       })
     })
   }
-
-
 
   async deleteUser(colId: string, docId: string) {
     await deleteDoc(this.getSingleDocRef(colId, docId)).catch(
@@ -85,14 +72,13 @@ export class UserService {
     )
   }
 
-  async updateUserId(colId: string, user: UserData, newId: string,) {
+  async updateUserId(colId: string, user: User, newId: string,) {
     user.id = newId;
     await this.updateUser(colId, user);
   }
 
-
-  async updateUser(colId: string, user: UserData) {
-    let docRef = this.getSingleDocRef(colId, user.id);
+  async updateUser(colId: string, user: User) {
+    let docRef = this.getSingleDocRef(colId, user.id || '');
     await updateDoc(docRef, this.getUpdateData(user)).catch(
       (error) => { console.log(error); }
 
@@ -100,7 +86,7 @@ export class UserService {
     console.log("User updated", user);
   }
 
-  getUpdateData(user: UserData) {
+  getUpdateData(user: User) {
     return {
       name: user.name,
       email: user.email,
@@ -111,17 +97,16 @@ export class UserService {
     }
   }
 
-  createEmptyUser(): UserData {
-    return {
-      name: "Guest",
-      email: "",
-      password: "",
-      id: "",
-      picture: "assets/img/avatars/profile.svg",
-      online: false,
-    }
-  }
-
+  // createEmptyUser(): User {
+  //   return {
+  //     name: "Guest",
+  //     email: "",
+  //     password: "",
+  //     id: "",
+  //     picture: "assets/img/avatars/profile.svg",
+  //     online: false,
+  //   }
+  // }
 
   setCurrentUserToLocalStorage() {
     let userJson = JSON.stringify(this.currentUser);
@@ -137,16 +122,16 @@ export class UserService {
   getCurrentUserFromLocalStorage(): void {
     const userJson = localStorage.getItem('currentUser');
     if (userJson) {
-      this.currentUser = JSON.parse(userJson) as UserData;
+      this.currentUser = JSON.parse(userJson) as User;
     } else {
       console.log('Kein currentUser im LocalStorage gefunden');
-      this.currentUser = this.createEmptyUser();
+      this.currentUser = new User;
     }
   }
 
   /**This is for getting the collection "customers" from firebase */
-  getUsersRef(colId: string) {
-    return collection(this.firestore, colId);
+  getUsersRef() {
+    return collection(this.firestore, 'users');
   }
 
   /**Here i get the Infos about a single customer, 
@@ -161,10 +146,4 @@ export class UserService {
   userExists(email: string): boolean {
     return this.users.some(user => user.email === email);
   }
-
-
-  
-
 }
-
-

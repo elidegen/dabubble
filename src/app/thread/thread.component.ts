@@ -3,7 +3,6 @@ import { ThreadService } from '../thread.service';
 import { Thread } from 'src/models/thread.class';
 import { UserService } from '../user.service';
 import { AuthService } from '../auth.service';
-import { UserData } from '../interfaces/user-interface';
 import { ChatService } from '../chat.service';
 import { Firestore, addDoc, arrayUnion, collection, doc, updateDoc } from '@angular/fire/firestore';
 import { DocumentData, DocumentReference, getDoc, onSnapshot, orderBy, query } from 'firebase/firestore';
@@ -12,6 +11,7 @@ import { Reaction } from 'src/models/reaction.class';
 import { Message } from 'src/models/message.class';
 import { EmojiService } from '../emoji.service';
 import { FirestoreService } from '../firestore.service';
+import { User } from 'src/models/user.class';
 
 @Component({
   selector: 'app-thread',
@@ -31,7 +31,7 @@ export class ThreadComponent implements OnInit {
   currentMessage: any = [];
 
   unSubReactions: any;
-  currentUser: UserData;
+  currentUser: User;
   currentThread: [] = [];
   toggled: boolean = false;
   @ViewChild('editorThread') editorThread!: ElementRef;

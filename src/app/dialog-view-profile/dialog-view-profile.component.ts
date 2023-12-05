@@ -1,10 +1,8 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { UserService } from '../user.service';
-import { UserData } from '../interfaces/user-interface';
 import { AuthService } from '../auth.service';
 import { User } from 'src/models/user.class';
-import { FirestoreService } from '../firestore.service';
 
 @Component({
   selector: 'app-dialog-view-profile',
@@ -13,7 +11,7 @@ import { FirestoreService } from '../firestore.service';
 })
 export class DialogViewProfileComponent {
   editState: boolean = false;
-  currentUser: UserData;
+  currentUser: User;
   user: User = new User();
 
 
@@ -39,7 +37,7 @@ export class DialogViewProfileComponent {
     this.userService.currentUser = this.currentUser;
     this.userService.setCurrentUserToLocalStorage();
     this.userService.updateUser("users", this.currentUser);
-    this.authService.updateUserEmail(this.currentUser.email);
+    this.authService.updateUserEmail(this.currentUser.email!);
     this.dialogRef.close();
   }
 }

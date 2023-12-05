@@ -9,7 +9,6 @@ import { ChatService } from '../chat.service';
 import { Channel } from 'src/models/channel.class';
 import { Message } from 'src/models/message.class';
 import { UserService } from '../user.service';
-import { UserData } from '../interfaces/user-interface';
 import { Reaction } from 'src/models/reaction.class';
 import { ThreadService } from '../thread.service';
 import { Thread } from 'src/models/thread.class';
@@ -30,7 +29,7 @@ export class MainChatComponent implements OnInit {
   @ViewChild('thread') threadDrawer!: MatDrawer;
   message: Message = new Message();
   reaction: Reaction = new Reaction;
-  currentUser: UserData;
+  currentUser: User;
   allReactionsByMessage: [] = [];   //???
   threadCount: any = 0;
   showEmojiPick: boolean = false;
@@ -48,7 +47,7 @@ export class MainChatComponent implements OnInit {
 
   constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public threadService: ThreadService, public authService: AuthService, public emojiService: EmojiService, public firestoreService: FirestoreService) {
     userService.getCurrentUserFromLocalStorage();
-    this.currentUser = this.userService.currentUser;
+    this.currentUser = this.userService.currentUser as User;
     firestoreService.loadUsers()
   }
 

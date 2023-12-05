@@ -5,7 +5,7 @@ import { getAuth, updateEmail, createUserWithEmailAndPassword, signOut, GoogleAu
 import { Router } from '@angular/router';
 import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { UserService } from './user.service';
-import { UserData } from './interfaces/user-interface';
+import { User } from 'src/models/user.class';
 
 @Injectable({
   providedIn: 'root'
@@ -16,18 +16,15 @@ export class AuthService {
   private auth = getAuth();
   provider = new GoogleAuthProvider();
   customPic: string = "";
-  newGuest: UserData = {
-    name: "Guest",
-    email: "",
-    password: "",
-    id: "",
-    picture: "assets/img/avatars/profile.svg",
-    online: true,
-  }
+  newGuest: User = new User;
 
   ngOnInit() { }
 
-  constructor(public router: Router, public userService: UserService) { }
+  constructor(public router: Router, public userService: UserService) {
+    this.newGuest.name = 'guest';
+    this.newGuest.picture = 'assets/img/avatars/profile.svg';
+    this.newGuest.online = true;
+  }
 
   ngOnDestroy() { }
 
@@ -81,7 +78,7 @@ export class AuthService {
           id: user.uid,
           picture: user.photoURL || "",
           online: true,
-        };
+        } as User;
         this.addGoogleUser();
       })
       .catch((error) => {
@@ -128,14 +125,14 @@ export class AuthService {
     if (this.userService.currentUser.name == "Guest") {
       this.userService.removeCurrentUserFromLocalStorage();
     } else {
-      let userIndexToLogout = this.findUserIndexWithEmail(this.userService.currentUser.email);
+      let userIndexToLogout = this.findUserIndexWithEmail(this.userService.currentUser.email || '');
       if (userIndexToLogout != -1) {
         console.log("Index to Logout", userIndexToLogout);
         this.userService.users[userIndexToLogout].online = false;
         this.userService.updateUser('users', this.userService.users[userIndexToLogout]);
       }
     }
-    this.userService.currentUser = this.userService.createEmptyUser();
+    this.userService.currentUser = new User;
     await signOut(this.auth).then(() => {
       console.log('Benutzer erfolgreich abgemeldet');
     }).catch((error) => {
@@ -144,8 +141,8 @@ export class AuthService {
   }
 
   async addGoogleUser() {
-    if (!this.userService.userExists(this.userService.currentUser.email)) {
-      await this.userService.addUser('users', this.userService.currentUser);
+    if (!this.userService.userExists(this.userService.currentUser.email || '')) {
+      await this.userService.addUser(this.userService.currentUser);
     }
     await this.userService.setCurrentUserToLocalStorage();
     await this.userService.getCurrentUserFromLocalStorage();

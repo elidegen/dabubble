@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { UserData } from '../interfaces/user-interface';
 import { UserService } from '../user.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
+import { User } from 'src/models/user.class';
 
 @Component({
   selector: 'app-login-screen',
@@ -17,41 +17,27 @@ export class LoginScreenComponent implements OnInit {
   profileImages: any = ["assets/img/avatars/character_1.svg", "assets/img/avatars/character_2.svg", "assets/img/avatars/character_3.svg", "assets/img/avatars/character_4.svg", "assets/img/avatars/character_5.svg", "assets/img/avatars/character_6.svg",]
   email: string = "";
   password: string = "";
-  newUser: UserData;
+  newUser: User = new User;
   resetEmail: string = "";
   uploadFile: string = "";
   userNotFound: boolean = false
   resetEmailNotFound: boolean = false;
   userAlreadyInUse: boolean = false;
 
-
-
   ngOnInit() {
     this.hideContentAfterAnimation();
   }
 
-  constructor(public userService: UserService, public router: Router, public authService : AuthService) {
-    this.newUser = {
-      name: "",
-      email: "",
-      password: "",
-      picture: "assets/img/avatars/profile.svg",
-      id: "",
-      online: false,
-    };
-  }
+  constructor(public userService: UserService, public router: Router, public authService: AuthService) { }
 
   getEmailForNewPassword = new FormGroup({
     emailForReset: new FormControl('', [Validators.required, Validators.email]),
-
-
   });
 
   login = new FormGroup({
     loginemail: new FormControl('', [Validators.required, Validators.email]),
     loginpassword: new FormControl('', [Validators.required]),
   });
-
 
   addUser = new FormGroup({
     newName: new FormControl('', [Validators.required, Validators.minLength(5)]),
@@ -60,11 +46,9 @@ export class LoginScreenComponent implements OnInit {
     disableSelect: new FormControl(false),
   });
 
-
   get newName() {
     return this.addUser.get('newName') as FormControl;
   }
-
 
   get newEmail() {
     return this.addUser.get('newEmail') as FormControl;
@@ -90,7 +74,6 @@ export class LoginScreenComponent implements OnInit {
     return this.addUser.get("disableSelect") as FormControl;
   }
 
-
   getErrorMessageLogin() {
     if (this.loginemail?.hasError('email')) {
       return 'Not a valid email';
@@ -115,22 +98,19 @@ export class LoginScreenComponent implements OnInit {
     return "";
   }
 
-    getErrorMessageNewEmail() {
-      if (this.newEmail?.hasError('email')) {
-        return 'Type in a valid e-mail';
-      }
-      return "";
+  getErrorMessageNewEmail() {
+    if (this.newEmail?.hasError('email')) {
+      return 'Type in a valid e-mail';
     }
+    return "";
+  }
 
-  
-    getErrorMessageNewPassword() {
-
+  getErrorMessageNewPassword() {
     if (this.newPassword?.hasError('minLenght')) {
       return 'You need a password with minium 6 letters';
     }
     return "";
   }
-
 
   getErrorMessageNoUser() {
     if (this.userNotFound) {
@@ -138,13 +118,10 @@ export class LoginScreenComponent implements OnInit {
     } else {
       return "";
     }
-     
   }
 
-  
   changePicSrc(pic: string) {
     this.picSrc = pic;
-
   }
 
   async createUser() {
@@ -154,30 +131,27 @@ export class LoginScreenComponent implements OnInit {
     this.userService.currentEmail = this.newEmail.value;
     this.userService.currentPassword = this.newPassword.value;
     console.log("User wird vorbereitet:", this.newUser);
-   await this.authService.createUser();
-   setTimeout(() => {
-    if (this.userService.userIsAvailable) {
-      this.changeSwitchCase('avatar');
-     } else {
-      this.userAlreadyInUse = true;
-      setTimeout(() => {
-        this.userAlreadyInUse = false;
-      }, 3000);
-     }
-   }, 3000);
-   
+    await this.authService.createUser();
+    setTimeout(() => {
+      if (this.userService.userIsAvailable) {
+        this.changeSwitchCase('avatar');
+      } else {
+        this.userAlreadyInUse = true;
+        setTimeout(() => {
+          this.userAlreadyInUse = false;
+        }, 3000);
+      }
+    }, 3000);
   }
 
   async uploadUser() {
     this.newUser.picture = this.picSrc;
     this.newUser.online = true;
-    this.userService.addUser('users', this.newUser as UserData);
+    this.userService.addUser(this.newUser as User);
     this.authService.signInUser(this.userService.currentEmail, this.userService.currentPassword);
-    
   }
 
   async loginUser() {
-
     await this.authService.signInUser(this.email, this.password);
     if (!this.userService.signInSuccess) {
       this.userNotFound = true;
@@ -189,9 +163,7 @@ export class LoginScreenComponent implements OnInit {
     this.authService.signInWithGoogle();
   }
 
-  loginWithApple() {
-
-  }
+  loginWithApple() { }
 
 
   hideContentAfterAnimation() {
@@ -200,10 +172,7 @@ export class LoginScreenComponent implements OnInit {
     }, 2500);
   }
 
-  onSubmit() {
-
-  }
-
+  onSubmit() { }
 
   changeSwitchCase(newSwitchCase: string) {
     this.switch_expression = newSwitchCase;
@@ -235,9 +204,6 @@ export class LoginScreenComponent implements OnInit {
   loginGuest() {
     this.authService.signOutUser();
     this.authService.signInGuest();
-   this.router.navigate(['home']);
+    this.router.navigate(['home']);
   }
-
 }
-
-
