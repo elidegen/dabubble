@@ -6,8 +6,6 @@ import { Chat } from 'src/models/chat.class';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from 'src/models/user.class';
 import { UserService } from './user.service';
-import { Message } from 'src/models/message.class';
-
 
 @Injectable({
   providedIn: 'root'
@@ -29,14 +27,12 @@ export class ChatService {
   allUsers: any[] = [];
   allDirectMessages: any[] = [];
 
-
   constructor(public userService: UserService) {
     this.getallChannels();
     this.getAllUsers();
   }
 
   // -------------- channel -----------------------
-
 
   get openChat$(): Observable<Channel | Chat | null> {
     return this._openChatSubject.asObservable();
@@ -55,9 +51,6 @@ export class ChatService {
     this._openDirectMessageSubject.next(value);
   }
 
-
-  
-
   // Create direct messages ------------------------------
   async createDirectMessage(user: User) {
     this.checkUserForDirectMessageName(user);
@@ -71,12 +64,10 @@ export class ChatService {
         .catch((err) => {
           console.log('error', err);
         });
-      }
-      this.compareNewDirectMessageWithExisting(user);
-      this.compareNewDirectMessageWithExisting(user);
+    }
+    this.compareNewDirectMessageWithExisting(user);
+    this.compareNewDirectMessageWithExisting(user);
   }
-  
-
 
   checkUserForId(user: User) {
     this.chat.members = []
@@ -85,7 +76,6 @@ export class ChatService {
       let userId = sortedUserIds.join('');
       let userData = this.convertUser(user);
       let currentUserData = this.convertUser(this.userService.currentUser);
-     
       this.chat.members.push(userData, currentUserData);
       this.chat.id = userId;
       return userId
@@ -108,7 +98,6 @@ export class ChatService {
     }
   }
 
-
   convertUser(user: any): any {
     return {
       name: user.name,
@@ -118,10 +107,6 @@ export class ChatService {
       picture: user.picture,
     };
   }
-
-  //-----------------------------------------
-
-
 
   // ---------------- Search function ---------------
   getallChannels() {
@@ -133,7 +118,6 @@ export class ChatService {
           channel.id = doc.id;
           return channel;
         });
-        //  console.log('all Channels', this.allChannels);
         this.getPersonalChannels();
       }
     );
@@ -156,7 +140,6 @@ export class ChatService {
 
   getAllMessages() {
     this.yourChannels.forEach(channel => {
-      // console.log('id', channel.id); 
       const messageCol = collection(this.firestore, `channels/${channel.id}/messages`);
       this.unSubMessages = onSnapshot(messageCol,
         (list) => {
@@ -166,9 +149,7 @@ export class ChatService {
         }
       );
     });
-    // console.log('check', this.allMessagesOfChannel);
   }
-
 
   getAllUsers() {
     const userCol = collection(this.firestore, 'users');
@@ -179,7 +160,6 @@ export class ChatService {
         });
       }
     );
-    // console.log('check Users', this.allUsers);
   }
 
   compareNewDirectMessageWithExisting(user: User) {
@@ -187,84 +167,55 @@ export class ChatService {
       .then(() => {
         this.findDirectMessage(user);
       });
-}
+  }
 
-getAllDirectMessages(): Promise<void> {
+  getAllDirectMessages(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-        this.allDirectMessages = [];
-        const directMessageCol = collection(this.firestore, 'direct messages');
-        this.unSubDirectMessages = onSnapshot(directMessageCol,
-            (list) => {
-                list.forEach(chat => {
-                    this.allDirectMessages.push(chat.data());
-                });
-                resolve();
-            },
-            (error) => {
-                reject(error); 
-            }
-        );
+      this.allDirectMessages = [];
+      const directMessageCol = collection(this.firestore, 'direct messages');
+      this.unSubDirectMessages = onSnapshot(directMessageCol,
+        (list) => {
+          list.forEach(chat => {
+            this.allDirectMessages.push(chat.data());
+          });
+          resolve();
+        },
+        (error) => {
+          reject(error);
+        }
+      );
     });
-}
-
+  }
 
   findDirectMessage(user: User) {
     let directId: any;
-    console.log('', user);
-    
+
     if (user.id !== this.userService.currentUser.id) {
       let sortedUserIds = [user.id, this.userService.currentUser.id].sort();
       directId = sortedUserIds.join('');
     } else {
       directId = this.userService.currentUser.id;
     }
-
-    console.log('user', directId);
-    
     const foundDirectMessage = this.allDirectMessages.find(message => message.id === directId);
     console.log('all directs', this.allDirectMessages);
     this.renderDirectMessage(foundDirectMessage);
-    
   }
 
   getChannelByMessage(message: any) {
     let channel = this.allChannels.find(channel => channel.id = message.channelID);
-    console.log( "Dieser channel wir ausgewählt in der suchfunktion",channel);
+    console.log("Dieser channel wir ausgewählt in der suchfunktion", channel);
     this.openChat = channel;
     this.chatWindow = 'channel';
   }
-
- 
-  
 
   renderDirectMessage(chat: Chat) {
     this.openDirectMessage = chat;
     this.chatWindow = 'direct';
   }
 
-
-  getOtherUserName(members: any[]) {
-    let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
-    return otherUser ? otherUser.name : '';
-  }
-
-
-  getUserProfileForDirectMessage(members: any[]) {
-    let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
-    let userProfile = this.allUsers.find(user => user.email == otherUser.email);
-    return userProfile ? userProfile.picture : '';
-  }
-
-  getUserOnlineStatus(members: any[]) {
-    let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
-    let userStatus = this.allUsers.find(user => user.id == otherUser.id);
-    return userStatus ? userStatus.online : '';
-  }
-
   getOtherUser(members: any[]) {
     let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
-    // let userStatus = this.allUsers.find(user => user.id == otherUser.id);
-    return otherUser as User;
+    let interlocutor = this.allUsers.find(user => user.id == otherUser.id);
+    return interlocutor as User;
   }
-
 }

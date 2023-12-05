@@ -62,13 +62,13 @@
             <button class="direct-message-button br-32" *ngFor="let directMessage of personalDirectMessages"
               (click)="chatservice.renderDirectMessage(directMessage)">
               <div class="profile-message-container">
-                <img class="d-flex" src="{{ chatservice.getUserProfileForDirectMessage(directMessage.members) }}" alt="avatar">
-                <div [ngClass]="{'offline-status': chatservice.getUserOnlineStatus(directMessage.members) === false}" class="online-status"></div>
+                <img class="d-flex" src="{{ (chatservice.getOtherUser(directMessage.members)).picture }}" alt="avatar">
+                <div [ngClass]="{'offline-status': !chatservice.getOtherUser(directMessage.members).online}"
+                  class="online-status"></div>
               </div>
 
-              <h3>{{ chatservice.getOtherUserName(directMessage.members) }}</h3>
+              <h3>{{ chatservice.getOtherUser(directMessage.members).name }}</h3>
             </button>
-
           </div>
 
         </mat-expansion-panel>

@@ -100,12 +100,12 @@
 
   <mat-card-content *ngSwitchCase="false" class="empty-direct-message-container">
     <div class="chat-patner-container">
-      <img src="{{ chatService.getUserProfileForDirectMessage(currentChat?.members)}}" alt="">
-      <span>{{ chatService.getOtherUserName(currentChat?.members) }}</span>
+      <img src="{{ interlocutor.picture}}" alt="">
+      <span>{{ interlocutor.name }}</span>
     </div>
     <div>
       <span>This conversation is only taking place between <span class="user-highlighted">@{{
-          chatService.getOtherUserName(currentChat?.members) }}</span> and you.</span>
+          interlocutor.name }}</span> and you.</span>
     </div>
   </mat-card-content>
 
