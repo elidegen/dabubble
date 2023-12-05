@@ -52,7 +52,6 @@ export class MainChatComponent implements OnInit {
     firestoreService.loadUsers()
   }
 
-
   ngOnInit() {
     this.chatService.openChat$.subscribe((openChat) => {
       if (openChat) {
@@ -71,7 +70,6 @@ export class MainChatComponent implements OnInit {
       }
     });
   }
-  
 
   ngOnDestroy() {
     if (this.firestoreService.unSubChannelMessages) {
@@ -79,13 +77,11 @@ export class MainChatComponent implements OnInit {
     }
   }
 
-
   openEditChannelDialog() {
     this.dialog.open(DialogEditChannelComponent, {
       panelClass: 'dialog-container'
     });
   }
-
 
   openDialog() {
     this.dialog.open(DialogAddToGroupComponent, {
@@ -93,32 +89,30 @@ export class MainChatComponent implements OnInit {
     });
   }
 
-
   openMemberDialog() {
     this.dialog.open(DialogShowGroupMemberComponent, {
       panelClass: 'dialog-container'
     });
   }
 
-
   onCloseThread() {
     this.threadDrawer.close();
   }
-  
- 
+
   async sendMessage() {
     if (this.currentChat?.id && this.message.content?.trim() !== '') {
       this.getSentMessageTime();
       this.getSentMessageDate();
       this.message.creator = this.userService.currentUser.name;
       this.message.creatorId = this.userService.currentUser.id,
-      this.message.channel = this.currentChat.name;
+        this.message.channel = this.currentChat.name;
       this.message.channelID = this.currentChat.id;
       this.message.profilePic = this.userService.currentUser.picture,
-      this.message.channel = this.currentChat.name;
+        this.message.channel = this.currentChat.name;
       await this.firestoreService.sendMessageInChannel(this.currentChat, this.message)
       this.message.content = '',
-      this.chatService.setViewedByZero(this.currentChat);
+        this.chatService.setViewedByZero(this.currentChat);
+      this.chatService.setViewedByMe(this.currentChat, this.currentUser as User);
     }
   }
 
@@ -128,7 +122,6 @@ export class MainChatComponent implements OnInit {
     this.message.date = formattedDate;
   }
 
-
   getSentMessageTime() {
     const currentTime = new Date();
     this.message.timeInMs = currentTime.getTime();
@@ -136,16 +129,13 @@ export class MainChatComponent implements OnInit {
     this.message.time = formattedTime;
   }
 
-
   getSentMessageCreator() {
     this.message.creator = this.userService.currentUser.id;
   }
 
-
   scrollToBottom(): void {
     this.messageContainer.nativeElement.scrollTop = this.messageContainer.nativeElement.scrollHeight;
   }
-
 
   isToday(date: string): boolean {
     const currentDate = this.getCurrentDate();
@@ -153,24 +143,20 @@ export class MainChatComponent implements OnInit {
     return date === formattedDate;
   }
 
-
   getCurrentDate(): string {
     const currentDate = new Date();
     return currentDate.toDateString();
   }
-
 
   formatDate(date: string): string {
     const parts = date.split(' ');
     return `${parts[2]}.${this.getMonthNumber(parts[1])}.${parts[3]}`;
   }
 
-
   getMonthNumber(month: string): string {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     return (months.indexOf(month) + 1).toString().padStart(2, '0');
   }
-
 
   openEmojiPicker(messageId: any) {
     setTimeout(() => {
@@ -179,13 +165,11 @@ export class MainChatComponent implements OnInit {
     this.emojiService.messageId = messageId;
   }
 
-
   openEmojiPickerChat() {
     setTimeout(() => {
       this.emojiService.showTextChatEmojiPicker = true;
     }, 1);
   }
-
 
   closeEmojiPicker() {
     if (this.emojiService.showMainChatEmojiPicker == true || this.emojiService.showTextChatEmojiPicker == true && this.emojiService.emojiString == "") {
@@ -193,7 +177,6 @@ export class MainChatComponent implements OnInit {
       this.emojiService.showTextChatEmojiPicker = false;
     }
   }
-
 
   addEmoji(event: any) {
     if (this.emojiService.messageId != "") {
@@ -204,13 +187,11 @@ export class MainChatComponent implements OnInit {
     }
   }
 
-
   addEmojiTextField($event: any) {
     this.emojiService.addEmojiTextChat($event);
     this.message.content += this.emojiService.emojiString;
     this.emojiService.emojiString = "";
   }
-
 
   async openThread(message: Message) {
     let messageId = message.id;
@@ -219,27 +200,24 @@ export class MainChatComponent implements OnInit {
     this.threadService.openMessage = message;
   }
 
-
   editMessage(message: Message) {
     if (this.currentChat) {
       if (message.creator == this.currentUser.name) {
         this.edit = true;
-        this.editingMessage = message.id; 
+        this.editingMessage = message.id;
       }
     }
   }
-  
 
   async updateMessageContent(message: Message) {
     let messageId = message.id
     const messageColRef = doc(collection(this.firestore, `channels/${this.currentChat?.id}/messages/`), messageId);
     await updateDoc(messageColRef, this.setMessageValues())
-    .catch((error) => {
-      console.error('Error updating document:', error);
-    });
+      .catch((error) => {
+        console.error('Error updating document:', error);
+      });
     this.edit = false;
   }
-
 
   setMessageValues() {
     return {
@@ -248,23 +226,19 @@ export class MainChatComponent implements OnInit {
   }
 
   // ---------------- search Input -------------------------
-
   filterUsers(): void {
     this.isInputFocused = true;
     this.firestoreService.filterAllUsers()
   }
 
-
   userSelected(event: Event) {
     event.stopPropagation();
   }
-
 
   selectUser(user: User) {
     this.chatService.createDirectMessage(user);
     this.search.nativeElement.value = '';
   }
-
 
   @HostListener('document:click', ['$event'])
   checkClick(event: Event) {
@@ -273,5 +247,4 @@ export class MainChatComponent implements OnInit {
       this.isInputFocused = false;
     }
   }
-  // -------------------------------------------------------------
 }
