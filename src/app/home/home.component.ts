@@ -82,15 +82,10 @@ export class HomeComponent {
 
 
 
-  openProfileDialog(id: String): void {
-    const dialogRef = this.dialog.open(DialogViewProfileComponent, {
+  openProfileDialog(id: any): void {
+    this.dialog.open(DialogViewProfileComponent, {
       panelClass: 'dialog-container',
       data: { userID: id },
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      // this.animal = result;
     });
   }
 

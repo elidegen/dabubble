@@ -215,7 +215,7 @@ export class ChatService {
 
   getOtherUser(members: any[]) {
     let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
-    let interlocutor = this.allUsers.find(user => user.id == otherUser.id);
+    let interlocutor = this.allUsers.find(user => user.id == otherUser.id);    
     return interlocutor as User;
   }
 }

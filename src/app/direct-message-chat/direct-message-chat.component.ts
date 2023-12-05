@@ -8,6 +8,7 @@ import { AuthService } from '../auth.service';
 import { EmojiService } from '../emoji.service';
 import { Chat } from 'src/models/chat.class';
 import { User } from 'src/models/user.class';
+import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-profile.component';
 
 
 @Component({
@@ -81,6 +82,13 @@ export class DirectMessageChatComponent implements OnInit {
       });
     }
     this.interlocutor = this.chatService.getOtherUser(this.currentChat?.members);
+  }
+
+  openProfileDialog(id: any): void {
+    this.dialog.open(DialogViewProfileComponent, {
+      panelClass: 'dialog-container',
+      data: { userID: id },
+    });
   }
 
   organizeMessagesByDate() {

@@ -1,7 +1,7 @@
 <div [ngSwitch]="messageIsExisting" class="chat-window-container">
   <mat-card-header>
-    <button class="br-32 profile-button">
-      <img src="{{ interlocutor.picture}}" />
+    <button class="br-32 profile-button" (click)="openProfileDialog(interlocutor.id)">
+      <img src="{{ interlocutor.picture}}">
       <span class="mr-16">{{ interlocutor.name }}</span>
     </button>
   </mat-card-header>
@@ -104,7 +104,7 @@
       <span>{{ interlocutor.name }}</span>
     </div>
     <div>
-      <span>This conversation is only taking place between <span class="user-highlighted">@{{
+      <span>This conversation is only taking place between <span (click)="openProfileDialog(interlocutor.id)" class="user-highlighted">@{{
           interlocutor.name }}</span> and you.</span>
     </div>
   </mat-card-content>
