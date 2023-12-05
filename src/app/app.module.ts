@@ -31,7 +31,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { WorkspaceComponent } from './workspace/workspace.component';
 import { MainChatComponent } from './main-chat/main-chat.component';
 import { ThreadComponent } from './thread/thread.component';
-import { MatExpansionModule } from '@angular/material/expansion';
+import {MatExpansionModule} from '@angular/material/expansion';
 import { DialogEditChannelComponent } from './dialog-edit-channel/dialog-edit-channel.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DialogViewProfileComponent } from './dialog-view-profile/dialog-view-profile.component';
