@@ -63,7 +63,7 @@
               (click)="chatservice.renderDirectMessage(directMessage)">
               <div class="profile-message-container">
                 <img class="d-flex" src="{{ getUserProfileForDirectMessage(directMessage.members) }}" alt="male2">
-                <div [ngClass]="{'offline-status': currentUser.online === false}" class="online-status"></div>
+                <div [ngClass]="{'offline-status': getUserStatusForDirectMessage(directMessage.members) === }" class="online-status"></div>                < [ngClass]="{'offline-status': currentUser.online></difalsev>
               </div>
 
               <h3>{{ getOtherUserName(directMessage.members) }}</h3>
