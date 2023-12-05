@@ -1,3 +1,12 @@
+mat-card {
+    max-height: 80vh;
+    overflow-y: scroll;
+}
+
+mat-card::-webkit-scrollbar {
+    display: none;
+}
+
 .member-view {
     display: flex;
     flex-direction: column;
@@ -11,7 +20,6 @@ header {
     justify-content: space-between;
     padding: 0 8px;
 }
-
 
 .online-status {
     width: 10px;
