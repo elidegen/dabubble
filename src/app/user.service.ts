@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { inject } from '@angular/core';
 import { Firestore, collection, doc, onSnapshot, addDoc, deleteDoc, updateDoc, } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
 import { User } from 'src/models/user.class';
 
 
@@ -19,6 +20,8 @@ export class UserService {
   customPic: string ="";
   userIsAvailable: boolean = false;
   resetEmailFound: boolean = false;
+  openUserContainerTextfield = new BehaviorSubject<boolean>(false);
+  nameStringForTextfield:any;
   unsubList;
 
   ngOnInit() {
@@ -95,6 +98,13 @@ export class UserService {
       picture: user.picture,
       online: user.online,
     }
+  }
+
+ 
+  openUserContainerTextField() {
+    setTimeout(() => {
+      this.openUserContainerTextfield.next(true);
+    }, 10);
   }
 
   // createEmptyUser(): User {

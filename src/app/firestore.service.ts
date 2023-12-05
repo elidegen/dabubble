@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { HostListener, Injectable, inject } from '@angular/core';
 import { DocumentData, DocumentReference, Firestore, addDoc, collection, doc, getDoc, getDocs, onSnapshot, orderBy, query, setDoc, updateDoc } from '@angular/fire/firestore';
 import { Message } from 'src/models/message.class';
 import { ThreadService } from './thread.service';
@@ -7,6 +7,7 @@ import { Channel } from 'src/models/channel.class';
 import { Thread } from 'src/models/thread.class';
 import { AuthService } from './auth.service';
 import { User } from 'src/models/user.class';
+import { deleteDoc } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -73,22 +74,22 @@ getUpdateData(channel: Channel) {
 }
 
 
-loadChannelMessages(currentChatId: any) {
-  if (currentChatId) {
-    const messageCollection = collection(this.firestore, `channels/${currentChatId}/messages`);
-    const q = query(messageCollection, orderBy('timeInMs', 'asc'));
-    this.unSubChannelMessages = onSnapshot(q, async (snapshot) => {
-      this.allMessagesOfChannel = await Promise.all(snapshot.docs.map(async doc => {
-        const message = doc.data() as Message;
-        message.id = doc.id;
-        message.threadCount = await this.threadService.countThreadMessages(message.id);
-        message.reactionCount = this.setEmojiCount(message.reaction);
-        return message;
-      }));
-      this.organizeMessagesByDate();
-    });
+  loadChannelMessages(currentChatId: any) {
+    if (currentChatId) {
+      const messageCollection = collection(this.firestore, `channels/${currentChatId}/messages`);
+      const q = query(messageCollection, orderBy('timeInMs', 'asc'));
+      this.unSubChannelMessages = onSnapshot(q, async (snapshot) => {
+        this.allMessagesOfChannel = await Promise.all(snapshot.docs.map(async doc => {
+          const message = doc.data() as Message;
+          message.id = doc.id;
+          message.threadCount = await this.threadService.countThreadMessages(message.id);
+          message.reactionCount = this.setEmojiCount(message.reaction);
+          return message;
+        }));
+        this.organizeMessagesByDate();
+      });
+    }
   }
-}
 
   organizeMessagesByDate() {
     this.messagesByDate = {};
@@ -107,21 +108,23 @@ loadChannelMessages(currentChatId: any) {
 
 
 
-   async sendMessageInChannel(channel: Channel, message: Message) {
+  async sendMessageInChannel(channel: Channel, message: Message) {
     let channelId = channel.id;
     const subColRef = collection(this.firestore, `channels/${channelId}/messages`);
-      await addDoc(subColRef, message.toJSON())
-        .catch((err) => {
-          console.log('Error', err);
-        })
-        .then((docRef: void | DocumentReference<DocumentData, DocumentData>) => {
-          if (docRef && docRef instanceof DocumentReference) {
-            if (channelId) {
-              this.updateMessageId(`channels/${channelId}/messages`, message, docRef.id);
-            }
-          }
-        });
+    await addDoc(subColRef, message.toJSON())
+    .catch((err) => {
+      console.log('Error', err);
+    })
+    .then((docRef: void | DocumentReference<DocumentData, DocumentData>) => {
+      if (docRef && docRef instanceof DocumentReference) {
+        if (channelId) {
+          this.updateMessageId(`channels/${channelId}/messages`, message, docRef.id);
+        }
+      }
+    });
   }
+
+  
 
 
   async updateMessageId(colId: string, message: Message, newId: string) {
@@ -160,6 +163,7 @@ loadChannelMessages(currentChatId: any) {
     }
   }
   
+
   async getAllChannelMembers(channelId: any) {
     if (channelId) {
       const channelDocRef = doc(this.firestore, `channels/${channelId}`);
@@ -177,11 +181,11 @@ loadChannelMessages(currentChatId: any) {
     }
   }
   
+
   updateOnlineStatus() {
     this.allChannelMembers.forEach(member => {
       let userIndex = this.authService.findUserIndexWithEmail(member.email);
       member.online = this.userService.users[userIndex].online;
-      // console.log("Online Status geupdated", member.online);
     });
   }
 
@@ -204,6 +208,7 @@ loadChannelMessages(currentChatId: any) {
       });
     }
   }
+
 
   async sendMessageInThread(threadId: any, message: Message) {
     const subColRef = collection(this.firestore, `threads/${threadId}/messages`);
@@ -228,6 +233,7 @@ loadChannelMessages(currentChatId: any) {
     }
   }
 
+
   filterAllUsers() {
     this.filteredUsers = this.allUsers.filter(user =>
       user.name?.toLowerCase().includes(this.searchInput.toLowerCase())
@@ -236,10 +242,7 @@ loadChannelMessages(currentChatId: any) {
 
   //--------------------------------------------------------------------------------
 
-  // ToDo: Irgendwie zusammenfügen
-  // einziger Unterschied collection und arrays!
-  // Unterschiedliche Arrays beachten "allMessagesOfChannel" und "allThreadMessages"
-
+  
   async addReaction(emoji: any, messageId: any, chatId: any, colId: any) {
     if (chatId) {
       let allMessages: any[] = [];
@@ -247,8 +250,8 @@ loadChannelMessages(currentChatId: any) {
         allMessages = this.allMessagesOfChannel;
       } else if (colId == 'threads') {
         allMessages = this.allThreadMessages;
-      } if (colId == 'direct messages') {
-        
+      } else if (colId == 'direct messages') {
+        allMessages = this.allDirectMessages;
       }
       const subReactionColRef = doc(collection(this.firestore, `${colId}/${chatId}/messages/`), messageId);
       let messageIndex = allMessages.findIndex(message => message.id === messageId);
@@ -263,18 +266,11 @@ loadChannelMessages(currentChatId: any) {
     }
   }
 
-
-
-
-
-
   updateMessage(message: any) {
     return {
       reaction: message.reaction
     }
   }
-
-
 
   setEmojiCount(reactions: any[]) {
     let counter: { [key: string]: number } = {};
@@ -295,7 +291,8 @@ loadChannelMessages(currentChatId: any) {
   }
 
 
-  loadDirectMessages(chatId: any) {
+  // ---------------- Direct messages ----------------------------------------------
+  async loadDirectMessages(chatId: any) {
     if (chatId) {
       const messageCollection = collection(this.firestore, `direct messages/${chatId}/messages`);
       const q = query(messageCollection, orderBy('timeInMs', 'asc'));
@@ -312,6 +309,7 @@ loadChannelMessages(currentChatId: any) {
     }
   }
 
+
   organizeDirectMessagesByDate() {
     this.messagesByDate = {};
     for (const message of this.allDirectMessages) {
@@ -325,8 +323,8 @@ loadChannelMessages(currentChatId: any) {
     }
     this.organizedMessages = Object.entries(this.messagesByDate).map(([date, messages]) => ({ date, messages }));
     this.organizedMessages = this.organizedMessages;
-    console.log('Show', this.organizedMessages)
   }
+
 
   checkMessageNumbers() {
     if (this.allDirectMessages.length > 0) {
@@ -334,5 +332,42 @@ loadChannelMessages(currentChatId: any) {
     } else {
       this.messageIsExisting = false
     }
+  }
+
+
+  async sendMessageInDirectMessage(chatId: any, message: Message) {
+    const subColRef = collection(this.firestore, `direct messages/${chatId}/messages`);
+    await addDoc(subColRef, message.toJSON())
+    .catch((err) => {
+      console.log(err);
+    })
+    .then((docRef: void | DocumentReference<DocumentData, DocumentData>) => {
+      if (docRef && docRef instanceof DocumentReference) {
+        if (chatId) {
+          this.updateMessageId(`direct messages/${chatId}/messages`, message, docRef.id);
+        }
+      }
+    });
+  }
+  
+  toggleMoreMenu(message: Message) {
+    message.messageSelected = !message.messageSelected;
+  }
+
+ 
+  async deleteMessageOfChat(colId: any, chatId: any, messageId: any) {
+    if (colId == 'channels') {
+      this.deletMessage(colId, chatId, messageId)
+    } else if (colId == 'threads') {
+      this.deletMessage(colId, chatId, messageId)
+    } else if (colId == 'direct messages') {
+      this.deletMessage(colId, chatId, messageId)
+    }
+  }
+
+
+  async deletMessage(colId: any, chatId: any, messageId: any) {
+    const messageDocRef = doc(collection(this.firestore, `${colId}/${chatId}/messages`), messageId);
+    await deleteDoc(messageDocRef);
   }
 }

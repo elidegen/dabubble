@@ -17,6 +17,8 @@ export class AuthService {
   provider = new GoogleAuthProvider();
   customPic: string = "";
   newGuest: User = new User;
+  uploadFile: any;
+
 
   ngOnInit() { }
 
@@ -122,15 +124,12 @@ export class AuthService {
   }
 
   async signOutUser() {
-    if (this.userService.currentUser.name == "Guest") {
-      this.userService.removeCurrentUserFromLocalStorage();
-    } else {
-      let userIndexToLogout = this.findUserIndexWithEmail(this.userService.currentUser.email || '');
-      if (userIndexToLogout != -1) {
-        console.log("Index to Logout", userIndexToLogout);
-        this.userService.users[userIndexToLogout].online = false;
-        this.userService.updateUser('users', this.userService.users[userIndexToLogout]);
-      }
+    this.userService.removeCurrentUserFromLocalStorage();
+    let userIndexToLogout = this.findUserIndexWithEmail(this.userService.currentUser.email);
+    if (userIndexToLogout != -1) {
+      console.log("Index to Logout", userIndexToLogout);
+      this.userService.users[userIndexToLogout].online = false;
+      this.userService.updateUser('users', this.userService.users[userIndexToLogout]);
     }
     this.userService.currentUser = new User;
     await signOut(this.auth).then(() => {
@@ -139,6 +138,7 @@ export class AuthService {
       console.error('Fehler beim Abmelden:', error);
     });
   }
+
 
   async addGoogleUser() {
     if (!this.userService.userExists(this.userService.currentUser.email || '')) {
@@ -171,7 +171,7 @@ export class AuthService {
       });
   }
 
-  findUserIndexWithEmail(email: string) {
+  findUserIndexWithEmail(email: any) {
     return this.userService.users.findIndex(user => user.email === email);
   }
 
@@ -209,6 +209,11 @@ export class AuthService {
     );
   }
 
+  onFileSelected($event: any) {
+    console.log($event);
+  }
+  
+
   createId(length: number) {
     let result = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -220,4 +225,8 @@ export class AuthService {
     }
     return result;
   }
+
+
+
+
 }

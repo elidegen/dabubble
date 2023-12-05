@@ -85,7 +85,7 @@ export class DialogAddToGroupComponent {
     }
   }
 
-  selectUser(user: User, i: number) {
+  selectUser(user: any, i: number) {
     console.log('selUs', this.selectedUsers);
     this.highlightButtons();
     let index = this.selectedUsers.findIndex((obj: { id: string | undefined; }) => obj.id === user.id);

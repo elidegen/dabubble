@@ -23,10 +23,8 @@ export class ThreadService {
   messagesByDate: { [date: string]: Message[] } = {};
   organizedMessages: { date: string, messages: Message[] }[] = [];
 
-  unsubList;
-
   constructor(public router: Router, public userService: UserService, public chatService: ChatService) {
-    this.unsubList = this.subThreadList();
+
   }
 
   public _openMessageSubject: BehaviorSubject<Message | null> = new BehaviorSubject<Message | null>(null);
@@ -52,11 +50,7 @@ export class ThreadService {
     console.log("die currentmessage ist ", this.currentMessage);
   }
 
-  ngOnDestroy() {
-    if (this.unsubList) {
-      this.unsubList();
-    }
-  }
+  
 
   async addThread(item: Thread) {
     if (this.currentMessage.id) {
@@ -96,23 +90,6 @@ return {
 }
 
 
-  subThreadList() {
-    if (this.currentChat.id && this.currentMessage.id) {
-      return onSnapshot(this.getThreadRef(this.currentMessage.id), (list) => {
-        this.threads = [];
-        list.forEach(element => {
-          const threadData = element.data() as Thread;
-          const thread = new Thread(threadData);
-          this.threads.push(thread);
-          console.log("threads sind vorhanden für  currentChat und currentMesage", this.currentChat.id, this.currentMessage);
-          console.log("Thread", thread);
-        });
-      });
-    } else {
-      console.log('Current chat or message is not defined');
-      return;
-    }
-  }
 
   setObjectData(obj: any,) {
     return {

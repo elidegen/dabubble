@@ -63,7 +63,7 @@
               <div class="reaction-container">
                 <div class="reaction-emoji-container">
                   <button class="reaction-emoji-button" *ngFor="let emoji of message.reactionCount | keyvalue">
-                    <div (click)='addReaction(emoji.key,message.id)' class="emoji-fit">{{emoji.key}}</div>
+                    <div (click)="firestoreService.addReaction(emoji.key,message.id, currentChat?.id, 'direct messages')" class="emoji-fit">{{emoji.key}}</div>
                     <span>{{ emoji.value }}</span>
                   </button>
                 </div>
@@ -75,18 +75,22 @@
               'own-message':
                 message.creator == this.userService.currentUser.name
             }">
-            <button mat-icon-button (click)="addReaction('✅', message.id)">
+            <button mat-icon-button (click)="firestoreService.addReaction('✅', message.id, currentChat?.id, 'direct messages')">
               <img src="assets/img/emojis/checkGreen.svg" alt="" />
             </button>
-            <button mat-icon-button (click)="addReaction('🙌', message.id)">
+            <button mat-icon-button (click)="firestoreService.addReaction('🙌', message.id, currentChat?.id, 'direct messages')">
               <img src="assets/img/emojis/hands.svg" alt="" />
             </button>
             <button class="hostlistener-dont-trigger" (click)="openEmojiPicker(message.id)" mat-icon-button>
               <img src="assets/img/icons/add_reaction.svg" alt="" />
             </button>
-            <button mat-icon-button *ngIf="message.creator == currentUser.name" (click)="editMessage(message)">
-              <img src="assets/img/icons/edit_square.svg" alt="" />
+            <button mat-icon-button *ngIf="message.creator == currentUser.name" (click)="firestoreService.toggleMoreMenu(message)">
+              <img src="assets/img/icons/more.svg" alt="">
             </button>
+            <div class="more-menu" [class.visible]="message.messageSelected">
+              <span (click)="editMessage(message)">Edit message</span>
+              <span class="delete-message" (click)="firestoreService.deleteMessageOfChat('direct messages', currentChat?.id, message.id)">Delete Message</span>
+            </div>
           </div>
         </div>
       </section>
@@ -118,9 +122,12 @@
         <div class="message-buttons">
           <div class="attachments">
             <div class="border-right">
-              <button mat-icon-button>
-                <img src="assets/img/icons/add.svg" alt="" />
-              </button>
+              <button class="mat-icon-button" 
+              type="submit"> <label class="custom-file-upload">
+                   <input class="dataInput" (change)="this.authService.onFileSelected($event)" [(ngModel)]="this.authService.uploadFile" type="file">
+                   <img style="z-index: 100;" src="assets/img/icons/add.svg" alt="" />
+                 </label>
+               </button>
             </div>
 
             <button (click)="openEmojiPickerChat()" mat-icon-button>

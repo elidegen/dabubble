@@ -39,6 +39,7 @@ export class MainChatComponent implements OnInit {
   @ViewChild('emojiPicker') emojiPickerElementRef!: ElementRef;
   editingMessage: string | undefined;
   newThread = new Thread();
+  uploadFile: any;
 
   // ------------------ search Input ---------------
   isInputFocused: boolean = false;
@@ -48,7 +49,7 @@ export class MainChatComponent implements OnInit {
   constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public threadService: ThreadService, public authService: AuthService, public emojiService: EmojiService, public firestoreService: FirestoreService) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser as User;
-    firestoreService.loadUsers()
+    firestoreService.loadUsers();
   }
 
   ngOnInit() {
@@ -75,6 +76,8 @@ export class MainChatComponent implements OnInit {
       this.firestoreService.unSubChannelMessages();
     }
   }
+
+
 
   openEditChannelDialog() {
     this.dialog.open(DialogEditChannelComponent, {
@@ -104,14 +107,15 @@ export class MainChatComponent implements OnInit {
       this.getSentMessageDate();
       this.message.creator = this.userService.currentUser.name;
       this.message.creatorId = this.userService.currentUser.id,
-        this.message.channel = this.currentChat.name;
+      this.message.channel = this.currentChat.name;
       this.message.channelID = this.currentChat.id;
       this.message.profilePic = this.userService.currentUser.picture,
-        this.message.channel = this.currentChat.name;
+      this.message.channel = this.currentChat.name;
+      this.message.messageSelected = false;
       await this.firestoreService.sendMessageInChannel(this.currentChat, this.message)
       this.message.content = '',
-        this.chatService.setViewedByZero(this.currentChat);
-      this.chatService.setViewedByMe(this.currentChat, this.currentUser);
+      this.chatService.setViewedByZero(this.currentChat);
+      this.chatService.setViewedByMe(this.currentChat, this.currentUser as User);
     }
   }
 
@@ -224,6 +228,7 @@ export class MainChatComponent implements OnInit {
     }
   }
 
+
   // ---------------- search Input -------------------------
   filterUsers(): void {
     this.isInputFocused = true;
@@ -234,9 +239,18 @@ export class MainChatComponent implements OnInit {
     event.stopPropagation();
   }
 
-  selectUser(user: User) {
+
+
+  selectUser(user: any) {
     this.chatService.createDirectMessage(user);
     this.search.nativeElement.value = '';
+  }
+
+  getUserNameString(user:any) {
+    console.log("User dessen Name ins Textfeld soll",user);
+    this.message.content += `<span style="color: #B357F0">@${user.name}</span>`;
+    console.log(this.message.content);
+    this.userService.openUserContainerTextfield.next(false);
   }
 
   @HostListener('document:click', ['$event'])
@@ -246,4 +260,10 @@ export class MainChatComponent implements OnInit {
       this.isInputFocused = false;
     }
   }
+
+  onFileSelected($event: any){
+    console.log($event);
+  }
 }
+
+

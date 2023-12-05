@@ -85,13 +85,17 @@
           </div>
         </div>
         
-        <div class="reaction" (click)="openEmojiPicker(thread.id)" [ngClass]="{'own-message': thread.creator == currentUser.name}">
-          <button mat-icon-button (click)="toggled = true" >
+        <div class="reaction" [ngClass]="{'own-message': thread.creator == currentUser.name}">
+          <button mat-icon-button (click)="toggled = true" (click)="openEmojiPicker(thread.id)">
             <img src="assets/img/icons/add_reaction.svg" alt="">
           </button>
-          <button mat-icon-button *ngIf="thread.creator == currentUser.name" (click)="editThreadMessage(thread)">
-            <img src="assets/img/icons/edit_square.svg" alt="">
+          <button mat-icon-button *ngIf="thread.creator == currentUser.name" (click)="firestoreService.toggleMoreMenu(thread)">
+            <img src="assets/img/icons/more.svg" alt="">
           </button>
+          <div class="more-menu" [class.visible]="thread.messageSelected">
+            <span (click)="editThreadMessage(thread)">Edit message</span>
+            <span class="delete-message" (click)="firestoreService.deleteMessageOfChat('threads', currentMessage.id, thread.id)">Delete Message</span>
+          </div>
         </div>
       </div>
       <emoji-mart *ngIf="this.emojiService.showThreadEmojiPicker == true" class="emojiPicker" (emojiClick)="addEmoji($event)"></emoji-mart>
@@ -107,9 +111,12 @@
       <div class="message-buttons">
         <div class="attachments">
           <div class="border-right">
-            <button mat-icon-button class="textfield-buttons">
-              <img src="assets/img/icons/add.svg" alt="" />
-            </button>
+            <button class="mat-icon-button" 
+            type="submit"> <label class="custom-file-upload">
+                 <input class="dataInput" (change)="this.authService.onFileSelected($event)" [(ngModel)]="this.authService.uploadFile" type="file">
+                 <img style="z-index: 100;" src="assets/img/icons/add.svg" alt="" />
+               </label>
+             </button>
           </div>
 
           <button (click)="openEmojiPickerChat()" mat-icon-button class="textfield-buttons">

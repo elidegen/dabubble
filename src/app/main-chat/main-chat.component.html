@@ -82,7 +82,10 @@
             <div class="attachments">
               <div class="border-right">
                 <button disabled mat-icon-button>
-                  <img src="assets/img/icons/add.svg" alt="" />
+                  <label class="custom-file-upload">
+                    <input class="dataInput" (change)="onFileSelected($event)" [(ngModel)]="uploadFile" type="file">
+                    <img src="assets/img/icons/add.svg" alt="" /> Test
+                  </label>
                 </button>
               </div>
               <button disabled (click)="openEmojiPickerChat()" mat-icon-button>
@@ -221,9 +224,13 @@
                 <button (click)="openThread(message)" mat-icon-button>
                   <img src="assets/img/icons/comment.svg" alt="">
                 </button>
-                <button mat-icon-button *ngIf="message.creator == currentUser.name" (click)="editMessage(message)">
-                  <img src="assets/img/icons/edit_square.svg" alt="">
+                <button mat-icon-button *ngIf="message.creator == currentUser.name" (click)="firestoreService.toggleMoreMenu(message)">
+                  <img src="assets/img/icons/more.svg" alt="">
                 </button>
+                <div class="more-menu" [class.visible]="message.messageSelected">
+                  <span (click)="editMessage(message)">Edit message</span>
+                  <span class="delete-message" (click)="firestoreService.deleteMessageOfChat('channels', currentChat?.id, message.id)">Delete Message</span>
+                </div>
               </div>
 
             </div>
@@ -237,6 +244,19 @@
 
       </mat-card-content>
 
+
+      <div class="user-search-container-textfield" *ngIf="this.userService.openUserContainerTextfield.value == true" >
+          <button (click)="getUserNameString(user)" class="user-container" *ngFor="let user of this.userService.users" >
+              <div  class="profile-container">
+                  <img src="{{user.picture}}" alt="profile">
+                  <div class="online-status"></div>
+              </div>
+              <span>{{user.name}}</span>
+          </button>
+              </div>
+
+  
+            
       <mat-card-content>
         <div class="textfield-content">
           <div class="text-field-container">
@@ -245,17 +265,21 @@
 
             <div class="message-buttons">
               <div class="attachments">
-                <div class="border-right">
-                  <button [disabled]="!currentChat" mat-icon-button>
-                    <img src="assets/img/icons/add.svg" alt="" />
-                  </button>
+                <div  class="border-right">
+                
+                  <button class="mat-icon-button" 
+                  type="submit"> <label class="custom-file-upload">
+                       <input class="dataInput" (change)="this.authService.onFileSelected($event)" [(ngModel)]="this.authService.uploadFile" type="file">
+                       <img style="z-index: 100;" src="assets/img/icons/add.svg" alt="" />
+                     </label>
+                   </button>
                 </div>
 
                 <button [disabled]="!currentChat" (click)="openEmojiPickerChat()" mat-icon-button>
                   <img src="assets/img/icons/smiley.svg" alt="" />
                 </button>
 
-                <button [disabled]="!currentChat" mat-icon-button>
+                <button [disabled]="!currentChat" (click)="this.userService.openUserContainerTextField()" mat-icon-button>
                   <img src="assets/img/icons/@.svg" alt="" />
                 </button>
               </div>
