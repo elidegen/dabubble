@@ -9,7 +9,6 @@ import { ChatService } from '../chat.service';
 import { Channel } from 'src/models/channel.class';
 import { Message } from 'src/models/message.class';
 import { UserService } from '../user.service';
-import { UserData } from '../interfaces/user-interface';
 import { Reaction } from 'src/models/reaction.class';
 import { ThreadService } from '../thread.service';
 import { Thread } from 'src/models/thread.class';
@@ -30,7 +29,7 @@ export class MainChatComponent implements OnInit {
   @ViewChild('thread') threadDrawer!: MatDrawer;
   message: Message = new Message();
   reaction: Reaction = new Reaction;
-  currentUser: UserData;
+  currentUser: User;
   allReactionsByMessage: [] = [];   //???
   threadCount: any = 0;
   showEmojiPick: boolean = false;
@@ -49,7 +48,7 @@ export class MainChatComponent implements OnInit {
 
   constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public threadService: ThreadService, public authService: AuthService, public emojiService: EmojiService, public firestoreService: FirestoreService) {
     userService.getCurrentUserFromLocalStorage();
-    this.currentUser = this.userService.currentUser;
+    this.currentUser = this.userService.currentUser as User;
     firestoreService.loadUsers()
   }
 
@@ -108,13 +107,13 @@ export class MainChatComponent implements OnInit {
       this.getSentMessageDate();
       this.message.creator = this.userService.currentUser.name;
       this.message.creatorId = this.userService.currentUser.id,
-        this.message.channel = this.currentChat.name;
+      this.message.channel = this.currentChat.name;
       this.message.channelID = this.currentChat.id;
       this.message.profilePic = this.userService.currentUser.picture,
-        this.message.channel = this.currentChat.name;
+      this.message.channel = this.currentChat.name;
       await this.firestoreService.sendMessageInChannel(this.currentChat, this.message)
       this.message.content = '',
-        this.chatService.setViewedByZero(this.currentChat);
+      this.chatService.setViewedByZero(this.currentChat);
       this.chatService.setViewedByMe(this.currentChat, this.currentUser as User);
     }
   }

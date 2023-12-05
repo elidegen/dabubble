@@ -3,7 +3,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-profile.component';
 import { UserService } from '../user.service';
 import { Router } from '@angular/router';
-import { UserData } from '../interfaces/user-interface';
 import { AuthService } from '../auth.service';
 import { User } from 'src/models/user.class';
 import { ChatService } from '../chat.service';
@@ -29,7 +28,7 @@ export class HomeComponent {
   @ViewChild('search') search!: ElementRef;
   searchInput: string = '';
   isInputFocused: boolean = false;
-  filteredUsers: UserData[] = [];
+  filteredUsers: User[] = [];
   filteredMessages: Message[] = [];
   constructor(public dialog: MatDialog, public auth: AuthService, public router: Router, public userService: UserService, public chatService: ChatService) {
     this.userService.getCurrentUserFromLocalStorage();

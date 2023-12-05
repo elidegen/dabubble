@@ -63,7 +63,7 @@
               <div class="reaction-container">
                 <div class="reaction-emoji-container">
                   <button class="reaction-emoji-button" *ngFor="let emoji of message.reactionCount | keyvalue">
-                    <div (click)='addReaction(emoji.key,message.id)' class="emoji-fit">{{emoji.key}}</div>
+                    <div (click)="firestoreService.addReaction(emoji.key,message.id, currentChat?.id, 'direct messages')" class="emoji-fit">{{emoji.key}}</div>
                     <span>{{ emoji.value }}</span>
                   </button>
                 </div>
@@ -75,10 +75,10 @@
               'own-message':
                 message.creator == this.userService.currentUser.name
             }">
-            <button mat-icon-button (click)="addReaction('✅', message.id)">
+            <button mat-icon-button (click)="firestoreService.addReaction('✅', message.id, currentChat?.id, 'direct messages')">
               <img src="assets/img/emojis/checkGreen.svg" alt="" />
             </button>
-            <button mat-icon-button (click)="addReaction('🙌', message.id)">
+            <button mat-icon-button (click)="firestoreService.addReaction('🙌', message.id, currentChat?.id, 'direct messages')">
               <img src="assets/img/emojis/hands.svg" alt="" />
             </button>
             <button class="hostlistener-dont-trigger" (click)="openEmojiPicker(message.id)" mat-icon-button>
