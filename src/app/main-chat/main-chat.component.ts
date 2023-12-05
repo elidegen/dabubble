@@ -62,7 +62,7 @@ export class MainChatComponent implements OnInit {
           if (this.firestoreService.unSubChannelMessages) {
             this.firestoreService.unSubChannelMessages();
           }
-          this.firestoreService.loadChannelMessages(this.currentChat.id)
+          this.firestoreService.loadChannelMessages(this.currentChat)
           this.firestoreService.getAllChannelMembers(this.currentChat.id);
         }
       } else {
@@ -76,8 +76,6 @@ export class MainChatComponent implements OnInit {
       this.firestoreService.unSubChannelMessages();
     }
   }
-
-
 
   openEditChannelDialog() {
     this.dialog.open(DialogEditChannelComponent, {
@@ -228,7 +226,6 @@ export class MainChatComponent implements OnInit {
     }
   }
 
-
   // ---------------- search Input -------------------------
   filterUsers(): void {
     this.isInputFocused = true;
@@ -238,8 +235,6 @@ export class MainChatComponent implements OnInit {
   userSelected(event: Event) {
     event.stopPropagation();
   }
-
-
 
   selectUser(user: any) {
     this.chatService.createDirectMessage(user);
@@ -265,5 +260,3 @@ export class MainChatComponent implements OnInit {
     console.log($event);
   }
 }
-
-

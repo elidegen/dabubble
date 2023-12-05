@@ -8,6 +8,7 @@ import { Thread } from 'src/models/thread.class';
 import { AuthService } from './auth.service';
 import { User } from 'src/models/user.class';
 import { deleteDoc } from 'firebase/firestore';
+import { ChatService } from './chat.service';
 
 @Injectable({
   providedIn: 'root'
@@ -28,58 +29,55 @@ export class FirestoreService {
 
   allThreadMessages: Message[] = [];
   unSubThread: any;
-  constructor( public threadService: ThreadService, public userService: UserService, public authService: AuthService) { }
+  constructor(public threadService: ThreadService, public chatService: ChatService, public userService: UserService, public authService: AuthService) { }
 
 
   // ----- Direct Messages --------------
   unSubDirectMessages: any;
   allDirectMessages: Message[] = [];
   messageIsExisting!: boolean;
-// ------------------ channel ----------------------------------------------------------
+  // ------------------ channel ----------------------------------------------------------
 
-async addChannel(channel: Channel) {
-  await addDoc(collection(this.firestore, 'channels'), channel.toJSON())
-  .catch((err) => {
-    console.log(err);
-  })
-  .then((docRef: void | DocumentReference<DocumentData, DocumentData>) => {
-    if (docRef && docRef instanceof DocumentReference) {
-      this.updateChannelId('channels', channel, docRef.id);
-    }
-  });
-}
+  async addChannel(channel: Channel) {
+    await addDoc(collection(this.firestore, 'channels'), channel.toJSON())
+      .catch((err) => {
+        console.log(err);
+      })
+      .then((docRef: void | DocumentReference<DocumentData, DocumentData>) => {
+        if (docRef && docRef instanceof DocumentReference) {
+          this.updateChannelId('channels', channel, docRef.id);
+        }
+      });
+  }
 
+  async updateChannelId(colId: string, channel: Channel, newId: string) {
+    channel.id = newId;
+    await this.updateChannel(colId, channel);
+  }
 
-async updateChannelId(colId: string, channel: Channel, newId: string) {
-  channel.id = newId;
-  await this.updateChannel(colId, channel);
-}
+  async updateChannel(colId: string, channel: Channel) {
+    const docRef = doc(collection(this.firestore, colId), channel.id);
+    await updateDoc(docRef, this.getUpdateData(channel)).catch(
+      (error) => { console.log(error); }
+    );
+  }
 
+  getUpdateData(channel: Channel) {
+    return {
+      name: channel.name,
+      description: channel.description,
+      creator: channel.creator,
+      id: channel.id,
+    };
+  }
 
-async updateChannel(colId: string, channel: Channel) {
-  const docRef = doc(collection(this.firestore, colId), channel.id);
-  await updateDoc(docRef, this.getUpdateData(channel)).catch(
-    (error) => { console.log(error); }
-  );
-}
-
-
-getUpdateData(channel: Channel) {
-  return {
-    name: channel.name,
-    description: channel.description,
-    creator: channel.creator,
-    id: channel.id,
-  };
-}
-
-
-  loadChannelMessages(currentChatId: any) {
-    if (currentChatId) {
-      const messageCollection = collection(this.firestore, `channels/${currentChatId}/messages`);
+  loadChannelMessages(currentChat: any) {
+    if (currentChat.id) {
+      const messageCollection = collection(this.firestore, `channels/${currentChat.id}/messages`);
       const q = query(messageCollection, orderBy('timeInMs', 'asc'));
       this.unSubChannelMessages = onSnapshot(q, async (snapshot) => {
         this.allMessagesOfChannel = await Promise.all(snapshot.docs.map(async doc => {
+          this.chatService.setViewedByMe(currentChat, this.userService.currentUser);
           const message = doc.data() as Message;
           message.id = doc.id;
           message.threadCount = await this.threadService.countThreadMessages(message.id);
@@ -106,32 +104,26 @@ getUpdateData(channel: Channel) {
     this.organizedMessages = this.organizedMessages;
   }
 
-
-
   async sendMessageInChannel(channel: Channel, message: Message) {
     let channelId = channel.id;
     const subColRef = collection(this.firestore, `channels/${channelId}/messages`);
     await addDoc(subColRef, message.toJSON())
-    .catch((err) => {
-      console.log('Error', err);
-    })
-    .then((docRef: void | DocumentReference<DocumentData, DocumentData>) => {
-      if (docRef && docRef instanceof DocumentReference) {
-        if (channelId) {
-          this.updateMessageId(`channels/${channelId}/messages`, message, docRef.id);
+      .catch((err) => {
+        console.log('Error', err);
+      })
+      .then((docRef: void | DocumentReference<DocumentData, DocumentData>) => {
+        if (docRef && docRef instanceof DocumentReference) {
+          if (channelId) {
+            this.updateMessageId(`channels/${channelId}/messages`, message, docRef.id);
+          }
         }
-      }
-    });
+      });
   }
-
-  
-
 
   async updateMessageId(colId: string, message: Message, newId: string) {
     message.id = newId;
     await this.updateChannelMessage(colId, message);
   }
-
 
   async updateChannelMessage(colId: string, message: Message) {
     const docRef = doc(collection(this.firestore, colId), message.id);
@@ -140,13 +132,11 @@ getUpdateData(channel: Channel) {
     );
   }
 
-
   getUpdateChannelMessageData(message: Message) {
     return {
       id: message.id,
     };
   }
-
 
   async createThread(messageId: any, thread: Thread) {
     const threadCollectionRef = collection(this.firestore, 'threads');
@@ -162,7 +152,6 @@ getUpdateData(channel: Channel) {
       console.error('Fehler beim Hinzufügen oder Aktualisieren des Threads:', err);
     }
   }
-  
 
   async getAllChannelMembers(channelId: any) {
     if (channelId) {
@@ -180,7 +169,6 @@ getUpdateData(channel: Channel) {
       }
     }
   }
-  
 
   updateOnlineStatus() {
     this.allChannelMembers.forEach(member => {
@@ -190,8 +178,6 @@ getUpdateData(channel: Channel) {
   }
 
   //----------------------Thread ----------------------------------------------
-
-
   loadThread(threadId: any) {
     if (threadId) {
       const threadCollection = collection(this.firestore, `threads/${threadId}/messages`);
@@ -209,21 +195,18 @@ getUpdateData(channel: Channel) {
     }
   }
 
-
   async sendMessageInThread(threadId: any, message: Message) {
     const subColRef = collection(this.firestore, `threads/${threadId}/messages`);
-      await addDoc(subColRef, message.toJSON())
-        .catch((err) => {
-          console.log(err);
-        })
-        .then(() => {
-          console.log('Message sent to thread');
-        });
+    await addDoc(subColRef, message.toJSON())
+      .catch((err) => {
+        console.log(err);
+      })
+      .then(() => {
+        console.log('Message sent to thread');
+      });
   }
 
-
   //----------- search Input Main Chat ----------------------------------
-
   async loadUsers() {
     try {
       const querySnapshot = await getDocs(collection(this.firestore, 'users'));
@@ -233,7 +216,6 @@ getUpdateData(channel: Channel) {
     }
   }
 
-
   filterAllUsers() {
     this.filteredUsers = this.allUsers.filter(user =>
       user.name?.toLowerCase().includes(this.searchInput.toLowerCase())
@@ -241,8 +223,6 @@ getUpdateData(channel: Channel) {
   }
 
   //--------------------------------------------------------------------------------
-
-  
   async addReaction(emoji: any, messageId: any, chatId: any, colId: any) {
     if (chatId) {
       let allMessages: any[] = [];
@@ -290,7 +270,6 @@ getUpdateData(channel: Channel) {
     return counter;
   }
 
-
   // ---------------- Direct messages ----------------------------------------------
   async loadDirectMessages(chatId: any) {
     if (chatId) {
@@ -309,7 +288,6 @@ getUpdateData(channel: Channel) {
     }
   }
 
-
   organizeDirectMessagesByDate() {
     this.messagesByDate = {};
     for (const message of this.allDirectMessages) {
@@ -325,7 +303,6 @@ getUpdateData(channel: Channel) {
     this.organizedMessages = this.organizedMessages;
   }
 
-
   checkMessageNumbers() {
     if (this.allDirectMessages.length > 0) {
       this.messageIsExisting = true;
@@ -334,27 +311,25 @@ getUpdateData(channel: Channel) {
     }
   }
 
-
   async sendMessageInDirectMessage(chatId: any, message: Message) {
     const subColRef = collection(this.firestore, `direct messages/${chatId}/messages`);
     await addDoc(subColRef, message.toJSON())
-    .catch((err) => {
-      console.log(err);
-    })
-    .then((docRef: void | DocumentReference<DocumentData, DocumentData>) => {
-      if (docRef && docRef instanceof DocumentReference) {
-        if (chatId) {
-          this.updateMessageId(`direct messages/${chatId}/messages`, message, docRef.id);
+      .catch((err) => {
+        console.log(err);
+      })
+      .then((docRef: void | DocumentReference<DocumentData, DocumentData>) => {
+        if (docRef && docRef instanceof DocumentReference) {
+          if (chatId) {
+            this.updateMessageId(`direct messages/${chatId}/messages`, message, docRef.id);
+          }
         }
-      }
-    });
+      });
   }
-  
+
   toggleMoreMenu(message: Message) {
     message.messageSelected = !message.messageSelected;
   }
 
- 
   async deleteMessageOfChat(colId: any, chatId: any, messageId: any) {
     if (colId == 'channels') {
       this.deletMessage(colId, chatId, messageId)
@@ -364,7 +339,6 @@ getUpdateData(channel: Channel) {
       this.deletMessage(colId, chatId, messageId)
     }
   }
-
 
   async deletMessage(colId: any, chatId: any, messageId: any) {
     const messageDocRef = doc(collection(this.firestore, `${colId}/${chatId}/messages`), messageId);
