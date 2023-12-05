@@ -15,7 +15,7 @@ import { updateDoc } from 'firebase/firestore';
   styleUrls: ['./dialog-add-to-group.component.scss']
 })
 export class DialogAddToGroupComponent {
-  constructor(public dialogRef: MatDialogRef<DialogAddToGroupComponent>, public chatService: ChatService, public userService: UserService) { 
+  constructor(public dialogRef: MatDialogRef<DialogAddToGroupComponent>, public chatService: ChatService, public userService: UserService) {
     this.loadUsers();
     this.currentUser = this.userService.currentUser;
   }
@@ -65,7 +65,7 @@ export class DialogAddToGroupComponent {
     }
   }
 
-  
+
   filterUsers(): void {
     this.isInputFocused = true;
     this.filteredUsers = this.users.filter(user =>
@@ -98,7 +98,7 @@ export class DialogAddToGroupComponent {
 
   highlightButtons() {
     this.filteredUsers.forEach(user => {
-      if(this.selectedUsers.includes(user)){
+      if (this.selectedUsers.includes(user)) {
         this.addHighlight(user);
       } else {
         this.removeHightlight(user);
@@ -115,7 +115,7 @@ export class DialogAddToGroupComponent {
   }
 
 
-  addHighlight(user: User) {    
+  addHighlight(user: User) {
     let index = this.filteredUsers.findIndex((obj => obj === user));
     const userContainer = this.userContainers.toArray()[index];
     if (userContainer) {
@@ -149,18 +149,34 @@ export class DialogAddToGroupComponent {
   async addChannelMember() {
     if (this.currentChat) {
       const channelDocRef = doc(collection(this.firestore, 'channels'), this.currentChat.id);
-      this.channel.members = this.selectedUsers;
+      this.channel.members = this.formatMembers(this.selectedUsers);
       this.channel.name = this.currentChat.name;
       this.channel.id = this.currentChat.id;
       this.channel.description = this.currentChat.description;
+      console.log('addm t channe', this.channel);
+      console.log('channelJSON', this.channel.toJSON());
+
       await updateDoc(channelDocRef, this.channel.toJSON()).catch((error) => {
         console.error('Error updating document:', error);
       });
     }
     this.dialogRef.close();
   }
-  
-  
+
+  formatMembers(usersToFormat: any[]){
+    const formattedUsers = usersToFormat.map(user => {
+      return {
+        name: user.name,
+        email: user.email,
+        password: user.password,
+        id: user.id,
+        picture: user.picture,
+        online: user.online
+      };
+    });
+    return formattedUsers;
+  }
+
   getMembers() {
     if (this.allChannelMembers) {
       this.addSelectedUsersToChannel(this.users);
@@ -173,18 +189,18 @@ export class DialogAddToGroupComponent {
 
   addSelectedUsersToChannel(selectedUsers: any[]) {
     const formattedUsers = selectedUsers.map(user => {
-        return {
-            name: user.name,
-            email: user.email,
-            password: user.password,
-            id: user.id,
-            picture: user.picture,
-            online: user.online
-        };
+      return {
+        name: user.name,
+        email: user.email,
+        password: user.password,
+        id: user.id,
+        picture: user.picture,
+        online: user.online
+      };
     });
     this.channel.members.push(...formattedUsers);
   }
-  
+
   addCurrentUser() {
     const userAlreadySelected = this.selectedUsers.some(user => user.id === this.currentUser.id);
     if (!userAlreadySelected) {
