@@ -12,7 +12,7 @@
 
         <div class="name">
             <h1>{{user.name}}</h1>
-            <span (click)="editState = true">Edit</span>
+            <span (click)="editState = true" *ngIf="currentUser.id == user.id">Edit</span>
         </div>
 
         <div [ngSwitch]="user.online">

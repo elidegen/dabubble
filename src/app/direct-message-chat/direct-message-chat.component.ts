@@ -8,6 +8,7 @@ import { AuthService } from '../auth.service';
 import { EmojiService } from '../emoji.service';
 import { Chat } from 'src/models/chat.class';
 import { User } from 'src/models/user.class';
+import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-profile.component';
 
 
 @Component({
@@ -54,7 +55,7 @@ export class DirectMessageChatComponent implements OnInit {
         this.currentChat = undefined;
       }
 
-    });    
+    });
   }
 
   ngOnDestroy() {
@@ -83,7 +84,12 @@ export class DirectMessageChatComponent implements OnInit {
     this.interlocutor = this.chatService.getOtherUser(this.currentChat?.members);
   }
 
-
+  openProfileDialog(id: any): void {
+    this.dialog.open(DialogViewProfileComponent, {
+      panelClass: 'dialog-container',
+      data: { userID: id },
+    });
+  }
 
   organizeMessagesByDate() {
     this.messagesByDate = {};
@@ -108,9 +114,7 @@ export class DirectMessageChatComponent implements OnInit {
       this.messageIsExisting = false
     }
     console.log(this.messageIsExisting);
-
   }
-
 
   async sendMessage() {
     if (this.currentChat?.id && this.message.content?.trim() !== '') {
@@ -135,7 +139,6 @@ export class DirectMessageChatComponent implements OnInit {
     }
   }
 
-
   getSentMessageDate() {
     const currentDate = this.getCurrentDate();
     const formattedDate = this.formatDate(currentDate);
@@ -149,31 +152,26 @@ export class DirectMessageChatComponent implements OnInit {
     this.message.time = formattedTime;
   }
 
-
   isToday(date: string): boolean {
     const currentDate = this.getCurrentDate();
     const formattedDate = this.formatDate(currentDate);
     return date === formattedDate;
   }
 
-
   getCurrentDate(): string {
     const currentDate = new Date();
     return currentDate.toDateString();
   }
-
 
   formatDate(date: string): string {
     const parts = date.split(' ');
     return `${parts[2]}.${this.getMonthNumber(parts[1])}.${parts[3]}`;
   }
 
-
   getMonthNumber(month: string): string {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     return (months.indexOf(month) + 1).toString().padStart(2, '0');
   }
-
 
   async updateMessageContent(message: Message) {
     let messageId = message.id
@@ -184,7 +182,6 @@ export class DirectMessageChatComponent implements OnInit {
     });
     this.edit = false;
   }
-
 
   setMessageValues(message: Message) {
     this.message.id = message.id;
@@ -200,7 +197,6 @@ export class DirectMessageChatComponent implements OnInit {
     this.message.timeInMs = message.timeInMs;
     this.message.content = this.editor.nativeElement.value;
   }
-
 
   setEmojiCount(reactions: any[]) {
     let counter: { [key: string]: number } = {};
@@ -243,13 +239,11 @@ export class DirectMessageChatComponent implements OnInit {
     this.emojiService.messageId = messageId;
   }
 
-
   openEmojiPickerChat() {
     setTimeout(() => {
       this.emojiService.showTextChatEmojiPicker = true;
     }, 1);
   }
-
 
   editMessage(message: Message) {
     console.log('Nachricht', message);
@@ -295,7 +289,6 @@ export class DirectMessageChatComponent implements OnInit {
       reaction: [],
       reactionCount: message.reactionCount,
       threadCount: message.threadCount,
-
     };
   }
 
@@ -307,11 +300,9 @@ export class DirectMessageChatComponent implements OnInit {
     }
   }
 
-
   addEmojiTextField($event: any) {
     this.emojiService.addEmojiTextChat($event);
     console.log("das ist das Emoji für die Textnachricht", this.emojiService.emojiString);
     this.message.content += this.emojiService.emojiString;
   }
-
 }

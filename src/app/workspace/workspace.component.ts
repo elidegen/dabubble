@@ -8,7 +8,6 @@ import { ThreadService } from '../thread.service';
 import { UserService } from '../user.service';
 import { Chat } from 'src/models/chat.class';
 import { User } from 'src/models/user.class';
-import { updateDoc } from 'firebase/firestore';
 
 @Component({
   selector: 'app-workspace',
@@ -39,7 +38,7 @@ export class WorkspaceComponent implements OnInit {
     this.loadChannels();
     this.loadDirectMessages();
     this.loadUsers();
-    
+
     this.chatservice.openChat$.subscribe((openChat) => {
       if (openChat) {
         const newChat = openChat as Channel;
@@ -70,7 +69,6 @@ export class WorkspaceComponent implements OnInit {
     );
   }
 
-
   loadDirectMessages() {
     this.unsubscribeChats = onSnapshot(
       query(collection(this.firestore, "direct messages"), orderBy("name")),
@@ -95,7 +93,6 @@ export class WorkspaceComponent implements OnInit {
       }
     );
   }
-
 
   getPersonalChannels() {
     this.yourChannels = [];
@@ -126,7 +123,6 @@ export class WorkspaceComponent implements OnInit {
     this.chatservice.chatWindow = 'channel';
   }
 
-
   unreadMsg(channel: Channel) {
     // console.log('chatserv', this.currentChat?.id);
     // console.log('chanel unreadmsg', channel.id);
@@ -138,7 +134,6 @@ export class WorkspaceComponent implements OnInit {
       return true;
     }
   }
-
 
   ngOnDestroy(): void {
     this.unsubscribeChannels;
