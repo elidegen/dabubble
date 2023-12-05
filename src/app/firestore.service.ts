@@ -186,7 +186,7 @@ loadChannelMessages(currentChatId: any) {
 
   loadThread(threadId: any) {
     if (threadId) {
-      const threadCollection = collection(this.firestore, `threads/${threadId}/threadMessages`);
+      const threadCollection = collection(this.firestore, `threads/${threadId}/messages`);
       console.log('message', threadCollection);
       const q = query(threadCollection, orderBy('timeInMs', 'asc'));
       this.unSubThread = onSnapshot(q, (snapshot) => {
@@ -202,7 +202,7 @@ loadChannelMessages(currentChatId: any) {
   }
 
   async sendMessageInThread(threadId: any, message: Message) {
-    const subColRef = collection(this.firestore, `threads/${threadId}/threadMessages`);
+    const subColRef = collection(this.firestore, `threads/${threadId}/messages`);
       await addDoc(subColRef, message.toJSON())
         .catch((err) => {
           console.log(err);
@@ -211,6 +211,7 @@ loadChannelMessages(currentChatId: any) {
           console.log('Message sent to thread');
         });
   }
+
 
   //----------- search Input Main Chat ----------------------------------
 
@@ -235,38 +236,32 @@ loadChannelMessages(currentChatId: any) {
   // einziger Unterschied collection und arrays!
   // Unterschiedliche Arrays beachten "allMessagesOfChannel" und "allThreadMessages"
 
-  async addReaction(emoji: any, messageId: any, chatId: any) {
+  async addReaction(emoji: any, messageId: any, chatId: any, colId: any) {
     if (chatId) {
-      const subReactionColRef = doc(collection(this.firestore, `channels/${chatId}/messages/`), messageId);
-      let messageIndex = this.allMessagesOfChannel.findIndex(message => message.id === messageId);
-      let currentMessage = this.allMessagesOfChannel[messageIndex];
+      let allMessages: any[] = [];
+      if (colId == 'channels') {
+        allMessages = this.allMessagesOfChannel;
+      } else if (colId == 'threads') {
+        allMessages = this.allThreadMessages;
+      } if (colId == 'direct messages') {
+        
+      }
+      const subReactionColRef = doc(collection(this.firestore, `${colId}/${chatId}/messages/`), messageId);
+      let messageIndex = allMessages.findIndex(message => message.id === messageId);
+      let currentMessage = allMessages[messageIndex];
       const reactionItem = { emoji, creatorId: this.userService.currentUser.id };
       if (currentMessage.reaction.some((emojiArray: { emoji: string; creatorId: string; }) => emojiArray.emoji === emoji && emojiArray.creatorId === this.userService.currentUser.id)) {
         currentMessage.reaction = currentMessage.reaction.filter((emojiArray: { emoji: string; creatorId: string; }) => !(emojiArray.emoji === emoji && emojiArray.creatorId === this.userService.currentUser.id));
       } else {
         currentMessage.reaction.push(reactionItem);
       }
-      updateDoc(subReactionColRef, this.updateMessage(this.allMessagesOfChannel[messageIndex]));
+      updateDoc(subReactionColRef, this.updateMessage(allMessages[messageIndex]));
     }
   }
 
 
 
 
-  async addReactionInThread(emoji: string, messageId: any, threadId: any) {
-    if (threadId) {
-      const subReactionColRef = doc(collection(this.firestore, `threads/${threadId}/threadMessages/`), messageId);
-      let messageIndex = this.allThreadMessages.findIndex(message => message.id === messageId);
-      let currentMessage = this.allThreadMessages[messageIndex];
-      const reactionItem = { emoji, creatorId: this.userService.currentUser.id };
-      if (currentMessage.reaction.some((emojiArray: { emoji: string; creatorId: string; }) => emojiArray.emoji === emoji && emojiArray.creatorId === this.userService.currentUser.id)) {
-        currentMessage.reaction = currentMessage.reaction.filter((emojiArray: { emoji: string; creatorId: string; }) => !(emojiArray.emoji === emoji && emojiArray.creatorId === this.userService.currentUser.id));
-      } else {
-        currentMessage.reaction.push(reactionItem);
-      }
-      updateDoc(subReactionColRef, this.updateMessage(this.allThreadMessages[messageIndex]));
-    }
-  }
 
 
   updateMessage(message: any) {
@@ -275,6 +270,7 @@ loadChannelMessages(currentChatId: any) {
     }
   }
 
+  
 
   setEmojiCount(reactions: any[]) {
     let counter: { [key: string]: number } = {};

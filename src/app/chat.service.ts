@@ -208,6 +208,7 @@ export class ChatService {
     this.chatWindow = 'channel';
   }
 
+ 
   renderDirectMessage(chat: Chat) {
     this.openDirectMessage = chat;
     this.chatWindow = 'direct';

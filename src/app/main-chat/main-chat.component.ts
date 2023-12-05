@@ -225,7 +225,7 @@ export class MainChatComponent implements OnInit {
   addEmoji(event: any) {
     if (this.emojiService.messageId != "") {
       this.emojiService.addEmojiMainChat(event);
-      this.firestoreService.addReaction(this.emojiService.emojiString, this.emojiService.messageId, this.currentChat?.id)
+      this.firestoreService.addReaction(this.emojiService.emojiString, this.emojiService.messageId, this.currentChat?.id, 'channels')
       this.emojiService.showMainChatEmojiPicker = false;
       this.emojiService.emojiString = "";
     }
