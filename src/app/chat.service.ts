@@ -1,5 +1,5 @@
 import { Injectable, OnInit, inject } from '@angular/core';
-import { Firestore, getDoc, onSnapshot, orderBy, query, setDoc } from '@angular/fire/firestore';
+import { Firestore, getDoc, onSnapshot, orderBy, query, setDoc, updateDoc } from '@angular/fire/firestore';
 import { DocumentData, DocumentReference, collection, doc } from 'firebase/firestore';
 import { Channel } from 'src/models/channel.class';
 import { Chat } from 'src/models/chat.class';
@@ -217,5 +217,28 @@ export class ChatService {
     let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
     let interlocutor = this.allUsers.find(user => user.id == otherUser.id);    
     return interlocutor as User;
+  }
+
+  setViewedByZero(channel: Channel) {
+    channel.viewedBy = [];
+    this.updateViewedBy(channel);
+  }
+
+  setViewedByMe(channel: Channel, user: User) {
+    console.log('viewedbyme', channel);
+
+    if (channel.viewedBy?.length < 1 || channel.viewedBy?.some((userid: string) => userid != user.id)) {
+      console.log('viewedbyme positive');
+      channel.viewedBy.push(user.id);
+      this.updateViewedBy(channel);
+    }
+  }
+
+  async updateViewedBy(channel: Channel) {
+    console.log('updated channel', channel);
+    const channelRef = doc(this.firestore, 'channels', `${channel.id}`);
+    await updateDoc(channelRef, {
+      viewedBy: channel.viewedBy
+    })
   }
 }

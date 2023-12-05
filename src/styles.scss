@@ -1,22 +1,20 @@
 /* You can add global styles to this file, and also import other style files */
 @import '@ctrl/ngx-emoji-mart/picker';
 
-
 @font-face {
     font-family: 'Nunito';
     src: url('assets/fonts/Nunito-Regular.ttf');
-  }
+}
 
 html,
 body {
     height: 100%;
-   
 }
 
- body {
+body {
     margin: 0;
     background-color: var(--primary);
-    font-family: 'Nunito', 'Roboto', sans-serif!important;
+    font-family: 'Nunito', 'Roboto', sans-serif !important;
 }
 
 .color-main {
@@ -86,7 +84,6 @@ button {
     color: var(--purple3);
 }
 
-
 .align-center {
     display: flex;
     justify-content: center;
@@ -101,7 +98,6 @@ button {
 .dialog-edit-channel .mat-mdc-dialog-container .mdc-dialog__surface {
     border-radius: 0 32px 32px 32px;
 }
-
 
 .w100 {
     width: 100%;
@@ -122,11 +118,9 @@ input {
     }
 }
 
-
 a {
     border-radius: 32px !important;
 }
-
 
 a {
     cursor: pointer;
@@ -150,16 +144,17 @@ a {
     }
 
     &:disabled {
-        color: var(--gray) !important; 
+        color: var(--gray) !important;
         border: 1px solid var(--gray) !important;
-        cursor: not-allowed; 
-        opacity: 0.5; 
+        cursor: not-allowed;
+        opacity: 0.5;
     }
 }
 
 .delete-button {
     border: 1px solid red !important;
     color: red !important;
+
     &:hover {
         background-color: red !important;
         color: white !important;
@@ -175,13 +170,12 @@ a {
     }
 }
 
-
 h1 {
-    font-family: 'Nunito', 'Roboto', sans-serif!important;
+    font-family: 'Nunito', 'Roboto', sans-serif !important;
 }
 
 h2 {
-    font-family: 'Nunito', 'Roboto', sans-serif!important;
+    font-family: 'Nunito', 'Roboto', sans-serif !important;
 }
 
 :root {
@@ -207,7 +201,6 @@ h2 {
     justify-content: flex-end;
     align-items: center;
 }
-
 
 .fadeIn {
     animation: fadeIn 500ms forwards;
