@@ -24,7 +24,6 @@ export class DirectMessageChatComponent implements OnInit {
   currentChat!: Chat | undefined;
   currentUser;
   message: Message = new Message();
-
   allMessages: Message[] = [];
   interlocutor: User = new User();
   // ------------- for editing of message ----------------
@@ -52,7 +51,6 @@ export class DirectMessageChatComponent implements OnInit {
       } else {
         this.currentChat = undefined;
       }
-
     });
   }
 
@@ -62,12 +60,13 @@ export class DirectMessageChatComponent implements OnInit {
     }
   }
 
-  loadMessages() {
+  async loadMessages() {
     if (this.currentChat?.id) {
-      this.firestoreService.loadDirectMessages(this.currentChat.id);
+      await this.firestoreService.loadDirectMessages(this.currentChat.id);
     }
     this.interlocutor = this.chatService.getOtherUser(this.currentChat?.members);
   }
+
 
   openProfileDialog(id: any): void {
     this.dialog.open(DialogViewProfileComponent, {
@@ -83,30 +82,24 @@ export class DirectMessageChatComponent implements OnInit {
     if (this.currentChat?.id && this.message.content?.trim() !== '') {
       this.getSentMessageTime();
       this.getSentMessageDate();
-      this.message.creator = this.userService.currentUser.id;
+      this.message.creator = this.userService.currentUser.name;
+      this.message.creatorId = this.userService.currentUser.id,
       this.message.channel = this.currentChat.name;
       this.message.channelID = this.currentChat.id;
-      const subColRef = collection(this.firestore, `direct messages/${this.currentChat.id}/messages`);
-      await addDoc(subColRef, this.message.toJSON())
-        .catch((err) => {
-          console.log(err);
-        })
-        .then((docRef: void | DocumentReference<DocumentData, DocumentData>) => {
-          if (docRef && docRef instanceof DocumentReference) {
-            if (this.currentChat?.id) {
-              this.updateMessageId(`direct messages/${this.currentChat.id}/messages`, this.message, docRef.id);
-            }
-          }
-          this.message.content = '';
-        });
+      this.message.profilePic = this.userService.currentUser.picture,
+      this.message.channel = this.currentChat.name;
+      this.firestoreService.sendMessageInDirectMessage(this.currentChat.id, this.message)
+      this.message.content = '';
     }
   }
+
 
   getSentMessageDate() {
     const currentDate = this.getCurrentDate();
     const formattedDate = this.formatDate(currentDate);
     this.message.date = formattedDate;
   }
+
 
   getSentMessageTime() {
     const currentTime = new Date();
@@ -115,84 +108,48 @@ export class DirectMessageChatComponent implements OnInit {
     this.message.time = formattedTime;
   }
 
+
   isToday(date: string): boolean {
     const currentDate = this.getCurrentDate();
     const formattedDate = this.formatDate(currentDate);
     return date === formattedDate;
   }
 
+
   getCurrentDate(): string {
     const currentDate = new Date();
     return currentDate.toDateString();
   }
+
 
   formatDate(date: string): string {
     const parts = date.split(' ');
     return `${parts[2]}.${this.getMonthNumber(parts[1])}.${parts[3]}`;
   }
 
+
   getMonthNumber(month: string): string {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     return (months.indexOf(month) + 1).toString().padStart(2, '0');
   }
 
+
   async updateMessageContent(message: Message) {
     let messageId = message.id
     const messageColRef = doc(collection(this.firestore, `direct messages/${this.currentChat?.id}/messages/`), messageId);
-    this.setMessageValues(message);
-    await updateDoc(messageColRef, this.message.toJSON()).catch((error) => {
+    await updateDoc(messageColRef, this.setMessageValues()).catch((error) => {
       console.error('Error updating document:', error);
     });
     this.edit = false;
   }
 
-  setMessageValues(message: Message) {
-    this.message.id = message.id;
-    this.message.creator = message.creator
-    this.message.creatorId = message.creatorId;
-    this.message.date = message.date;
-    this.message.lastThreadTime = message.lastThreadTime;
-    this.message.profilePic = message.profilePic;
-    this.message.reaction = message.reaction;
-    this.message.reactionCount = message.reactionCount;
-    this.message.time = message.time;
-    this.message.threadCount = message.threadCount;
-    this.message.timeInMs = message.timeInMs;
-    this.message.content = this.editor.nativeElement.value;
-  }
 
-  setEmojiCount(reactions: any[]) {
-    let counter: { [key: string]: number } = {};
-    reactions.forEach(react => {
-      let key = JSON.stringify(react.emoji);
-      if (key) {
-        key = key.substring(1);
-        key = key.substring(0, key.length - 1);
-      }
-      if (counter[key]) {
-        counter[key]++;
-      } else {
-        if (key != undefined)
-          counter[key] = 1;
-      }
-    });
-    return counter;
-  }
-
-  async addReaction(emoji: any, messageId: any) {
-    if (this.currentChat?.id) {
-      const subReactionColRef = doc(collection(this.firestore, `direct messages/${this.currentChat.id}/messages`), messageId);
-      let messageIndex = this.allMessages.findIndex(message => message.id === messageId);
-      let currentMessage = this.allMessages[messageIndex];
-      const reactionItem = { emoji, creatorId: this.currentUser.id };
-      if (currentMessage.reaction.some((emojiArray: { emoji: string; creatorId: string; }) => emojiArray.emoji === emoji && emojiArray.creatorId === this.currentUser.id)) {
-        currentMessage.reaction = currentMessage.reaction.filter((emojiArray: { emoji: string; creatorId: string; }) => !(emojiArray.emoji === emoji && emojiArray.creatorId === this.currentUser.id));
-      } else {
-        currentMessage.reaction.push(reactionItem);
-      }
-      updateDoc(subReactionColRef, this.updateMessage(this.allMessages[messageIndex]));
+  setMessageValues() {
+    return {
+      content: this.editor.nativeElement.value,
     }
   }
+
 
   openEmojiPicker(messageId: any) {
     setTimeout(() => {
@@ -201,6 +158,7 @@ export class DirectMessageChatComponent implements OnInit {
 
     this.emojiService.messageId = messageId;
   }
+
 
   openEmojiPickerChat() {
     setTimeout(() => {
@@ -258,7 +216,7 @@ export class DirectMessageChatComponent implements OnInit {
   addEmoji(event: any) {
     if (this.emojiService.messageId != "") {
       this.emojiService.addEmojiMainChat(event);
-      this.addReaction(this.emojiService.emojiString, this.emojiService.messageId)
+      this.firestoreService.addReaction(this.emojiService.emojiString, this.emojiService.messageId, this.currentChat?.id, 'direct messages')
       this.emojiService.showMainChatEmojiPicker = false;
     }
   }
