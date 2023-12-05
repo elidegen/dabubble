@@ -242,4 +242,16 @@ export class ChatService {
       viewedBy: channel.viewedBy
     })
   }
+
+  unreadMsg(channel: Channel, user: User) {
+    // console.log('chatserv', this.currentChat?.id);
+    // console.log('chanel unreadmsg', channel.viewedBy);
+    if (channel.viewedBy.includes(user.id) || user.id == channel.id) {
+      // console.log('includes crnt usr', channel.name, channel.viewedBy);
+      return false;
+    } else {
+      // console.log('not crnt usr', channel.name, channel.viewedBy);
+      return true;
+    }
+  }
 }
