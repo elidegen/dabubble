@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { HostListener, Injectable, inject } from '@angular/core';
 import { DocumentData, DocumentReference, Firestore, addDoc, collection, doc, getDoc, getDocs, onSnapshot, orderBy, query, setDoc, updateDoc } from '@angular/fire/firestore';
 import { Message } from 'src/models/message.class';
 import { ThreadService } from './thread.service';
@@ -7,6 +7,7 @@ import { Channel } from 'src/models/channel.class';
 import { Thread } from 'src/models/thread.class';
 import { AuthService } from './auth.service';
 import { User } from 'src/models/user.class';
+import { deleteDoc } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -346,7 +347,27 @@ getUpdateData(channel: Channel) {
           this.updateMessageId(`direct messages/${chatId}/messages`, message, docRef.id);
         }
       }
-    
     });
+  }
+  
+  toggleMoreMenu(message: Message) {
+    message.messageSelected = !message.messageSelected;
+  }
+
+ 
+  async deleteMessageOfChat(colId: any, chatId: any, messageId: any) {
+    if (colId == 'channels') {
+      this.deletMessage(colId, chatId, messageId)
+    } else if (colId == 'threads') {
+      this.deletMessage(colId, chatId, messageId)
+    } else if (colId == 'direct messages') {
+      this.deletMessage(colId, chatId, messageId)
+    }
+  }
+
+
+  async deletMessage(colId: any, chatId: any, messageId: any) {
+    const messageDocRef = doc(collection(this.firestore, `${colId}/${chatId}/messages`), messageId);
+    await deleteDoc(messageDocRef);
   }
 }

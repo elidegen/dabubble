@@ -224,9 +224,13 @@
                 <button (click)="openThread(message)" mat-icon-button>
                   <img src="assets/img/icons/comment.svg" alt="">
                 </button>
-                <button mat-icon-button *ngIf="message.creator == currentUser.name" (click)="editMessage(message)">
-                  <img src="assets/img/icons/edit_square.svg" alt="">
+                <button mat-icon-button *ngIf="message.creator == currentUser.name" (click)="firestoreService.toggleMoreMenu(message)">
+                  <img src="assets/img/icons/more.svg" alt="">
                 </button>
+                <div class="more-menu" [class.visible]="message.messageSelected">
+                  <span (click)="editMessage(message)">Edit message</span>
+                  <span class="delete-message" (click)="firestoreService.deleteMessageOfChat('channels', currentChat?.id, message.id)">Delete Message</span>
+                </div>
               </div>
 
             </div>
