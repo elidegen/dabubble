@@ -113,6 +113,16 @@
     </div>
   </mat-card-content>
 
+  <div class="user-search-container-textfield" *ngIf="this.userService.openUserContainerTextfield.value == true" >
+    <button (click)="getUserNameString(user)" class="user-container" *ngFor="let user of this.userService.users" >
+        <div  class="profile-container">
+            <img src="{{user.picture}}" alt="profile">
+            <div class="online-status"></div>
+        </div>
+        <span>{{user.name}}</span>
+    </button>
+        </div>
+
   <mat-card-content>
     <div class="textfield-content">
       <div class="text-field-container">
@@ -134,7 +144,7 @@
               <img src="assets/img/icons/smiley.svg" alt="" />
             </button>
 
-            <button mat-icon-button>
+            <button (click)="this.userService.openUserContainerTextField()" mat-icon-button>
               <img src="assets/img/icons/@.svg" alt="" />
             </button>
           </div>

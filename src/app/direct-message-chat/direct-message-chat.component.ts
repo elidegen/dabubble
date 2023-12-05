@@ -61,6 +61,12 @@ export class DirectMessageChatComponent implements OnInit {
   }
   
 
+  getUserNameString(user: any) {
+    const taggedName = `@${user.name}`;
+    this.message.content += taggedName;
+    this.userService.openUserContainerTextfield.next(false);
+  }
+
   async loadMessages() {
     if (this.currentChat?.id) {
       await this.firestoreService.loadDirectMessages(this.currentChat.id);
