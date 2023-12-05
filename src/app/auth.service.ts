@@ -122,17 +122,15 @@ export class AuthService {
   }
 
   async signOutUser() {
-    if (this.userService.currentUser.name == "Guest") {
       this.userService.removeCurrentUserFromLocalStorage();
-    } else {
-      let userIndexToLogout = this.findUserIndexWithEmail(this.userService.currentUser.email || '');
+      let userIndexToLogout = this.findUserIndexWithEmail(this.userService.currentUser.email);
       if (userIndexToLogout != -1) {
         console.log("Index to Logout", userIndexToLogout);
         this.userService.users[userIndexToLogout].online = false;
         this.userService.updateUser('users', this.userService.users[userIndexToLogout]);
       }
     }
-    this.userService.currentUser = new User;
+    this.userService.currentUser = this.userService.createEmptyUser();
     await signOut(this.auth).then(() => {
       console.log('Benutzer erfolgreich abgemeldet');
     }).catch((error) => {
@@ -208,6 +206,11 @@ export class AuthService {
       }
     );
   }
+
+  onFileSelected($event: any) {
+    console.log($event);
+  }
+  
 
   createId(length: number) {
     let result = '';

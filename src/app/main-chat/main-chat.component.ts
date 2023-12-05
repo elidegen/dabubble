@@ -39,6 +39,7 @@ export class MainChatComponent implements OnInit {
   @ViewChild('emojiPicker') emojiPickerElementRef!: ElementRef;
   editingMessage: string | undefined;
   newThread = new Thread();
+  uploadFile: any;
 
   // ------------------ search Input ---------------
   isInputFocused: boolean = false;
@@ -75,6 +76,8 @@ export class MainChatComponent implements OnInit {
       this.firestoreService.unSubChannelMessages();
     }
   }
+
+
 
   openEditChannelDialog() {
     this.dialog.open(DialogEditChannelComponent, {
@@ -249,5 +252,9 @@ export class MainChatComponent implements OnInit {
     }
   }
 
-  
+  onFileSelected($event: any){
+    console.log($event);
+  }
 }
+
+
