@@ -257,9 +257,12 @@
 
   
             
+          
+
+
       <mat-card-content>
-        <div class="textfield-content">
-          <div class="text-field-container">
+        <div style="min-height: 200px;" class="textfield-content">
+          <div  class="text-field-container">
             <textarea [disabled]="!currentChat" (keyup.enter)="sendMessage()" [(ngModel)]="message.content"
               placeholder="Message to {{currentChat?.name}}"></textarea>
 

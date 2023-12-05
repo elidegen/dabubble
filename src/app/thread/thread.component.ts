@@ -101,6 +101,7 @@ export class ThreadComponent implements OnInit {
       this.emojiService.showThreadEmojiPicker = false;
       this.emojiService.showThreadTextChatEmojiPicker = false;
     }
+    this.userService.openUserContainerThreadTextfield.next(false);
   }
 
 
@@ -145,6 +146,12 @@ export class ThreadComponent implements OnInit {
     await this.updateChannel(colId, message);
   }
 
+
+  getUserNameString(user: any) {
+    const taggedName = `@${user.name}`;
+    this.message.content += taggedName;
+    this.userService.openUserContainerThreadTextfield.next(false);
+  }
 
   async updateChannel(colId: string, message: Message) {
     const docRef = doc(collection(this.firestore, colId), message.id);
