@@ -35,6 +35,15 @@ h3 {
     background: white;
 }
 
+.custom-file-upload {
+    cursor: pointer;
+}
+
+input[type="file"] {
+   display: none;
+}
+
+
 .ml-16 {
     margin-left: 16px;
 }
@@ -64,6 +73,13 @@ mat-card,
 
 .mat-dialog-container {
     border-radius: 20px !important;
+}
+
+.mat-icon-button {
+    background-color: white;
+    border-radius: 100%;
+    padding: 10px;
+    border: none;
 }
 
 button {

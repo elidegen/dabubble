@@ -118,9 +118,12 @@
         <div class="message-buttons">
           <div class="attachments">
             <div class="border-right">
-              <button mat-icon-button>
-                <img src="assets/img/icons/add.svg" alt="" />
-              </button>
+              <button class="mat-icon-button" 
+              type="submit"> <label class="custom-file-upload">
+                   <input class="dataInput" (change)="this.authService.onFileSelected($event)" [(ngModel)]="this.authService.uploadFile" type="file">
+                   <img style="z-index: 100;" src="assets/img/icons/add.svg" alt="" />
+                 </label>
+               </button>
             </div>
 
             <button (click)="openEmojiPickerChat()" mat-icon-button>

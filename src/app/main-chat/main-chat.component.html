@@ -82,7 +82,10 @@
             <div class="attachments">
               <div class="border-right">
                 <button disabled mat-icon-button>
-                  <img src="assets/img/icons/add.svg" alt="" />
+                  <label class="custom-file-upload">
+                    <input class="dataInput" (change)="onFileSelected($event)" [(ngModel)]="uploadFile" type="file">
+                    <img src="assets/img/icons/add.svg" alt="" /> Test
+                  </label>
                 </button>
               </div>
               <button disabled (click)="openEmojiPickerChat()" mat-icon-button>
@@ -237,6 +240,19 @@
 
       </mat-card-content>
 
+
+      <div class="user-search-container" >
+          <button class="user-container" *ngFor="let user of this.userService.users" >
+              <div (click)="selectUser(user.name)" class="profile-container">
+                  <img src="{{user.picture}}" alt="profile">
+                  <div class="online-status"></div>
+              </div>
+              <span>{{user.name}}</span>
+          </button>
+              </div>
+
+  
+            
       <mat-card-content>
         <div class="textfield-content">
           <div class="text-field-container">
@@ -245,10 +261,14 @@
 
             <div class="message-buttons">
               <div class="attachments">
-                <div class="border-right">
-                  <button [disabled]="!currentChat" mat-icon-button>
-                    <img src="assets/img/icons/add.svg" alt="" />
-                  </button>
+                <div  class="border-right">
+                
+                  <button class="mat-icon-button" 
+                  type="submit"> <label class="custom-file-upload">
+                       <input class="dataInput" (change)="this.authService.onFileSelected($event)" [(ngModel)]="this.authService.uploadFile" type="file">
+                       <img style="z-index: 100;" src="assets/img/icons/add.svg" alt="" />
+                     </label>
+                   </button>
                 </div>
 
                 <button [disabled]="!currentChat" (click)="openEmojiPickerChat()" mat-icon-button>
