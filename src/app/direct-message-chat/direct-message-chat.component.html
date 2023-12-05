@@ -1,4 +1,4 @@
-<div [ngSwitch]="messageIsExisting" class="chat-window-container">
+<div [ngSwitch]="firestoreService.messageIsExisting" class="chat-window-container">
   <mat-card-header>
     <button class="br-32 profile-button" (click)="openProfileDialog(interlocutor.id)">
       <img src="{{ interlocutor.picture}}">
@@ -6,7 +6,7 @@
     </button>
   </mat-card-header>
   <mat-card-content #messageContainer class="p-0 main-chat-container" *ngSwitchCase="true">
-    <ng-container *ngFor="let organizedMessage of this.organizedMessages.slice()">
+    <ng-container *ngFor="let organizedMessage of firestoreService.organizedMessages.slice()">
       <section>
         <div class="date-container">
           <div class="separator"></div>

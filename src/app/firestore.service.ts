@@ -30,6 +30,10 @@ export class FirestoreService {
   constructor( public threadService: ThreadService, public userService: UserService, public authService: AuthService) { }
 
 
+  // ----- Direct Messages --------------
+  unSubDirectMessages: any;
+  allDirectMessages: Message[] = [];
+  messageIsExisting!: boolean;
 // ------------------ channel ----------------------------------------------------------
 
 async addChannel(channel: Channel) {
@@ -67,6 +71,7 @@ getUpdateData(channel: Channel) {
     id: channel.id,
   };
 }
+
 
 loadChannelMessages(currentChatId: any) {
   if (currentChatId) {
@@ -270,7 +275,7 @@ loadChannelMessages(currentChatId: any) {
     }
   }
 
-  
+
 
   setEmojiCount(reactions: any[]) {
     let counter: { [key: string]: number } = {};
@@ -288,5 +293,47 @@ loadChannelMessages(currentChatId: any) {
       }
     });
     return counter;
+  }
+
+
+  loadDirectMessages(chatId: any) {
+    if (chatId) {
+      const messageCollection = collection(this.firestore, `direct messages/${chatId}/messages`);
+      const q = query(messageCollection, orderBy('timeInMs', 'asc'));
+      this.unSubDirectMessages = onSnapshot(q, async (snapshot) => {
+        this.allDirectMessages = await Promise.all(snapshot.docs.map(async doc => {
+          const message = doc.data() as Message;
+          message.reactionCount = this.setEmojiCount(message.reaction);
+          message.id = doc.id;
+          return message;
+        }));
+        this.organizeDirectMessagesByDate();
+        this.checkMessageNumbers();
+      });
+    }
+  }
+
+  organizeDirectMessagesByDate() {
+    this.messagesByDate = {};
+    for (const message of this.allDirectMessages) {
+      const messageDate = message.date;
+      if (messageDate) {
+        if (!this.messagesByDate[messageDate]) {
+          this.messagesByDate[messageDate] = [];
+        }
+        this.messagesByDate[messageDate].push(message);
+      }
+    }
+    this.organizedMessages = Object.entries(this.messagesByDate).map(([date, messages]) => ({ date, messages }));
+    this.organizedMessages = this.organizedMessages;
+    console.log('Show', this.organizedMessages)
+  }
+
+  checkMessageNumbers() {
+    if (this.allDirectMessages.length > 0) {
+      this.messageIsExisting = true;
+    } else {
+      this.messageIsExisting = false
+    }
   }
 }
