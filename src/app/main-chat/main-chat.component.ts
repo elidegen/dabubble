@@ -48,7 +48,7 @@ export class MainChatComponent implements OnInit {
   constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public threadService: ThreadService, public authService: AuthService, public emojiService: EmojiService, public firestoreService: FirestoreService) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser as User;
-    firestoreService.loadUsers()
+    firestoreService.loadUsers();
   }
 
   ngOnInit() {
@@ -108,6 +108,7 @@ export class MainChatComponent implements OnInit {
       this.message.channelID = this.currentChat.id;
       this.message.profilePic = this.userService.currentUser.picture,
       this.message.channel = this.currentChat.name;
+      this.message.messageSelected = false;
       await this.firestoreService.sendMessageInChannel(this.currentChat, this.message)
       this.message.content = '',
       this.chatService.setViewedByZero(this.currentChat);
@@ -224,6 +225,7 @@ export class MainChatComponent implements OnInit {
     }
   }
 
+
   // ---------------- search Input -------------------------
   filterUsers(): void {
     this.isInputFocused = true;
@@ -246,4 +248,6 @@ export class MainChatComponent implements OnInit {
       this.isInputFocused = false;
     }
   }
+
+  
 }

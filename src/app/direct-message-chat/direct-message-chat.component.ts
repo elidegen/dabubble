@@ -59,6 +59,7 @@ export class DirectMessageChatComponent implements OnInit {
       this.firestoreService.unSubDirectMessages;
     }
   }
+  
 
   async loadMessages() {
     if (this.currentChat?.id) {
@@ -88,7 +89,7 @@ export class DirectMessageChatComponent implements OnInit {
       this.message.channelID = this.currentChat.id;
       this.message.profilePic = this.userService.currentUser.picture,
       this.message.channel = this.currentChat.name;
-      this.firestoreService.sendMessageInDirectMessage(this.currentChat.id, this.message)
+      await this.firestoreService.sendMessageInDirectMessage(this.currentChat.id, this.message)
       this.message.content = '';
     }
   }
@@ -132,6 +133,7 @@ export class DirectMessageChatComponent implements OnInit {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     return (months.indexOf(month) + 1).toString().padStart(2, '0');
   }
+
 
 
   async updateMessageContent(message: Message) {
@@ -180,38 +182,6 @@ export class DirectMessageChatComponent implements OnInit {
     this.messageContainer.nativeElement.scrollTop = this.messageContainer.nativeElement.scrollHeight;
   }
 
-  updateMessage(message: any) {
-    return {
-      reaction: message.reaction
-    }
-  }
-
-  async updateMessageId(colId: string, message: Message, newId: string) {
-    message.id = newId;
-    await this.updateChannel(colId, message);
-  }
-
-  async updateChannel(colId: string, message: Message) {
-    const docRef = doc(collection(this.firestore, colId), message.id);
-    await updateDoc(docRef, this.getUpdateData(message)).catch(
-      (error) => { console.log(error); }
-    );
-  }
-
-  getUpdateData(message: Message) {
-    return {
-      creator: this.userService.currentUser.name,
-      creatorId: this.userService.currentUser.id,
-      content: message.content,
-      time: message.time,
-      date: message.date,
-      id: message.id,
-      profilePic: this.userService.currentUser.picture,
-      reaction: [],
-      reactionCount: message.reactionCount,
-      threadCount: message.threadCount,
-    };
-  }
 
   addEmoji(event: any) {
     if (this.emojiService.messageId != "") {

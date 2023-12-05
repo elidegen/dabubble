@@ -14,6 +14,7 @@ export class Message {
     channel: any;
     channelID: any;
     viewedBy: any = [];
+    messageSelected: boolean;
 
     constructor(obj?: any) {
         this.creator = obj ? obj.creator : '';
@@ -30,7 +31,8 @@ export class Message {
         this.lastThreadTime = obj ? obj.lastThreadTime: "";
         this.viewedBy = obj ? obj.viewedBy : [];
         this.channel = obj = obj ? obj.channel: "";
-        this.channelID = obj = obj ? obj.channelID: "";
+        this.channelID = obj = obj ? obj.channelID : "";
+        this.messageSelected = obj ? obj.message : "";
     }
 
     public toJSON() {
@@ -49,6 +51,7 @@ export class Message {
             channel: this.channel,
             channelID: this.channelID,
             viewedBy: this.viewedBy,
+            messageSelected: this.messageSelected
         }
     }
 }
