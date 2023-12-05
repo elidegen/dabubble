@@ -30,7 +30,7 @@ export class MainChatComponent implements OnInit {
   message: Message = new Message();
   reaction: Reaction = new Reaction;
   currentUser: User;
-  allReactionsByMessage: [] = [];   //???
+  allReactionsByMessage: [] = [];
   threadCount: any = 0;
   showEmojiPick: boolean = false;
   toggled: boolean = false;
@@ -76,6 +76,8 @@ export class MainChatComponent implements OnInit {
       this.firestoreService.unSubChannelMessages();
     }
   }
+
+  
 
 
 
@@ -173,6 +175,7 @@ export class MainChatComponent implements OnInit {
       this.emojiService.showTextChatEmojiPicker = true;
     }, 1);
   }
+
 
   closeEmojiPicker() {
     if (this.emojiService.showMainChatEmojiPicker == true || this.emojiService.showTextChatEmojiPicker == true && this.emojiService.emojiString == "") {
