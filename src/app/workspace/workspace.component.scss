@@ -38,17 +38,25 @@ mat-expansion-panel {
 .direct-message-button {
     display: flex !important;
     align-items: center;
-    gap: 8px;
-    padding: 8px;
+    justify-content: space-between;
     outline: none;
     border: none;
     background: none;
     overflow: hidden;
-
+    padding: 8px;
+    gap: 8px;
+    cursor: pointer;
     h3 {
         white-space: nowrap;
         max-width: 100%;
     }
+}
+
+.profile-button-div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  
 }
 
 .profile-message-container {
@@ -58,6 +66,17 @@ mat-expansion-panel {
         height: 40px;
         width: 40px;
         border-radius: 50%;
+    }
+}
+
+.delete-direct-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    width: 32px;
+    img {
+        height: 32px;
     }
 }
 

@@ -8,6 +8,7 @@ import { ThreadService } from '../thread.service';
 import { UserService } from '../user.service';
 import { Chat } from 'src/models/chat.class';
 import { User } from 'src/models/user.class';
+import { deleteDoc } from 'firebase/firestore';
 
 @Component({
   selector: 'app-workspace',
@@ -149,4 +150,13 @@ export class WorkspaceComponent implements OnInit {
   startNewMessage() {
     this.chatservice.chatWindow = 'newMessage';
   }
+
+  async deleteDirectMessageChat(chatId: any) {
+    const directColRef = doc(collection(this.firestore, 'direct messages'), chatId)
+    await deleteDoc(directColRef);
+    this.chatservice.chatWindow = 'empty';
+    
+  }
+
+  
 }

@@ -30,7 +30,7 @@ export class MainChatComponent implements OnInit {
   message: Message = new Message();
   reaction: Reaction = new Reaction;
   currentUser: User;
-  allReactionsByMessage: [] = [];   //???
+  allReactionsByMessage: [] = [];
   threadCount: any = 0;
   showEmojiPick: boolean = false;
   toggled: boolean = false;
@@ -172,11 +172,13 @@ export class MainChatComponent implements OnInit {
     }, 1);
   }
 
+
   closeEmojiPicker() {
     if (this.emojiService.showMainChatEmojiPicker == true || this.emojiService.showTextChatEmojiPicker == true && this.emojiService.emojiString == "") {
       this.emojiService.showMainChatEmojiPicker = false;
       this.emojiService.showTextChatEmojiPicker = false;
     }
+    this.userService.openUserContainerTextfield.next(false);
   }
 
   addEmoji(event: any) {
@@ -241,10 +243,9 @@ export class MainChatComponent implements OnInit {
     this.search.nativeElement.value = '';
   }
 
-  getUserNameString(user:any) {
-    console.log("User dessen Name ins Textfeld soll",user);
-    this.message.content += `<span style="color: #B357F0">@${user.name}</span>`;
-    console.log(this.message.content);
+  getUserNameString(user: any) {
+    const taggedName = `@${user.name}`;
+    this.message.content += taggedName;
     this.userService.openUserContainerTextfield.next(false);
   }
 

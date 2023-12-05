@@ -17,11 +17,12 @@ export class UserService {
   currentEmail: string = "";
   currentPassword: string = "";
   signInSuccess = false;
-  customPic: string ="";
+  customPic: string = "";
   userIsAvailable: boolean = false;
   resetEmailFound: boolean = false;
   openUserContainerTextfield = new BehaviorSubject<boolean>(false);
-  nameStringForTextfield:any;
+  nameStringForTextfield: any;
+  openUserContainerThreadTextfield= new BehaviorSubject<boolean>(false);
   unsubList;
 
   ngOnInit() {
@@ -100,10 +101,16 @@ export class UserService {
     }
   }
 
- 
+
   openUserContainerTextField() {
     setTimeout(() => {
       this.openUserContainerTextfield.next(true);
+    }, 10);
+  }
+
+  openUserContainerThreadTextField() {
+    setTimeout(() => {
+      this.openUserContainerThreadTextfield.next(true);
     }, 10);
   }
 

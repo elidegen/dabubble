@@ -188,6 +188,46 @@ a {
     }
 }
 
+.user-container {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    gap: 16px;
+    border-radius: 32px;
+    padding: 6px 24px;
+    background-color: white;
+    outline: 0;
+    border: 0;
+    max-width: 245px;
+    cursor: pointer;
+
+    img {
+        height: 50px;
+        border-radius: 100%;
+    }
+
+    &:hover {
+        background-color: var(--primary);
+    }
+
+    span {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}
+
+.user-container-highlighted {
+    background-color: var(--primary);
+    color: var(--purple3);
+    font-weight: 700;
+}
+
+.profile-container {
+    position: relative;
+}
+
+
 
 .delete-button {
     border: 1px solid red !important;
@@ -233,6 +273,7 @@ h2 {
 .d-flex {
     display: flex;
 }
+
 
 .j-flex-end {
     display: flex;
