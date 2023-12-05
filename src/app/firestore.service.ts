@@ -78,7 +78,6 @@ loadChannelMessages(currentChatId: any) {
         message.id = doc.id;
         message.threadCount = await this.threadService.countThreadMessages(message.id);
         message.reactionCount = this.setEmojiCount(message.reaction);
-        // this.setViewedByMe(this.currentChat as Channel);
         return message;
       }));
       this.organizeMessagesByDate();

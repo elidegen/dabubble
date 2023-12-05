@@ -118,15 +118,15 @@ export class WorkspaceComponent implements OnInit {
   }
 
   renderChannel(channel: Channel) {
-    console.log('show channel', channel);
     this.chatservice.openChat = channel;
     this.chatservice.chatWindow = 'channel';
+    this.chatservice.setViewedByMe(this.currentChat, this.currentUser as User)
   }
 
   unreadMsg(channel: Channel) {
     // console.log('chatserv', this.currentChat?.id);
-    // console.log('chanel unreadmsg', channel.id);
-    if (channel.viewedBy?.length > 0 && channel.viewedBy.includes(this.currentUser.id) || this.currentChat?.id == channel.id) {
+    // console.log('chanel unreadmsg', channel);
+    if (channel.viewedBy.includes(this.currentUser.id) || this.currentChat?.id == channel.id) {
       // console.log('includes crnt usr', channel.name, channel.viewedBy);
       return false;
     } else {

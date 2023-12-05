@@ -118,36 +118,9 @@ export class MainChatComponent implements OnInit {
       this.message.channel = this.currentChat.name;
       await this.firestoreService.sendMessageInChannel(this.currentChat, this.message)
       this.message.content = '',
-      this.setViewedByZero(this.currentChat);
+      this.chatService.setViewedByZero(this.currentChat);
     }
   }
-
-
-  setViewedByZero(channel: Channel) {
-    channel.viewedBy = [];
-    this.updateViewedBy(channel);
-  }
-
-
-  setViewedByMe(channel: Channel) {
-    console.log('viewedbyme', channel);
-
-    if (channel.viewedBy?.length < 1 || channel.viewedBy?.some((userid: string) => userid != this.currentUser.id)) {
-      console.log('viewedbyme positive');
-      channel.viewedBy.push(this.currentUser.id);
-      this.updateViewedBy(channel);
-    }
-  }
-
-
-  async updateViewedBy(channel: Channel) {
-    console.log('updated channel', channel);
-    const channelRef = doc(this.firestore, 'channels', `${channel.id}`);
-    await updateDoc(channelRef, {
-      viewedBy: channel.viewedBy
-    })
-  }
-
 
   getSentMessageDate() {
     const currentDate = this.getCurrentDate();
