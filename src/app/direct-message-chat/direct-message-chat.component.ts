@@ -9,6 +9,7 @@ import { EmojiService } from '../emoji.service';
 import { Chat } from 'src/models/chat.class';
 import { User } from 'src/models/user.class';
 import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-profile.component';
+import { FirestoreService } from '../firestore.service';
 
 
 @Component({
@@ -23,18 +24,16 @@ export class DirectMessageChatComponent implements OnInit {
   currentChat!: Chat | undefined;
   currentUser;
   message: Message = new Message();
-  organizedMessages: { date: string, messages: Message[] }[] = []
-  messagesByDate: { [date: string]: Message[] } = {};
-  messageIsExisting!: boolean;
+
   allMessages: Message[] = [];
   interlocutor: User = new User();
   // ------------- for editing of message ----------------
   edit: boolean = false;
   editingMessage: string | undefined;
   @ViewChild('editor') editor!: ElementRef;
-  unSubMessages: any;
 
-  constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public authService: AuthService, public emojiService: EmojiService) {
+
+  constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public authService: AuthService, public emojiService: EmojiService, public firestoreService: FirestoreService) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
   }
@@ -45,11 +44,10 @@ export class DirectMessageChatComponent implements OnInit {
         const newChat = openDirectMessage as Chat;
         if (!this.currentChat || this.currentChat.id !== newChat.id) {
           this.currentChat = newChat;
-          if (this.unSubMessages) {
-            this.unSubMessages();
+          if (this.firestoreService.unSubDirectMessages) {
+            this.firestoreService.unSubDirectMessages();
           }
           this.loadMessages();
-          // this.getAllChannelMembers();
         }
       } else {
         this.currentChat = undefined;
@@ -59,27 +57,14 @@ export class DirectMessageChatComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    if (this.unSubMessages) {
-      this.unSubMessages();
+    if (this.firestoreService.unSubDirectMessages) {
+      this.firestoreService.unSubDirectMessages;
     }
   }
 
   loadMessages() {
     if (this.currentChat?.id) {
-      const messageCollection = collection(this.firestore, `direct messages/${this.currentChat.id}/messages`);
-      const q = query(messageCollection, orderBy('timeInMs', 'asc'));
-      this.unSubMessages = onSnapshot(q, async (snapshot) => {
-        this.allMessages = await Promise.all(snapshot.docs.map(async doc => {
-          const message = doc.data() as Message;
-          message.reactionCount = this.setEmojiCount(message.reaction);
-          message.id = doc.id;
-          return message;
-        }));
-        console.log('chat', this.currentChat);
-
-        this.organizeMessagesByDate();
-        this.checkMessageNumbers()
-      });
+      this.firestoreService.loadDirectMessages(this.currentChat.id);
     }
     this.interlocutor = this.chatService.getOtherUser(this.currentChat?.members);
   }
@@ -91,30 +76,8 @@ export class DirectMessageChatComponent implements OnInit {
     });
   }
 
-  organizeMessagesByDate() {
-    this.messagesByDate = {};
-    for (const message of this.allMessages) {
-      const messageDate = message.date;
-      if (messageDate) {
-        if (!this.messagesByDate[messageDate]) {
-          this.messagesByDate[messageDate] = [];
-        }
-        this.messagesByDate[messageDate].push(message);
-      }
-    }
-    this.organizedMessages = Object.entries(this.messagesByDate).map(([date, messages]) => ({ date, messages }));
-    this.organizedMessages = this.organizedMessages;
-    console.log('Show', this.organizedMessages)
-  }
+ 
 
-  checkMessageNumbers() {
-    if (this.allMessages.length > 0) {
-      this.messageIsExisting = true;
-    } else {
-      this.messageIsExisting = false
-    }
-    console.log(this.messageIsExisting);
-  }
 
   async sendMessage() {
     if (this.currentChat?.id && this.message.content?.trim() !== '') {
