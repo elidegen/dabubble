@@ -237,9 +237,18 @@ export class MainChatComponent implements OnInit {
     event.stopPropagation();
   }
 
-  selectUser(user: User) {
+
+
+  selectUser(user: any) {
     this.chatService.createDirectMessage(user);
     this.search.nativeElement.value = '';
+  }
+
+  getUserNameString(user:any) {
+    console.log("User dessen Name ins Textfeld soll",user);
+    this.message.content += `<span style="color: #B357F0">@${user.name}</span>`;
+    console.log(this.message.content);
+    this.userService.openUserContainerTextfield.next(false);
   }
 
   @HostListener('document:click', ['$event'])

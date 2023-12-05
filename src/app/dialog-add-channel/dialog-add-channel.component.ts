@@ -101,7 +101,7 @@ export class DialogAddChannelComponent {
   }
 
 
-  selectUser(user: User, i: number) {
+  selectUser(user: any, i: number) {
     this.highlightButton(i);
     let index = this.selectedUsers.findIndex(obj => obj.id === user.id);
     if (index == -1) {
