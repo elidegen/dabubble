@@ -261,5 +261,10 @@ getAllDirectMessages(): Promise<void> {
     return userStatus ? userStatus.online : '';
   }
 
+  getOtherUser(members: any[]) {
+    let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
+    // let userStatus = this.allUsers.find(user => user.id == otherUser.id);
+    return otherUser as User;
+  }
 
 }

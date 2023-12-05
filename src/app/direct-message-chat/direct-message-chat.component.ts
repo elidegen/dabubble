@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '../auth.service';
 import { EmojiService } from '../emoji.service';
 import { Chat } from 'src/models/chat.class';
+import { User } from 'src/models/user.class';
 
 
 @Component({
@@ -14,7 +15,7 @@ import { Chat } from 'src/models/chat.class';
   templateUrl: './direct-message-chat.component.html',
   styleUrls: ['./direct-message-chat.component.scss']
 })
-export class DirectMessageChatComponent implements OnInit{
+export class DirectMessageChatComponent implements OnInit {
   @ViewChildren('userContainer') userContainers!: QueryList<any>;
   @ViewChild('messageContainer') messageContainer!: ElementRef;
   firestore: Firestore = inject(Firestore);
@@ -25,6 +26,7 @@ export class DirectMessageChatComponent implements OnInit{
   messagesByDate: { [date: string]: Message[] } = {};
   messageIsExisting!: boolean;
   allMessages: Message[] = [];
+  interlocutor: User = new User();
   // ------------- for editing of message ----------------
   edit: boolean = false;
   editingMessage: string | undefined;
@@ -34,9 +36,7 @@ export class DirectMessageChatComponent implements OnInit{
   constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public authService: AuthService, public emojiService: EmojiService) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
-
   }
-
 
   ngOnInit() {
     this.chatService.openDirectMessage$.subscribe((openDirectMessage) => {
@@ -53,8 +53,8 @@ export class DirectMessageChatComponent implements OnInit{
       } else {
         this.currentChat = undefined;
       }
-  
-    });
+
+    });    
   }
 
   ngOnDestroy() {
@@ -74,12 +74,13 @@ export class DirectMessageChatComponent implements OnInit{
           message.id = doc.id;
           return message;
         }));
-        console.log('chat',this.currentChat);
-        
+        console.log('chat', this.currentChat);
+
         this.organizeMessagesByDate();
         this.checkMessageNumbers()
       });
     }
+    this.interlocutor = this.chatService.getOtherUser(this.currentChat?.members);
   }
 
 
@@ -101,13 +102,13 @@ export class DirectMessageChatComponent implements OnInit{
   }
 
   checkMessageNumbers() {
-    if(this.allMessages.length > 0){
+    if (this.allMessages.length > 0) {
       this.messageIsExisting = true;
     } else {
       this.messageIsExisting = false
     }
     console.log(this.messageIsExisting);
-    
+
   }
 
 
@@ -258,13 +259,7 @@ export class DirectMessageChatComponent implements OnInit{
         this.editingMessage = message.id; // Speichern Sie die ID der bearbeiteten Nachricht
       }
     }
-  } 
-
- 
-
-
-
-
+  }
 
   scrollToBottom(): void {
     this.messageContainer.nativeElement.scrollTop = this.messageContainer.nativeElement.scrollHeight;
@@ -315,8 +310,8 @@ export class DirectMessageChatComponent implements OnInit{
 
   addEmojiTextField($event: any) {
     this.emojiService.addEmojiTextChat($event);
-    console.log("das ist das Emoji für die Textnachricht",this.emojiService.emojiString);
-     this.message.content += this.emojiService.emojiString;
+    console.log("das ist das Emoji für die Textnachricht", this.emojiService.emojiString);
+    this.message.content += this.emojiService.emojiString;
   }
 
 }

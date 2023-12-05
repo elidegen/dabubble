@@ -7,15 +7,15 @@
             </button>
         </div>
         <div class="picture">
-            <img src="{{currentUser.picture}}" alt="" />
+            <img src="{{user.picture}}" alt="" />
         </div>
 
         <div class="name">
-            <h1>{{currentUser.name}}</h1>
+            <h1>{{user.name}}</h1>
             <span (click)="editState = true">Edit</span>
         </div>
 
-        <div [ngSwitch]="currentUser.online">
+        <div [ngSwitch]="user.online">
             <div class="status" *ngSwitchCase="false">
                 <div class="status-circle" style="background-color: grey !important;"></div>
                 <span style="color: grey;">Inactive</span>
@@ -32,7 +32,7 @@
             </div>
             <div class="email">
                 <h2>E-Mail Adress</h2>
-                <span>{{currentUser.email}}</span>
+                <span>{{user.email}}</span>
             </div>
         </div>
     </mat-card-content>
@@ -45,7 +45,7 @@
             </button>
         </div>
         <div class="picture">
-            <img src="{{currentUser.picture}}" alt="" />
+            <img src="{{user.picture}}" alt="" />
         </div>
 
         <form>
@@ -54,14 +54,14 @@
                 <h2>Full Name</h2>
             </div>
 
-            <input [(ngModel)]="currentUser.name" name="newUserName" type="text">
+            <input [(ngModel)]="user.name" name="newUserName" type="text">
 
             <div class="display-flex">
                 <img class="mr-16" src="assets/img/icons/mail.svg">
                 <h2>E-Mail Adress</h2>
             </div>
 
-            <input [(ngModel)]="currentUser.email"  name="newEmail" type="email">
+            <input [(ngModel)]="user.email"  name="newEmail" type="email">
         </form>
 
         <div class="buttons w100">
