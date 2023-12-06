@@ -218,7 +218,27 @@ export class FirestoreService {
     } catch (error) {
       console.error('Error loading users:', error);
     }
+    this.setUsersToOffline();
+    
   }
+
+
+  async setUsersToOffline() {
+    let time = this.getLoginTime();
+    this.allUsers.forEach(user => {
+      if (time - user.loginTime > 10000000) {
+        user.online = false;
+        console.log("User wurde auf offline gesetzt",user);
+        this.userService.updateUser('users', user);
+      }
+    });
+  }
+
+  getLoginTime() {
+    const currentTime = new Date();
+     return currentTime.getTime();
+  }
+
 
   filterAllUsers() {
     this.filteredUsers = this.allUsers.filter(user =>

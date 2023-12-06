@@ -53,6 +53,7 @@ export class MainChatComponent implements OnInit {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser as User;
     firestoreService.loadUsers();
+
   }
 
   ngOnInit() {

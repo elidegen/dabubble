@@ -8,6 +8,7 @@ import { User } from 'src/models/user.class';
 import { ChatService } from '../chat.service';
 import { Chat } from 'src/models/chat.class';
 import { Message } from 'src/models/message.class';
+import { FirestoreService } from '../firestore.service';
 
 
 @Component({
@@ -31,9 +32,10 @@ export class HomeComponent {
   filteredUsers: User[] = [];
   filteredChannelMessages: Message[] = [];
   filteredDirectMessages: Message[] = [];
-  constructor(public dialog: MatDialog, public auth: AuthService, public router: Router, public userService: UserService, public chatService: ChatService) {
+  constructor(public dialog: MatDialog, public auth: AuthService, public router: Router, public userService: UserService, public chatService: ChatService, public firestoreService: FirestoreService) {
     this.userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
+    this.firestoreService.setUsersToOffline();
   }
 
 

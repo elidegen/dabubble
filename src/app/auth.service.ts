@@ -46,17 +46,19 @@ export class AuthService {
       });
   }
 
+  
+
   async signInUser(email: string, password: string) {
     try {
-      const userCredential = await signInWithEmailAndPassword(this.auth, email, password);
-      console.log("User signed in:", userCredential.user);
+      await signInWithEmailAndPassword(this.auth, email, password);
 
       const activeUserIndex = this.findUserIndexWithEmail(email);
       if (activeUserIndex !== -1) {
         this.userService.users[activeUserIndex].online = true;
-        // console.log("Online Status von user", this.userService.users[activeUserIndex]);
+        this.userService.users[activeUserIndex].loginTime = this.getLoginTime();
         this.userService.signInSuccess = true;
         this.userService.updateUser('users', this.userService.users[activeUserIndex]);
+        console.log("Login Time von User", this.userService.users[activeUserIndex]);
         this.userService.currentUser = this.userService.users[activeUserIndex];
         this.userService.setCurrentUserToLocalStorage();
         // console.log("Current User:", this.userService.currentUser);
@@ -67,6 +69,13 @@ export class AuthService {
       // console.log("Anmeldung Fehlgeschlagen");
     }
   }
+
+
+  getLoginTime() {
+    const currentTime = new Date();
+     return currentTime.getTime();
+  }
+
 
   async signInWithGoogle() {
     await signInWithPopup(this.auth, this.provider)
@@ -80,6 +89,7 @@ export class AuthService {
           id: user.uid,
           picture: user.photoURL || "",
           online: true,
+          loginTime: this.getLoginTime(),
         } as User;
         this.addGoogleUser();
       })

@@ -5,6 +5,7 @@ export class User {
     id: string | undefined;
     picture: string | undefined;
     online : boolean | undefined;
+    loginTime: number;
 
     constructor(obj?: any) {
         this.name = obj ? obj.name : '';
@@ -13,6 +14,7 @@ export class User {
         this.id = obj ? obj.id : '';
         this.picture = obj ? obj.picture : '';
         this.online = obj ? obj.online : false;
+        this.loginTime = obj ? obj.loginTime : null;
     }
 
     public toJSON() {
@@ -22,7 +24,8 @@ export class User {
             password:  this.password,
             id:  this.id,
             picture:  this.picture,
-            online:  this.online
+            online:  this.online,
+            loginTime: this.loginTime,
         }
     }
 }
