@@ -38,7 +38,15 @@
                     'my-message-content': message.creator == currentUser.name,
                     'message-content': message.creator != currentUser.name
                   }" *ngSwitchCase="false">
+                  <a (click)="openProfileDialog(messagemention['id'])"   *ngFor="let messagemention of message.mentions"> @{{messagemention['name']}}</a>
                   <span> {{ message.content }}</span>
+                </div>
+                <div *ngFor="let messagefile of message.files">
+                  <img style="max-height: 100px; margin-top: 10px;" *ngIf="this.authService.isImage(messagefile)" src="{{messagefile}}" alt="Angehängtes Bild">
+                  <div class="pdf" *ngIf="this.authService.isPDF(messagefile)">
+                    <img src="assets/img/icons/pdf.svg" alt="">
+                    <a href="{{messagefile}}" target="_blank">Show PDF</a>
+                  </div>
                 </div>
                 <div *ngIf="
                     message.creator == currentUser.name &&
@@ -134,7 +142,7 @@
             <div class="border-right">
               <button class="mat-icon-button" 
               type="submit"> <label class="custom-file-upload">
-                   <input class="dataInput" (change)="this.authService.onFileSelected($event)" [(ngModel)]="this.authService.uploadFile" type="file">
+                   <input class="dataInput" (change)="onFileSelected($event)" type="file">
                    <img style="z-index: 100;" src="assets/img/icons/add.svg" alt="" />
                  </label>
                </button>
@@ -147,6 +155,10 @@
             <button (click)="this.userService.openUserContainerTextField()" mat-icon-button>
               <img src="assets/img/icons/@.svg" alt="" />
             </button>
+            <ng-container *ngFor="let messagefile of this.message.files">
+              <img *ngIf="this.authService.isImage(messagefile) && this.showUploadedFile" src="assets/img/icons/photo.svg" alt="Angehängtes Bild">
+                <img *ngIf="this.authService.isPDF(messagefile) && this.showUploadedFile" src="assets/img/icons/pdf.svg" alt="">
+            </ng-container>
           </div>
 
           <button class="send-button" mat-icon-button (click)="sendMessage()" [disabled]="!message.content">

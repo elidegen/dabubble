@@ -15,7 +15,7 @@ export class Message {
     channelID: any;
     viewedBy: any = [];
     messageSelected: boolean;
-    file: any;
+    files: any = [];
     mentions: any = [];
 
     constructor(obj?: any) {
@@ -35,7 +35,7 @@ export class Message {
         this.channel = obj = obj ? obj.channel: "";
         this.channelID = obj = obj ? obj.channelID : "";
         this.messageSelected = obj ? obj.message : "";
-        this.file = obj ? obj.file: "";
+        this.files = obj ? obj.files: [];
         this.mentions = obj ? obj.mentions: [];
     }
 
@@ -56,7 +56,7 @@ export class Message {
             channelID: this.channelID,
             viewedBy: this.viewedBy,
             messageSelected: this.messageSelected,
-            file: this.file,
+            files: this.files,
             mentions: this.mentions,
         }
     }

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output, OnInit, inject, ViewChild, ElementRef } from '@angular/core';
 import { ThreadService } from '../thread.service';
 import { Thread } from 'src/models/thread.class';
+import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '../user.service';
 import { AuthService } from '../auth.service';
 import { ChatService } from '../chat.service';
@@ -12,6 +13,7 @@ import { Message } from 'src/models/message.class';
 import { EmojiService } from '../emoji.service';
 import { FirestoreService } from '../firestore.service';
 import { User } from 'src/models/user.class';
+import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-profile.component';
 
 @Component({
   selector: 'app-thread',
@@ -29,7 +31,8 @@ export class ThreadComponent implements OnInit {
   sortedThreadMessages: { date: string, messages: Message[] }[] = []
   allReactionsByMessage: [] = [];
   currentMessage: any = [];
-
+  showUploadedFile = false;
+  taggedNames = "";
   unSubReactions: any;
   currentUser: User;
   currentThread: [] = [];
@@ -39,7 +42,7 @@ export class ThreadComponent implements OnInit {
   edit: boolean = false;
   editingThreadMessage: string | undefined;
 
-  constructor(public threadService: ThreadService, public userService: UserService, public authService: AuthService, public chatService: ChatService, public emojiService: EmojiService, public firestoreService: FirestoreService) {
+  constructor(public threadService: ThreadService, public dialog: MatDialog, public userService: UserService, public authService: AuthService, public chatService: ChatService, public emojiService: EmojiService, public firestoreService: FirestoreService) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
   }
@@ -69,13 +72,14 @@ export class ThreadComponent implements OnInit {
 
   async addMessageToThread() {
     if (this.currentMessage.id && this.message.content?.trim() !== '') {
+      this.message.content = this.message.content!.replace(this.taggedNames, '');
       this.getSentMessageTime();
       this.getSentMessageDate();
       this.message.creator = this.userService.currentUser.name;
       this.message.profilePic = this.userService.currentUser.picture;
       this.message.creatorId = this.userService.currentUser.id;
       await this.firestoreService.sendMessageInThread(this.currentMessage.id, this.message);
-      this.message.content = '';
+      this.message = new Message();
     }
     this.threadService.updateThreadCount(this.threadService.currentMessage, this.message.time);
   }
@@ -86,6 +90,16 @@ export class ThreadComponent implements OnInit {
       this.emojiService.showThreadEmojiPicker = true;
     }, 1);
     this.emojiService.messageId = messageId;
+  }
+
+  getUserNameString(user: any) {
+    let taggedName: any;
+    taggedName = `@${user.name}`;
+    this.taggedNames +=  `@${user.name}`;
+    console.log(this.taggedNames);
+    this.message.content += taggedName!;
+    this.message.mentions.push(user);
+    this.userService.openUserContainerTextfield.next(false);
   }
 
   openEmojiPickerChat() {
@@ -147,11 +161,7 @@ export class ThreadComponent implements OnInit {
   }
 
 
-  getUserNameString(user: any) {
-    const taggedName = `@${user.name}`;
-    this.message.content += taggedName;
-    this.userService.openUserContainerThreadTextfield.next(false);
-  }
+ 
 
   async updateChannel(colId: string, message: Message) {
     const docRef = doc(collection(this.firestore, colId), message.id);
@@ -160,6 +170,13 @@ export class ThreadComponent implements OnInit {
     );
   }
 
+
+  openProfileDialog(id: any): void {
+    this.dialog.open(DialogViewProfileComponent, {
+      panelClass: 'dialog-container',
+      data: { userID: id },
+    });
+  }
 
   getUpdateData(message: Message) {
     return {
@@ -191,6 +208,20 @@ export class ThreadComponent implements OnInit {
     }
   }
 
+
+   
+  onFileSelected(event: any): void {
+    console.log("Übergebene Datei:", event)
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      this.authService.uploadProfileImage(file);
+    }
+    setTimeout(() => {
+      this.message.files.push(this.authService.customPic);
+      console.log(this.message);
+    }, 1500);
+    this.showUploadedFile = true;
+  }
 
   async updateMessageContent(message: Message) {
     let messageId = message.id
