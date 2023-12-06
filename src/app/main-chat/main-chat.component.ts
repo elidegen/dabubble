@@ -77,15 +77,12 @@ export class MainChatComponent implements OnInit {
     }
   }
 
-  
-
-
-
   openEditChannelDialog() {
     this.dialog.open(DialogEditChannelComponent, {
       panelClass: 'dialog-container'
     });
   }
+
 
   openDialog() {
     this.dialog.open(DialogAddToGroupComponent, {
@@ -93,15 +90,18 @@ export class MainChatComponent implements OnInit {
     });
   }
 
+
   openMemberDialog() {
     this.dialog.open(DialogShowGroupMemberComponent, {
       panelClass: 'dialog-container'
     });
   }
 
+
   onCloseThread() {
     this.threadDrawer.close();
   }
+
 
   async sendMessage() {
     if (this.currentChat?.id && this.message.content?.trim() !== '') {

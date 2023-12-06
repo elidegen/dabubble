@@ -7,7 +7,7 @@ import { Channel } from 'src/models/channel.class';
 import { Thread } from 'src/models/thread.class';
 import { AuthService } from './auth.service';
 import { User } from 'src/models/user.class';
-import { deleteDoc } from 'firebase/firestore';
+import { deleteDoc, limit } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -77,7 +77,7 @@ getUpdateData(channel: Channel) {
   loadChannelMessages(currentChatId: any) {
     if (currentChatId) {
       const messageCollection = collection(this.firestore, `channels/${currentChatId}/messages`);
-      const q = query(messageCollection, orderBy('timeInMs', 'asc'));
+      const q = query(messageCollection, orderBy('timeInMs', 'desc'), limit(10));
       this.unSubChannelMessages = onSnapshot(q, async (snapshot) => {
         this.allMessagesOfChannel = await Promise.all(snapshot.docs.map(async doc => {
           const message = doc.data() as Message;
@@ -90,6 +90,9 @@ getUpdateData(channel: Channel) {
       });
     }
   }
+
+
+
 
   organizeMessagesByDate() {
     this.messagesByDate = {};
