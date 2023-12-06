@@ -171,7 +171,7 @@
                       [ngClass]="{'my-message-content': message.creator == currentUser.name, 'message-content': message.creator != currentUser.name}"
                       *ngSwitchCase="false">
                       <span><span *ngFor="let messagemention of message.mentions"> {{message.mentions}}</span> {{message.content}}</span>
-                    
+
                     </div>
                    
                     <div *ngIf="message.creator == currentUser.name && editingMessage === message.id">
@@ -263,7 +263,7 @@
 
 
       <mat-card-content>
-        <div style="min-height: 200px;" class="textfield-content">
+        <div class="textfield-content">
           <div  class="text-field-container">
             <textarea [disabled]="!currentChat" (keyup.enter)="sendMessage()" [(ngModel)]="message.content"
               placeholder="Message to {{currentChat?.name}}"></textarea>
