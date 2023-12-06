@@ -29,7 +29,8 @@ export class HomeComponent {
   searchInput: string = '';
   isInputFocused: boolean = false;
   filteredUsers: User[] = [];
-  filteredMessages: Message[] = [];
+  filteredChannelMessages: Message[] = [];
+  filteredDirectMessages: Message[] = [];
   constructor(public dialog: MatDialog, public auth: AuthService, public router: Router, public userService: UserService, public chatService: ChatService) {
     this.userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
@@ -49,6 +50,7 @@ export class HomeComponent {
     this.isInputFocused = true;
     this.filterUsers();
     this.filterChannels();
+    this.filterDirectMessages();
   }
 
   filterUsers() {
@@ -59,10 +61,15 @@ export class HomeComponent {
   }
 
   filterChannels() {
-    this.filteredMessages = [];
-    this.filteredMessages = this.chatService.allMessagesOfChannel.filter(message => message.content?.toLowerCase().includes(this.searchInput.toLowerCase()) );
-    console.log(this.filteredMessages);
+    this.filteredChannelMessages = [];
+    this.filteredChannelMessages = this.chatService.allMessagesOfChannel.filter(message => message.content?.toLowerCase().includes(this.searchInput.toLowerCase()));
+  }
+
+  filterDirectMessages() {
+    console.log(this.chatService.allMessagesOfDM);
     
+    this.filteredDirectMessages = [];
+    this.filteredDirectMessages = this.chatService.allMessagesOfDM.filter(message => message.content?.toLowerCase().includes(this.searchInput.toLowerCase()));
   }
 
   
@@ -73,7 +80,13 @@ export class HomeComponent {
     this.search.nativeElement.value = '';
   }
 
-  selectMessage(message: any) {
+  selectChannel(message: any) {
+    console.log("Bei der Suchfunktion ausgewählte Nachricht", message)
+    this.chatService.getChannelByMessage(message);
+  }
+
+
+  selectDirectMessage(message: any) {
     console.log("Bei der Suchfunktion ausgewählte Nachricht", message)
     this.chatService.getChannelByMessage(message);
   }
