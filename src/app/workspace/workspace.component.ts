@@ -125,6 +125,7 @@ export class WorkspaceComponent implements OnInit {
   }
 
   unreadMsg(channel: Channel) {
+    // console.log('update')
     // console.log('chatserv', this.currentChat?.id);
     // console.log('chanel unreadmsg', channel.viewedBy);
     if (channel.viewedBy.includes(this.currentUser.id) || this.currentChat?.id == channel.id) {

@@ -179,7 +179,7 @@ export class AuthService {
     return this.userService.users.findIndex(user => user.id === Id);
   }
 
-  async uploadProfileImage(file: File,) {
+  async uploadProfileImage(file: any) {
     const storage = getStorage();
     const storageReference = storageRef(storage, `profileImages/${file.name}`);
     const uploadTask = uploadBytesResumable(storageReference, file);

@@ -83,7 +83,7 @@
               <div class="border-right">
                 <button disabled mat-icon-button>
                   <label class="custom-file-upload">
-                    <input class="dataInput" (change)="onFileSelected($event)" [(ngModel)]="uploadFile" type="file">
+                    <input class="dataInput" (change)="onFileSelected($event)"  type="file">
                     <img src="assets/img/icons/add.svg" alt="" /> Test
                   </label>
                 </button>
@@ -170,8 +170,10 @@
                     <div
                       [ngClass]="{'my-message-content': message.creator == currentUser.name, 'message-content': message.creator != currentUser.name}"
                       *ngSwitchCase="false">
-                      <span> {{message.content}}</span>
+                      <span><span *ngFor="let messagemention of message.mentions"> {{message.mentions}}</span> {{message.content}}</span>
+                    
                     </div>
+                   
                     <div *ngIf="message.creator == currentUser.name && editingMessage === message.id">
                       <div *ngSwitchCase="true" class="text-field-container j-flex-end">
                         <textarea #editor cols="30" rows="10">{{message.content}}</textarea>
@@ -196,7 +198,7 @@
                         <span>{{ emoji.value }}</span>
                       </button>
                     </div>
-
+                    <span>{{message.file}}</span>
                     <div class="comment-section" (click)="openThread(message)">
                       <span *ngIf="message.threadCount == 0" class="comments color-purple2-text">Reply</span>
                       <span *ngIf="message.threadCount == 1" class="comments color-purple2-text"> 1 Comment</span>
@@ -272,7 +274,7 @@
                 
                   <button class="mat-icon-button" 
                   type="submit"> <label class="custom-file-upload">
-                       <input class="dataInput" (change)="this.authService.onFileSelected($event)" [(ngModel)]="this.authService.uploadFile" type="file">
+                       <input class="dataInput" (change)="onFileSelected($event)"  type="file">
                        <img style="z-index: 100;" src="assets/img/icons/add.svg" alt="" />
                      </label>
                    </button>

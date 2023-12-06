@@ -39,7 +39,8 @@ export class MainChatComponent implements OnInit {
   @ViewChild('emojiPicker') emojiPickerElementRef!: ElementRef;
   editingMessage: string | undefined;
   newThread = new Thread();
-  uploadFile: any;
+  taggedName: any;
+  dataSrc: any;
 
   // ------------------ search Input ---------------
   isInputFocused: boolean = false;
@@ -62,7 +63,7 @@ export class MainChatComponent implements OnInit {
           if (this.firestoreService.unSubChannelMessages) {
             this.firestoreService.unSubChannelMessages();
           }
-          this.firestoreService.loadChannelMessages(this.currentChat.id)
+          this.firestoreService.loadChannelMessages(this.currentChat)
           this.firestoreService.getAllChannelMembers(this.currentChat.id);
         }
       } else {
@@ -105,6 +106,7 @@ export class MainChatComponent implements OnInit {
 
   async sendMessage() {
     if (this.currentChat?.id && this.message.content?.trim() !== '') {
+    
       this.getSentMessageTime();
       this.getSentMessageDate();
       this.message.creator = this.userService.currentUser.name;
@@ -118,6 +120,7 @@ export class MainChatComponent implements OnInit {
       this.message.content = '',
       this.chatService.setViewedByZero(this.currentChat);
       this.chatService.setViewedByMe(this.currentChat, this.currentUser as User);
+      console.log("Nachricht mit der Datei", this.message);
     }
   }
 
@@ -232,7 +235,6 @@ export class MainChatComponent implements OnInit {
     }
   }
 
-
   // ---------------- search Input -------------------------
   filterUsers(): void {
     this.isInputFocused = true;
@@ -243,16 +245,15 @@ export class MainChatComponent implements OnInit {
     event.stopPropagation();
   }
 
-
-
   selectUser(user: any) {
     this.chatService.createDirectMessage(user);
     this.search.nativeElement.value = '';
   }
 
   getUserNameString(user: any) {
-    const taggedName = `@${user.name}`;
-    this.message.content += taggedName;
+    this.taggedName = `@${user.name}`;
+    this.message.content += this.taggedName;
+    this.message.mentions.push(this.taggedName);
     this.userService.openUserContainerTextfield.next(false);
   }
 
@@ -264,9 +265,19 @@ export class MainChatComponent implements OnInit {
     }
   }
 
-  onFileSelected($event: any){
-    console.log($event);
+  onFileSelected(event: any): void {
+    console.log("Übergebene Datei:", event)
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      this.authService.uploadProfileImage(file);
+    }
+    setTimeout(() => {
+      this.message.file = this.authService.customPic;
+      console.log(this.message);
+    }, 1500);
+
+
+
   }
+
 }
-
-
