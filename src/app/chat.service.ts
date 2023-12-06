@@ -10,14 +10,15 @@ import { UserService } from './user.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ChatService {
+export class ChatService implements OnInit {
   private _openChatSubject: BehaviorSubject<Channel | Chat | null> = new BehaviorSubject<Channel | Chat | null>(null);
   private _openDirectMessageSubject: BehaviorSubject<Chat | null> = new BehaviorSubject<Chat | null>(null);
   firestore: Firestore = inject(Firestore)
   chatWindow = 'empty';
   chat: Chat = new Chat();
   unSubChannels: any;
-  unSubMessages: any;
+  unSubDMMessages: any;
+  unSubChannelMessages: any;
   allChannels: any[] = [];
   allDirectMessages: any[] = [];
   allLoadedDirectMessages: any[] = [];
@@ -34,6 +35,10 @@ export class ChatService {
     this.getAllUsers();
     this.loadAllDirectMessages();
     
+  }
+
+  ngOnInit(): void {
+
   }
 
   ngOnDestroy() {
@@ -192,13 +197,16 @@ export class ChatService {
         this.yourChannels.push(channel);
       }
     });
+
+    
     this.getAllChannelMessages();
   }
 
   getAllChannelMessages() {
+   
     this.yourChannels.forEach(channel => {
       const messageCol = collection(this.firestore, `channels/${channel.id}/messages`);
-      this.unSubMessages = onSnapshot(messageCol,
+      this.unSubChannelMessages = onSnapshot(messageCol,
         (list) => {
           list.forEach(message => {
             this.allMessagesOfChannel.push(message.data());
@@ -219,8 +227,7 @@ export class ChatService {
           return channel;
         });
         this.getPersonalDirectMessages();
-      }
-    );
+      });
   }
 
 
@@ -228,12 +235,9 @@ export class ChatService {
     this.yourDirectMessages = [];
     this.allLoadedDirectMessages.forEach(dm => {
       if (dm.members.some((member: { id: string; }) => member.id === this.userService.currentUser.id)) {
-        // console.log(channel);
         this.yourDirectMessages.push(dm);
       }
     });
-    console.log(this.yourDirectMessages);
-    
     this.getDMMessages();
   }
 
@@ -241,7 +245,7 @@ export class ChatService {
   getDMMessages() {
     this.yourDirectMessages.forEach(dm => {
       const messageCol = collection(this.firestore, `direct messages/${dm.id}/messages`);
-      this.unSubMessages = onSnapshot(messageCol,
+      this.unSubDMMessages = onSnapshot(messageCol,
         (list) => {
           list.forEach(message => {
             this.allMessagesOfDM.push(message.data());
@@ -250,6 +254,8 @@ export class ChatService {
       );
     });
   }
+
+  
 
 
   getAllUsers() {
@@ -263,7 +269,7 @@ export class ChatService {
     );
   }
 
-  
+
   getChannelByMessage(message: any) {
     let channel = this.allChannels.find(channel => channel.id = message.channelID);
     this.openChat = channel;
@@ -272,13 +278,18 @@ export class ChatService {
 
 
   getDirectMessageByMessage(message: any) {
+    console.log('all', this.allDirectMessages);
+    
     let direct = this.allDirectMessages.find(dm => dm.id = message.channelID);
+    console.log('direct', direct);
+    console.log('message', message);
+    
+    
     this.openDirectMessage = direct;
     this.chatWindow = 'direct';
   }
 
  
-
 
   getOtherUser(members: any[]) {
     let otherUser = members.find(member => member.id !== this.userService.currentUser.id);

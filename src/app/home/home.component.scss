@@ -190,14 +190,16 @@ mat-drawer {
     border-radius: 0 32px 32px 32px;
     box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.4);
     padding: 16px;
-    display: flex;
-    flex-direction: column;
     width: 49vw;
-    gap: 16px;
-
     &::-webkit-scrollbar {
         display: none;
     }
+}
+
+.search-results {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 .user-container {
