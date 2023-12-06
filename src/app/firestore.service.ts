@@ -70,15 +70,17 @@ export class FirestoreService {
       id: channel.id,
     };
   }
-  
+
 
   loadChannelMessages(currentChat: any) {
     if (currentChat.id) {
       const messageCollection = collection(this.firestore, `channels/${currentChat.id}/messages`);
       const q = query(messageCollection, orderBy('timeInMs', 'desc'), limit(50));
       this.unSubChannelMessages = onSnapshot(q, async (snapshot) => {
-        this.allMessagesOfChannel = await Promise.all(snapshot.docs.map(async doc => {          
+        this.allMessagesOfChannel = await Promise.all(snapshot.docs.map(async doc => {
           const message = doc.data() as Message;
+          this.chatService.setViewedByMe(currentChat, this.userService.currentUser);
+
           message.id = doc.id;
           message.threadCount = await this.threadService.countThreadMessages(message.id);
           message.reactionCount = this.setEmojiCount(message.reaction);
@@ -104,7 +106,7 @@ export class FirestoreService {
     this.organizedMessages = Object.entries(this.messagesByDate).map(([date, messages]) => ({ date, messages }));
   }
 
-  
+
 
   async sendMessageInChannel(channel: Channel, message: Message) {
     let channelId = channel.id;
