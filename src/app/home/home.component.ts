@@ -48,7 +48,7 @@ export class HomeComponent {
   filterEverything(): void {
     this.isInputFocused = true;
     this.filterUsers();
-    this.filterMessages();
+    this.filterChannels();
   }
 
   filterUsers() {
@@ -58,14 +58,14 @@ export class HomeComponent {
     );
   }
 
-  filterMessages() {
+  filterChannels() {
     this.filteredMessages = [];
-    this.filteredMessages = this.chatService.allMessagesOfChannel.filter(message =>
-      message.content?.toLowerCase().includes(this.searchInput.toLowerCase()) ||
-      message.creator?.toLowerCase().includes(this.searchInput.toLowerCase())
-    );
+    this.filteredMessages = this.chatService.allMessagesOfChannel.filter(message => message.content?.toLowerCase().includes(this.searchInput.toLowerCase()) );
+    console.log(this.filteredMessages);
+    
   }
 
+  
   selectUser(user: any) {
     this.chatService.createDirectMessage(user);
     this.chatService.chatWindow = 'direct';

@@ -87,6 +87,7 @@ export class ChatService {
     }
   }
 
+
   checkUserForDirectMessageName(user: User) {
     if (user.id !== this.userService.currentUser.id) {
       let sortedUserNames = [user.name, this.userService.currentUser.name].sort();
@@ -97,6 +98,7 @@ export class ChatService {
     }
   }
 
+
   convertUser(user: any): any {
     return {
       name: user.name,
@@ -106,6 +108,7 @@ export class ChatService {
       picture: user.picture,
     };
   }
+
 
   // ---------------- Search function ---------------
   getallChannels() {
@@ -133,9 +136,11 @@ export class ChatService {
     this.getAllMessages();
   }
 
+
   ngOnDestroy() {
     this.unSubDirectMessages();
   }
+
 
   getAllMessages() {
     this.yourChannels.forEach(channel => {
@@ -148,7 +153,11 @@ export class ChatService {
         }
       );
     });
+
   }
+
+  
+
 
   getAllUsers() {
     const userCol = collection(this.firestore, 'users');
@@ -161,12 +170,14 @@ export class ChatService {
     );
   }
 
+
   compareNewDirectMessageWithExisting(user: User) {
     this.getAllDirectMessages()
       .then(() => {
         this.findDirectMessage(user);
       });
   }
+
 
   getAllDirectMessages(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
@@ -200,6 +211,7 @@ export class ChatService {
     this.renderDirectMessage(foundDirectMessage);
   }
 
+
   getChannelByMessage(message: any) {
     let channel = this.allChannels.find(channel => channel.id = message.channelID);
     console.log("Dieser channel wir ausgewählt in der suchfunktion", channel);
@@ -213,16 +225,19 @@ export class ChatService {
     this.chatWindow = 'direct';
   }
 
+
   getOtherUser(members: any[]) {
     let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
     let interlocutor = this.allUsers.find(user => user.id == otherUser.id);    
     return interlocutor as User;
   }
 
+
   setViewedByZero(channel: Channel) {
     channel.viewedBy = [];
     this.updateViewedBy(channel);
   }
+
 
   setViewedByMe(channel: Channel, user: User) {
     console.log('viewedbyme', channel);
@@ -234,6 +249,7 @@ export class ChatService {
     }
   }
 
+
   async updateViewedBy(channel: Channel) {
     console.log('updated channel', channel);
     const channelRef = doc(this.firestore, 'channels', `${channel.id}`);
@@ -241,6 +257,7 @@ export class ChatService {
       viewedBy: channel.viewedBy
     })
   }
+
 
   unreadMsg(channel: Channel, user: User) {
     // console.log('chatserv', this.currentChat?.id);

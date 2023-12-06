@@ -185,14 +185,14 @@ mat-drawer {
     overflow-y: scroll;
     background-color: white;
     z-index: 2;
-    left: 50px;
+    left: 50%;
     top: 56px;
     border-radius: 0 32px 32px 32px;
     box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.4);
     padding: 16px;
     display: flex;
     flex-direction: column;
-    width: 40vw;
+    width: 49vw;
     gap: 16px;
 
     &::-webkit-scrollbar {
@@ -242,4 +242,34 @@ mat-drawer {
 
 .headline {
     padding: 0 16px 16px 16px;
+}
+
+.filtered-message-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin-top: 8px;
+}
+
+.filtered-message-creator {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.filtered-message {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.by {
+    font-weight: bold;
+}
+
+.filtered-message-channel {
+    font-weight: bold;
+}
+
+b {
+    color: var(--purple3);
 }

@@ -154,8 +154,7 @@ export class WorkspaceComponent implements OnInit {
   async deleteDirectMessageChat(chatId: any) {
     const directColRef = doc(collection(this.firestore, 'direct messages'), chatId)
     await deleteDoc(directColRef);
-    this.chatservice.chatWindow = 'empty';
-    
+
   }
 
   
