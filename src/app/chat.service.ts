@@ -19,16 +19,25 @@ export class ChatService {
   unSubChannels: any;
   unSubMessages: any;
   allChannels: any[] = [];
+  allDirectMessages: any[] = [];
+  allLoadedDirectMessages: any[] = [];
   yourChannels: any[] = [];
+  yourDirectMessages: any[] = [];
   allMessagesOfChannel: any[] = [];
   unSubUsers: any;
   unSubDirectMessages: any;
   allUsers: any[] = [];
-  allDirectMessages: any[] = [];
+  allMessagesOfDM: any[] = [];
 
   constructor(public userService: UserService) {
     this.getallChannels();
     this.getAllUsers();
+    this.loadAllDirectMessages();
+    
+  }
+
+  ngOnDestroy() {
+    this.unSubDirectMessages();
   }
 
   // -------------- channel -----------------------
@@ -66,99 +75,6 @@ export class ChatService {
     }
     this.compareNewDirectMessageWithExisting(user);
     this.compareNewDirectMessageWithExisting(user);
-  }
-
-  checkUserForId(user: User) {
-    this.chat.members = []
-    if (user.id !== this.userService.currentUser.id) {
-      let sortedUserIds = [user.id, this.userService.currentUser.id].sort();
-      let userId = sortedUserIds.join('');
-      let userData = this.convertUser(user);
-      let currentUserData = this.convertUser(this.userService.currentUser);
-      this.chat.members.push(userData, currentUserData);
-      this.chat.id = userId;
-      return userId
-    } else {
-      let userId = this.userService.currentUser.id;
-      let currentUserData = this.convertUser(this.userService.currentUser);
-      this.chat.members.push(currentUserData);
-      this.chat.id = userId;
-      return userId
-    }
-  }
-
-  checkUserForDirectMessageName(user: User) {
-    if (user.id !== this.userService.currentUser.id) {
-      let sortedUserNames = [user.name, this.userService.currentUser.name].sort();
-      let userChatName = sortedUserNames.join(' ');
-      this.chat.name = userChatName;
-    } else {
-      this.chat.name = this.userService.currentUser.name;
-    }
-  }
-
-  convertUser(user: any): any {
-    return {
-      name: user.name,
-      email: user.email,
-      password: user.password,
-      id: user.id,
-      picture: user.picture,
-    };
-  }
-
-  // ---------------- Search function ---------------
-  getallChannels() {
-    this.unSubChannels = onSnapshot(
-      query(collection(this.firestore, "channels"), orderBy("name")),
-      (snapshot) => {
-        this.allChannels = snapshot.docs.map((doc) => {
-          const channel = doc.data() as Channel;
-          channel.id = doc.id;
-          return channel;
-        });
-        this.getPersonalChannels();
-      }
-    );
-  }
-
-  getPersonalChannels() {
-    this.yourChannels = [];
-    this.allChannels.forEach(channel => {
-      if (channel.members.some((member: { id: string; }) => member.id === this.userService.currentUser.id)) {
-        // console.log(channel);
-        this.yourChannels.push(channel);
-      }
-    });
-    this.getAllMessages();
-  }
-
-  ngOnDestroy() {
-    this.unSubDirectMessages();
-  }
-
-  getAllMessages() {
-    this.yourChannels.forEach(channel => {
-      const messageCol = collection(this.firestore, `channels/${channel.id}/messages`);
-      this.unSubMessages = onSnapshot(messageCol,
-        (list) => {
-          list.forEach(message => {
-            this.allMessagesOfChannel.push(message.data());
-          });
-        }
-      );
-    });
-  }
-
-  getAllUsers() {
-    const userCol = collection(this.firestore, 'users');
-    this.unSubUsers = onSnapshot(userCol,
-      (list) => {
-        list.forEach(user => {
-          this.allUsers.push(user.data());
-        });
-      }
-    );
   }
 
   compareNewDirectMessageWithExisting(user: User) {
@@ -200,18 +116,169 @@ export class ChatService {
     this.renderDirectMessage(foundDirectMessage);
   }
 
-  getChannelByMessage(message: any) {
-    let channel = this.allChannels.find(channel => channel.id = message.channelID);
-    console.log("Dieser channel wir ausgewählt in der suchfunktion", channel);
-    this.openChat = channel;
-    this.chatWindow = 'channel';
-  }
-
- 
+  
   renderDirectMessage(chat: Chat) {
     this.openDirectMessage = chat;
     this.chatWindow = 'direct';
   }
+
+  //------------------------------------------------------------------------------------
+
+
+  checkUserForId(user: User) {
+    this.chat.members = []
+    if (user.id !== this.userService.currentUser.id) {
+      let sortedUserIds = [user.id, this.userService.currentUser.id].sort();
+      let userId = sortedUserIds.join('');
+      let userData = this.convertUser(user);
+      let currentUserData = this.convertUser(this.userService.currentUser);
+      this.chat.members.push(userData, currentUserData);
+      this.chat.id = userId;
+      return userId
+    } else {
+      let userId = this.userService.currentUser.id;
+      let currentUserData = this.convertUser(this.userService.currentUser);
+      this.chat.members.push(currentUserData);
+      this.chat.id = userId;
+      return userId
+    }
+  }
+
+
+  checkUserForDirectMessageName(user: User) {
+    if (user.id !== this.userService.currentUser.id) {
+      let sortedUserNames = [user.name, this.userService.currentUser.name].sort();
+      let userChatName = sortedUserNames.join(' ');
+      this.chat.name = userChatName;
+    } else {
+      this.chat.name = this.userService.currentUser.name;
+    }
+  }
+
+
+  convertUser(user: any): any {
+    return {
+      name: user.name,
+      email: user.email,
+      password: user.password,
+      id: user.id,
+      picture: user.picture,
+    };
+  }
+
+
+  // ---------------- Search function ----------------------------------------------
+
+
+  getallChannels() {
+    this.unSubChannels = onSnapshot(
+      query(collection(this.firestore, "channels"), orderBy("name")),
+      (snapshot) => {
+        this.allChannels = snapshot.docs.map((doc) => {
+          const channel = doc.data() as Channel;
+          channel.id = doc.id;
+          return channel;
+        });
+        this.getPersonalChannels();
+      }
+    );
+  }
+
+  getPersonalChannels() {
+    this.yourChannels = [];
+    this.allChannels.forEach(channel => {
+      if (channel.members.some((member: { id: string; }) => member.id === this.userService.currentUser.id)) {
+        // console.log(channel);
+        this.yourChannels.push(channel);
+      }
+    });
+    this.getAllChannelMessages();
+  }
+
+  getAllChannelMessages() {
+    this.yourChannels.forEach(channel => {
+      const messageCol = collection(this.firestore, `channels/${channel.id}/messages`);
+      this.unSubMessages = onSnapshot(messageCol,
+        (list) => {
+          list.forEach(message => {
+            this.allMessagesOfChannel.push(message.data());
+          });
+        }
+      );
+    });
+  }
+
+
+  loadAllDirectMessages() {
+    this.unSubDirectMessages = onSnapshot(
+      query(collection(this.firestore, "direct messages"), orderBy("name")),
+      (snapshot) => {
+        this.allLoadedDirectMessages = snapshot.docs.map((doc) => {
+          const channel = doc.data() as Channel;
+          channel.id = doc.id;
+          return channel;
+        });
+        this.getPersonalDirectMessages();
+      }
+    );
+  }
+
+
+  getPersonalDirectMessages() {
+    this.yourDirectMessages = [];
+    this.allLoadedDirectMessages.forEach(dm => {
+      if (dm.members.some((member: { id: string; }) => member.id === this.userService.currentUser.id)) {
+        // console.log(channel);
+        this.yourDirectMessages.push(dm);
+      }
+    });
+    console.log(this.yourDirectMessages);
+    
+    this.getDMMessages();
+  }
+
+  
+  getDMMessages() {
+    this.yourDirectMessages.forEach(dm => {
+      const messageCol = collection(this.firestore, `direct messages/${dm.id}/messages`);
+      this.unSubMessages = onSnapshot(messageCol,
+        (list) => {
+          list.forEach(message => {
+            this.allMessagesOfDM.push(message.data());
+          });
+        }
+      );
+    });
+  }
+
+
+  getAllUsers() {
+    const userCol = collection(this.firestore, 'users');
+    this.unSubUsers = onSnapshot(userCol,
+      (list) => {
+        list.forEach(user => {
+          this.allUsers.push(user.data());
+        });
+      }
+    );
+  }
+
+  
+  getChannelByMessage(message: any) {
+    let channel = this.allChannels.find(channel => channel.id = message.channelID);
+    this.openChat = channel;
+    this.chatWindow = 'channel';
+  }
+
+
+  getDirectMessageByMessage(message: any) {
+    let direct = this.allDirectMessages.find(dm => dm.id = message.channelID);
+    this.openDirectMessage = direct;
+    this.chatWindow = 'direct';
+  }
+
+ 
+
 
   getOtherUser(members: any[]) {
     let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
@@ -219,20 +286,23 @@ export class ChatService {
     return interlocutor as User;
   }
 
+
   setViewedByZero(channel: Channel) {
     channel.viewedBy = [];
     this.updateViewedBy(channel);
   }
 
-  setViewedByMe(channel: Channel, user: User) {
 
+  setViewedByMe(channel: Channel, user: User) {
+    console.log('viewedbyme before edit', channel);
 
     if (channel.viewedBy?.length < 1 || channel.viewedBy?.some((userid: string) => userid != user.id)) {
-      console.log('viewedbyme positive');
+      console.log('viewedbyme positive', channel);
       channel.viewedBy.push(user.id);
       this.updateViewedBy(channel);
     }
   }
+
 
   async updateViewedBy(channel: Channel) {
     console.log('updated channel', channel);
@@ -241,6 +311,7 @@ export class ChatService {
       viewedBy: channel.viewedBy
     })
   }
+
 
   unreadMsg(channel: Channel, user: User) {
     // console.log('chatserv', this.currentChat?.id);

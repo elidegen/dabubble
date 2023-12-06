@@ -5,49 +5,49 @@
     </div>
 
     <div class="add-members-container">
-      <input #search class="w100 input-members search" type="text" placeholder="Search" [(ngModel)]="searchInput"
-          (input)="filterEverything()" (click)="this.isInputFocused = true;">
-
-      <div class="user-search-container" *ngIf="isInputFocused" >
+      <input #search class="w100 input-members search" type="text" placeholder="Search" [(ngModel)]="searchInput" (input)="filterEverything()" (click)="this.isInputFocused = true;">
+      <div class="user-search-container" *ngIf="isInputFocused">
         <h1>Users:</h1>
-          <button class="user-container" *ngFor="let user of filteredUsers" (click)="selectUser(user)">
-              <div (click)="selectUser(user)" class="profile-container">
-                  <img src="{{user.picture}}" alt="profile">
-                  <div class="online-status"></div>
+        <button class="user-container" *ngFor="let user of filteredUsers" (click)="selectUser(user)">
+          <div (click)="selectUser(user)" class="profile-container">
+            <img src="{{user.picture}}" alt="profile">
+            <div class="online-status"></div>
+          </div>
+          <span>{{user.name}}</span>
+        </button>
+        <span *ngIf="filteredUsers.length < 1">No matching contact</span>
+
+        <h1>Channel messages:</h1>
+        <div class="message-row-container" *ngFor="let message of filteredChannelMessages" (click)="selectChannel(message)">
+          <span >Found in <b>{{message.channel}}</b></span>
+          <div class="filtered-message-container"> 
+            <span class="filtered-message">{{message.content}}</span>
+            <div class="filtered-message-creator">
+              <span class="by">by</span>
+              <span class="name">{{ message.creator }}</span>
+              <div class="creator-picture-container">
+                <img src="{{message.profilePic}}" alt="" />
               </div>
-              <span>{{user.name}}</span>
-          </button>
-          <span *ngIf="filteredUsers.length < 1">No matching contact</span>
-          <h1>Messages:</h1>
-          <div class="message-row-container"[ngClass]="{'my-messages': message.creator == currentUser.name}" *ngFor="let message of filteredMessages" (click)="selectMessage(message)" >
-        <span>Found in {{message.channel}}</span>
-              <div class="message-box">
-                <div  class="creator-picture-container">
-                  <img src="{{message.profilePic}}" alt="" />
-                </div>
-
-                <div class="message-container">
-                  <div class="message-data">
-                    <span class="name">{{ message.creator }}</span>
-                    <span class="date">{{ message.time }}</span>
-                  </div>
-
-  
-                    <div
-                      [ngClass]="{'my-message-content': message.creator == currentUser.name, 'message-content': message.creator != currentUser.name}">
-                      <span> {{message.content}}</span>
-                    </div>
-        
-                </div>
-              </div>
-
-  
             </div>
+          </div>
+        </div>
+
+        <h1>Direct Messages:</h1>
+        <div class="message-row-container" *ngFor="let message of filteredDirectMessages" (click)="selectDirectMessage(message)">
+          <span >Found in <b>{{message.channel}}</b></span>
+          <div class="filtered-message-container"> 
+            <span class="filtered-message">{{message.content}}</span>
+            <div class="filtered-message-creator">
+              <span class="by">by</span>
+              <span class="name">{{ message.creator }}</span>
+              <div class="creator-picture-container">
+                <img src="{{message.profilePic}}" alt="" />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div>
-       
-      </div>
-  </div>
+    </div>
 
     <div class="profile-container">
       <h1>{{this.userService.currentUser.name}}</h1>
@@ -64,6 +64,7 @@
       </mat-menu>
     </div>
   </header>
+  
 
   <main>
     <mat-drawer-container autosize>

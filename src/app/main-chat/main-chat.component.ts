@@ -118,6 +118,7 @@ export class MainChatComponent implements OnInit {
       this.message.channelID = this.currentChat.id;
       this.message.profilePic = this.userService.currentUser.picture,
         this.message.channel = this.currentChat.name;
+        this.message.channel = this.currentChat.name;
       this.message.messageSelected = false;
       await this.firestoreService.sendMessageInChannel(this.currentChat, this.message);
       this.chatService.setViewedByZero(this.currentChat);

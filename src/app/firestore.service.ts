@@ -7,7 +7,7 @@ import { Channel } from 'src/models/channel.class';
 import { Thread } from 'src/models/thread.class';
 import { AuthService } from './auth.service';
 import { User } from 'src/models/user.class';
-import { deleteDoc } from 'firebase/firestore';
+import { deleteDoc, limit } from 'firebase/firestore';
 import { ChatService } from './chat.service';
 
 @Injectable({
@@ -70,27 +70,25 @@ export class FirestoreService {
       id: channel.id,
     };
   }
+  
 
   loadChannelMessages(currentChat: any) {
     if (currentChat.id) {
       const messageCollection = collection(this.firestore, `channels/${currentChat.id}/messages`);
-      const q = query(messageCollection, orderBy('timeInMs', 'asc'));
+      const q = query(messageCollection, orderBy('timeInMs', 'desc'), limit(50));
       this.unSubChannelMessages = onSnapshot(q, async (snapshot) => {
-        this.allMessagesOfChannel = await Promise.all(snapshot.docs.map(async doc => {
-          this.chatService.setViewedByMe(currentChat, this.userService.currentUser);
+        this.allMessagesOfChannel = await Promise.all(snapshot.docs.map(async doc => {          
           const message = doc.data() as Message;
           message.id = doc.id;
           message.threadCount = await this.threadService.countThreadMessages(message.id);
           message.reactionCount = this.setEmojiCount(message.reaction);
           return message;
         }));
+        this.allMessagesOfChannel.reverse();
         this.organizeMessagesByDate();
       });
     }
   }
-
-
-
 
   organizeMessagesByDate() {
     this.messagesByDate = {};
@@ -104,8 +102,9 @@ export class FirestoreService {
       }
     }
     this.organizedMessages = Object.entries(this.messagesByDate).map(([date, messages]) => ({ date, messages }));
-    this.organizedMessages = this.organizedMessages;
   }
+
+  
 
   async sendMessageInChannel(channel: Channel, message: Message) {
     let channelId = channel.id;
@@ -186,7 +185,7 @@ export class FirestoreService {
     if (threadId) {
       const threadCollection = collection(this.firestore, `threads/${threadId}/messages`);
       console.log('message', threadCollection);
-      const q = query(threadCollection, orderBy('timeInMs', 'asc'));
+      const q = query(threadCollection, orderBy('timeInMs', 'desc'), limit(50));
       this.unSubThread = onSnapshot(q, (snapshot) => {
         this.allThreadMessages = snapshot.docs.map(doc => {
           const message = doc.data() as Message;
@@ -195,6 +194,7 @@ export class FirestoreService {
           console.log('show me', message);
           return message;
         });
+        this.allThreadMessages.reverse()
       });
     }
   }
@@ -278,7 +278,7 @@ export class FirestoreService {
   async loadDirectMessages(chatId: any) {
     if (chatId) {
       const messageCollection = collection(this.firestore, `direct messages/${chatId}/messages`);
-      const q = query(messageCollection, orderBy('timeInMs', 'asc'));
+      const q = query(messageCollection, orderBy('timeInMs', 'desc'), limit(50));
       this.unSubDirectMessages = onSnapshot(q, async (snapshot) => {
         this.allDirectMessages = await Promise.all(snapshot.docs.map(async doc => {
           const message = doc.data() as Message;
@@ -286,6 +286,7 @@ export class FirestoreService {
           message.id = doc.id;
           return message;
         }));
+        this.allDirectMessages.reverse();
         this.organizeDirectMessagesByDate();
         this.checkMessageNumbers();
       });
