@@ -99,7 +99,6 @@ export class WorkspaceComponent implements OnInit {
     this.yourChannels = [];
     this.allChannels.forEach(channel => {
       if (channel.members.some((member: { id: string; }) => member.id === this.currentUser.id)) {
-        // console.log(channel);
         this.yourChannels.push(channel);
       }
     });
@@ -119,20 +118,19 @@ export class WorkspaceComponent implements OnInit {
   }
 
   renderChannel(channel: Channel) {
+    if (this.currentChat != undefined)
+      this.chatservice.setViewedByMe(this.currentChat, this.userService.currentUser);
+    console.log(this.currentChat);
+    
     this.chatservice.openChat = channel;
     this.chatservice.chatWindow = 'channel';
     this.chatservice.setViewedByMe(this.currentChat, this.currentUser as User)
   }
 
   unreadMsg(channel: Channel) {
-    // console.log('update')
-    // console.log('chatserv', this.currentChat?.id);
-    // console.log('chanel unreadmsg', channel.viewedBy);
     if (channel.viewedBy.includes(this.currentUser.id) || this.currentChat?.id == channel.id) {
-      // console.log('includes crnt usr', channel.name, channel.viewedBy);
       return false;
     } else {
-      // console.log('not crnt usr', channel.name, channel.viewedBy);
       return true;
     }
   }
@@ -155,8 +153,5 @@ export class WorkspaceComponent implements OnInit {
     const directColRef = doc(collection(this.firestore, 'direct messages'), chatId)
     await deleteDoc(directColRef);
     this.chatservice.chatWindow = 'empty';
-    
   }
-
-  
 }

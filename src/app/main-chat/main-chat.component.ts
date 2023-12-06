@@ -106,19 +106,19 @@ export class MainChatComponent implements OnInit {
 
   async sendMessage() {
     if (this.currentChat?.id && this.message.content?.trim() !== '') {
-    
+
       this.getSentMessageTime();
       this.getSentMessageDate();
       this.message.creator = this.userService.currentUser.name;
       this.message.creatorId = this.userService.currentUser.id,
-      this.message.channel = this.currentChat.name;
+        this.message.channel = this.currentChat.name;
       this.message.channelID = this.currentChat.id;
       this.message.profilePic = this.userService.currentUser.picture,
-      this.message.channel = this.currentChat.name;
+        this.message.channel = this.currentChat.name;
       this.message.messageSelected = false;
       await this.firestoreService.sendMessageInChannel(this.currentChat, this.message)
       this.message.content = '',
-      this.chatService.setViewedByZero(this.currentChat);
+        this.chatService.setViewedByZero(this.currentChat);
       this.chatService.setViewedByMe(this.currentChat, this.currentUser as User);
       console.log("Nachricht mit der Datei", this.message);
     }
@@ -275,9 +275,5 @@ export class MainChatComponent implements OnInit {
       this.message.file = this.authService.customPic;
       console.log(this.message);
     }, 1500);
-
-
-
   }
-
 }

@@ -225,10 +225,10 @@ export class ChatService {
   }
 
   setViewedByMe(channel: Channel, user: User) {
-    console.log('viewedbyme', channel);
+    console.log('viewedbyme before edit', channel);
 
     if (channel.viewedBy?.length < 1 || channel.viewedBy?.some((userid: string) => userid != user.id)) {
-      console.log('viewedbyme positive');
+      console.log('viewedbyme positive', channel);
       channel.viewedBy.push(user.id);
       this.updateViewedBy(channel);
     }

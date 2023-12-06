@@ -76,8 +76,7 @@ export class FirestoreService {
       const messageCollection = collection(this.firestore, `channels/${currentChat.id}/messages`);
       const q = query(messageCollection, orderBy('timeInMs', 'asc'));
       this.unSubChannelMessages = onSnapshot(q, async (snapshot) => {
-        this.allMessagesOfChannel = await Promise.all(snapshot.docs.map(async doc => {
-          this.chatService.setViewedByMe(currentChat, this.userService.currentUser);
+        this.allMessagesOfChannel = await Promise.all(snapshot.docs.map(async doc => {          
           const message = doc.data() as Message;
           message.id = doc.id;
           message.threadCount = await this.threadService.countThreadMessages(message.id);
@@ -88,9 +87,6 @@ export class FirestoreService {
       });
     }
   }
-
-
-
 
   organizeMessagesByDate() {
     this.messagesByDate = {};
