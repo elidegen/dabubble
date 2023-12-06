@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogAddChannelComponent } from '../dialog-add-channel/dialog-add-channel.component';
-import { Firestore, collection, doc, onSnapshot, orderBy, query } from '@angular/fire/firestore';
+import { Firestore, collection, doc, getDocs, onSnapshot, orderBy, query } from '@angular/fire/firestore';
 import { Channel } from 'src/models/channel.class';
 import { ChatService } from '../chat.service';
 import { ThreadService } from '../thread.service';
@@ -152,10 +152,16 @@ export class WorkspaceComponent implements OnInit {
   }
 
   async deleteDirectMessageChat(chatId: any) {
-    const directColRef = doc(collection(this.firestore, 'direct messages'), chatId)
-    await deleteDoc(directColRef);
-
-  }
+    const directDocRef = doc(collection(this.firestore, 'direct messages'), chatId);
+    const directSubColRef = collection(this.firestore, `direct messages/${chatId}/messages`);
+    const messagesQuerySnapshot = await getDocs(directSubColRef);
+    messagesQuerySnapshot.forEach(async (doc) => {
+        await deleteDoc(doc.ref);
+    });
+    // Lösche das Hauptdokument
+    await deleteDoc(directDocRef);
+    this.chatservice.chatWindow = 'empty';
+}
 
   
 }

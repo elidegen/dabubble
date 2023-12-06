@@ -41,10 +41,6 @@ export class HomeComponent {
 
   }
 
-  // userSelected(event: Event) {
-  //   event.stopPropagation();
-  // }
-
 
   filterEverything(): void {
     this.isInputFocused = true;

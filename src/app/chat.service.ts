@@ -251,6 +251,7 @@ export class ChatService {
     });
   }
 
+
   getAllUsers() {
     const userCol = collection(this.firestore, 'users');
     this.unSubUsers = onSnapshot(userCol,
@@ -262,6 +263,7 @@ export class ChatService {
     );
   }
 
+  
   getChannelByMessage(message: any) {
     let channel = this.allChannels.find(channel => channel.id = message.channelID);
     this.openChat = channel;
