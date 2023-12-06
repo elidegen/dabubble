@@ -43,6 +43,14 @@ input[type="file"] {
    display: none;
 }
 
+.pdf {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px;
+}
+
+
 
 .ml-16 {
     margin-left: 16px;
@@ -140,9 +148,10 @@ a {
 
 a {
     cursor: pointer;
+    text-decoration: none;
 
     &:hover {
-        transform: scale(1.1);
+        font-weight: bold;
     }
 }
 

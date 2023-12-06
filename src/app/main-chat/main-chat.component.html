@@ -154,7 +154,7 @@
 
             <div class="message-row-container" [ngClass]="{'my-messages': message.creator == currentUser.name}"
               *ngFor="let message of organizedMessage.messages">
-
+            
               <div class="message-box">
                 <div class="creator-picture-container">
                   <img src="{{message.profilePic}}" alt="" />
@@ -165,13 +165,20 @@
                     <span class="name">{{ message.creator }}</span>
                     <span class="date">{{ message.time }}</span>
                   </div>
-
+                
                   <div [ngSwitch]="edit && message.creator == currentUser.name && editingMessage === message.id">
                     <div
                       [ngClass]="{'my-message-content': message.creator == currentUser.name, 'message-content': message.creator != currentUser.name}"
                       *ngSwitchCase="false">
-                      <span><span *ngFor="let messagemention of message.mentions"> {{message.mentions}}</span> {{message.content}}</span>
-
+                      <a (click)="openProfileDialog(messagemention['id'])"   *ngFor="let messagemention of message.mentions"> @{{messagemention['name']}}</a>
+                      <span> {{message.content}}</span>
+                    </div>
+                    <div *ngFor="let messagefile of message.files">
+                      <img style="max-height: 100px; margin-top: 10px;" *ngIf="this.authService.isImage(messagefile)" src="{{messagefile}}" alt="Angehängtes Bild">
+                      <div class="pdf" *ngIf="this.authService.isPDF(messagefile)">
+                        <img src="assets/img/icons/pdf.svg" alt="">
+                        <a href="{{messagefile}}" target="_blank">Show PDF</a>
+                      </div>
                     </div>
                    
                     <div *ngIf="message.creator == currentUser.name && editingMessage === message.id">
@@ -198,7 +205,7 @@
                         <span>{{ emoji.value }}</span>
                       </button>
                     </div>
-                    <span>{{message.file}}</span>
+                   
                     <div class="comment-section" (click)="openThread(message)">
                       <span *ngIf="message.threadCount == 0" class="comments color-purple2-text">Reply</span>
                       <span *ngIf="message.threadCount == 1" class="comments color-purple2-text"> 1 Comment</span>
@@ -287,8 +294,13 @@
                 <button [disabled]="!currentChat" (click)="this.userService.openUserContainerTextField()" mat-icon-button>
                   <img src="assets/img/icons/@.svg" alt="" />
                 </button>
+               
+                <ng-container *ngFor="let messagefile of this.message.files">
+                  <img *ngIf="this.authService.isImage(messagefile) && this.showUploadedFile" src="assets/img/icons/photo.svg" alt="Angehängtes Bild">
+                    <img *ngIf="this.authService.isPDF(messagefile) && this.showUploadedFile" src="assets/img/icons/pdf.svg" alt="">
+                </ng-container>
               </div>
-
+            
               <button class="send-button" mat-icon-button (click)="sendMessage()" [disabled]="!message.content">
                 <svg width="23" height="20" viewBox="0 0 23 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path

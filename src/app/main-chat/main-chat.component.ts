@@ -16,6 +16,7 @@ import { AuthService } from '../auth.service';
 import { EmojiService } from '../emoji.service';
 import { User } from 'src/models/user.class';
 import { FirestoreService } from '../firestore.service';
+import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-profile.component';
 
 @Component({
   selector: 'app-main-chat',
@@ -39,8 +40,9 @@ export class MainChatComponent implements OnInit {
   @ViewChild('emojiPicker') emojiPickerElementRef!: ElementRef;
   editingMessage: string | undefined;
   newThread = new Thread();
-  taggedName: any;
+  taggedNames = "";
   dataSrc: any;
+  showUploadedFile = false;
 
   // ------------------ search Input ---------------
   isInputFocused: boolean = false;
@@ -106,7 +108,8 @@ export class MainChatComponent implements OnInit {
 
   async sendMessage() {
     if (this.currentChat?.id && this.message.content?.trim() !== '') {
-
+      this.showUploadedFile = false;
+      this.message.content = this.message.content!.replace(this.taggedNames, '');
       this.getSentMessageTime();
       this.getSentMessageDate();
       this.message.creator = this.userService.currentUser.name;
@@ -115,12 +118,15 @@ export class MainChatComponent implements OnInit {
       this.message.channelID = this.currentChat.id;
       this.message.profilePic = this.userService.currentUser.picture,
         this.message.channel = this.currentChat.name;
+        this.message.channel = this.currentChat.name;
       this.message.messageSelected = false;
-      await this.firestoreService.sendMessageInChannel(this.currentChat, this.message)
-      this.message.content = '',
-        this.chatService.setViewedByZero(this.currentChat);
+      await this.firestoreService.sendMessageInChannel(this.currentChat, this.message);
+      this.chatService.setViewedByZero(this.currentChat);
       this.chatService.setViewedByMe(this.currentChat, this.currentUser as User);
       console.log("Nachricht mit der Datei", this.message);
+      this.taggedNames = "";
+      this.message = new Message();
+
     }
   }
 
@@ -251,10 +257,20 @@ export class MainChatComponent implements OnInit {
   }
 
   getUserNameString(user: any) {
-    this.taggedName = `@${user.name}`;
-    this.message.content += this.taggedName;
-    this.message.mentions.push(this.taggedName);
+    let taggedName: any;
+    taggedName = `@${user.name}`;
+    this.taggedNames +=  `@${user.name}`;
+    console.log(this.taggedNames);
+    this.message.content += taggedName!;
+    this.message.mentions.push(user);
     this.userService.openUserContainerTextfield.next(false);
+  }
+
+  openProfileDialog(id: any): void {
+    this.dialog.open(DialogViewProfileComponent, {
+      panelClass: 'dialog-container',
+      data: { userID: id },
+    });
   }
 
   @HostListener('document:click', ['$event'])
@@ -272,8 +288,13 @@ export class MainChatComponent implements OnInit {
       this.authService.uploadProfileImage(file);
     }
     setTimeout(() => {
-      this.message.file = this.authService.customPic;
+      this.message.files.push(this.authService.customPic);
       console.log(this.message);
-    }, 1500);
+    }, 1000);
+    this.showUploadedFile = true;
+
   }
+
+  
+
 }

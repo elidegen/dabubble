@@ -26,6 +26,8 @@ export class DirectMessageChatComponent implements OnInit {
   message: Message = new Message();
   allMessages: Message[] = [];
   interlocutor: User = new User();
+  taggedNames = "";
+  showUploadedFile = false;
   // ------------- for editing of message ----------------
   edit: boolean = false;
   editingMessage: string | undefined;
@@ -62,10 +64,15 @@ export class DirectMessageChatComponent implements OnInit {
   
 
   getUserNameString(user: any) {
-    const taggedName = `@${user.name}`;
-    this.message.content += taggedName;
+    let taggedName: any;
+    taggedName = `@${user.name}`;
+    this.taggedNames +=  `@${user.name}`;
+    console.log(this.taggedNames);
+    this.message.content += taggedName!;
+    this.message.mentions.push(user);
     this.userService.openUserContainerTextfield.next(false);
   }
+
 
   async loadMessages() {
     if (this.currentChat?.id) {
@@ -82,11 +89,25 @@ export class DirectMessageChatComponent implements OnInit {
     });
   }
 
- 
+  
+  onFileSelected(event: any): void {
+    console.log("Übergebene Datei:", event)
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      this.authService.uploadProfileImage(file);
+    }
+    setTimeout(() => {
+      this.message.files.push(this.authService.customPic);
+      console.log(this.message);
+    }, 1500);
+    this.showUploadedFile = true;
+  }
+
 
 
   async sendMessage() {
     if (this.currentChat?.id && this.message.content?.trim() !== '') {
+      this.message.content = this.message.content!.replace(this.taggedNames, '');
       this.getSentMessageTime();
       this.getSentMessageDate();
       this.message.creator = this.userService.currentUser.name;
@@ -96,7 +117,7 @@ export class DirectMessageChatComponent implements OnInit {
       this.message.profilePic = this.userService.currentUser.picture,
       this.message.channel = this.currentChat.name;
       await this.firestoreService.sendMessageInDirectMessage(this.currentChat.id, this.message)
-      this.message.content = '';
+      this.message = new Message();
     }
   }
 

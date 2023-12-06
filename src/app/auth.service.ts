@@ -227,6 +227,32 @@ export class AuthService {
   }
 
 
+  getFileType(fileUrl?: any): any | null {
+
+    if (fileUrl) {
+      const extension = fileUrl.split('.').pop()?.split('?')[0];
+      return extension || null;
+    }
+    return null; // Oder werfen Sie einen Fehler oder geben Sie einen Standardwert zurück
+  }
+
+  isImage(fileUrl: any): any {
+    const imageExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+    const extension = this.getFileType(fileUrl);
+    if (extension) {
+      return imageExtensions.includes(extension.toLowerCase()) || null;
+    }
+
+  }
+
+  isPDF(fileUrl: any): any {
+    const extension = this.getFileType(fileUrl);
+    if (extension) {
+      return extension.toLowerCase() === 'pdf';
+    }
+  }
+
+
 
 
 }
