@@ -111,6 +111,7 @@ export class WorkspaceComponent implements OnInit {
         this.personalDirectMessages.push(chat);
       }
     });
+    // this.chatservice.chatWindow = 'empty';
   }
 
   openDialog() {
@@ -121,7 +122,7 @@ export class WorkspaceComponent implements OnInit {
     if (this.currentChat != undefined)
       this.chatservice.setViewedByMe(this.currentChat, this.userService.currentUser);
     console.log(this.currentChat);
-    
+
     this.chatservice.openChat = channel;
     this.chatservice.chatWindow = 'channel';
     this.chatservice.setViewedByMe(this.currentChat, this.currentUser as User)
@@ -154,12 +155,12 @@ export class WorkspaceComponent implements OnInit {
     const directSubColRef = collection(this.firestore, `direct messages/${chatId}/messages`);
     const messagesQuerySnapshot = await getDocs(directSubColRef);
     messagesQuerySnapshot.forEach(async (doc) => {
-        await deleteDoc(doc.ref);
+      await deleteDoc(doc.ref);
     });
     // Lösche das Hauptdokument
     await deleteDoc(directDocRef);
     this.chatservice.chatWindow = 'empty';
-}
+  }
 
-  
+
 }
