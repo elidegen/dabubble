@@ -17,13 +17,13 @@ export class UserService {
   currentUser: User = new User;
   currentEmail: string = "";
   currentPassword: string = "";
-  signInSuccess = false;
   customPic: any = "";
   userIsAvailable: boolean = false;
   resetEmailFound: boolean = false;
   openUserContainerTextfield = new BehaviorSubject<boolean>(false);
   nameStringForTextfield: any;
   openUserContainerThreadTextfield= new BehaviorSubject<boolean>(false);
+ 
   unsubList;
 
 

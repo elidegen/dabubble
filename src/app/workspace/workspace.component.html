@@ -68,7 +68,7 @@
                 </div>
                 <h3>{{ chatservice.getOtherUser(directMessage.members).name }}</h3>
               </button>
-              <button class="delete-direct-button" mat-icon-button (click)="deleteDirectMessageChat(directMessage.id)">
+              <button   matTooltip="Delete chat" class="delete-direct-button" mat-icon-button (click)="deleteDirectMessageChat(directMessage.id)">
                 <img src="assets/img/icons/close.svg" alt="">
               </button>
             </div>

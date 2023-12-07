@@ -24,6 +24,8 @@ export class FirestoreService {
   allUsers: User[] = [];
   filteredUsers: User[] = [];
   searchInput: string = '';
+  showSpinner = false;
+  showThreadSpinner = false;
 
   // ----Thread----
 
@@ -228,7 +230,7 @@ export class FirestoreService {
   async setUsersToOffline() {
     let time = this.getLoginTime();
     this.allUsers.forEach(user => {
-      if (time - user.loginTime > 10000000) {
+      if (time - user.loginTime > 10000000 && user.online == true) {
         user.online = false;
         console.log("User wurde auf offline gesetzt",user);
         this.userService.updateUser('users', user);

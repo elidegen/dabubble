@@ -4,6 +4,7 @@ import { UserService } from '../user.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { User } from 'src/models/user.class';
+import { FirestoreService } from '../firestore.service';
 
 @Component({
   selector: 'app-login-screen',
@@ -20,15 +21,18 @@ export class LoginScreenComponent implements OnInit {
   newUser: User = new User;
   resetEmail: string = "";
   uploadFile: string = "";
-  userNotFound: boolean = false
+  userNotFound: any;
   resetEmailNotFound: boolean = false;
   userAlreadyInUse: boolean = false;
+ showUserCreatedSuccess = false;
+ showEmailSent = false;
+
 
   ngOnInit() {
     this.hideContentAfterAnimation();
   }
 
-  constructor(public userService: UserService, public router: Router, public authService: AuthService) { }
+  constructor(public userService: UserService, public router: Router, public authService: AuthService, public firestoreService: FirestoreService) { }
 
   getEmailForNewPassword = new FormGroup({
     emailForReset: new FormControl('', [Validators.required, Validators.email]),
@@ -132,16 +136,18 @@ export class LoginScreenComponent implements OnInit {
     this.userService.currentPassword = this.newPassword.value;
     console.log("User wird vorbereitet:", this.newUser);
     await this.authService.createUser();
+    this.firestoreService.showSpinner = true;
     setTimeout(() => {
       if (this.userService.userIsAvailable) {
         this.changeSwitchCase('avatar');
+        this.firestoreService.showSpinner = false;
       } else {
         this.userAlreadyInUse = true;
         setTimeout(() => {
           this.userAlreadyInUse = false;
         }, 3000);
       }
-    }, 3000);
+    }, 1500);
   }
 
   async uploadUser() {
@@ -149,13 +155,23 @@ export class LoginScreenComponent implements OnInit {
     this.newUser.online = true;
     this.userService.addUser(this.newUser as User);
     this.authService.signInUser(this.userService.currentEmail, this.userService.currentPassword);
+    this.showUserCreatedSuccess = true;
   }
 
   async loginUser() {
-    await this.authService.signInUser(this.email, this.password);
-    if (!this.userService.signInSuccess) {
-      this.userNotFound = true;
-      this.getErrorMessageNoUser();
+   await this.authService.signInUser(this.email, this.password);
+    if (this.authService.signInSuccess) {
+      this.authService.signInSuccess = true;
+      this.userNotFound = false;
+      setTimeout(() => {
+        this.authService.signInSuccess = false;
+        
+      }, 1000);
+    } else {
+     
+        this.authService.signInSuccess = false;
+        this.userNotFound = true;
+        this.getErrorMessageNoUser();
     }
   }
 
@@ -180,16 +196,22 @@ export class LoginScreenComponent implements OnInit {
 
   sendResetEmail() {
     this.authService.sendResetEmail(this.resetEmail);
+    this.showEmailSent = true;
+    setTimeout(() => {
+      this.showEmailSent = false;
+    }, 1000);
   }
 
   onFileSelected(event: any): void {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
       this.authService.uploadProfileImage(file);
+      this.firestoreService.showSpinner = true;
     }
     setTimeout(() => {
-      this.picSrc = this.userService.customPic;
-    }, 2000);
+      this.picSrc = this.authService.customPic;
+      this.firestoreService.showSpinner = false;
+    }, 2500);
   }
 
   checkIfUserExists() {
@@ -204,6 +226,11 @@ export class LoginScreenComponent implements OnInit {
   loginGuest() {
     this.authService.signOutUser();
     this.authService.signInGuest();
-    this.router.navigate(['home']);
+    this.authService.signInSuccess = true;
+    setTimeout(() => {
+      this.authService.signInSuccess = false;
+      this.router.navigate(['home']);
+    }, 1000);
+  
   }
 }

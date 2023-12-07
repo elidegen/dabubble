@@ -55,7 +55,7 @@
     <div class="profile-container">
       <h1>{{this.userService.currentUser.name}}</h1>
       <div class="profile-picture">
-        <img src="{{currentUser.picture}}" alt="" />
+        <img src="{{this.userService.currentUser.picture}}" alt="" />
         <div class="online-status"></div>
       </div>
       <button mat-icon-button [matMenuTriggerFor]="menu">

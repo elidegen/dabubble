@@ -139,18 +139,51 @@ form {
 mat-error {
     position: absolute;
     bottom: -25px;
-    /* Positionieren Sie die Fehlermeldung unter dem Input-Feld */
     left: 0;
     width: 100%;
-    /* Sollte die Breite des Input-Feldes haben */
     font-size: 0.8em;
-    /* Passen Sie die Größe an Ihre Fehlermeldung an */
     color: red;
-    /* Fehlermeldung Farbe */
     visibility: visible;
-    /* Jetzt sichtbar */
     padding-top: 10px;
 }
+
+.account-popup {
+    z-index: 10;
+    position: absolute;
+    text-align: center;
+    display: flex;
+    opacity: 1;
+    align-items: center;
+    justify-content: center;
+    top: 50%;
+    color: white;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    border-radius: 30px 30px 0px 30px;
+    height: 100px;
+    width: 300px;
+    font-size: 30px;
+    background-color: #444DF2;
+    box-shadow: 0px 6px 10px 0px #00000033;
+    animation: popupAnimation 2s ease;
+
+
+}
+
+
+@keyframes popupAnimation {
+    from {
+
+        transform: translate(-30%, -30%);
+   
+    }
+
+    to {
+        transform: translate(-50%, -50%);
+    
+    }
+}
+
 
 .grey-span-resetpw {
     font-size: 20px;
@@ -176,6 +209,7 @@ mat-error {
     color: var(--textGray);
     margin-top: 20px;
     position: relative;
+    border: 1px solid transparent;
 
     img {
         margin-left: 20px;
@@ -285,10 +319,10 @@ input {
 }
 
 .transform {
-    transform: scale(1.0);
+    
 
     &:hover {
-        transform: scale(1.1);
+        font-weight: bold;
     }
 }
 
@@ -335,6 +369,7 @@ input[type="email"] {
 .userPic {
     width: 150px;
     height: 150px;
+    border-radius: 50%;
 }
 
 .picture-container {

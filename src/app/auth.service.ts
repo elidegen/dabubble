@@ -18,12 +18,13 @@ export class AuthService {
   customPic: string = "";
   newGuest: User = new User;
   uploadFile: any;
+  signInSuccess: any;
 
 
   ngOnInit() { }
 
   constructor(public router: Router, public userService: UserService) {
-    this.newGuest.name = 'guest';
+    this.newGuest.name = 'Guest';
     this.newGuest.picture = 'assets/img/avatars/profile.svg';
     this.newGuest.online = true;
   }
@@ -56,16 +57,19 @@ export class AuthService {
       if (activeUserIndex !== -1) {
         this.userService.users[activeUserIndex].online = true;
         this.userService.users[activeUserIndex].loginTime = this.getLoginTime();
-        this.userService.signInSuccess = true;
+        this.signInSuccess = true;
         this.userService.updateUser('users', this.userService.users[activeUserIndex]);
         console.log("Login Time von User", this.userService.users[activeUserIndex]);
         this.userService.currentUser = this.userService.users[activeUserIndex];
         this.userService.setCurrentUserToLocalStorage();
-        // console.log("Current User:", this.userService.currentUser);
-        await this.router.navigate(['home']);
+        setTimeout(() => {
+           this.router.navigate(['home']);
+           this.signInSuccess = false;
+        }, 1500);
+     
       }
     } catch (error) {
-      this.userService.signInSuccess = false;
+      this.signInSuccess = false;
       // console.log("Anmeldung Fehlgeschlagen");
     }
   }

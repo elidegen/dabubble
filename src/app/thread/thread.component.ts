@@ -215,10 +215,12 @@ export class ThreadComponent implements OnInit {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
       this.authService.uploadProfileImage(file);
+      this.firestoreService.showSpinner = true;
     }
     setTimeout(() => {
       this.message.files.push(this.authService.customPic);
       console.log(this.message);
+      this.firestoreService.showSpinner = false;
     }, 1500);
     this.showUploadedFile = true;
   }
