@@ -101,13 +101,22 @@ import { PrivacyComponent } from './privacy/privacy.component';
     //  "authDomain": "dabubble-c4b96.firebaseapp.com", "messagingSenderId": "390532295885" })),
     // provideFirestore(() => getFirestore()),
   
+    // provideFirebaseApp(() => initializeApp({ 
+    //   "projectId": "dabubble-dec6e", 
+    // "appId": "1:260526664736:web:1646199aec6fed465aa045", 
+    // "storageBucket": "dabubble-dec6e.appspot.com", 
+    // "apiKey": "AIzaSyA9gpqSDb0Sd0ZgwkB81Q6EPZ-Om-nPpbQ",
+    //  "authDomain": "dabubble-dec6e",
+    //   "messagingSenderId": "260526664736" })),
+    // provideFirestore(() => getFirestore()),
+  
     provideFirebaseApp(() => initializeApp({ 
-      "projectId": "dabubble-dec6e", 
-    "appId": "1:260526664736:web:1646199aec6fed465aa045", 
-    "storageBucket": "dabubble-dec6e.appspot.com", 
-    "apiKey": "AIzaSyA9gpqSDb0Sd0ZgwkB81Q6EPZ-Om-nPpbQ",
-     "authDomain": "dabubble-dec6e",
-      "messagingSenderId": "260526664736" })),
+      "projectId": "dabubble-81b67", 
+    "appId": "1:983219363350:web:25eacf514195e328531f37", 
+    "storageBucket": "dabubble-81b67.appspot.com", 
+    "apiKey": "AIzaSyDgZc98sYnuUz2Pb-WALAAI2W8_QSwTOUM",
+     "authDomain": "dabubble-81b67.firebaseapp.com",
+      "messagingSenderId": "983219363350" })),
     provideFirestore(() => getFirestore()),
 
 
