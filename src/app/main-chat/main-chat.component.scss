@@ -137,9 +137,9 @@ mat-card {
 .main-chat-container {
     overflow-y: scroll;
     height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
+    // display: flex;
+    // flex-direction: column;
+    // justify-content: flex-end;
 
 
     &::-webkit-scrollbar {

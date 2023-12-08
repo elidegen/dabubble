@@ -60,8 +60,12 @@ export class MainChatComponent implements OnInit {
     this.chatService.openChat$.subscribe((openChat) => {
       if (openChat) {
         const newChat = openChat as Channel;
+        console.log('main channel', newChat);
+        
         if (!this.currentChat || this.currentChat.id !== newChat.id) {
           this.currentChat = newChat;
+          console.log('main currentChat', this.currentChat);
+          
           this.threadService.currentChat = newChat;
           if (this.firestoreService.unSubChannelMessages) {
             this.firestoreService.unSubChannelMessages();

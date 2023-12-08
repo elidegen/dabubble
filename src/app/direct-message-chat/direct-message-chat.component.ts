@@ -43,8 +43,12 @@ export class DirectMessageChatComponent implements OnInit {
     this.chatService.openDirectMessage$.subscribe((openDirectMessage) => {
       if (openDirectMessage) {
         const newChat = openDirectMessage as Chat;
+        console.log('opendirect', newChat);
+        
         if (!this.currentChat || this.currentChat.id !== newChat.id) {
           this.currentChat = newChat;
+          console.log('currentDirect');
+          
           if (this.firestoreService.unSubDirectMessages) {
             this.firestoreService.unSubDirectMessages();
           }

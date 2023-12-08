@@ -34,7 +34,6 @@ export class ChatService implements OnInit {
     this.getallChannels();
     this.getAllUsers();
     this.loadAllDirectMessages();
-    
   }
 
   ngOnInit(): void {
@@ -193,17 +192,16 @@ export class ChatService implements OnInit {
     this.yourChannels = [];
     this.allChannels.forEach(channel => {
       if (channel.members.some((member: { id: string; }) => member.id === this.userService.currentUser.id)) {
-        // console.log(channel);
         this.yourChannels.push(channel);
       }
     });
-
-    
     this.getAllChannelMessages();
   }
 
+
   getAllChannelMessages() {
-   
+    console.log('chatservice before', this.allMessagesOfChannel);
+    
     this.yourChannels.forEach(channel => {
       const messageCol = collection(this.firestore, `channels/${channel.id}/messages`);
       this.unSubChannelMessages = onSnapshot(messageCol,
@@ -213,8 +211,12 @@ export class ChatService implements OnInit {
           });
         }
       );
+      console.log('chatsservice after', this.allMessagesOfChannel);
+      
     });
   }
+
+
 
 
   loadAllDirectMessages() {
@@ -255,8 +257,6 @@ export class ChatService implements OnInit {
     });
   }
 
-  
-
 
   getAllUsers() {
     const userCol = collection(this.firestore, 'users');
@@ -271,20 +271,14 @@ export class ChatService implements OnInit {
 
 
   getChannelByMessage(message: any) {
-    let channel = this.allChannels.find(channel => channel.id = message.channelID);
+    let channel = this.allChannels.find(channel => channel.id === message.channelID);
     this.openChat = channel;
     this.chatWindow = 'channel';
   }
 
 
   getDirectMessageByMessage(message: any) {
-    console.log('all', this.allDirectMessages);
-    
-    let direct = this.allDirectMessages.find(dm => dm.id = message.channelID);
-    console.log('direct', direct);
-    console.log('message', message);
-    
-    
+    let direct = this.allLoadedDirectMessages.find(dm => dm.id === message.channelID);
     this.openDirectMessage = direct;
     this.chatWindow = 'direct';
   }
@@ -306,7 +300,6 @@ export class ChatService implements OnInit {
 
   setViewedByMe(channel: Channel, user: User) {
     console.log('viewedbyme before edit', channel);
-
     if (channel.viewedBy?.length < 1 || channel.viewedBy?.some((userid: string) => userid != user.id)) {
       console.log('viewedbyme positive', channel);
       channel.viewedBy.push(user.id);

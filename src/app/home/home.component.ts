@@ -65,6 +65,8 @@ export class HomeComponent {
 
 
   filterEverything(): void {
+    console.log('personal channel M');
+    
     this.isInputFocused = true;
     if (this.searchInput !== this.lastSearchInput) {
       this.filterUsers();
@@ -87,22 +89,23 @@ export class HomeComponent {
   }
 
   filterChannels() {
+    console.log('filterChannels all', this.chatService.allMessagesOfChannel);
+    console.log('filtered messages in home before', this.filteredChannelMessages);
+    
     this.filteredChannelMessages = [];
     this.chatService.allMessagesOfChannel.forEach(message => {
       if (message.content?.toLowerCase().includes(this.searchInput.toLowerCase())) {
         this.filteredChannelMessages.push(message);
       }
     });
-  
     console.log('channel', this.filteredChannelMessages);
   }
 
+
+
+
   filterDirectMessages() {
-    console.log('allDmsFromChatService in home', this.chatService.allMessagesOfDM);
-    console.log('allFiltered before', this.filteredDirectMessages);
-  
     this.filteredDirectMessages = [];
-    
     if (this.searchInput.trim() !== '') {
       this.chatService.allMessagesOfDM.forEach(message => {
         if (message.content?.toLowerCase().includes(this.searchInput.toLowerCase())) {
@@ -110,20 +113,16 @@ export class HomeComponent {
         }
       });
     }
-  
-    console.log('allFiltered after', this.filteredDirectMessages);
   }
 
   
   selectUser(user: any) {
     this.chatService.createDirectMessage(user);
     this.chatService.chatWindow = 'direct';
-    console.log("User wurde in der Suchfunktion ausgewählt für einen direct Chat", user);
     this.search.nativeElement.value = '';
   }
 
   selectChannel(message: any) {
-    console.log("Bei der Suchfunktion ausgewählte Nachricht", message)
     this.chatService.getChannelByMessage(message);
   }
 
