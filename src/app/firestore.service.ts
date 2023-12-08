@@ -116,7 +116,6 @@ export class FirestoreService {
     await addDoc(subColRef, message.toJSON())
       .catch((err) => {
         console.log('Error', err);
-        console.log("Neue Nachricht mit Datei",message.toJSON());
       })
       .then((docRef: void | DocumentReference<DocumentData, DocumentData>) => {
         if (docRef && docRef instanceof DocumentReference) {

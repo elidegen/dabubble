@@ -1,5 +1,5 @@
 import { Injectable, OnInit, inject } from '@angular/core';
-import { Firestore, getDoc, onSnapshot, orderBy, query, setDoc, updateDoc } from '@angular/fire/firestore';
+import { Firestore, getDoc, getDocs, onSnapshot, orderBy, query, setDoc, updateDoc } from '@angular/fire/firestore';
 import { DocumentData, DocumentReference, collection, doc } from 'firebase/firestore';
 import { Channel } from 'src/models/channel.class';
 import { Chat } from 'src/models/chat.class';
@@ -42,6 +42,8 @@ export class ChatService implements OnInit {
 
   ngOnDestroy() {
     this.unSubDirectMessages();
+    this.unSubChannelMessages();
+    this.unSubChannels();
   }
 
   // -------------- channel -----------------------
@@ -195,25 +197,26 @@ export class ChatService implements OnInit {
         this.yourChannels.push(channel);
       }
     });
-    this.getAllChannelMessages();
   }
 
 
-  getAllChannelMessages() {
-    console.log('chatservice before', this.allMessagesOfChannel);
+  async getAllChannelMessages() {
+    this.allMessagesOfChannel = [];
+    for (const channel of this.yourChannels) {
+      const messageId = channel.id;
+      const messageCol = collection(this.firestore, `channels/${messageId}/messages`);
+      try {
+        const querySnapshot = await getDocs(messageCol);
+     
+        querySnapshot.forEach((message) => {
+          this.allMessagesOfChannel.push(message.data());
+       });
+      } catch (error) {
+        console.error('Error fetching messages:', error);
+      }
+    }
+    console.log('getAllChannelMessages - After adding messages:', this.allMessagesOfChannel);
     
-    this.yourChannels.forEach(channel => {
-      const messageCol = collection(this.firestore, `channels/${channel.id}/messages`);
-      this.unSubChannelMessages = onSnapshot(messageCol,
-        (list) => {
-          list.forEach(message => {
-            this.allMessagesOfChannel.push(message.data());
-          });
-        }
-      );
-      console.log('chatsservice after', this.allMessagesOfChannel);
-      
-    });
   }
 
 
@@ -240,21 +243,27 @@ export class ChatService implements OnInit {
         this.yourDirectMessages.push(dm);
       }
     });
-    this.getDMMessages();
+    console.log('yourDirects', this.yourDirectMessages);
+    
   }
 
   
-  getDMMessages() {
-    this.yourDirectMessages.forEach(dm => {
-      const messageCol = collection(this.firestore, `direct messages/${dm.id}/messages`);
-      this.unSubDMMessages = onSnapshot(messageCol,
-        (list) => {
-          list.forEach(message => {
-            this.allMessagesOfDM.push(message.data());
-          });
-        }
-      );
-    });
+  async getDMMessages() {
+    console.log('yourDirects2', this.yourDirectMessages);
+    this.allMessagesOfDM = [];
+    for (const dm of this.yourDirectMessages) {
+      const dmId = dm.id;
+      const messageCol = collection(this.firestore, `direct messages/${dmId}/messages`);
+      try {
+        const querySnapshot = await getDocs(messageCol);
+      
+        querySnapshot.forEach((message) => {
+          this.allMessagesOfDM.push(message.data());
+        });
+      } catch (error) {
+        console.error('Error fetching direct messages:', error);
+      }
+    }
   }
 
 

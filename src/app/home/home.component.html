@@ -7,7 +7,7 @@
     <div class="add-members-container">
       <input #search class="w100 input-members search" type="text" placeholder="Search" [(ngModel)]="searchInput" (input)="filterEverything()" (click)="this.isInputFocused = true;">
       <div class="user-search-container" *ngIf="isInputFocused">
-        <div *ngIf="filteredUsers.length > 0" class="search-results">
+        <div *ngIf="searchInput.trim() !== ''" class="search-results">
           <h1>Users:</h1>
           <button class="user-container" *ngFor="let user of filteredUsers" (click)="selectUser(user)">
             <div (click)="selectUser(user)" class="profile-container">
@@ -48,7 +48,7 @@
             </div>
           </div>
         </div>
-        <span *ngIf="filteredUsers.length < 1">No matching results</span>
+        <span *ngIf="searchInput.trim() === ''">No matching results</span>
       </div>
     </div>
 

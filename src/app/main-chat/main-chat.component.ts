@@ -112,6 +112,7 @@ export class MainChatComponent implements OnInit {
 
 
   async sendMessage() {
+    console.log('Before sendMessage - allMessagesOfChannel:', this.chatService.allMessagesOfChannel);
     if (this.currentChat?.id && this.message.content?.trim() !== '') {
       this.showUploadedFile = false;
       this.message.content = this.message.content!.replace(this.taggedNames, '');
@@ -129,10 +130,12 @@ export class MainChatComponent implements OnInit {
       this.chatService.setViewedByZero(this.currentChat);
       this.chatService.setViewedByMe(this.currentChat, this.currentUser as User);
       console.log("Nachricht mit der Datei", this.message);
+      console.log('After sendMessage - allMessagesOfChannel:', this.chatService.allMessagesOfChannel);
       this.taggedNames = "";
       this.message = new Message();
 
     }
+   
   }
 
   getSentMessageDate() {
