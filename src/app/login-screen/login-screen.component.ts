@@ -9,7 +9,7 @@ import { FirestoreService } from '../firestore.service';
 @Component({
   selector: 'app-login-screen',
   templateUrl: './login-screen.component.html',
-  styleUrls: ['./login-screen.component.scss']
+  styleUrls: ['./login-screen.component.scss','./login-screen-mediaquery.scss']
 })
 export class LoginScreenComponent implements OnInit {
   animationIsFinished = false;
@@ -169,6 +169,9 @@ export class LoginScreenComponent implements OnInit {
     this.userService.addUser(this.newUser as User);
     this.authService.signInUser(this.userService.currentEmail, this.userService.currentPassword);
     this.showUserCreatedSuccess = true;
+    setTimeout(() => {
+      this.showUserCreatedSuccess = false;
+    }, 1000);
   }
 
  /**
