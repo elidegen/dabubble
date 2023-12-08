@@ -143,6 +143,7 @@ export class LoginScreenComponent implements OnInit {
         this.firestoreService.showSpinner = false;
       } else {
         this.userAlreadyInUse = true;
+        this.firestoreService.showSpinner = false;
         setTimeout(() => {
           this.userAlreadyInUse = false;
         }, 3000);

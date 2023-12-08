@@ -86,15 +86,13 @@ export class AuthService {
       .then((result) => {
         const user = result.user;
         console.log('Google Benutzer angemeldet:', user);
-        this.userService.currentUser = {
-          name: user.displayName || "",
-          email: user.email || "",
-          password: "",
-          id: user.uid,
-          picture: user.photoURL || "",
-          online: true,
-          loginTime: this.getLoginTime(),
-        } as User;
+        this.userService.currentUser.name = user.displayName || "",
+        this.userService.currentUser.email = user.email || "",
+        this.userService.currentUser.password = "",
+        this.userService.currentUser.id = user.uid,
+        this.userService.currentUser.picture = user.photoURL || "",
+        this.userService.currentUser.online = true,
+        this.userService.currentUser.loginTime = this.getLoginTime(),
         this.addGoogleUser();
       })
       .catch((error) => {
@@ -158,6 +156,7 @@ export class AuthService {
     if (!this.userService.userExists(this.userService.currentUser.email || '')) {
       await this.userService.addUser(this.userService.currentUser);
     }
+    console.log("googleUser", this.userService.currentUser);
     await this.userService.setCurrentUserToLocalStorage();
     await this.userService.getCurrentUserFromLocalStorage();
     await this.router.navigate(['home']);

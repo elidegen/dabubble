@@ -1,7 +1,7 @@
 
 
 <mat-card *ngIf="userService.currentUser.name != 'Guest'" [ngSwitch]="editState">
-    <mat-spinner *ngIf="firestoreService.showSpinner == true" class="mat-spinner-profile"></mat-spinner>
+    <mat-spinner *ngIf="firestoreService.showSpinner == true" class="mat-spinner"></mat-spinner>
     <mat-card-content *ngSwitchCase="false">
         <div class="header">
             <h1>Profile</h1>

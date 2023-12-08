@@ -6,13 +6,23 @@
     src: url('assets/fonts/Nunito-Regular.ttf');
 }
 
+
+
 html,
 body {
     height: 100%;
+    display: flex;
+    justify-content: center;
+    max-width: 1920px;
+   
 }
 
 body {
     margin: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    max-width: 1920px;
     background-color: var(--primary);
     font-family: 'Nunito', 'Roboto', sans-serif !important;
 }
@@ -49,28 +59,6 @@ input[type="file"] {
     gap: 10px;
     margin: 10px;
 }
-
-
-::ng-deep mat-spinner {
-    z-index: 20;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    stroke: white!important;
-   border: 10px solid red;
-    color: accent;
-    background-color: white!important;
-    --mdc-circular-progress-active-indicator-color: red;
-}
-
-
-
-
-
-
-
-
 
 
 .ml-16 {
