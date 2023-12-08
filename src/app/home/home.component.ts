@@ -25,6 +25,7 @@ export class HomeComponent {
     picture: "assets/img/avatars/profile.svg",
     online: false,
   }
+  
   @ViewChild('search') search!: ElementRef;
   searchInput: string = '';
   lastSearchInput: string = '';

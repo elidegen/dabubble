@@ -35,7 +35,7 @@ h1 {
     margin: 0;
 }
 .home-container {
-    padding: 16px;
+    padding: 16px 0 16px 0;
     height: calc(100vh - 32px);
 }
 
@@ -275,3 +275,4 @@ mat-drawer {
 b {
     color: var(--purple3);
 }
+

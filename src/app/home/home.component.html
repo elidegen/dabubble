@@ -71,15 +71,12 @@
 
   <main>
     <mat-drawer-container autosize>
-      <mat-drawer #workspace mode="side" [opened]="true">
+      <mat-drawer style="padding-left: 16px;" #workspace mode="side" [opened]="true">
         <app-workspace></app-workspace>
       </mat-drawer>
       <div class="main-chat-container">
         <app-main-chat></app-main-chat>
       </div>
-      <mat-drawer #thread mode="side" position="end">
-        <app-thread></app-thread>
-      </mat-drawer>
     </mat-drawer-container>
 
 

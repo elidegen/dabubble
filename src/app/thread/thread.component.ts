@@ -18,7 +18,7 @@ import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-p
 @Component({
   selector: 'app-thread',
   templateUrl: './thread.component.html',
-  styleUrls: ['./thread.component.scss']
+  styleUrls: ['./thread.component.scss', './thread.component.mediaquery.scss']
 })
 
 export class ThreadComponent implements OnInit {

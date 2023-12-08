@@ -13,7 +13,7 @@ import { deleteDoc } from 'firebase/firestore';
 @Component({
   selector: 'app-workspace',
   templateUrl: './workspace.component.html',
-  styleUrls: ['./workspace.component.scss']
+  styleUrls: ['./workspace.component.scss', './workspace.component.mediaquery.scss']
 })
 export class WorkspaceComponent implements OnInit {
   firestore: Firestore = inject(Firestore);
