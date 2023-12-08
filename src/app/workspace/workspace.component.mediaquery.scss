@@ -50,7 +50,7 @@
 }
 
 
-@media (max-width: 1280px) {
+@media (max-width: 1279px) {
     mat-card {
         width: 290px;
     }
@@ -230,6 +230,39 @@
         height: 9px;
         width: 9px;
     }
+}
+
+
+@media (max-height: 990px ) {
+    .channel-container {
+
+        max-height: 150px;
+    }
+    .direct-message-container {
+        max-height: 185px;
+    }
+
+    .channel-section {
+        gap: 30px;
+        max-height: 300px;
+    }
+
+}
+
+@media (max-height: 810px ) {
+    .channel-container {
+
+        max-height: 105px;
+    }
+    .direct-message-container {
+        max-height: 133px;
+    }
+
+    .channel-section {
+        gap: 30px;
+        max-height: 300px;
+    }
+
 }
 
 
