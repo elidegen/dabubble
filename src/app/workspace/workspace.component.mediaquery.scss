@@ -233,9 +233,91 @@
 }
 
 
+@media (max-width: 799px ) {
+    mat-card {
+        width: 100%;
+        height: calc(100vh - 182px);
+        align-items: center;
+    }
+    mat-card-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+    mat-expansion-panel-header {
+        mat-panel-title {
+            font-size: 23px;
+        }
+        svg {
+            height: 24px;
+            width: 24px;
+        }
+    }
+    .mobile-container {
+       display: flex;
+       flex-direction: column;
+       align-items: center;
+       width: 100%;
+    }
+    mat-accordion {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    mat-expansion-panel {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .channel-btn {
+        span {
+            font-size: 18px;
+        }
+    }
+    h3 {
+        font-size: 20px !important;
+    }
+    .profile-message-container {
+        img {
+            height: 50px;
+            width: 50px;
+        }
+    }
+    .online-status {
+        bottom: 1px;
+        right: 1px;
+        height: 12px;
+        width: 12px;
+    }
+    .add_channel_button-container {
+        font-size: 18px;
+        svg {
+            height: 20px;
+            width: 20px;
+            margin-bottom: 2px;
+        }
+    }
+    .edit-mobile {
+        position: absolute;
+        bottom: 30px;
+        right: 30px;
+    }
+    .channel-section {
+        margin-left: 90px;
+    }
+    .direct-message-container {
+        margin-left: 93px;
+    }
+    .mr-mobile {
+        margin-right: 80px;
+    }
+   
+}
+
+
 @media (max-height: 990px ) {
     .channel-container {
-
         max-height: 150px;
     }
     .direct-message-container {
@@ -246,8 +328,12 @@
         gap: 30px;
         max-height: 300px;
     }
-
 }
+
+
+
+
+
 
 @media (max-height: 810px ) {
     .channel-container {

@@ -33,15 +33,20 @@ export class HomeComponent {
   filteredUsers: User[] = [];
   filteredChannelMessages: Message[] = [];
   filteredDirectMessages: Message[] = [];
+
   constructor(public dialog: MatDialog, public auth: AuthService, public router: Router, public userService: UserService, public chatService: ChatService, public firestoreService: FirestoreService) {
     this.userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
     this.firestoreService.setUsersToOffline();
+    this.checkScreenWidth();
+    console.log('test', this.chatService.isMobile);
+    
   }
 
 
   ngOnInit() {
-
+ 
+    
   }
 
   openProfileDialog(id: any): void {
@@ -129,7 +134,14 @@ export class HomeComponent {
     this.chatService.getDirectMessageByMessage(message);
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any): void {
+    this.checkScreenWidth();
+  }
 
+  checkScreenWidth(): void {
+    this.chatService.isMobile = window.innerWidth < 800;
+  }
 
 
   

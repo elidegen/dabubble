@@ -44,32 +44,32 @@ export class WorkspaceComponent implements OnInit {
     this.loadDirectMessages();
     this.loadUsers();
 
-    this.chatservice.openChat$.subscribe((openChat) => {
-      if (openChat) {
-        const newChat = openChat as Channel;
-        if (!this.currentChat || this.currentChat.id !== newChat.id) {
-          this.currentChat = newChat;
-          this.threadService.currentChat = newChat;
-          if (this.unSubMessages) {
-            this.unSubMessages();
-          }
-        }
-      } else {
-        this.currentChat = undefined;
-      }
-    });
+    // this.chatservice.openChat$.subscribe((openChat) => {
+    //   if (openChat) {
+    //     const newChat = openChat as Channel;
+    //     if (!this.currentChat || this.currentChat.id !== newChat.id) {
+    //       this.currentChat = newChat;
+    //       this.threadService.currentChat = newChat;
+    //       if (this.unSubMessages) {
+    //         this.unSubMessages();
+    //       }
+    //     }
+    //   } else {
+    //     this.currentChat = undefined;
+    //   }
+    // });
     // Startet das Intervall, um die Funktion alle 1000 Millisekunden (1 Sekunde) aufzurufen
-    this.unSubInterval = interval(1000).subscribe(() => {
-      if (this.currentChat != undefined)
-        this.setReadDM();
-      this.yourChannels.forEach(channel => {
-        this.updateUnreadMsg(channel);
-      });
-    });
+    // this.unSubInterval = interval(1000).subscribe(() => {
+    //   if (this.currentChat != undefined)
+    //     this.setReadDM();
+    //   this.yourChannels.forEach(channel => {
+    //     this.updateUnreadMsg(channel);
+    //   });
+    // });
   }
 
   ngOnDestroy(): void {
-    this.unSubInterval;
+    // this.unSubInterval;
     this.unsubscribeChannels;
     this.unsubscribeChats;
     this.unsubscribeUsers;
@@ -89,6 +89,7 @@ export class WorkspaceComponent implements OnInit {
           return channel;
         });
         this.getPersonalChannels();
+        
       }
     );
   }

@@ -1,6 +1,6 @@
 <mat-card>
   <mat-card-content>
-    <div class="headline">
+    <div *ngIf="!chatservice.isMobile" class="headline">
       <img class="workspace-logo" src="assets/img/icons/workspace-logo.svg" alt="workspace-logo" />
       <h2>Code learning</h2>
       <button mat-icon-button (click)="startNewMessage()">
@@ -8,9 +8,9 @@
       </button>
     </div>
 
-    <div>
+    <div class="mobile-container">
       <mat-accordion>
-        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false"
+        <mat-expansion-panel class="mr-mobile" (opened)="panelOpenState = true" (closed)="panelOpenState = false"
           [togglePosition]="'before'">
           <mat-expansion-panel-header>
             <mat-panel-title>
@@ -24,7 +24,7 @@
               <div class="channel-button-container" *ngFor="let channel of this.yourChannels;">
                 <button (click)="renderChannel(channel)" mat-button>
                   <div class="channel-btn">
-                    <span># {{channel.name}}</span>
+                    <span><b>#</b> {{channel.name}}</span>
                     <div class="unread-msg" *ngIf="unreadMsg(channel)"></div>
                   </div>
                 </button>
@@ -44,7 +44,7 @@
       </mat-accordion>
     </div>
 
-    <div>
+    <div class="mobile-container">
       <mat-accordion>
         <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false"
           [togglePosition]="'before'">
@@ -80,5 +80,9 @@
         </mat-expansion-panel>
       </mat-accordion>
     </div>
+   
   </mat-card-content>
+  <button class="edit-mobile" *ngIf="chatservice.isMobile" mat-fab color="primary">
+    <mat-icon>edit_square</mat-icon>
+  </button>
 </mat-card>

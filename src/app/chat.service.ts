@@ -1,4 +1,4 @@
-import { Injectable, OnInit, inject } from '@angular/core';
+import { HostListener, Injectable, OnInit, inject } from '@angular/core';
 import { Firestore, getDoc, getDocs, onSnapshot, orderBy, query, setDoc } from '@angular/fire/firestore';
 import { DocumentData, DocumentReference, collection, doc } from 'firebase/firestore';
 import { Channel } from 'src/models/channel.class';
@@ -29,12 +29,14 @@ export class ChatService {
   unSubDirectMessages: any;
   allUsers: any[] = [];
   allMessagesOfDM: any[] = [];
+    isMobile: boolean = false;
 
   constructor(public userService: UserService) {
     this.getallChannels();
     this.getAllUsers();
     this.loadAllDirectMessages();
   }
+
 
   ngOnDestroy() {
     this.unSubDirectMessages();
@@ -263,10 +265,14 @@ export class ChatService {
     this.openDirectMessage = direct;
     this.chatWindow = 'direct';
   }
-
+  
   getOtherUser(members: any[]) {
     let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
     let interlocutor = this.allUsers.find(user => user.id == otherUser.id);
     return interlocutor as User;
   }
+
+ 
+
+ 
 }
