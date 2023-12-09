@@ -34,7 +34,6 @@ export class ChatService {
     this.getallChannels();
     this.getAllUsers();
     this.loadAllDirectMessages();
-    
   }
 
   ngOnDestroy() {
@@ -186,7 +185,6 @@ export class ChatService {
     });
   }
 
-
   async getAllChannelMessages() {
     this.allMessagesOfChannel = [];
     for (const channel of this.yourChannels) {
@@ -194,18 +192,15 @@ export class ChatService {
       const messageCol = collection(this.firestore, `channels/${messageId}/messages`);
       try {
         const querySnapshot = await getDocs(messageCol);
-     
+
         querySnapshot.forEach((message) => {
           this.allMessagesOfChannel.push(message.data());
-       });
+        });
       } catch (error) {
         console.error('Error fetching messages:', error);
       }
     }
-    console.log('getAllChannelMessages - After adding messages:', this.allMessagesOfChannel);
-    
   }
-
 
   loadAllDirectMessages() {
     this.unSubDirectMessages = onSnapshot(
@@ -228,11 +223,10 @@ export class ChatService {
       }
     });
     console.log(this.yourDirectMessages);
-    
+
     this.getDMMessages();
   }
 
-  
   getDMMessages() {
     this.yourDirectMessages.forEach(dm => {
       const messageCol = collection(this.firestore, `direct messages/${dm.id}/messages`);
@@ -257,7 +251,6 @@ export class ChatService {
     );
   }
 
-  
   getChannelByMessage(message: any) {
     let channel = this.allChannels.find(channel => channel.id === message.channelID);
     this.openChat = channel;
@@ -270,51 +263,9 @@ export class ChatService {
     this.chatWindow = 'direct';
   }
 
- 
-
-
   getOtherUser(members: any[]) {
     let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
     let interlocutor = this.allUsers.find(user => user.id == otherUser.id);
     return interlocutor as User;
-  }
-
-
-  setViewedByZero(channel: Channel) {
-    channel.viewedBy = [];
-    this.updateViewedBy(channel);
-  }
-
-
-  setViewedByMe(channel: Channel, user: User) {
-    console.log('viewedbyme before edit', channel);
-
-    if (channel.viewedBy?.length < 1 || channel.viewedBy?.some((userid: string) => userid != user.id)) {
-      console.log('viewedbyme positive', channel);
-      channel.viewedBy.push(user.id);
-      this.updateViewedBy(channel);
-    }
-  }
-
-
-  async updateViewedBy(channel: Channel) {
-    console.log('updated channel', channel);
-    const channelRef = doc(this.firestore, 'channels', `${channel.id}`);
-    await updateDoc(channelRef, {
-      viewedBy: channel.viewedBy
-    })
-  }
-
-
-  unreadMsg(channel: Channel, user: User) {
-    // console.log('chatserv', this.currentChat?.id);
-    // console.log('chanel unreadmsg', channel.viewedBy);
-    if (channel.viewedBy.includes(user.id) || user.id == channel.id) {
-      // console.log('includes crnt usr', channel.name, channel.viewedBy);
-      return false;
-    } else {
-      // console.log('not crnt usr', channel.name, channel.viewedBy);
-      return true;
-    }
   }
 }
