@@ -21,7 +21,7 @@ import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-p
 @Component({
   selector: 'app-main-chat',
   templateUrl: './main-chat.component.html',
-  styleUrls: ['./main-chat.component.scss']
+  styleUrls: ['./main-chat.component.scss','./main-chat.mediaquery.component.scss']
 })
 export class MainChatComponent implements OnInit {
   @ViewChild('messageContainer') messageContainer!: ElementRef;
