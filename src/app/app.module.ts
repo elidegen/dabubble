@@ -93,6 +93,15 @@ import { PrivacyComponent } from './privacy/privacy.component';
     MatExpansionModule,
     ReactiveFormsModule,
     PickerComponent,
+    provideFirebaseApp(() => initializeApp({ 
+      "projectId": "dabubble-81b67", 
+    "appId": "1:983219363350:web:25eacf514195e328531f37", 
+    "storageBucket": "dabubble-81b67.appspot.com", 
+    "apiKey": "AIzaSyDgZc98sYnuUz2Pb-WALAAI2W8_QSwTOUM",
+     "authDomain": "dabubble-81b67.firebaseapp.com",
+      "messagingSenderId": "983219363350" })),
+    provideFirestore(() => getFirestore()),
+
     // provideFirebaseApp(() => initializeApp({ "projectId": "dabubble-c4b96", "appId":
     //  "1:390532295885:web:ad6cd75380acc256d50d84", "storageBucket": "dabubble-c4b96.appspot.com", "apiKey": "AIzaSyAEu4ozPAp4fPV6zGVHoY_x9YT8wbZrMs4", 
     //  "authDomain": "dabubble-c4b96.firebaseapp.com", "messagingSenderId": "390532295885" })),
@@ -107,15 +116,7 @@ import { PrivacyComponent } from './privacy/privacy.component';
     //   "messagingSenderId": "260526664736" })),
     // provideFirestore(() => getFirestore()),
   
-    provideFirebaseApp(() => initializeApp({ 
-      "projectId": "dabubble-81b67", 
-    "appId": "1:983219363350:web:25eacf514195e328531f37", 
-    "storageBucket": "dabubble-81b67.appspot.com", 
-    "apiKey": "AIzaSyDgZc98sYnuUz2Pb-WALAAI2W8_QSwTOUM",
-     "authDomain": "dabubble-81b67.firebaseapp.com",
-      "messagingSenderId": "983219363350" })),
-    provideFirestore(() => getFirestore()),
-
+    
 
   
    
