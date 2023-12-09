@@ -92,9 +92,7 @@ export class UserService {
     let docRef = this.getSingleDocRef('users', user.id || '');
     await updateDoc(docRef, this.getUpdateData(user)).catch(
       (error) => { console.log(error); }
-
     );
-    console.log("User updated", user);
   }
 
 

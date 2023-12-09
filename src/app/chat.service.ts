@@ -1,5 +1,5 @@
 import { Injectable, OnInit, inject } from '@angular/core';
-import { Firestore, getDoc, getDocs, onSnapshot, orderBy, query, setDoc, updateDoc } from '@angular/fire/firestore';
+import { Firestore, getDoc, getDocs, onSnapshot, orderBy, query, setDoc } from '@angular/fire/firestore';
 import { DocumentData, DocumentReference, collection, doc } from 'firebase/firestore';
 import { Channel } from 'src/models/channel.class';
 import { Chat } from 'src/models/chat.class';
@@ -149,6 +149,7 @@ export class ChatService {
     } else {
       this.chat.name = this.userService.currentUser.name;
     }
+    this.chat.unread = true;
   }
 
   convertUser(user: any): any {

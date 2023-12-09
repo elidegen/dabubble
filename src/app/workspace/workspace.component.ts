@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogAddChannelComponent } from '../dialog-add-channel/dialog-add-channel.component';
-import { Firestore, addDoc, collection, doc, getDoc, getDocs, limit, onSnapshot, orderBy, query, updateDoc } from '@angular/fire/firestore';
+import { Firestore, collection, doc, getDoc, getDocs, limit, onSnapshot, orderBy, query, updateDoc } from '@angular/fire/firestore';
 import { Channel } from 'src/models/channel.class';
 import { ChatService } from '../chat.service';
 import { ThreadService } from '../thread.service';
@@ -33,6 +33,7 @@ export class WorkspaceComponent implements OnInit {
   currentChat: any;
   unSubMessages: any;
   unSubInterval: any;
+  currentDM: any;
 
   constructor(public dialog: MatDialog, public chatservice: ChatService, public threadService: ThreadService, public userService: UserService) {
     this.currentUser = userService.currentUser;
@@ -59,6 +60,8 @@ export class WorkspaceComponent implements OnInit {
     });
     // Startet das Intervall, um die Funktion alle 1000 Millisekunden (1 Sekunde) aufzurufen
     this.unSubInterval = interval(1000).subscribe(() => {
+      if (this.currentChat != undefined)
+        this.setReadDM();
       this.yourChannels.forEach(channel => {
         this.updateUnreadMsg(channel);
       });
@@ -160,6 +163,18 @@ export class WorkspaceComponent implements OnInit {
     this.updateFirestoreLTV(channelToSet);
   }
 
+  async setReadDM() {
+    if (!('creator' in this.currentChat)) {
+      this.currentChat.unread = false;
+      // const channelDocRef = doc(collection(this.firestore, 'direct messages'), this.currentChat.id);
+    }
+  }
+
+  openChat(chat: Chat) {
+    this.chatservice.renderDirectMessage(chat);
+    this.currentChat = chat;
+  }
+
   async updateFirestoreLTV(channelToUpdate: Channel) {
     const channelDocRef = doc(collection(this.firestore, 'channels'), channelToUpdate.id);
     await updateDoc(channelDocRef, {
@@ -187,7 +202,8 @@ export class WorkspaceComponent implements OnInit {
   }
 
   async updateUnreadMsg(channel: Channel) {
-    if (this.currentChat) {
+
+    if (this.currentChat && 'creator' in this.currentChat) {
       await this.setLastTimeViewed(this.currentChat);
     }
     const lastMsgTimeStamp = await this.getLastMsgTimestamp(channel);
@@ -199,7 +215,8 @@ export class WorkspaceComponent implements OnInit {
       this.userService.updateUser(this.currentUser);
     }
 
-    if (this.currentUser.unreadChats != undefined) {
+    if (this.currentUser.unreadChats != undefined && this.currentChat != undefined) {
+
       const index = this.currentUser.unreadChats.findIndex((obj: String) => obj == this.currentChat.id)
       if (index != -1) {
         this.currentUser.unreadChats.splice(index, 1);
@@ -240,5 +257,11 @@ export class WorkspaceComponent implements OnInit {
     });
     await deleteDoc(directDocRef);
     this.chatservice.chatWindow = 'empty';
+  }
+
+  unreadDM(directMessage: any) {
+    // console.log(directMessage);
+
+    return directMessage.unread == true;
   }
 }

@@ -1,4 +1,4 @@
-import { HostListener, Injectable, inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { DocumentData, DocumentReference, Firestore, addDoc, collection, doc, getDoc, getDocs, onSnapshot, orderBy, query, setDoc, updateDoc } from '@angular/fire/firestore';
 import { Message } from 'src/models/message.class';
 import { ThreadService } from './thread.service';
@@ -28,18 +28,16 @@ export class FirestoreService {
   showThreadSpinner = false;
 
   // ----Thread----
-
   allThreadMessages: Message[] = [];
   unSubThread: any;
   constructor(public threadService: ThreadService, public chatService: ChatService, public userService: UserService, public authService: AuthService) { }
-
 
   // ----- Direct Messages --------------
   unSubDirectMessages: any;
   allDirectMessages: Message[] = [];
   messageIsExisting!: boolean;
-  // ------------------ channel ----------------------------------------------------------
 
+  // ------------------ channel ----------------------------------------------------------
   async addChannel(channel: Channel) {
     await addDoc(collection(this.firestore, 'channels'), channel.toJSON())
       .catch((err) => {
@@ -73,7 +71,6 @@ export class FirestoreService {
     };
   }
 
-
   loadChannelMessages(currentChat: any) {
     if (currentChat.id) {
       const messageCollection = collection(this.firestore, `channels/${currentChat.id}/messages`);
@@ -105,8 +102,6 @@ export class FirestoreService {
     }
     this.organizedMessages = Object.entries(this.messagesByDate).map(([date, messages]) => ({ date, messages }));
   }
-
-
 
   async sendMessageInChannel(channel: Channel, message: Message) {
     let channelId = channel.id;
@@ -220,16 +215,14 @@ export class FirestoreService {
       console.error('Error loading users:', error);
     }
     this.setUsersToOffline();
-    
   }
-
 
   async setUsersToOffline() {
     let time = this.getLoginTime();
     this.allUsers.forEach(user => {
       if (time - user.loginTime > 10000000 && user.online == true) {
         user.online = false;
-        console.log("User wurde auf offline gesetzt",user);
+        console.log("User wurde auf offline gesetzt", user);
         this.userService.updateUser(user);
       }
     });
@@ -237,9 +230,8 @@ export class FirestoreService {
 
   getLoginTime() {
     const currentTime = new Date();
-     return currentTime.getTime();
+    return currentTime.getTime();
   }
-
 
   filterAllUsers() {
     this.filteredUsers = this.allUsers.filter(user =>

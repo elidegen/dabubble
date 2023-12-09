@@ -1,5 +1,5 @@
-import { Component, ElementRef, HostListener, OnInit, QueryList, ViewChild, ViewChildren, inject } from '@angular/core';
-import { DocumentData, DocumentReference, Firestore, addDoc, collection, doc, getDoc, getDocs, onSnapshot, orderBy, query, updateDoc } from '@angular/fire/firestore';
+import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren, inject } from '@angular/core';
+import { Firestore, collection, doc, updateDoc } from '@angular/fire/firestore';
 import { ChatService } from '../chat.service';
 import { UserService } from '../user.service';
 import { Message } from 'src/models/message.class';
@@ -10,7 +10,6 @@ import { Chat } from 'src/models/chat.class';
 import { User } from 'src/models/user.class';
 import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-profile.component';
 import { FirestoreService } from '../firestore.service';
-
 
 @Component({
   selector: 'app-direct-message-chat',
@@ -33,7 +32,6 @@ export class DirectMessageChatComponent implements OnInit {
   editingMessage: string | undefined;
   @ViewChild('editor') editor!: ElementRef;
 
-
   constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public authService: AuthService, public emojiService: EmojiService, public firestoreService: FirestoreService) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
@@ -43,12 +41,8 @@ export class DirectMessageChatComponent implements OnInit {
     this.chatService.openDirectMessage$.subscribe((openDirectMessage) => {
       if (openDirectMessage) {
         const newChat = openDirectMessage as Chat;
-        console.log('opendirect', newChat);
-        
         if (!this.currentChat || this.currentChat.id !== newChat.id) {
           this.currentChat = newChat;
-          console.log('currentDirect');
-          
           if (this.firestoreService.unSubDirectMessages) {
             this.firestoreService.unSubDirectMessages();
           }
@@ -65,18 +59,15 @@ export class DirectMessageChatComponent implements OnInit {
       this.firestoreService.unSubDirectMessages;
     }
   }
-  
 
   getUserNameString(user: any) {
     let taggedName: any;
     taggedName = `@${user.name}`;
-    this.taggedNames +=  `@${user.name}`;
-    console.log(this.taggedNames);
+    this.taggedNames += `@${user.name}`;
     this.message.content += taggedName!;
     this.message.mentions.push(user);
     this.userService.openUserContainerTextfield.next(false);
   }
-
 
   async loadMessages() {
     if (this.currentChat?.id) {
@@ -85,7 +76,6 @@ export class DirectMessageChatComponent implements OnInit {
     this.interlocutor = this.chatService.getOtherUser(this.currentChat?.members);
   }
 
-
   openProfileDialog(id: any): void {
     this.dialog.open(DialogViewProfileComponent, {
       panelClass: 'dialog-container',
@@ -93,9 +83,7 @@ export class DirectMessageChatComponent implements OnInit {
     });
   }
 
-  
   onFileSelected(event: any): void {
-    console.log("Übergebene Datei:", event)
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
       this.authService.uploadProfileImage(file);
@@ -103,13 +91,10 @@ export class DirectMessageChatComponent implements OnInit {
     }
     setTimeout(() => {
       this.message.files.push(this.authService.customPic);
-      console.log(this.message);
       this.firestoreService.showSpinner = false;
     }, 1500);
     this.showUploadedFile = true;
   }
-
-
 
   async sendMessage() {
     if (this.currentChat?.id && this.message.content?.trim() !== '') {
@@ -118,22 +103,28 @@ export class DirectMessageChatComponent implements OnInit {
       this.getSentMessageDate();
       this.message.creator = this.userService.currentUser.name;
       this.message.creatorId = this.userService.currentUser.id,
-      this.message.channel = this.currentChat.name;
+        this.message.channel = this.currentChat.name;
       this.message.channelID = this.currentChat.id;
       this.message.profilePic = this.userService.currentUser.picture,
-      this.message.channel = this.currentChat.name;
+        this.message.channel = this.currentChat.name;
       await this.firestoreService.sendMessageInDirectMessage(this.currentChat.id, this.message)
+      this.setUnreadDM(this.currentChat.id);
       this.message = new Message();
     }
   }
 
+  setUnreadDM(chatId: String) {
+    const subColRef = doc(collection(this.firestore, `direct messages/${chatId}/`));
+    updateDoc(subColRef, {
+      unread: true
+    })
+  }
 
   getSentMessageDate() {
     const currentDate = this.getCurrentDate();
     const formattedDate = this.formatDate(currentDate);
     this.message.date = formattedDate;
   }
-
 
   getSentMessageTime() {
     const currentTime = new Date();
@@ -142,32 +133,26 @@ export class DirectMessageChatComponent implements OnInit {
     this.message.time = formattedTime;
   }
 
-
   isToday(date: string): boolean {
     const currentDate = this.getCurrentDate();
     const formattedDate = this.formatDate(currentDate);
     return date === formattedDate;
   }
 
-
   getCurrentDate(): string {
     const currentDate = new Date();
     return currentDate.toDateString();
   }
-
 
   formatDate(date: string): string {
     const parts = date.split(' ');
     return `${parts[2]}.${this.getMonthNumber(parts[1])}.${parts[3]}`;
   }
 
-
   getMonthNumber(month: string): string {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     return (months.indexOf(month) + 1).toString().padStart(2, '0');
   }
-
-
 
   async updateMessageContent(message: Message) {
     let messageId = message.id
@@ -178,13 +163,11 @@ export class DirectMessageChatComponent implements OnInit {
     this.edit = false;
   }
 
-
   setMessageValues() {
     return {
       content: this.editor.nativeElement.value,
     }
   }
-
 
   openEmojiPicker(messageId: any) {
     setTimeout(() => {
@@ -194,7 +177,6 @@ export class DirectMessageChatComponent implements OnInit {
     this.emojiService.messageId = messageId;
   }
 
-
   openEmojiPickerChat() {
     setTimeout(() => {
       this.emojiService.showTextChatEmojiPicker = true;
@@ -202,7 +184,6 @@ export class DirectMessageChatComponent implements OnInit {
   }
 
   editMessage(message: Message) {
-    console.log('Nachricht', message);
     if (this.currentChat) {
       if (message.creator == this.currentUser.name) {
         this.edit = true;
@@ -215,7 +196,6 @@ export class DirectMessageChatComponent implements OnInit {
     this.messageContainer.nativeElement.scrollTop = this.messageContainer.nativeElement.scrollHeight;
   }
 
-
   addEmoji(event: any) {
     if (this.emojiService.messageId != "") {
       this.emojiService.addEmojiMainChat(event);
@@ -226,7 +206,6 @@ export class DirectMessageChatComponent implements OnInit {
 
   addEmojiTextField($event: any) {
     this.emojiService.addEmojiTextChat($event);
-    console.log("das ist das Emoji für die Textnachricht", this.emojiService.emojiString);
     this.message.content += this.emojiService.emojiString;
   }
 }

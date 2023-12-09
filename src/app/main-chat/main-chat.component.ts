@@ -53,19 +53,14 @@ export class MainChatComponent implements OnInit {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser as User;
     firestoreService.loadUsers();
-
   }
 
   ngOnInit() {
     this.chatService.openChat$.subscribe((openChat) => {
       if (openChat) {
         const newChat = openChat as Channel;
-        console.log('main channel', newChat);
-        
         if (!this.currentChat || this.currentChat.id !== newChat.id) {
           this.currentChat = newChat;
-          console.log('main currentChat', this.currentChat);
-          
           this.threadService.currentChat = newChat;
           if (this.firestoreService.unSubChannelMessages) {
             this.firestoreService.unSubChannelMessages();
@@ -91,13 +86,11 @@ export class MainChatComponent implements OnInit {
     });
   }
 
-
   openDialog() {
     this.dialog.open(DialogAddToGroupComponent, {
       panelClass: 'dialog-container'
     });
   }
-
 
   openMemberDialog() {
     this.dialog.open(DialogShowGroupMemberComponent, {
@@ -105,11 +98,9 @@ export class MainChatComponent implements OnInit {
     });
   }
 
-
   onCloseThread() {
     this.threadDrawer.close();
   }
-
 
   async sendMessage() {
     console.log('Before sendMessage - allMessagesOfChannel:', this.chatService.allMessagesOfChannel);
@@ -124,14 +115,12 @@ export class MainChatComponent implements OnInit {
       this.message.channelID = this.currentChat.id;
       this.message.profilePic = this.userService.currentUser.picture,
         this.message.channel = this.currentChat.name;
-        this.message.channel = this.currentChat.name;
+      this.message.channel = this.currentChat.name;
       this.message.messageSelected = false;
       await this.firestoreService.sendMessageInChannel(this.currentChat, this.message);
       this.taggedNames = "";
       this.message = new Message();
-
     }
-   
   }
 
   getSentMessageDate() {
@@ -188,7 +177,6 @@ export class MainChatComponent implements OnInit {
       this.emojiService.showTextChatEmojiPicker = true;
     }, 1);
   }
-
 
   closeEmojiPicker() {
     if (this.emojiService.showMainChatEmojiPicker == true || this.emojiService.showTextChatEmojiPicker == true && this.emojiService.emojiString == "") {
@@ -263,7 +251,7 @@ export class MainChatComponent implements OnInit {
   getUserNameString(user: any) {
     let taggedName: any;
     taggedName = `@${user.name}`;
-    this.taggedNames +=  `@${user.name}`;
+    this.taggedNames += `@${user.name}`;
     console.log(this.taggedNames);
     this.message.content += taggedName!;
     this.message.mentions.push(user);
@@ -299,10 +287,4 @@ export class MainChatComponent implements OnInit {
     }, 2000);
     this.showUploadedFile = true;
   }
-
-
-  
-
-  
-
 }
