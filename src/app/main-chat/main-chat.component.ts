@@ -121,9 +121,6 @@ export class MainChatComponent implements OnInit {
         this.message.channel = this.currentChat.name;
       this.message.messageSelected = false;
       await this.firestoreService.sendMessageInChannel(this.currentChat, this.message);
-      this.chatService.setViewedByZero(this.currentChat);
-      this.chatService.setViewedByMe(this.currentChat, this.currentUser as User);
-      console.log("Nachricht mit der Datei", this.message);
       this.taggedNames = "";
       this.message = new Message();
 

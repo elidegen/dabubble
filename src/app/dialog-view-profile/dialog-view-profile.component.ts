@@ -36,7 +36,7 @@ export class DialogViewProfileComponent {
   editUser() {
     this.userService.currentUser = this.currentUser;
     this.userService.setCurrentUserToLocalStorage();
-    this.userService.updateUser("users", this.currentUser);
+    this.userService.updateUser(this.currentUser);
     this.authService.updateUserEmail(this.currentUser.email!);
     this.dialogRef.close();
   }

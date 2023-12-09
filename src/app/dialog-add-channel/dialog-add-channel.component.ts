@@ -1,5 +1,5 @@
 import { Component, HostListener, QueryList, ViewChildren, inject } from '@angular/core';
-import { DocumentData, DocumentReference, Firestore, addDoc, collection, doc, getDocs, updateDoc } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Channel } from 'src/models/channel.class';
 import { ChatService } from '../chat.service';
@@ -24,7 +24,6 @@ export class DialogAddChannelComponent {
   selectedUsers: any[] = [];
   currentUser;
 
-  
   constructor(public dialogRef: MatDialogRef<DialogAddChannelComponent>, public chatService: ChatService, public userService: UserService, public firestoreService: FirestoreService) {
     firestoreService.loadUsers()
     this.currentUser = this.userService.currentUser;
@@ -38,21 +37,21 @@ export class DialogAddChannelComponent {
     }
   }
 
-
   filterUsers(): void {
     this.isInputFocused = true;
     this.firestoreService.filterAllUsers()
   }
 
-
   async createChannel() {
     this.getMembers();
     this.channel.creator = this.userService.currentUser.name;
     this.channel.viewedBy = [];
+    this.channel.lastTimeViewed = [];
+    console.log('channel', this.channel);
+    
     await this.firestoreService.addChannel(this.channel);
     this.dialogRef.close();
   }
-
 
   getMembers() {
     if (this.allMembers) {
@@ -62,7 +61,6 @@ export class DialogAddChannelComponent {
       this.addSelectedUsersToChannel(this.selectedUsers)
     }
   }
-
 
   addSelectedUsersToChannel(selectedUsers: any[]) {
     const formattedUsers = selectedUsers.map(user => {
@@ -78,11 +76,9 @@ export class DialogAddChannelComponent {
     this.channel.members.push(...formattedUsers);
   }
 
-  
   userSelected(event: Event) {
     event.stopPropagation();
   }
-
 
   addCurrentUser() {
     const userAlreadySelected = this.selectedUsers.some(user => user.id === this.currentUser.id);
@@ -91,7 +87,6 @@ export class DialogAddChannelComponent {
     }
   }
 
-
   removeUser(user: User) {
     let index = this.selectedUsers.findIndex(obj => obj.id === user.id);
 
@@ -99,7 +94,6 @@ export class DialogAddChannelComponent {
       this.selectedUsers.splice(index, 1);
     }
   }
-
 
   selectUser(user: any, i: number) {
     this.highlightButton(i);
@@ -110,7 +104,6 @@ export class DialogAddChannelComponent {
       this.removeUser(user)
     }
   }
-
 
   highlightButton(index: number) {
     const userContainer = this.userContainers.toArray()[index];

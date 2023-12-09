@@ -79,8 +79,6 @@ export class FirestoreService {
       this.unSubChannelMessages = onSnapshot(q, async (snapshot) => {
         this.allMessagesOfChannel = await Promise.all(snapshot.docs.map(async doc => {
           const message = doc.data() as Message;
-          this.chatService.setViewedByMe(currentChat, this.userService.currentUser);
-
           message.id = doc.id;
           message.threadCount = await this.threadService.countThreadMessages(message.id);
           message.reactionCount = this.setEmojiCount(message.reaction);
@@ -114,7 +112,7 @@ export class FirestoreService {
     await addDoc(subColRef, message.toJSON())
       .catch((err) => {
         console.log('Error', err);
-        console.log("Neue Nachricht mit Datei",message.toJSON());
+        // console.log("Neue Nachricht mit Datei",message.toJSON());
       })
       .then((docRef: void | DocumentReference<DocumentData, DocumentData>) => {
         if (docRef && docRef instanceof DocumentReference) {

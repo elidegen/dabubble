@@ -56,7 +56,7 @@ export class AuthService {
         this.userService.users[activeUserIndex].online = true;
         // console.log("Online Status von user", this.userService.users[activeUserIndex]);
         this.userService.signInSuccess = true;
-        this.userService.updateUser('users', this.userService.users[activeUserIndex]);
+        this.userService.updateUser(this.userService.users[activeUserIndex]);
         this.userService.currentUser = this.userService.users[activeUserIndex];
         this.userService.setCurrentUserToLocalStorage();
         // console.log("Current User:", this.userService.currentUser);
@@ -129,7 +129,7 @@ export class AuthService {
     if (userIndexToLogout != -1) {
       console.log("Index to Logout", userIndexToLogout);
       this.userService.users[userIndexToLogout].online = false;
-      this.userService.updateUser('users', this.userService.users[userIndexToLogout]);
+      this.userService.updateUser(this.userService.users[userIndexToLogout]);
     }
     this.userService.currentUser = new User;
     await signOut(this.auth).then(() => {

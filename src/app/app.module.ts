@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
@@ -31,7 +30,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { WorkspaceComponent } from './workspace/workspace.component';
 import { MainChatComponent } from './main-chat/main-chat.component';
 import { ThreadComponent } from './thread/thread.component';
-import {MatExpansionModule} from '@angular/material/expansion';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { DialogEditChannelComponent } from './dialog-edit-channel/dialog-edit-channel.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DialogViewProfileComponent } from './dialog-view-profile/dialog-view-profile.component';
@@ -43,11 +42,6 @@ import { ImprintComponent } from './imprint/imprint.component';
 import { DirectMessageChatComponent } from './direct-message-chat/direct-message-chat.component';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { PrivacyComponent } from './privacy/privacy.component';
-
-
-
-
-
 
 @NgModule({
   declarations: [
@@ -103,16 +97,12 @@ import { PrivacyComponent } from './privacy/privacy.component';
       "messagingSenderId": "260526664736" })),
     provideFirestore(() => getFirestore()),
 
-
-    // provideFirebaseApp(() => initializeApp({ "projectId": "dabubble-c4b96", "appId":
-    //  "1:390532295885:web:ad6cd75380acc256d50d84", "storageBucket": "dabubble-c4b96.appspot.com", "apiKey": "AIzaSyAEu4ozPAp4fPV6zGVHoY_x9YT8wbZrMs4", 
-    //  "authDomain": "dabubble-c4b96.firebaseapp.com", "messagingSenderId": "390532295885" })),
+    // provideFirebaseApp(() => initializeApp({
+    //   "projectId": "dabubble-c4b96", "appId":
+    //     "1:390532295885:web:ad6cd75380acc256d50d84", "storageBucket": "dabubble-c4b96.appspot.com", "apiKey": "AIzaSyAEu4ozPAp4fPV6zGVHoY_x9YT8wbZrMs4",
+    //   "authDomain": "dabubble-c4b96.firebaseapp.com", "messagingSenderId": "390532295885"
+    // })),
     // provideFirestore(() => getFirestore()),
-  
-  
-   
-    
-  
   ],
   providers: [],
   bootstrap: [AppComponent]
