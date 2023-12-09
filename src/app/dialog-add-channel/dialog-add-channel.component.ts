@@ -10,7 +10,7 @@ import { FirestoreService } from '../firestore.service';
 @Component({
   selector: 'app-dialog-add-channel',
   templateUrl: './dialog-add-channel.component.html',
-  styleUrls: ['./dialog-add-channel.component.scss']
+  styleUrls: ['./dialog-add-channel.component.scss', './dialog-add-channel.mediaquery.component.scss']
 })
 export class DialogAddChannelComponent {
   @ViewChildren('userContainer') userContainers!: QueryList<any>;

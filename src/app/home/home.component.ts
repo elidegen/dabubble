@@ -13,7 +13,7 @@ import { FirestoreService } from '../firestore.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss', './home.mediaquery.component.scss']
 })
 export class HomeComponent {
   showFiller: any;

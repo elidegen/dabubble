@@ -1,17 +1,18 @@
 mat-card {
-    max-height: 80vh;
-    overflow-y: scroll;
+    width: 400px;
 }
 
-mat-card::-webkit-scrollbar {
-    display: none;
-}
 
 .member-view {
     display: flex;
     flex-direction: column;
     gap: 16px;
     padding: 32px;
+    overflow-y: scroll;
+    max-height: 50vh;
+    &::-webkit-scrollbar {
+        display: none;
+    }
 }
 
 header {

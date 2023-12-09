@@ -1,0 +1,35 @@
+@media (max-width: 1279px) {
+    .message-content,
+    .my-message-content {
+        font-size: 12px;
+        max-width: 350px;
+    }
+    .name {
+        font-size: 16px;
+    }
+    .date {
+        font-size: 10px;
+    }
+    .comments {
+        font-size: 10px;
+    }
+    .time-box {
+        border-radius: 10px;
+        padding: 0px 8px;
+        font-size: 10px;
+    }
+    .creator-picture-container {
+        img {
+            height: 50px;
+            width: 50px;
+        }
+    }
+    .profile-button {
+        font-size: 18px;
+        img {
+            height: 50px;
+            width: 50px;
+    
+        }
+    }
+}

@@ -126,6 +126,8 @@
     max-width: 100%;
     color: black;
     background-color: var(--primary);
+    font-size: 18px;
+    max-width: 600px;
 }
 
 .message-row-container {
@@ -205,11 +207,11 @@ section {
 
 .date {
     color: gray;
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .name {
-    font-size: 18px;
+    font-size: 24px;
     font-weight: 500;
 }
 
@@ -312,6 +314,7 @@ section {
     border: 0;
     background: none;
     padding: 8px 0 8px 8px;
+    font-size: 24px;
     font-weight: bold;
     cursor: pointer;
     &:hover {
@@ -321,8 +324,8 @@ section {
         background-color: #d3d3d34d !important;
     }
     img {
-        height: 40px;
-        width: 40px;
+        height: 64px;
+        width: 64px;
         border-radius: 100%;
     }
 }
@@ -336,5 +339,5 @@ section {
 
 mat-card-header {
     border-bottom: 2px solid lightgrey;
-    padding: 16px 16px;
+    padding: 16px 16px 0;
 }

@@ -15,7 +15,7 @@ import { FirestoreService } from '../firestore.service';
 @Component({
   selector: 'app-direct-message-chat',
   templateUrl: './direct-message-chat.component.html',
-  styleUrls: ['./direct-message-chat.component.scss']
+  styleUrls: ['./direct-message-chat.component.scss', './direct-message.mediaquery.component.scss']
 })
 export class DirectMessageChatComponent implements OnInit {
   @ViewChildren('userContainer') userContainers!: QueryList<any>;

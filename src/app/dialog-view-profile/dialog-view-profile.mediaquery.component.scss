@@ -1,0 +1,11 @@
+@media (max-width: 1279px) {
+    mat-card {
+        width: 350px;
+    }
+    .picture,
+    .name {
+    img {
+        height: 120px;
+    }
+}
+}
