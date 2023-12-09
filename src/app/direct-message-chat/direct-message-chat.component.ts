@@ -43,12 +43,8 @@ export class DirectMessageChatComponent implements OnInit {
     this.chatService.openDirectMessage$.subscribe((openDirectMessage) => {
       if (openDirectMessage) {
         const newChat = openDirectMessage as Chat;
-        console.log('opendirect', newChat);
-        
         if (!this.currentChat || this.currentChat.id !== newChat.id) {
           this.currentChat = newChat;
-          console.log('currentDirect');
-          
           if (this.firestoreService.unSubDirectMessages) {
             this.firestoreService.unSubDirectMessages();
           }
@@ -65,13 +61,12 @@ export class DirectMessageChatComponent implements OnInit {
       this.firestoreService.unSubDirectMessages;
     }
   }
-  
+
 
   getUserNameString(user: any) {
     let taggedName: any;
     taggedName = `@${user.name}`;
-    this.taggedNames +=  `@${user.name}`;
-    console.log(this.taggedNames);
+    this.taggedNames += `@${user.name}`;
     this.message.content += taggedName!;
     this.message.mentions.push(user);
     this.userService.openUserContainerTextfield.next(false);
@@ -93,9 +88,8 @@ export class DirectMessageChatComponent implements OnInit {
     });
   }
 
-  
+
   onFileSelected(event: any): void {
-    console.log("Übergebene Datei:", event)
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
       this.authService.uploadProfileImage(file);
@@ -103,7 +97,6 @@ export class DirectMessageChatComponent implements OnInit {
     }
     setTimeout(() => {
       this.message.files.push(this.authService.customPic);
-      console.log(this.message);
       this.firestoreService.showSpinner = false;
     }, 1500);
     this.showUploadedFile = true;
@@ -118,10 +111,10 @@ export class DirectMessageChatComponent implements OnInit {
       this.getSentMessageDate();
       this.message.creator = this.userService.currentUser.name;
       this.message.creatorId = this.userService.currentUser.id,
-      this.message.channel = this.currentChat.name;
+        this.message.channel = this.currentChat.name;
       this.message.channelID = this.currentChat.id;
       this.message.profilePic = this.userService.currentUser.picture,
-      this.message.channel = this.currentChat.name;
+        this.message.channel = this.currentChat.name;
       await this.firestoreService.sendMessageInDirectMessage(this.currentChat.id, this.message)
       this.message = new Message();
     }
@@ -202,7 +195,6 @@ export class DirectMessageChatComponent implements OnInit {
   }
 
   editMessage(message: Message) {
-    console.log('Nachricht', message);
     if (this.currentChat) {
       if (message.creator == this.currentUser.name) {
         this.edit = true;
@@ -226,7 +218,6 @@ export class DirectMessageChatComponent implements OnInit {
 
   addEmojiTextField($event: any) {
     this.emojiService.addEmojiTextChat($event);
-    console.log("das ist das Emoji für die Textnachricht", this.emojiService.emojiString);
     this.message.content += this.emojiService.emojiString;
   }
 }

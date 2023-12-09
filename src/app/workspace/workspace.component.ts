@@ -199,7 +199,8 @@ export class WorkspaceComponent implements OnInit {
       this.userService.updateUser(this.currentUser);
     }
 
-    if (this.currentUser.unreadChats != undefined) {
+    if (this.currentUser.unreadChats != undefined && this.currentChat != undefined) {
+      
       const index = this.currentUser.unreadChats.findIndex((obj: String) => obj == this.currentChat.id)
       if (index != -1) {
         this.currentUser.unreadChats.splice(index, 1);
