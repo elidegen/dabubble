@@ -1,5 +1,5 @@
 import { Injectable, OnInit, inject } from '@angular/core';
-import { Firestore, getDoc, onSnapshot, orderBy, query, setDoc, updateDoc } from '@angular/fire/firestore';
+import { Firestore, getDoc, getDocs, onSnapshot, orderBy, query, setDoc, updateDoc } from '@angular/fire/firestore';
 import { DocumentData, DocumentReference, collection, doc } from 'firebase/firestore';
 import { Channel } from 'src/models/channel.class';
 import { Chat } from 'src/models/chat.class';
@@ -10,7 +10,7 @@ import { UserService } from './user.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ChatService implements OnInit {
+export class ChatService {
   private _openChatSubject: BehaviorSubject<Channel | Chat | null> = new BehaviorSubject<Channel | Chat | null>(null);
   private _openDirectMessageSubject: BehaviorSubject<Chat | null> = new BehaviorSubject<Chat | null>(null);
   firestore: Firestore = inject(Firestore)
@@ -236,7 +236,7 @@ export class ChatService implements OnInit {
   getDMMessages() {
     this.yourDirectMessages.forEach(dm => {
       const messageCol = collection(this.firestore, `direct messages/${dm.id}/messages`);
-      this.unSubMessages = onSnapshot(messageCol,
+      this.unSubDMMessages = onSnapshot(messageCol,
         (list) => {
           list.forEach(message => {
             this.allMessagesOfDM.push(message.data());

@@ -230,7 +230,7 @@ export class FirestoreService {
       if (time - user.loginTime > 10000000 && user.online == true) {
         user.online = false;
         console.log("User wurde auf offline gesetzt",user);
-        this.userService.updateUser('users', user);
+        this.userService.updateUser(user);
       }
     });
   }
