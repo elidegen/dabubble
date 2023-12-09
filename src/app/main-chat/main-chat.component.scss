@@ -1,6 +1,10 @@
 .chat-title {
     display: flex;
     align-items: center;
+    img {
+        height: 32px;
+        width: 32px;
+    }
 }
 
 .header {
@@ -9,6 +13,12 @@
     justify-content: space-between;
     width: 100%;
     min-height: 64px;
+}
+
+h2 {
+    font-size: 30px;
+    font-weight: bold;
+    margin-right: 6px !important;
 }
 
 .group-members-container {
@@ -31,8 +41,8 @@
     align-items: center;
 
     img {
-        height: 40px;
-        margin-left: -12px;
+        height: 50px;
+        margin-left: -20px;
         border-radius: 50%;
         border: 2px solid white;
     }
@@ -49,6 +59,7 @@
 
 h3 {
     font-weight: 500 !important;
+    font-size: 20px;
 }
 
 mat-card-header {
@@ -206,6 +217,8 @@ mat-card {
     max-width: 100%;
     color: black;
     background-color: var(--primary);
+    font-size: 18px;
+    max-width: 600px;
 }
 
 .message-row-container {
@@ -286,11 +299,11 @@ section {
 
 .date {
     color: gray;
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .name {
-    font-size: 18px;
+    font-size: 24px;
     font-weight: 500;
 }
 
@@ -357,7 +370,7 @@ section {
     display: flex;
     gap: 16px;
     margin-top: 2px;
-
+    width: fit-content;
     &:hover .comments {
         font-weight: bold;
     }

@@ -1,6 +1,11 @@
 header {
     display: flex;
     justify-content: space-between;
+    padding: 0 16px;
+    height: 75px;
+}
+.logo {
+    width: 220px;
 }
 .trans {
     background-color: transparent;
