@@ -60,7 +60,7 @@ export class UserService {
     ).then(
       (docRef) => {
         console.log()
-        this.updateUserId('users', item, docRef!.id);
+        this.updateUserId(item, docRef!.id);
       }
     )
   }
@@ -71,7 +71,6 @@ export class UserService {
       this.users = [];
       list.forEach(element => {
         this.users.push(element.data() as User);
-        // console.log("Available users", element.data());
       })
     })
    
@@ -84,7 +83,7 @@ export class UserService {
     )
   }
 
-  async updateUserId(colId: string, user: User, newId: string,) {
+  async updateUserId(user: User, newId: string,) {
     user.id = newId;
     await this.updateUser(user);
   }
