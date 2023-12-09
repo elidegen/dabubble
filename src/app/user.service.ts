@@ -86,11 +86,11 @@ export class UserService {
 
   async updateUserId(colId: string, user: User, newId: string,) {
     user.id = newId;
-    await this.updateUser(colId, user);
+    await this.updateUser(user);
   }
 
-  async updateUser(colId: string, user: User) {
-    let docRef = this.getSingleDocRef(colId, user.id || '');
+  async updateUser(user: User) {
+    let docRef = this.getSingleDocRef('users', user.id || '');
     await updateDoc(docRef, this.getUpdateData(user)).catch(
       (error) => { console.log(error); }
 

@@ -39,7 +39,7 @@ export class DialogViewProfileComponent {
   editUser() {
     this.userService.currentUser = this.currentUser;
     this.userService.setCurrentUserToLocalStorage();
-    this.userService.updateUser("users", this.currentUser);
+    this.userService.updateUser(this.currentUser);
     this.authService.updateUserEmail(this.currentUser.email!);
     this.dialogRef.close();
   }
@@ -55,7 +55,7 @@ export class DialogViewProfileComponent {
     setTimeout(() => {
       this.user.picture = this.authService.customPic;
       this.userService.currentUser.picture =  this.user.picture;
-      this.userService.updateUser('users',this.user);
+      this.userService.updateUser(this.user);
    
       this.firestoreService.showSpinner = false;
     }, 1500);

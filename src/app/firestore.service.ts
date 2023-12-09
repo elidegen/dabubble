@@ -81,8 +81,6 @@ export class FirestoreService {
       this.unSubChannelMessages = onSnapshot(q, async (snapshot) => {
         this.allMessagesOfChannel = await Promise.all(snapshot.docs.map(async doc => {
           const message = doc.data() as Message;
-          this.chatService.setViewedByMe(currentChat, this.userService.currentUser);
-
           message.id = doc.id;
           message.threadCount = await this.threadService.countThreadMessages(message.id);
           message.reactionCount = this.setEmojiCount(message.reaction);
@@ -232,7 +230,7 @@ export class FirestoreService {
       if (time - user.loginTime > 10000000 && user.online == true) {
         user.online = false;
         console.log("User wurde auf offline gesetzt",user);
-        this.userService.updateUser('users', user);
+        this.userService.updateUser(user);
       }
     });
   }

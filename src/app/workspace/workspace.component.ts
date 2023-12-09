@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogAddChannelComponent } from '../dialog-add-channel/dialog-add-channel.component';
-import { Firestore, collection, doc, getDocs, onSnapshot, orderBy, query } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, doc, getDoc, getDocs, limit, onSnapshot, orderBy, query, updateDoc } from '@angular/fire/firestore';
 import { Channel } from 'src/models/channel.class';
 import { ChatService } from '../chat.service';
 import { ThreadService } from '../thread.service';
@@ -9,6 +9,7 @@ import { UserService } from '../user.service';
 import { Chat } from 'src/models/chat.class';
 import { User } from 'src/models/user.class';
 import { deleteDoc } from 'firebase/firestore';
+import { first, interval } from 'rxjs';
 
 @Component({
   selector: 'app-workspace',
@@ -18,6 +19,7 @@ import { deleteDoc } from 'firebase/firestore';
 export class WorkspaceComponent implements OnInit {
   firestore: Firestore = inject(Firestore);
   panelOpenState: boolean = true;
+  channel: Channel = new Channel;
   allChannels: Channel[] = [];
   yourChannels: Channel[] = [];
   unsubscribeChannels: any;
@@ -30,6 +32,7 @@ export class WorkspaceComponent implements OnInit {
   usersOfDirectMessage: User[] = [];
   currentChat: any;
   unSubMessages: any;
+  unSubInterval: any;
 
   constructor(public dialog: MatDialog, public chatservice: ChatService, public threadService: ThreadService, public userService: UserService) {
     this.currentUser = userService.currentUser;
@@ -54,6 +57,23 @@ export class WorkspaceComponent implements OnInit {
         this.currentChat = undefined;
       }
     });
+    // Startet das Intervall, um die Funktion alle 1000 Millisekunden (1 Sekunde) aufzurufen
+    this.unSubInterval = interval(1000).subscribe(() => {
+      this.yourChannels.forEach(channel => {
+        this.updateUnreadMsg(channel);
+      });
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.unSubInterval;
+    this.unsubscribeChannels;
+    this.unsubscribeChats;
+    this.unsubscribeUsers;
+
+    if (this.unSubMessages) {
+      this.unSubMessages();
+    }
   }
 
   loadChannels() {
@@ -119,31 +139,92 @@ export class WorkspaceComponent implements OnInit {
   }
 
   renderChannel(channel: Channel) {
-    if (this.currentChat != undefined)
-      this.chatservice.setViewedByMe(this.currentChat, this.userService.currentUser);
-    console.log(this.currentChat);
-
     this.chatservice.openChat = channel;
     this.chatservice.chatWindow = 'channel';
-    this.chatservice.setViewedByMe(this.currentChat, this.currentUser as User)
+  }
+
+  async setLastTimeViewed(channelToSet: Channel) {
+    const channelDocRef = doc(collection(this.firestore, 'channels'), channelToSet.id);
+    const channel = (await getDoc(channelDocRef)).data();
+    let channelLTV = channel?.['lastTimeViewed'] ?? [];
+    const lastTimeViewedIndex = channelLTV.findIndex((obj: { userId: string | undefined; }) => obj.userId == this.currentUser.id);
+    if (lastTimeViewedIndex != -1) {
+      channelLTV[lastTimeViewedIndex].timestamp = new Date().getTime();
+    } else {
+      channelLTV.push({
+        userId: this.currentUser.id,
+        timestamp: new Date().getTime()
+      })
+    }
+    channelToSet.lastTimeViewed = channelLTV;
+    this.updateFirestoreLTV(channelToSet);
+  }
+
+  async updateFirestoreLTV(channelToUpdate: Channel) {
+    const channelDocRef = doc(collection(this.firestore, 'channels'), channelToUpdate.id);
+    await updateDoc(channelDocRef, {
+      lastTimeViewed: channelToUpdate.lastTimeViewed
+    })
+  }
+
+  getLastMsgTimestamp(channel: Channel) {
+    const messageCollection = collection(this.firestore, `channels/${channel.id}/messages`);
+    const q = query(messageCollection, orderBy('timeInMs', 'desc'), limit(1));
+    return new Promise<number>((resolve) => {
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        if (!snapshot.empty) {
+          const documents = snapshot.docs;
+          const firstDocumentData = documents[0].data();
+          const timeInMs = firstDocumentData['timeInMs'];
+          unsubscribe();
+          resolve(timeInMs);
+        } else {
+          unsubscribe();
+          resolve(0);
+        }
+      });
+    });
+  }
+
+  async updateUnreadMsg(channel: Channel) {
+    if (this.currentChat) {
+      await this.setLastTimeViewed(this.currentChat);
+    }
+    const lastMsgTimeStamp = await this.getLastMsgTimestamp(channel);
+    const lastTimeViewed = await this.getLastTimeViewed(channel)
+
+    if (lastMsgTimeStamp > lastTimeViewed) {
+      this.currentUser.unreadChats = [];
+      this.currentUser.unreadChats.push(channel.id);
+      this.userService.updateUser(this.currentUser);
+    }
+
+    if (this.currentUser.unreadChats != undefined) {
+      const index = this.currentUser.unreadChats.findIndex((obj: String) => obj == this.currentChat.id)
+      if (index != -1) {
+        this.currentUser.unreadChats.splice(index, 1);
+      }
+    }
+  }
+
+  getLastTimeViewed(channel: Channel) {
+    let channelLTV = channel['lastTimeViewed'] ?? [];
+    const lastTimeViewedIndex = channelLTV.findIndex((obj: { userId: string | undefined; }) => obj.userId == this.currentUser.id);
+    if (lastTimeViewedIndex != -1) {
+      return channelLTV[lastTimeViewedIndex].timestamp;
+    } else {
+      return 0;
+    }
+  }
+
+  removeUnreadChats(channel: Channel, user: User) {
+    const channelIndex = user.unreadChats.findIndex((obj: string | undefined) => obj == channel.id);
+    user.unreadChats.splice(channelIndex, 1);
   }
 
   unreadMsg(channel: Channel) {
-    if (channel.viewedBy.includes(this.currentUser.id) || this.currentChat?.id == channel.id) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  ngOnDestroy(): void {
-    this.unsubscribeChannels;
-    this.unsubscribeChats;
-    this.unsubscribeUsers;
-
-    if (this.unSubMessages) {
-      this.unSubMessages();
-    }
+    this.currentUser.unreadChats = this.currentUser.unreadChats ?? [];
+    return this.currentUser.unreadChats.includes(channel.id);
   }
 
   startNewMessage() {
@@ -157,10 +238,7 @@ export class WorkspaceComponent implements OnInit {
     messagesQuerySnapshot.forEach(async (doc) => {
       await deleteDoc(doc.ref);
     });
-    // Lösche das Hauptdokument
     await deleteDoc(directDocRef);
     this.chatservice.chatWindow = 'empty';
   }
-
-
 }

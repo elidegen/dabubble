@@ -4,10 +4,8 @@ import { ChatService } from '../chat.service';
 import { UserService } from '../user.service';
 import { Firestore, collection, doc, getDoc, getDocs } from '@angular/fire/firestore';
 import { Channel } from 'src/models/channel.class';
-
 import { User } from 'src/models/user.class';
 import { updateDoc } from 'firebase/firestore';
-
 
 @Component({
   selector: 'app-dialog-add-to-group',
@@ -46,7 +44,6 @@ export class DialogAddToGroupComponent {
     });
   }
 
-
   @HostListener('document:click', ['$event'])
   checkClick(event: Event) {
     const clickedElement = event.target as HTMLElement;
@@ -54,7 +51,6 @@ export class DialogAddToGroupComponent {
       this.isInputFocused = false;
     }
   }
-
 
   async loadUsers() {
     try {
@@ -64,7 +60,6 @@ export class DialogAddToGroupComponent {
       console.error('Error loading users:', error);
     }
   }
-
 
   filterUsers(): void {
     this.isInputFocused = true;
@@ -114,7 +109,6 @@ export class DialogAddToGroupComponent {
     }
   }
 
-
   addHighlight(user: User) {
     let index = this.filteredUsers.findIndex((obj => obj === user));
     const userContainer = this.userContainers.toArray()[index];
@@ -122,7 +116,6 @@ export class DialogAddToGroupComponent {
       userContainer.nativeElement.classList.add('user-container-highlighted');
     }
   }
-
 
   async getAllChannelMembers() {
     if (this.currentChat?.id) {
@@ -153,9 +146,6 @@ export class DialogAddToGroupComponent {
       this.channel.name = this.currentChat.name;
       this.channel.id = this.currentChat.id;
       this.channel.description = this.currentChat.description;
-      console.log('addm t channe', this.channel);
-      console.log('channelJSON', this.channel.toJSON());
-
       await updateDoc(channelDocRef, this.channel.toJSON()).catch((error) => {
         console.error('Error updating document:', error);
       });
@@ -186,7 +176,6 @@ export class DialogAddToGroupComponent {
     }
   }
 
-
   addSelectedUsersToChannel(selectedUsers: any[]) {
     const formattedUsers = selectedUsers.map(user => {
       return {
@@ -207,7 +196,4 @@ export class DialogAddToGroupComponent {
       this.selectedUsers.push(this.currentUser);
     }
   }
-
 }
-
-
