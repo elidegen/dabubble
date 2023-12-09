@@ -11,6 +11,11 @@ mat-card-header {
     padding: 16px 16px 0;
 }
 
+h2 {
+    font-size: 30px;
+    font-weight: bold;
+}
+
 .emoji-fit {
     font-size: 20px;
 }
@@ -27,12 +32,14 @@ header {
 
 .header {
     display: flex;
-    gap: 8px;
+    gap: 12px;
 }
 
 
 .channel-title {
-    font-size: 10px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
 }
 
 .close-thread {
@@ -44,8 +51,8 @@ header {
 }
 
 .close-icon {
-    height: 16px;
-    width: 16px;
+    height: 20px;
+    width: 20px;
 }
 
 .text-field-container {
@@ -192,6 +199,7 @@ header {
     img {
         height: 50px;
         width: 50px;
+        border-radius: 50%;
     }
 }
 
@@ -227,12 +235,14 @@ header {
     background-color: var(--purple2) !important;
     color: white;
     padding: 12px 16px;
+    max-width: 280px;
 }
 
 .message-content {
     border-radius: 0 24px 24px 24px;
     background-color: var(--primary);
     padding: 12px 16px;
+    max-width: 280px;
 }
 
 .reaction {
@@ -375,4 +385,8 @@ header {
             fill: var(--textGray);
         }
     } 
+}
+
+.mt-thread {
+    margin-top: 32px;
 }

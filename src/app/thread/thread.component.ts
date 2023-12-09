@@ -202,7 +202,7 @@ export class ThreadComponent implements OnInit {
       if (message.creator == this.currentUser.name) {
         this.edit = true;
         this.editingThreadMessage = message.id;
-        console.log('bearbeitet', this.editingThreadMessage);
+        this.firestoreService.toggleMoreMenu(message);
       }
     }
   }
