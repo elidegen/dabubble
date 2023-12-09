@@ -3,12 +3,12 @@ mat-card {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 30vw;
+    width: 430px;
 }
 
 mat-card-header {
     border-bottom: 2px solid lightgrey;
-    padding-bottom: 8px;
+    padding: 16px 16px 0;
 }
 
 .emoji-fit {
@@ -22,6 +22,7 @@ header {
     gap: 8px;
     flex: 1;
     padding: 0 8px;
+    min-height: 64px;
 }
 
 .header {
@@ -29,10 +30,6 @@ header {
     gap: 8px;
 }
 
-.title {
-    font-weight: bold;
-    font-size: 18px;
-}
 
 .channel-title {
     font-size: 10px;

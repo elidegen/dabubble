@@ -6,6 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 import { User } from 'src/models/user.class';
 
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -16,21 +17,26 @@ export class UserService {
   currentUser: User = new User;
   currentEmail: string = "";
   currentPassword: string = "";
-  signInSuccess = false;
   customPic: any = "";
   userIsAvailable: boolean = false;
   resetEmailFound: boolean = false;
   openUserContainerTextfield = new BehaviorSubject<boolean>(false);
   nameStringForTextfield: any;
   openUserContainerThreadTextfield= new BehaviorSubject<boolean>(false);
+ 
   unsubList;
+
+
+ 
 
   ngOnInit() {
     this.getCurrentUserFromLocalStorage();
+   
   }
 
   constructor(public router: Router) {
-    this.unsubList = this.subUserList('users');
+    this.unsubList = this.subUserList();
+    console.log("Alle Nutzer",this.users);
   }
 
   ngOnDestroy() {
@@ -59,7 +65,8 @@ export class UserService {
     )
   }
 
-  subUserList(coldId: string) {
+  subUserList() {
+  
     return onSnapshot(this.getUsersRef(), (list) => {
       this.users = [];
       list.forEach(element => {
@@ -67,6 +74,7 @@ export class UserService {
         // console.log("Available users", element.data());
       })
     })
+   
   }
 
   async deleteUser(colId: string, docId: string) {
@@ -90,6 +98,9 @@ export class UserService {
     console.log("User updated", user);
   }
 
+
+
+
   getUpdateData(user: User) {
     return {
       name: user.name,
@@ -98,6 +109,7 @@ export class UserService {
       id: user.id,
       picture: user.picture,
       online: user.online,
+      loginTime: user.loginTime,
     }
   }
 
@@ -129,11 +141,13 @@ export class UserService {
     let userJson = JSON.stringify(this.currentUser);
     localStorage.setItem('currentUser', userJson);
     console.log('currentUser im LocalStorage gespeichert');
+
   }
 
   removeCurrentUserFromLocalStorage() {
     localStorage.removeItem('currentUser');
     console.log('currentUser aus LocalStorage entfernt');
+   
   }
 
   getCurrentUserFromLocalStorage(): void {
@@ -144,6 +158,7 @@ export class UserService {
       console.log('Kein currentUser im LocalStorage gefunden');
       this.currentUser = new User;
     }
+   
   }
 
   /**This is for getting the collection "customers" from firebase */

@@ -53,14 +53,19 @@ export class MainChatComponent implements OnInit {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser as User;
     firestoreService.loadUsers();
+
   }
 
   ngOnInit() {
     this.chatService.openChat$.subscribe((openChat) => {
       if (openChat) {
         const newChat = openChat as Channel;
+        console.log('main channel', newChat);
+        
         if (!this.currentChat || this.currentChat.id !== newChat.id) {
           this.currentChat = newChat;
+          console.log('main currentChat', this.currentChat);
+          
           this.threadService.currentChat = newChat;
           if (this.firestoreService.unSubChannelMessages) {
             this.firestoreService.unSubChannelMessages();
@@ -107,6 +112,7 @@ export class MainChatComponent implements OnInit {
 
 
   async sendMessage() {
+    console.log('Before sendMessage - allMessagesOfChannel:', this.chatService.allMessagesOfChannel);
     if (this.currentChat?.id && this.message.content?.trim() !== '') {
       this.showUploadedFile = false;
       this.message.content = this.message.content!.replace(this.taggedNames, '');
@@ -125,6 +131,7 @@ export class MainChatComponent implements OnInit {
       this.message = new Message();
 
     }
+   
   }
 
   getSentMessageDate() {
@@ -283,14 +290,18 @@ export class MainChatComponent implements OnInit {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
       this.authService.uploadProfileImage(file);
+      this.firestoreService.showSpinner = true;
     }
     setTimeout(() => {
       this.message.files.push(this.authService.customPic);
       console.log(this.message);
-    }, 1000);
+      this.firestoreService.showSpinner = false;
+    }, 2000);
     this.showUploadedFile = true;
-
   }
+
+
+  
 
   
 

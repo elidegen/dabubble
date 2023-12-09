@@ -18,12 +18,13 @@ export class AuthService {
   customPic: string = "";
   newGuest: User = new User;
   uploadFile: any;
+  signInSuccess: any;
 
 
   ngOnInit() { }
 
   constructor(public router: Router, public userService: UserService) {
-    this.newGuest.name = 'guest';
+    this.newGuest.name = 'Guest';
     this.newGuest.picture = 'assets/img/avatars/profile.svg';
     this.newGuest.online = true;
   }
@@ -46,41 +47,52 @@ export class AuthService {
       });
   }
 
+  
+
   async signInUser(email: string, password: string) {
     try {
-      const userCredential = await signInWithEmailAndPassword(this.auth, email, password);
-      console.log("User signed in:", userCredential.user);
+      await signInWithEmailAndPassword(this.auth, email, password);
 
       const activeUserIndex = this.findUserIndexWithEmail(email);
       if (activeUserIndex !== -1) {
         this.userService.users[activeUserIndex].online = true;
-        // console.log("Online Status von user", this.userService.users[activeUserIndex]);
-        this.userService.signInSuccess = true;
+        this.userService.users[activeUserIndex].loginTime = this.getLoginTime();
+        this.signInSuccess = true;
         this.userService.updateUser(this.userService.users[activeUserIndex]);
+        console.log("Login Time von User", this.userService.users[activeUserIndex]);
         this.userService.currentUser = this.userService.users[activeUserIndex];
         this.userService.setCurrentUserToLocalStorage();
-        // console.log("Current User:", this.userService.currentUser);
-        await this.router.navigate(['home']);
+        setTimeout(() => {
+           this.router.navigate(['home']);
+           this.signInSuccess = false;
+        }, 1500);
+     
       }
     } catch (error) {
-      this.userService.signInSuccess = false;
+      this.signInSuccess = false;
       // console.log("Anmeldung Fehlgeschlagen");
     }
   }
+
+
+  getLoginTime() {
+    const currentTime = new Date();
+     return currentTime.getTime();
+  }
+
 
   async signInWithGoogle() {
     await signInWithPopup(this.auth, this.provider)
       .then((result) => {
         const user = result.user;
         console.log('Google Benutzer angemeldet:', user);
-        this.userService.currentUser = {
-          name: user.displayName || "",
-          email: user.email || "",
-          password: "",
-          id: user.uid,
-          picture: user.photoURL || "",
-          online: true,
-        } as User;
+        this.userService.currentUser.name = user.displayName || "",
+        this.userService.currentUser.email = user.email || "",
+        this.userService.currentUser.password = "",
+        this.userService.currentUser.id = user.uid,
+        this.userService.currentUser.picture = user.photoURL || "",
+        this.userService.currentUser.online = true,
+        this.userService.currentUser.loginTime = this.getLoginTime(),
         this.addGoogleUser();
       })
       .catch((error) => {
@@ -144,6 +156,7 @@ export class AuthService {
     if (!this.userService.userExists(this.userService.currentUser.email || '')) {
       await this.userService.addUser(this.userService.currentUser);
     }
+    console.log("googleUser", this.userService.currentUser);
     await this.userService.setCurrentUserToLocalStorage();
     await this.userService.getCurrentUserFromLocalStorage();
     await this.router.navigate(['home']);

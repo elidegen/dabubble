@@ -6,13 +6,23 @@
     src: url('assets/fonts/Nunito-Regular.ttf');
 }
 
+
+
 html,
 body {
     height: 100%;
+    // display: flex;
+    // justify-content: center;
+    // max-width: 1920px;
+   
 }
 
 body {
     margin: 0;
+    height: 100%;
+    // display: flex;
+    // justify-content: center;
+    // max-width: 1920px;
     background-color: var(--primary);
     font-family: 'Nunito', 'Roboto', sans-serif !important;
 }
@@ -49,7 +59,6 @@ input[type="file"] {
     gap: 10px;
     margin: 10px;
 }
-
 
 
 .ml-16 {
@@ -156,6 +165,8 @@ a {
 }
 
 .main-button {
+    box-sizing: border-box;
+    outline: none;
     border-radius: 24px !important;
     padding: 12px 24px !important;
     height: fit-content !important;
@@ -163,7 +174,6 @@ a {
     border: 1px solid var(--purple1) !important;
     color: var(--purple1) !important;
     transition: all 125ms !important;
-
     &:hover {
         opacity: 0.8 !important;
     }
@@ -173,6 +183,7 @@ a {
         border: 1px solid var(--gray) !important;
         cursor: not-allowed;
         opacity: 0.5;
+        margin-top: 2px;
     }
 }
 

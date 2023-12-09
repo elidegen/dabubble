@@ -1,3 +1,5 @@
+
+
 <mat-drawer-container (click)="closeEmojiPicker()" autosize [ngSwitch]="chatService.chatWindow">
   <mat-card class="mr-16">
 
@@ -266,7 +268,7 @@
 
   
             
-          
+             
 
 
       <mat-card-content>
@@ -274,7 +276,7 @@
           <div  class="text-field-container">
             <textarea [disabled]="!currentChat" (keyup.enter)="sendMessage()" [(ngModel)]="message.content"
               placeholder="Message to {{currentChat?.name}}"></textarea>
-
+              <mat-spinner *ngIf="firestoreService.showSpinner == true" class="mat-spinner --purple1"></mat-spinner>
             <div class="message-buttons">
               <div class="attachments">
                 <div  class="border-right">
@@ -322,7 +324,7 @@
 
   </mat-card>
 
-  <mat-drawer #thread mode="side" position="end">
+  <mat-drawer style="padding-right: 16px;" #thread mode="side" position="end">
     <app-thread style="width: 25%" (closeThread)="onCloseThread()"></app-thread>
   </mat-drawer>
 </mat-drawer-container>

@@ -24,6 +24,8 @@ export class FirestoreService {
   allUsers: User[] = [];
   filteredUsers: User[] = [];
   searchInput: string = '';
+  showSpinner = false;
+  showThreadSpinner = false;
 
   // ----Thread----
 
@@ -112,7 +114,6 @@ export class FirestoreService {
     await addDoc(subColRef, message.toJSON())
       .catch((err) => {
         console.log('Error', err);
-        // console.log("Neue Nachricht mit Datei",message.toJSON());
       })
       .then((docRef: void | DocumentReference<DocumentData, DocumentData>) => {
         if (docRef && docRef instanceof DocumentReference) {
@@ -218,7 +219,27 @@ export class FirestoreService {
     } catch (error) {
       console.error('Error loading users:', error);
     }
+    this.setUsersToOffline();
+    
   }
+
+
+  async setUsersToOffline() {
+    let time = this.getLoginTime();
+    this.allUsers.forEach(user => {
+      if (time - user.loginTime > 10000000 && user.online == true) {
+        user.online = false;
+        console.log("User wurde auf offline gesetzt",user);
+        this.userService.updateUser('users', user);
+      }
+    });
+  }
+
+  getLoginTime() {
+    const currentTime = new Date();
+     return currentTime.getTime();
+  }
+
 
   filterAllUsers() {
     this.filteredUsers = this.allUsers.filter(user =>

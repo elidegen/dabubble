@@ -5,8 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '../user.service';
 import { AuthService } from '../auth.service';
 import { ChatService } from '../chat.service';
-import { Firestore, addDoc, arrayUnion, collection, doc, updateDoc } from '@angular/fire/firestore';
-import { DocumentData, DocumentReference, getDoc, onSnapshot, orderBy, query } from 'firebase/firestore';
+import { Firestore, collection, doc, updateDoc } from '@angular/fire/firestore';
 import { Channel } from 'src/models/channel.class';
 import { Reaction } from 'src/models/reaction.class';
 import { Message } from 'src/models/message.class';
@@ -18,7 +17,7 @@ import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-p
 @Component({
   selector: 'app-thread',
   templateUrl: './thread.component.html',
-  styleUrls: ['./thread.component.scss']
+  styleUrls: ['./thread.component.scss', './thread.component.mediaquery.scss']
 })
 
 export class ThreadComponent implements OnInit {
@@ -215,10 +214,12 @@ export class ThreadComponent implements OnInit {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
       this.authService.uploadProfileImage(file);
+      this.firestoreService.showSpinner = true;
     }
     setTimeout(() => {
       this.message.files.push(this.authService.customPic);
       console.log(this.message);
+      this.firestoreService.showSpinner = false;
     }, 1500);
     this.showUploadedFile = true;
   }

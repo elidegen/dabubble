@@ -1,4 +1,7 @@
-<mat-card [ngSwitch]="editState">
+
+
+<mat-card *ngIf="userService.currentUser.name != 'Guest'" [ngSwitch]="editState">
+    <mat-spinner *ngIf="firestoreService.showSpinner == true" class="mat-spinner"></mat-spinner>
     <mat-card-content *ngSwitchCase="false">
         <div class="header">
             <h1>Profile</h1>
@@ -6,8 +9,8 @@
                 <mat-icon>close</mat-icon>
             </button>
         </div>
-        <div class="picture">
-            <img src="{{user.picture}}" alt="" />
+        <div   class="picture"> 
+                <img src="{{user.picture}}" alt="" />
         </div>
 
         <div class="name">
@@ -44,8 +47,12 @@
                 <mat-icon>close</mat-icon>
             </button>
         </div>
-        <div class="picture">
-            <img src="{{user.picture}}" alt="" />
+        <div   matTooltip="Change Picture" class="picture">
+            <label class="custom-file-upload">
+                <input class="dataInput" (change)="onFileSelected($event)" type="file" accept="image/jpeg, image/png">
+                <img src="{{user.picture}}" alt="" />
+              </label>
+        
         </div>
 
         <form>
@@ -73,4 +80,42 @@
             </button>
         </div>
     </mat-card-content>
+</mat-card>
+
+
+
+<mat-card *ngIf="userService.currentUser.name == 'Guest'">
+    <mat-card-content >
+        <div class="header">
+            <h1>Profile</h1>
+            <button mat-icon-button (click)="dialogRef.close()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+        <div class="picture">
+            <img src="assets/img/avatars/profile.svg" alt="" />
+        </div>
+
+        <div class="name">
+            <h1>Guest</h1>
+            
+        </div>
+
+        <div >
+            <div class="status" >
+                <div class="status-circle" style="background-color: #92c83e !important;"></div>
+                <span style="color: #92c83e;">Active</span>
+            </div>
+        </div>
+
+        <div class="email-container">
+            <div class="mail-icon mr-16">
+                <img src="assets/img/icons/mail.svg" alt="">
+            </div>
+            <div class="email">
+                <h2>Guest</h2>
+            </div>
+        </div>
+    </mat-card-content>
+
 </mat-card>

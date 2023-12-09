@@ -1,3 +1,5 @@
+<mat-spinner *ngIf="firestoreService.showSpinner == true" class="mat-spinner"></mat-spinner>
+
 <div [ngSwitch]="firestoreService.messageIsExisting" class="chat-window-container">
   <mat-card-header>
     <button class="br-32 profile-button" (click)="openProfileDialog(interlocutor.id)">

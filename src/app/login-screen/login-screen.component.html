@@ -1,5 +1,11 @@
+
+
+<mat-spinner *ngIf="firestoreService.showSpinner == true" class="mat-spinner "></mat-spinner>
+<div *ngIf="this.authService.signInSuccess == true" class="account-popup"><span>Login successfull</span></div>
+<div *ngIf="showUserCreatedSuccess == true" class="account-popup"><span>Account created</span></div>
+<div  *ngIf="showEmailSent == true" class="account-popup"><span>E-mail sent</span></div>
 <div *ngIf="!animationIsFinished" class="start-animation-container"></div>
-<div *ngIf="!animationIsFinished" class="start-animation hideafteranimation">
+<div *ngIf="!animationIsFinished" class="start-animation start-animation-responsive hideafteranimation">
   <div class="start-animation-logo"><img src="assets\img\icons\logo.svg"></div><span
     class="start-animation-span">DABubble</span>
 </div>
@@ -7,10 +13,11 @@
 
 
 <div [ngSwitch]="switch_expression" class="login-container">
-  <img class="start-logo" src="assets\img\icons\logo-home.svg">
+ 
   <div *ngSwitchCase="'login'" class="top-span"><span class="padding-bottom">New at DABubble ?</span><span
       (click)="changeSwitchCase('createAccount')" class="color-purple2-text cursor-pointer transform">Create
       Account</span></div>
+      <img class="start-logo" src="assets\img\icons\logo-home.svg">
   <div class="impressum-span"><a routerLink="/imprint">Impress</a><a routerLink="/privacy">Privacy Policy</a></div>
 
   <div *ngSwitchCase="'login'" class="login bg-white">
@@ -40,11 +47,7 @@
           <span (click)="loginWithGoogle()" class="color-purple2-text ">Login with google</span>
         </div>
 
-        <div mat-button class="input-container  cursor-pointer align-center  google-button">
-          <img style="width: 50px" src="assets\img\icons\apple.svg">
-          <span (click)="loginWithApple()" class="color-purple2-text ">Login with apple</span>
-        </div>
-
+     
         <div class="submit-buttons margin-top">
           <button (click)="loginUser()" mat-button class="main-button primary mr-16" type="submit">Login</button>
           <button (click)="loginGuest()" mat-button class="main-button ">Guest login</button>
@@ -55,38 +58,38 @@
 
   <div *ngSwitchCase="'createAccount'" class="login bg-white">
     <div class="form-container">
-      <img (click)="changeSwitchCase('login')" class="position-relative cursor-pointer transform"
+      <img (click)="changeSwitchCase('login')" class="position-relative cursor-pointer transform arrow"
         src="assets\img\icons\arrow_back.svg">
       <h1 class="color-purple2-text padding-bottom"> Create account</h1>
       <p>Create your account with your name and e-mail adress.</p>
 
       <form [formGroup]="addUser" (ngSubmit)="createUser()">
-        <div class="input-container margin-top">
-          <img src="assets\img\icons\person.svg">
-          <input minlength="5" [formControl]="newName" matInput placeholder="First and  Lastname" required>
-          <div class="placeholder"></div>
-          <mat-error *ngIf="this.newName?.hasError('minlength')">Your name need minimum 5 letters</mat-error>
-        </div>
         <div class="input-container margin-top25">
+          <img src="assets\img\icons\person.svg">
+          <input minlength="5" [formControl]="newName" matInput placeholder="Name" required>
+          <div class="placeholder"></div>
+          <mat-error class="error" *ngIf="this.newName?.hasError('minlength')">Your name need minimum 5 letters</mat-error>
+        </div>
+        <div  class="input-container margin-top25">
           <img src="assets\img\icons\mail.svg">
           <input [formControl]="newEmail" matInput placeholder="E-mail" required>
           <div class="placeholder"></div>
-          <mat-error *ngIf="!newEmail.valid">{{getErrorMessageNewEmail()}}</mat-error>
+          <mat-error class="error" *ngIf="!newEmail.valid">{{getErrorMessageNewEmail()}}</mat-error>
         </div>
 
         <div class="input-container margin-top25"><img src="assets\img\icons\lock.svg"><input minlength="6"
             type="password" [formControl]="newPassword" matInput placeholder="Password" required>
           <div class="placeholder"></div>
-          <mat-error *ngIf="this.newPassword?.hasError('minlength')">You need a password with minium 6
-            letters</mat-error> <mat-error *ngIf="this.userAlreadyInUse">This user already exists</mat-error>
+          <mat-error class="error error-bottom" *ngIf="this.newPassword?.hasError('minlength')">You need a password with minium 6
+            letters</mat-error> <mat-error class="error" *ngIf="this.userAlreadyInUse">This user already exists</mat-error>
         </div>
 
-        <span class="margin-top gap  cursor-pointer align-center"><input [formControl]="disableSelect"
+        <span class="margin-top gap checkbox-bottom cursor-pointer align-center"><input [formControl]="disableSelect"
             class="cursor-pointer" type="checkbox">I accept
           the <a routerLink="/privacy" class="color-purple2-text transform">privacy policy</a></span>
 
 
-        <div class="submit-buttons margin-top justify-content-end">
+        <div class="submit-buttons justify-content-end">
           <button mat-button class="align-self main-button primary" type="submit"
             [disabled]= "!disableSelect.value || !addUser.valid ">Next</button>
         </div>
@@ -96,9 +99,9 @@
 
 
 
-  <div *ngSwitchCase="'avatar'" class="login bg-white">
+  <div  *ngSwitchCase="'avatar'" class="login bg-white margin-top30">
     <div class="form-container">
-      <img (click)="changeSwitchCase('createAccount')" class="position-relative cursor-pointer transform"
+      <img (click)="changeSwitchCase('createAccount')" class="position-relative cursor-pointer transform arrow"
         src="assets\img\icons\arrow_back.svg">
       <h1 class="color-purple2-text padding-bottom"> Choose your Avatar</h1>
       <div class="big-profile-pic"><img class="userPic" src="{{this.picSrc}}"></div>
@@ -110,7 +113,7 @@
         </div>
         <div class="upload-picture margin-top align-center"><span class="font-size20"></span> <button mat-button
             class="main-button" type="submit"> <label class="custom-file-upload">
-              <input class="dataInput" (change)="onFileSelected($event)" [(ngModel)]="uploadFile" type="file">
+              <input class="dataInput" (change)="onFileSelected($event)" type="file" accept="image/jpeg, image/png">
               Upload file
             </label>
           </button></div>
@@ -130,7 +133,7 @@
 
   <div *ngSwitchCase="'resetPassword'" class="login bg-white">
     <div class="form-container">
-      <img (click)="changeSwitchCase('login')" class="position-relative cursor-pointer transform"
+      <img (click)="changeSwitchCase('login')" class="position-relative cursor-pointer transform arrow"
         src="assets\img\icons\arrow_back.svg">
       <h1 class="color-purple2-text padding-bottom">Reset password</h1>
       <p style="font-size:20px;">Please enter your E-mail adress.</p>
@@ -142,7 +145,7 @@
           <mat-error *ngIf="this.emailForReset?.hasError('email')">Enter a valid e-mail</mat-error>
         </div>
         <p  *ngIf="!this.userService.resetEmailFound" class="margin-top25 grey-span-resetpw">Receive an e-mail to reset your password</p>
-        <p  *ngIf="this.userService.resetEmailFound"class="margin-top25 grey-span-resetpw">An e-mail to reset your passoword was sent !</p>
+        <p  *ngIf="this.userService.resetEmailFound"class="margin-top25 grey-span-resetpw">An e-mail to reset your password was sent !</p>
         <div class="submit-buttons margin-top justify-content-end">
           <button mat-button (click)="sendResetEmail()" [disabled]="!this.emailForReset.valid" class="main-button primary"
             type="submit">Send Email</button>
@@ -150,9 +153,6 @@
       </form>
     </div>
   </div>
-
-
-
 
   <!-- <div *ngSwitchCase="'newPassword'" class="login bg-white">
     <div class="form-container">
@@ -172,4 +172,12 @@
       </form>
     </div>
   </div> -->
+  <div  *ngSwitchCase="'login'" class="responsive-create-account"><span >New at DABubble ?</span>
+ 
+    <button   (click)="changeSwitchCase('createAccount')" mat-button class="main-button ">Create Account</button>
+   </div>
+  
 </div>
+
+
+

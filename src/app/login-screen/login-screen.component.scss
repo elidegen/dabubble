@@ -1,3 +1,11 @@
+.body {
+   top: 0;
+   position: relative;
+   left:0;
+   height: 100vh;
+   max-width: 1920px;
+}
+
 .start-animation-container {
     height: 100vh;
     width: 100%;
@@ -7,7 +15,8 @@
     position: absolute;
     opacity: 1;
     top: 0;
-    display: none;
+    left: 0;
+    
 }
 
 .login-container {
@@ -17,8 +26,8 @@
     align-items: center;
     height: 100vh;
     width: 100%;
-    position: absolute;
     top: 0;
+    left: 0;
     background-color: var(--primary);
     z-index: 1;
 }
@@ -55,7 +64,7 @@
 
 .login {
     height: auto;
-    min-width: 40vw;
+    min-width: 40%;
     display: flex;
     flex-direction: column;
     box-shadow: 0px 2px 10px 0px #00000014;
@@ -82,7 +91,9 @@
     z-index: 1;
     transform: translate(0);
     display: flex;
-    animation: holdSpanLeft 2s,
+    animation: holdSpanLeft 2s;
+    color: white;
+    font-family: 'Nunito', 'Roboto', sans-serif !important;
 }
 
 .start-animation {
@@ -96,7 +107,6 @@
     z-index: 2;
     animation: moveLeft 1s ease, moveToLeftCorner 1s ease 1.5s;
     overflow: hidden;
-    display: none;
 }
 
 .padding-bottom {
@@ -139,18 +149,49 @@ form {
 mat-error {
     position: absolute;
     bottom: -25px;
-    /* Positionieren Sie die Fehlermeldung unter dem Input-Feld */
     left: 0;
     width: 100%;
-    /* Sollte die Breite des Input-Feldes haben */
     font-size: 0.8em;
-    /* Passen Sie die Größe an Ihre Fehlermeldung an */
     color: red;
-    /* Fehlermeldung Farbe */
     visibility: visible;
-    /* Jetzt sichtbar */
     padding-top: 10px;
 }
+
+.account-popup {
+    z-index: 10;
+    position: absolute;
+    text-align: center;
+    display: flex;
+    opacity: 1;
+    align-items: center;
+    justify-content: center;
+    top: 50%;
+    color: white;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    border-radius: 30px 30px 0px 30px;
+    height: 100px;
+    width: 300px;
+    font-size: 30px;
+    background-color: #444DF2;
+    box-shadow: 0px 6px 10px 0px #00000033;
+    animation: popupAnimation 2s ease;
+}
+
+
+@keyframes popupAnimation {
+    from {
+
+        transform: translate(-30%, -30%);
+   
+    }
+
+    to {
+        transform: translate(-50%, -50%);
+    
+    }
+}
+
 
 .grey-span-resetpw {
     font-size: 20px;
@@ -176,6 +217,7 @@ mat-error {
     color: var(--textGray);
     margin-top: 20px;
     position: relative;
+    border: 1px solid transparent;
 
     img {
         margin-left: 20px;
@@ -213,6 +255,7 @@ input {
     border: none;
     background-color: var(--primary);
     height: 30px;
+    max-width: 150px;
     font-size: 20px;
     cursor: pointer;
 
@@ -285,10 +328,10 @@ input {
 }
 
 .transform {
-    transform: scale(1.0);
+    
 
     &:hover {
-        transform: scale(1.1);
+        font-weight: bold;
     }
 }
 
@@ -299,6 +342,10 @@ input {
 .cursor-pointer {
     cursor: pointer;
 
+}
+
+.responsive-create-account {
+    display: none;
 }
 
 
@@ -335,56 +382,18 @@ input[type="email"] {
 .userPic {
     width: 150px;
     height: 150px;
+    border-radius: 50%;
 }
 
 .picture-container {
     display: flex;
     justify-content: space-between;
+    gap: 5px;
 }
 
 .upload-picture {
     gap: 20px;
 }
 
-@keyframes moveToLeftCorner {
-    from {
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
 
-    to {
-        top: 75px;
-        left: 75px;
-        transform: translate(0, 0);
-    }
-}
-
-
-@keyframes holdSpanLeft {
-    from {
-
-        transform: translateX(-200%);
-    }
-}
-
-
-@keyframes moveLeft {
-    from {
-
-        transform: translate(-20%, -50%);
-        opacity: 1;
-    }
-
-    to {
-        transform: translate(-50%, -50%);
-        opacity: 1;
-    }
-}
-
-
-@keyframes showContainer {
-    from {
-        opacity: 1;
-    }
-}
+  

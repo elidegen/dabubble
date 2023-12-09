@@ -43,8 +43,12 @@ export class DirectMessageChatComponent implements OnInit {
     this.chatService.openDirectMessage$.subscribe((openDirectMessage) => {
       if (openDirectMessage) {
         const newChat = openDirectMessage as Chat;
+        console.log('opendirect', newChat);
+        
         if (!this.currentChat || this.currentChat.id !== newChat.id) {
           this.currentChat = newChat;
+          console.log('currentDirect');
+          
           if (this.firestoreService.unSubDirectMessages) {
             this.firestoreService.unSubDirectMessages();
           }
@@ -95,10 +99,12 @@ export class DirectMessageChatComponent implements OnInit {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
       this.authService.uploadProfileImage(file);
+      this.firestoreService.showSpinner = true;
     }
     setTimeout(() => {
       this.message.files.push(this.authService.customPic);
       console.log(this.message);
+      this.firestoreService.showSpinner = false;
     }, 1500);
     this.showUploadedFile = true;
   }
