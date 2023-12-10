@@ -13,6 +13,7 @@ import { EmojiService } from '../emoji.service';
 import { FirestoreService } from '../firestore.service';
 import { User } from 'src/models/user.class';
 import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-profile.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-thread',
@@ -41,7 +42,9 @@ export class ThreadComponent implements OnInit {
   edit: boolean = false;
   editingThreadMessage: string | undefined;
 
-  constructor(public threadService: ThreadService, public dialog: MatDialog, public userService: UserService, public authService: AuthService, public chatService: ChatService, public emojiService: EmojiService, public firestoreService: FirestoreService) {
+  constructor(public threadService: ThreadService, public dialog: MatDialog, public userService: UserService,
+    public authService: AuthService, public chatService: ChatService, public emojiService: EmojiService, 
+    public firestoreService: FirestoreService, public router: Router) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
   }
@@ -177,6 +180,7 @@ export class ThreadComponent implements OnInit {
     });
   }
 
+
   getUpdateData(message: Message) {
     return {
       creator: this.userService.currentUser.name,
@@ -193,7 +197,11 @@ export class ThreadComponent implements OnInit {
 
 
   onCloseClick() {
-    this.closeThread.emit();
+    if (this.chatService.isMobile) {
+      this.router.navigate(['main'])
+    } else {
+      this.closeThread.emit();
+    }
   }
 
 
@@ -238,5 +246,10 @@ export class ThreadComponent implements OnInit {
     return {
       content: this.editorThread.nativeElement.value
     }
+  }
+
+  logOutUser() {
+    this.authService.signOutUser();
+    this.router.navigate(['']);
   }
 }

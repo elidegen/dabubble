@@ -102,7 +102,52 @@
     .message-box {
         padding: 0 10px;
     }
-    
+}
+
+@media (max-width: 799px) {
+    .header-mobile {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 16px;
+        height: 100px;
+        align-items: center;
+    }
+    .profile-container {
+        img {
+            cursor: pointer;
+        }
+    }
+    .logo-header-mobile {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        span {
+            font-size: 22px !important;
+            font-weight: bold !important;
+        }
+    }
+    .logo {
+        margin-right: 8px;
+    }
+    mat-card {
+        border-radius: 0 !important;
+        height: calc(100vh - 100px);
+        margin-right: 0;
+        width: 100%;
+    }
+    mat-card-header {
+        padding: 0 16px;
+    }
+    h2 {
+        font-size: 22px !important;
+    }
+    .channel-title {
+        font-size: 12px;
+    }
+    .close-icon {
+        height: 16px;
+        width: 16px;
+    }
 }
 
 @media (max-height: 900px) {

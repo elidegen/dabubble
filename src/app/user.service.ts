@@ -7,6 +7,7 @@ import { User } from 'src/models/user.class';
 
 
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -34,7 +35,7 @@ export class UserService {
    
   }
 
-  constructor(public router: Router) {
+  constructor(public router: Router ) {
     this.unsubList = this.subUserList();
     console.log("Alle Nutzer",this.users);
   }

@@ -1,15 +1,18 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, Inject, OnInit, Optional, inject } from '@angular/core';
 import { Channel } from 'src/models/channel.class';
 import { ChatService } from '../chat.service';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { UserService } from '../user.service';
 import { Firestore, collection, doc, getDoc, updateDoc } from '@angular/fire/firestore';
+import { AuthService } from '../auth.service';
+import { Router } from '@angular/router';
+import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-profile.component';
 
 
 @Component({
   selector: 'app-dialog-edit-channel',
   templateUrl: './dialog-edit-channel.component.html',
-  styleUrls: ['./dialog-edit-channel.component.scss']
+  styleUrls: ['./dialog-edit-channel.component.scss', './dialog-edit-channel.mediaquery.component.scss']
 })
 export class DialogEditChannelComponent implements OnInit {
   editName: boolean = false;
@@ -22,8 +25,14 @@ export class DialogEditChannelComponent implements OnInit {
   newChannelMembers: any[] = [];
   unSubChannel: any;
 
-  constructor(public chatService: ChatService, public dialogRef: MatDialogRef<DialogEditChannelComponent>, public userService: UserService) {
+  
+  constructor(
+    public chatService: ChatService, @Optional() @Inject(MatDialogRef) public dialogRef: MatDialogRef<DialogEditChannelComponent> | undefined,
+     public userService: UserService, public authService: AuthService, public router: Router, public dialog: MatDialog) {
     this.currentUser = this.userService.currentUser;
+    if (chatService.isMobile) {
+      this.dialogRef = undefined
+    }
    }
 
   ngOnInit() {
@@ -71,7 +80,7 @@ export class DialogEditChannelComponent implements OnInit {
         console.error('Error updating document:', error);
       });
     }
-    this.dialogRef.close();
+    this.dialogRef?.close();
     this.chatService.chatWindow = 'empty'
     this.chatService.openChat = null;
   }
@@ -84,6 +93,21 @@ export class DialogEditChannelComponent implements OnInit {
       this.newChannelMembers = this.allChannelMembers;
       console.log('no currentUser', this.newChannelMembers );
     }
+  }
+  logOutUser() {
+    this.authService.signOutUser();
+    this.router.navigate(['']);
+  }
+
+  openProfileDialog(id: any): void {
+    this.dialog.open(DialogViewProfileComponent, {
+      panelClass: 'dialog-container',
+      data: { userID: id },
+    });
+  }
+
+  backToChat() {
+    this.router.navigate(['main']);
   }
 
 }

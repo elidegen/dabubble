@@ -10,6 +10,7 @@ import { Chat } from 'src/models/chat.class';
 import { User } from 'src/models/user.class';
 import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-profile.component';
 import { FirestoreService } from '../firestore.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-direct-message-chat',
@@ -32,7 +33,8 @@ export class DirectMessageChatComponent implements OnInit {
   editingMessage: string | undefined;
   @ViewChild('editor') editor!: ElementRef;
 
-  constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public authService: AuthService, public emojiService: EmojiService, public firestoreService: FirestoreService) {
+  constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, 
+    public authService: AuthService, public emojiService: EmojiService, public firestoreService: FirestoreService, public router: Router) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
   }
@@ -207,5 +209,10 @@ export class DirectMessageChatComponent implements OnInit {
   addEmojiTextField($event: any) {
     this.emojiService.addEmojiTextChat($event);
     this.message.content += this.emojiService.emojiString;
+  }
+
+  logOutUser() {
+    this.authService.signOutUser();
+    this.router.navigate(['']);
   }
 }

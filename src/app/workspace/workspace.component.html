@@ -82,7 +82,7 @@
     </div>
    
   </mat-card-content>
-  <button class="edit-mobile" *ngIf="chatservice.isMobile" mat-fab color="primary">
+  <button class="edit-mobile" *ngIf="chatservice.isMobile" mat-fab color="primary" (click)="renderNewMainChat()">
     <mat-icon>edit_square</mat-icon>
   </button>
 </mat-card>

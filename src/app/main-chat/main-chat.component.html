@@ -1,22 +1,36 @@
-
-
 <mat-drawer-container (click)="closeEmojiPicker()" autosize [ngSwitch]="chatService.chatWindow">
-  <mat-card class="mr-16">
+  <div *ngIf="chatService.isMobile" class="header-mobile">
+    <div class="logo-header-mobile">
+      <button mat-icon-button [routerLink]="['/home']">
+        <img src="assets/img/icons/chevron_left.svg">
+      </button>
+      <img class="logo" src="assets/img/icons/workspace-logo.svg"/>
+      <span>Code learning</span>
+    </div>
+    <div class="profile-container">
+      <div class="profile-picture" [matMenuTriggerFor]="menu">
+        <img src="{{this.userService.currentUser.picture}}" alt="" />
+      </div>
+      <mat-menu class="menu-mobile" #menu="matMenu" xPosition="before">
+        <div class="separator-mobile"></div>
+        <button (click)="openProfileDialog(currentUser.id)" class="menu" mat-menu-item>Profile</button>
+        <button (click)="logOutUser()" mat-menu-item>Log Out</button>
+      </mat-menu>
+    </div>
+  </div>
 
+  <mat-card class="mr-16">
     <div *ngSwitchCase="'empty'" class="chat-window-container">
       <mat-card-header>
         <div class="header">
         </div>
       </mat-card-header>
-
       <mat-card-content class="empty-chat-container" *ngSwitchCase="'empty'">
         <span>Du hast keinen Channel ausgewählt</span>
       </mat-card-content>
-
       <mat-card-content class="textfield-content">
         <div class="text-field-container">
           <textarea disabled placeholder="Choose channel or direct Message or start a new conversation"></textarea>
-
           <div class="message-buttons">
             <div class="attachments">
               <div class="border-right">
@@ -27,29 +41,22 @@
               <button disabled (click)="openEmojiPickerChat()" mat-icon-button>
                 <img src="assets/img/icons/smiley.svg" alt="" />
               </button>
-
               <button disabled mat-icon-button>
                 <img src="assets/img/icons/@.svg" alt="" />
               </button>
             </div>
-
             <button class="send-button" mat-icon-button disabled>
               <svg width="23" height="20" viewBox="0 0 23 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M2.5 19.2812C2.08333 19.4479 1.6875 19.4112 1.3125 19.1712C0.9375 18.9321 0.75 18.5833 0.75 18.125V13.4687C0.75 13.1771 0.833333 12.9167 1 12.6875C1.16667 12.4583 1.39583 12.3125 1.6875 12.25L10.75 9.99999L1.6875 7.74999C1.39583 7.68749 1.16667 7.54166 1 7.31249C0.833333 7.08333 0.75 6.82291 0.75 6.53124V1.87499C0.75 1.41666 0.9375 1.06749 1.3125 0.827493C1.6875 0.588327 2.08333 0.552076 2.5 0.718743L21.75 8.84374C22.2708 9.07291 22.5312 9.45833 22.5312 9.99999C22.5312 10.5417 22.2708 10.9271 21.75 11.1562L2.5 19.2812Z"
                   fill="#444DF2" />
               </svg>
-
             </button>
           </div>
         </div>
       </mat-card-content>
-
     </div>
-
-
     <div *ngSwitchCase="'newMessage'" class="chat-window-container">
-
       <mat-card-header *ngSwitchCase="'newMessage'">
         <div class="w100 headline">
           <h1>New Message</h1>
@@ -79,40 +86,34 @@
       <mat-card-content class="textfield-content">
         <div class="text-field-container">
           <textarea disabled placeholder="Choose channel or direct Message or start a new conversation"></textarea>
-
           <div class="message-buttons">
             <div class="attachments">
               <div class="border-right">
                 <button disabled mat-icon-button>
                   <label class="custom-file-upload">
                     <input class="dataInput" (change)="onFileSelected($event)"  type="file">
-                    <img src="assets/img/icons/add.svg" alt="" /> Test
+                    <img src="assets/img/icons/add.svg"/>
                   </label>
                 </button>
               </div>
               <button disabled (click)="openEmojiPickerChat()" mat-icon-button>
-                <img src="assets/img/icons/smiley.svg" alt="" />
+                <img src="assets/img/icons/smiley.svg"/>
               </button>
-
               <button disabled mat-icon-button>
-                <img src="assets/img/icons/@.svg" alt="" />
+                <img src="assets/img/icons/@.svg"/>
               </button>
             </div>
-
             <button class="send-button" mat-icon-button disabled>
               <svg width="23" height="20" viewBox="0 0 23 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M2.5 19.2812C2.08333 19.4479 1.6875 19.4112 1.3125 19.1712C0.9375 18.9321 0.75 18.5833 0.75 18.125V13.4687C0.75 13.1771 0.833333 12.9167 1 12.6875C1.16667 12.4583 1.39583 12.3125 1.6875 12.25L10.75 9.99999L1.6875 7.74999C1.39583 7.68749 1.16667 7.54166 1 7.31249C0.833333 7.08333 0.75 6.82291 0.75 6.53124V1.87499C0.75 1.41666 0.9375 1.06749 1.3125 0.827493C1.6875 0.588327 2.08333 0.552076 2.5 0.718743L21.75 8.84374C22.2708 9.07291 22.5312 9.45833 22.5312 9.99999C22.5312 10.5417 22.2708 10.9271 21.75 11.1562L2.5 19.2812Z"
                   fill="#444DF2" />
               </svg>
-
             </button>
           </div>
         </div>
       </mat-card-content>
-
     </div>
-
 
     <div *ngSwitchCase="'channel'" class="chat-window-container">
       <mat-card-header *ngSwitchCase="'channel'">
@@ -124,8 +125,8 @@
               <mat-icon>expand_more</mat-icon>
             </div>
           </button>
-          <div class="group-members-container">
 
+          <div *ngIf="!chatService.isMobile" class="group-members-container">
             <button mat-button class="group-members-button" (click)="openMemberDialog()">
               <div class="group-members-container">
                 <div class="group-members">
@@ -137,11 +138,14 @@
                   {{firestoreService.allChannelMembers.length -3}}</h3>
               </div>
             </button>
-
             <button mat-icon-button class="add-user" (click)="openDialog()">
               <img src="assets/img/icons/add-person.svg" alt="" />
             </button>
           </div>
+
+          <button *ngIf="chatService.isMobile" mat-icon-button class="add-user" (click)="openDialog()">
+            <img src="assets/img/icons/add-person.svg" alt="" />
+          </button>
         </div>
       </mat-card-header>
 
@@ -156,7 +160,6 @@
 
             <div class="message-row-container" [ngClass]="{'my-messages': message.creator == currentUser.name}"
               *ngFor="let message of organizedMessage.messages">
-            
               <div class="message-box">
                 <div class="creator-picture-container">
                   <img src="{{message.profilePic}}" alt="" />
@@ -255,7 +258,6 @@
 
       </mat-card-content>
 
-
       <div class="user-search-container-textfield" *ngIf="this.userService.openUserContainerTextfield.value == true" >
           <button (click)="getUserNameString(user)" class="user-container" *ngFor="let user of this.userService.users" >
               <div  class="profile-container">
@@ -264,12 +266,7 @@
               </div>
               <span>{{user.name}}</span>
           </button>
-              </div>
-
-  
-            
-             
-
+      </div>
 
       <mat-card-content>
         <div class="textfield-content">
@@ -302,29 +299,24 @@
                     <img *ngIf="this.authService.isPDF(messagefile) && this.showUploadedFile" src="assets/img/icons/pdf.svg" alt="">
                 </ng-container>
               </div>
-            
               <button class="send-button" mat-icon-button (click)="sendMessage()" [disabled]="!message.content">
                 <svg width="23" height="20" viewBox="0 0 23 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M2.5 19.2812C2.08333 19.4479 1.6875 19.4112 1.3125 19.1712C0.9375 18.9321 0.75 18.5833 0.75 18.125V13.4687C0.75 13.1771 0.833333 12.9167 1 12.6875C1.16667 12.4583 1.39583 12.3125 1.6875 12.25L10.75 9.99999L1.6875 7.74999C1.39583 7.68749 1.16667 7.54166 1 7.31249C0.833333 7.08333 0.75 6.82291 0.75 6.53124V1.87499C0.75 1.41666 0.9375 1.06749 1.3125 0.827493C1.6875 0.588327 2.08333 0.552076 2.5 0.718743L21.75 8.84374C22.2708 9.07291 22.5312 9.45833 22.5312 9.99999C22.5312 10.5417 22.2708 10.9271 21.75 11.1562L2.5 19.2812Z"
-                    fill="#444DF2" />
+                  <path d="M2.5 19.2812C2.08333 19.4479 1.6875 19.4112 1.3125 19.1712C0.9375 18.9321 0.75 18.5833 0.75 18.125V13.4687C0.75 13.1771 0.833333 12.9167 1 12.6875C1.16667 12.4583 1.39583 12.3125 1.6875 12.25L10.75 9.99999L1.6875 7.74999C1.39583 7.68749 1.16667 7.54166 1 7.31249C0.833333 7.08333 0.75 6.82291 0.75 6.53124V1.87499C0.75 1.41666 0.9375 1.06749 1.3125 0.827493C1.6875 0.588327 2.08333 0.552076 2.5 0.718743L21.75 8.84374C22.2708 9.07291 22.5312 9.45833 22.5312 9.99999C22.5312 10.5417 22.2708 10.9271 21.75 11.1562L2.5 19.2812Z" fill="#444DF2" />
                 </svg>
-
               </button>
             </div>
           </div>
         </div>
       </mat-card-content>
-
     </div>
-
     <div *ngSwitchCase="'direct'" style="height: 100%;">
       <app-direct-message-chat style="display: flex; flex-direction: column; height: 100%;"></app-direct-message-chat>
     </div>
-
   </mat-card>
 
   <mat-drawer style="padding-right: 16px;" #thread mode="side" position="end">
     <app-thread style="width: 25%" (closeThread)="onCloseThread()"></app-thread>
   </mat-drawer>
 </mat-drawer-container>
+
+
