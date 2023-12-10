@@ -122,7 +122,10 @@ export class ChatService {
   renderDirectMessage(chat: Chat) {
     this.openDirectMessage = chat;
     this.chatWindow = 'direct';
-    this.router.navigate(['directMessage'])
+    if (this.isMobile) {
+      this.router.navigate(['directMessage'])
+    }
+    
   }
 
   //------------------------------------------------------------------------------------
