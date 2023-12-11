@@ -106,12 +106,16 @@ export class HomeComponent {
 
   async filterDirectMessages() {
     await this.chatService.getDMMessages();
+    console.log('filterallDm Ms', this.chatService.allMessagesOfDM);
+    
     this.filteredDirectMessages = [];
     this.chatService.allMessagesOfDM.forEach(message => {
       if (message.content?.toLowerCase().includes(this.searchInput.toLowerCase())) {
         this.filteredDirectMessages.push(message);
       }
     });
+    console.log('filter after', this.filteredDirectMessages);
+    
   }
 
   

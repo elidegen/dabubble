@@ -127,6 +127,7 @@ export class FirestoreService {
     await this.updateChannelMessage(colId, message);
   }
 
+  
   async updateChannelMessage(colId: string, message: Message) {
     const docRef = doc(collection(this.firestore, colId), message.id);
     await updateDoc(docRef, this.getUpdateChannelMessageData(message)).catch(

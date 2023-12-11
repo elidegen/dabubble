@@ -19,7 +19,6 @@ export class DialogAddChannelComponent {
   firestore: Firestore = inject(Firestore);
   addMembers: boolean = false;
   allMembers: boolean = true;
-  searchInput: string = '';
   isInputFocused: boolean = false;
   touched: boolean = false;
   selectedUsers: any[] = [];
@@ -33,6 +32,7 @@ export class DialogAddChannelComponent {
     }
   }
 
+
   @HostListener('document:click', ['$event'])
   checkClick(event: Event) {
     const clickedElement = event.target as HTMLElement;
@@ -41,22 +41,24 @@ export class DialogAddChannelComponent {
     }
   }
 
+
   filterUsers(): void {
     this.isInputFocused = true;
     this.firestoreService.filterAllUsers()
   }
 
+
   async createChannel() {
     this.getMembers();
     this.channel.creator = this.userService.currentUser.name;
     await this.firestoreService.addChannel(this.channel);
-
     if (this.chatService.isMobile) {
       this.router.navigate(['home']);
     } else {
       this.dialogRef?.close();
     }
   }
+
 
   getMembers() {
     if (this.allMembers) {
@@ -66,6 +68,7 @@ export class DialogAddChannelComponent {
       this.addSelectedUsersToChannel(this.selectedUsers)
     }
   }
+
 
   addSelectedUsersToChannel(selectedUsers: any[]) {
     const formattedUsers = selectedUsers.map(user => {
@@ -81,9 +84,11 @@ export class DialogAddChannelComponent {
     this.channel.members.push(...formattedUsers);
   }
 
+
   userSelected(event: Event) {
     event.stopPropagation();
   }
+
 
   addCurrentUser() {
     const userAlreadySelected = this.selectedUsers.some(user => user.id === this.currentUser.id);
@@ -92,13 +97,14 @@ export class DialogAddChannelComponent {
     }
   }
 
+
   removeUser(user: User) {
     let index = this.selectedUsers.findIndex(obj => obj.id === user.id);
-
     if (index !== -1) {
       this.selectedUsers.splice(index, 1);
     }
   }
+
 
   selectUser(user: any, i: number) {
     this.highlightButton(i);
@@ -109,6 +115,7 @@ export class DialogAddChannelComponent {
       this.removeUser(user)
     }
   }
+
 
   highlightButton(index: number) {
     const userContainer = this.userContainers.toArray()[index];

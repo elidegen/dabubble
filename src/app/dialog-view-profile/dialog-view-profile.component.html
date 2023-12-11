@@ -9,15 +9,13 @@
                 <mat-icon>close</mat-icon>
             </button>
         </div>
-        <div   class="picture"> 
-                <img src="{{user.picture}}" alt="" />
+        <div class="picture"> 
+            <img src="{{user.picture}}" alt="" />
         </div>
-
         <div class="name">
             <h1>{{user.name}}</h1>
             <span (click)="editState = true" *ngIf="currentUser.id == user.id">Edit</span>
         </div>
-
         <div [ngSwitch]="user.online">
             <div class="status" *ngSwitchCase="false">
                 <div class="status-circle" style="background-color: grey !important;"></div>
@@ -28,7 +26,6 @@
                 <span style="color: #92c83e;">Active</span>
             </div>
         </div>
-
         <div class="email-container">
             <div class="mail-icon mr-16">
                 <img src="assets/img/icons/mail.svg" alt="">
@@ -47,12 +44,11 @@
                 <mat-icon>close</mat-icon>
             </button>
         </div>
-        <div   matTooltip="Change Picture" class="picture">
+        <div matTooltip="Change Picture" class="picture">
             <label class="custom-file-upload">
                 <input class="dataInput" (change)="onFileSelected($event)" type="file" accept="image/jpeg, image/png">
                 <img src="{{user.picture}}" alt="" />
-              </label>
-        
+            </label>
         </div>
 
         <form>
@@ -60,14 +56,11 @@
                 <img class="mr-16" src="assets/img/icons/account_circle_big.svg">
                 <h2>Full Name</h2>
             </div>
-
             <input [(ngModel)]="user.name" name="newUserName" type="text">
-
             <div class="display-flex">
                 <img class="mr-16" src="assets/img/icons/mail.svg">
                 <h2>E-Mail Adress</h2>
             </div>
-
             <input [(ngModel)]="user.email"  name="newEmail" type="email">
         </form>
 
@@ -95,19 +88,15 @@
         <div class="picture">
             <img src="assets/img/avatars/profile.svg" alt="" />
         </div>
-
         <div class="name">
             <h1>Guest</h1>
-            
         </div>
-
-        <div >
+        <div>
             <div class="status" >
                 <div class="status-circle" style="background-color: #92c83e !important;"></div>
                 <span style="color: #92c83e;">Active</span>
             </div>
         </div>
-
         <div class="email-container">
             <div class="mail-icon mr-16">
                 <img src="assets/img/icons/mail.svg" alt="">
@@ -117,5 +106,4 @@
             </div>
         </div>
     </mat-card-content>
-
 </mat-card>

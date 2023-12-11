@@ -6,6 +6,7 @@ import { Firestore, collection, doc, getDoc, getDocs } from '@angular/fire/fires
 import { Channel } from 'src/models/channel.class';
 import { User } from 'src/models/user.class';
 import { updateDoc } from 'firebase/firestore';
+import { FirestoreService } from '../firestore.service';
 
 @Component({
   selector: 'app-dialog-add-to-group',
@@ -13,7 +14,9 @@ import { updateDoc } from 'firebase/firestore';
   styleUrls: ['./dialog-add-to-group.component.scss']
 })
 export class DialogAddToGroupComponent {
-  constructor(public dialogRef: MatDialogRef<DialogAddToGroupComponent>, public chatService: ChatService, public userService: UserService) {
+  
+  constructor(public dialogRef: MatDialogRef<DialogAddToGroupComponent>, public chatService: ChatService, 
+    public userService: UserService, public firestoreService: FirestoreService) {
     this.loadUsers();
     this.currentUser = this.userService.currentUser;
   }

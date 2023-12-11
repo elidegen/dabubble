@@ -52,8 +52,8 @@ export class DirectMessageChatComponent implements OnInit {
           if (this.firestoreService.unSubDirectMessages) {
             this.firestoreService.unSubDirectMessages();
           }
-          this.loadMessages();
         }
+        this.loadMessages();
       } else {
         this.currentChat = undefined;
       }

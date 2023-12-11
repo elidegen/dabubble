@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class ChatService {
-  private _openChatSubject: BehaviorSubject<Channel | Chat | null> = new BehaviorSubject<Channel | Chat | null>(null);
+  private _openChatSubject: BehaviorSubject<Channel | null> = new BehaviorSubject<Channel | null>(null);
   private _openDirectMessageSubject: BehaviorSubject<Chat | null> = new BehaviorSubject<Chat | null>(null);
   firestore: Firestore = inject(Firestore)
   chatWindow = 'empty';
@@ -30,7 +30,7 @@ export class ChatService {
   unSubDirectMessages: any;
   allUsers: any[] = [];
   allMessagesOfDM: any[] = [];
-    isMobile: boolean = false;
+  isMobile: boolean = false;
 
   constructor(public userService: UserService, public router: Router) {
     this.getallChannels();
@@ -46,24 +46,28 @@ export class ChatService {
   }
 
   // -------------- channel -----------------------
-  get openChat$(): Observable<Channel | Chat | null> {
+  get openChat$(): Observable<Channel | null> {
     return this._openChatSubject.asObservable();
   }
 
-  set openChat(value: Channel | Chat | null) {
-    this._openChatSubject.next(value);
+
+  set openChat(channel: Channel | null) {
+    this._openChatSubject.next(channel);
   }
+
 
   // ----------------- Direct Message --------------------------
   get openDirectMessage$(): Observable<Chat | null> {
     return this._openDirectMessageSubject.asObservable();
   }
 
-  set openDirectMessage(value: Chat | null) {
-    this._openDirectMessageSubject.next(value);
+
+  set openDirectMessage(chat: Chat | null) {
+    this._openDirectMessageSubject.next(chat);
   }
 
   // Create direct messages ------------------------------
+
   async createDirectMessage(user: User) {
     this.checkUserForDirectMessageName(user);
     const directMessageRef = collection(this.firestore, 'direct messages');
@@ -78,7 +82,6 @@ export class ChatService {
         });
     }
     this.compareNewDirectMessageWithExisting(user);
-    this.compareNewDirectMessageWithExisting(user);
   }
 
   compareNewDirectMessageWithExisting(user: User) {
@@ -87,6 +90,7 @@ export class ChatService {
         this.findDirectMessage(user);
       });
   }
+
 
   getAllDirectMessages(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
@@ -106,6 +110,7 @@ export class ChatService {
     });
   }
 
+
   findDirectMessage(user: User) {
     let directId: any;
     if (user.id !== this.userService.currentUser.id) {
@@ -119,14 +124,15 @@ export class ChatService {
     this.renderDirectMessage(foundDirectMessage);
   }
 
+
   renderDirectMessage(chat: Chat) {
     this.openDirectMessage = chat;
     this.chatWindow = 'direct';
     if (this.isMobile) {
       this.router.navigate(['directMessage'])
     }
-    
   }
+
 
   //------------------------------------------------------------------------------------
   checkUserForId(user: User) {
@@ -140,13 +146,14 @@ export class ChatService {
       this.chat.id = userId;
       return userId
     } else {
-      let userId = this.userService.currentUser.id;
-      let currentUserData = this.convertUser(this.userService.currentUser);
-      this.chat.members.push(currentUserData);
-      this.chat.id = userId;
-      return userId
+     let userId = this.userService.currentUser.id;
+     let currentUserData = this.convertUser(this.userService.currentUser);
+     this.chat.members.push(currentUserData);
+     this.chat.id = userId;
+     return userId
     }
   }
+
 
   checkUserForDirectMessageName(user: User) {
     if (user.id !== this.userService.currentUser.id) {
@@ -158,15 +165,13 @@ export class ChatService {
     }
   }
 
+
   convertUser(user: any): any {
     return {
-      name: user.name,
-      email: user.email,
-      password: user.password,
-      id: user.id,
-      picture: user.picture,
+      name: user.name, email: user.email, password: user.password, id: user.id, picture: user.picture,
     };
   }
+
 
   // ---------------- Search function ----------------------------------------------
   getallChannels() {
@@ -183,6 +188,7 @@ export class ChatService {
     );
   }
 
+
   getPersonalChannels() {
     this.yourChannels = [];
     this.allChannels.forEach(channel => {
@@ -192,22 +198,19 @@ export class ChatService {
     });
   }
 
+  
   async getAllChannelMessages() {
     this.allMessagesOfChannel = [];
     for (const channel of this.yourChannels) {
       const messageId = channel.id;
       const messageCol = collection(this.firestore, `channels/${messageId}/messages`);
-      try {
-        const querySnapshot = await getDocs(messageCol);
-
-        querySnapshot.forEach((message) => {
-          this.allMessagesOfChannel.push(message.data());
-        });
-      } catch (error) {
-        console.error('Error fetching messages:', error);
-      }
+      const querySnapshot = await getDocs(messageCol);
+      querySnapshot.forEach((message) => {
+        this.allMessagesOfChannel.push(message.data());
+      });
     }
   }
+
 
   loadAllDirectMessages() {
     this.unSubDirectMessages = onSnapshot(
@@ -219,8 +222,10 @@ export class ChatService {
           return channel;
         });
         this.getPersonalDirectMessages();
-      });
+      }
+    );
   }
+
 
   getPersonalDirectMessages() {
     this.yourDirectMessages = [];
@@ -229,21 +234,21 @@ export class ChatService {
         this.yourDirectMessages.push(dm);
       }
     });
-    console.log(this.yourDirectMessages);
   }
 
+
   async getDMMessages() {
-    this.yourDirectMessages.forEach(dm => {
-      const messageCol = collection(this.firestore, `direct messages/${dm.id}/messages`);
-      this.unSubDMMessages = onSnapshot(messageCol,
-        (list) => {
-          list.forEach(message => {
-            this.allMessagesOfDM.push(message.data());
-          });
-        }
-      );
-    });
+    this.allMessagesOfDM = [];
+    for (const dm of this.yourDirectMessages) {
+      const messageId = dm.id;
+      const messageCol = collection(this.firestore, `direct messages/${messageId}/messages`);
+      const querySnapshot = await getDocs(messageCol);
+      querySnapshot.forEach((message) => {
+          this.allMessagesOfDM.push(message.data());
+      });
+    }
   }
+
 
   getAllUsers() {
     const userCol = collection(this.firestore, 'users');
@@ -256,16 +261,16 @@ export class ChatService {
     );
   }
 
+
   getChannelByMessage(message: any) {
     let channel = this.allChannels.find(channel => channel.id === message.channelID);
     this.openChat = channel;
     this.chatWindow = 'channel';
     if (this.isMobile) {
       this.router.navigate(['main']);
-    }
-  
-    
+    }  
   }
+
 
   getDirectMessageByMessage(message: any) {
     let direct = this.allLoadedDirectMessages.find(dm => dm.id === message.channelID);
@@ -274,16 +279,13 @@ export class ChatService {
     if (this.isMobile) {
       this.router.navigate(['main']);
     }
-   
   }
   
+
   getOtherUser(members: any[]) {
     let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
     let interlocutor = this.allUsers.find(user => user.id == otherUser.id);
     return interlocutor as User;
   }
 
- 
-
- 
 }

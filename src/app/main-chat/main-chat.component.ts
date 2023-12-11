@@ -75,18 +75,17 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
         const newChat = openChat as Channel;
         if (!this.currentChat || this.currentChat.id !== newChat.id) {
           this.currentChat = newChat;
-          console.log('currentChat', this.currentChat);
-          
           this.threadService.currentChat = newChat;
           if (this.firestoreService.unSubChannelMessages) {
             this.firestoreService.unSubChannelMessages();
           }
-          this.firestoreService.loadChannelMessages(this.currentChat);
-          this.firestoreService.getAllChannelMembers(this.currentChat.id);
         }
+        this.firestoreService.loadChannelMessages(this.currentChat);
+        this.firestoreService.getAllChannelMembers(this.currentChat.id);
       } else {
-        this.currentChat = undefined;
+        this.currentChat = this.currentChat;
       }
+    
     });
 
     this.threadService.openThread.subscribe(() => {

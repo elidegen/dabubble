@@ -12,21 +12,17 @@
             </header>
         </mat-card-header>
         <mat-card-content>
-            <p>Channels serve your team for communication. Ideally, they should be topic-specific, for example,
-                #marketing.
-            </p>
+            <p>Channels serve your team for communication. Ideally, they should be topic-specific, for example, #marketing.</p>
             <div class="channel-name w100">
                 <h3>Channel name</h3>
-                <input class="input-add-channel" [(ngModel)]="channel.name" type="text"
-                    placeholder="e.g. Corporation Projects">
+                <input class="input-add-channel" [(ngModel)]="channel.name" type="text" placeholder="e.g. Corporation Projects">
             </div>
             <div class="w100 description-container">
                 <div class="description">
                     <h3>Description</h3>
                     <span>(optional)</span>
                 </div>
-                <input class="input-add-channel" [(ngModel)]="channel.description" type="text"
-                    placeholder="Your message">
+                <input class="input-add-channel" [(ngModel)]="channel.description" type="text" placeholder="Your message">
             </div>
 
             <div class="create-container">
@@ -56,20 +52,19 @@
             </mat-radio-group>
 
 
-            <div class="add-members-container" *ngIf="allMembers == false"
-                [ngClass]="{'show': allMembers === false}">
-                <input class="w100 input-members" type="text" placeholder="Enter name" [(ngModel)]="firestoreService.searchInput"
-                    (input)="filterUsers()" (click)="this.isInputFocused = true;">
-
+            <div class="add-members-container" *ngIf="allMembers == false" [ngClass]="{'show': allMembers === false}">
+                <input class="w100 input-members" type="text" placeholder="Enter name" [(ngModel)]="firestoreService.searchInput" (input)="filterUsers()" (click)="this.isInputFocused = true;">
                 <div class="user-search-container" *ngIf="isInputFocused" (click)="userSelected($event)">
-                    <button #userContainer class="user-container" *ngFor="let user of firestoreService.filteredUsers; let i = index" (click)="selectUser(user, i)">
-                        <div class="profile-container">
-                            <img src="{{user.picture}}" alt="profile">
-                            <div class="online-status"></div>
-                        </div>
-                        <span>{{user.name}}</span>
-                    </button>
-                    <span *ngIf="firestoreService.filteredUsers.length <1">No matching contact</span>
+                    <div *ngIf="firestoreService.searchInput.trim() !== '' && firestoreService.filteredUsers.length !== 0">
+                        <button #userContainer class="user-container" *ngFor="let user of firestoreService.filteredUsers; let i = index" (click)="selectUser(user, i)">
+                            <div class="profile-container">
+                                <img src="{{user.picture}}" alt="profile">
+                                <div class="online-status"></div>
+                            </div>
+                            <span>{{user.name}}</span>
+                        </button>
+                    </div>
+                    <span *ngIf="firestoreService.searchInput.trim() === '' || firestoreService.filteredUsers.length == 0">No matching contact</span>
                 </div>
                 <div class="w100 selected-user-container">
                     <div class="selected-user" *ngFor="let item of this.selectedUsers">
