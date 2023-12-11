@@ -123,11 +123,12 @@ export class WorkspaceComponent implements OnInit {
 
   getPersonalChannels() {
     this.yourChannels = [];
-    this.allChannels.forEach(channel => {
-      if (channel.members.some((member: { id: string; }) => member.id === this.currentUser.id)) {
-        this.yourChannels.push(channel);
-      }
-    });
+  if (this.userService.currentUser.name == "Guest") {
+    this.yourChannels = this.chatservice.allChannels;
+  } else {
+    this.yourChannels = this.chatservice.yourChannels;
+  }
+ 
   }
 
   getPersonalDirectMessages() {
