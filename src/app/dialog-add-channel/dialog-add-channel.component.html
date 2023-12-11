@@ -3,7 +3,10 @@
         <mat-card-header class="w100">
             <header class="w100">
                 <h2>Create a channel</h2>
-                <button mat-icon-button (click)="dialogRef.close()">
+                <button *ngIf="!chatService.isMobile" mat-icon-button (click)="dialogRef?.close()">
+                    <mat-icon>close</mat-icon>
+                </button>
+                <button *ngIf="chatService.isMobile" mat-icon-button [routerLink]="['/home']">
                     <mat-icon>close</mat-icon>
                 </button>
             </header>
@@ -38,7 +41,10 @@
         <mat-card-header class="w100">
             <header class="w100">
                 <h2>Add Members</h2>
-                <button mat-icon-button (click)="dialogRef.close()">
+                <button *ngIf="!chatService.isMobile" mat-icon-button (click)="dialogRef?.close()">
+                    <mat-icon>close</mat-icon>
+                </button>
+                <button *ngIf="chatService.isMobile" mat-icon-button [routerLink]="['/home']">
                     <mat-icon>close</mat-icon>
                 </button>
             </header>

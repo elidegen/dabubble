@@ -9,7 +9,8 @@ import { UserService } from '../user.service';
 import { Chat } from 'src/models/chat.class';
 import { User } from 'src/models/user.class';
 import { deleteDoc } from 'firebase/firestore';
-import { interval } from 'rxjs';
+import { first, interval } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-workspace',
@@ -35,7 +36,8 @@ export class WorkspaceComponent implements OnInit {
   unSubInterval: any;
   currentDM: any;
 
-  constructor(public dialog: MatDialog, public chatservice: ChatService, public threadService: ThreadService, public userService: UserService) {
+  constructor(public dialog: MatDialog, public chatservice: ChatService,
+    public threadService: ThreadService, public userService: UserService, public router: Router) {
     this.currentUser = userService.currentUser;
   }
 
@@ -89,6 +91,7 @@ export class WorkspaceComponent implements OnInit {
           return channel;
         });
         this.getPersonalChannels();
+        
       }
     );
   }
@@ -138,12 +141,19 @@ export class WorkspaceComponent implements OnInit {
   }
 
   openDialog() {
-    this.dialog.open(DialogAddChannelComponent, { panelClass: 'dialog-container' });
+    if (this.chatservice.isMobile) {
+      this.router.navigate(['add-channel'])
+    } else {
+      this.dialog.open(DialogAddChannelComponent, { panelClass: 'dialog-container' });
+    }
   }
 
   renderChannel(channel: Channel) {
     this.chatservice.openChat = channel;
     this.chatservice.chatWindow = 'channel';
+    if (this.chatservice.isMobile) {
+      this.router.navigate(['main']);
+    }
   }
 
   async setLastTimeViewed(channelToSet: Channel) {
@@ -172,6 +182,7 @@ export class WorkspaceComponent implements OnInit {
 
   openChat(chat: Chat) {
     this.chatservice.renderDirectMessage(chat);
+    
     this.currentChat = chat;
   }
 
@@ -202,21 +213,17 @@ export class WorkspaceComponent implements OnInit {
   }
 
   async updateUnreadMsg(channel: Channel) {
-
     if (this.currentChat && 'creator' in this.currentChat) {
       await this.setLastTimeViewed(this.currentChat);
     }
     const lastMsgTimeStamp = await this.getLastMsgTimestamp(channel);
     const lastTimeViewed = await this.getLastTimeViewed(channel)
-
     if (lastMsgTimeStamp > lastTimeViewed) {
       this.currentUser.unreadChats = [];
       this.currentUser.unreadChats.push(channel.id);
       this.userService.updateUser(this.currentUser);
     }
-
     if (this.currentUser.unreadChats != undefined && this.currentChat != undefined) {
-
       const index = this.currentUser.unreadChats.findIndex((obj: String) => obj == this.currentChat.id)
       if (index != -1) {
         this.currentUser.unreadChats.splice(index, 1);
@@ -260,8 +267,11 @@ export class WorkspaceComponent implements OnInit {
   }
 
   unreadDM(directMessage: any) {
-    // console.log(directMessage);
-
     return directMessage.unread == true;
+  }
+
+  renderNewMainChat() {
+    this.chatservice.chatWindow = 'newMessage';
+    this.router.navigate(['main']);
   }
 }

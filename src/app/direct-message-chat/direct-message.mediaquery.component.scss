@@ -33,3 +33,40 @@
         }
     }
 }
+
+@media (max-width: 799px) {
+    .header-mobile {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 16px;
+        height: 100px;
+        align-items: center;
+    }
+    .profile-container {
+        img {
+            cursor: pointer;
+        }
+    }
+
+    .logo-header-mobile {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        span {
+            font-size: 22px !important;
+            font-weight: bold !important;
+        }
+    }
+
+    .logo {
+        margin-right: 8px;
+    }
+
+    mat-card-header {
+        padding: 4px 16px;
+    }
+    
+    .chat-window-container {
+        height: calc(100vh - 100px);
+    }
+}

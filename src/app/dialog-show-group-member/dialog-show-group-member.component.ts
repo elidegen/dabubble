@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, Inject, OnInit, Optional, inject } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DialogAddToGroupComponent } from '../dialog-add-to-group/dialog-add-to-group.component';
 import { ChatService } from '../chat.service';
@@ -10,14 +10,19 @@ import { UserService } from '../user.service';
 @Component({
   selector: 'app-dialog-show-group-member',
   templateUrl: './dialog-show-group-member.component.html',
-  styleUrls: ['./dialog-show-group-member.component.scss']
+  styleUrls: ['./dialog-show-group-member.component.scss', './dialog-show-group-member.mediaquery.component.scss']
 })
 export class DialogShowGroupMemberComponent implements OnInit {
   currentChat!: Channel | undefined;
   allChannelMembers: any[] = [];
   firestore: Firestore = inject(Firestore);
 
-  constructor(public dialog: MatDialog, public dialogRef: MatDialogRef<DialogAddToGroupComponent>, public chatService: ChatService, public authService: AuthService, public userService: UserService) { }
+  constructor(public dialog: MatDialog, @Optional() @Inject(MatDialogRef) public dialogRef: MatDialogRef<DialogShowGroupMemberComponent> | undefined,
+    public chatService: ChatService, public authService: AuthService, public userService: UserService) {
+      if (chatService.isMobile) {
+        this.dialogRef = undefined;
+      }
+    }
 
   openDialog() {
     this.dialog.open(DialogAddToGroupComponent, {

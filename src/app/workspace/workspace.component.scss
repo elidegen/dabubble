@@ -80,7 +80,7 @@ mat-expansion-panel {
     gap: 8px;
     &:hover {
         .delete-direct-button {
-            display: flex;
+            opacity: 100;
         }
     }
   
@@ -97,11 +97,12 @@ mat-expansion-panel {
 }
 
 .delete-direct-button {
-    display: none;
+    display: flex;
     align-items: center;
     justify-content: center;
     height: 32px;
     width: 32px;
+    opacity: 0;
     img {
         height: 32px;
     }
@@ -193,15 +194,15 @@ mat-expansion-panel-header {
     background-color: white;
     outline: none;
     border: 0;
-    font-weight: 700;
     cursor: pointer;
-
+    color: var(--purple3);
+    svg path {
+        fill: var(--purple3);
+    }
     &:hover {
         background-color: transparent !important;
-        color: var(--purple3);
-
         svg path {
-            fill: var(--purple3);
+            font-weight: 700;
         }
     }
 }

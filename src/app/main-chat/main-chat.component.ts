@@ -17,6 +17,7 @@ import { EmojiService } from '../emoji.service';
 import { User } from 'src/models/user.class';
 import { FirestoreService } from '../firestore.service';
 import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-profile.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-chat',
@@ -49,7 +50,9 @@ export class MainChatComponent implements OnInit {
   @ViewChild('search') search!: ElementRef;
   // ----------------------------------------------------
 
-  constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public threadService: ThreadService, public authService: AuthService, public emojiService: EmojiService, public firestoreService: FirestoreService) {
+  constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, 
+    public threadService: ThreadService, public authService: AuthService, public emojiService: EmojiService, 
+    public firestoreService: FirestoreService, public router: Router) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser as User;
     firestoreService.loadUsers();
@@ -81,9 +84,14 @@ export class MainChatComponent implements OnInit {
   }
 
   openEditChannelDialog() {
-    this.dialog.open(DialogEditChannelComponent, {
-      panelClass: 'dialog-container'
-    });
+    if (!this.chatService.isMobile) {
+      this.dialog.open(DialogEditChannelComponent, {
+        panelClass: 'dialog-container'
+      });
+    } else {
+      this.router.navigate(['editChannel']);
+    }
+   
   }
 
   openDialog() {
@@ -204,8 +212,12 @@ export class MainChatComponent implements OnInit {
   async openThread(message: Message) {
     let messageId = message.id;
     await this.firestoreService.createThread(messageId, this.newThread);
-    this.threadDrawer.open();
     this.threadService.openMessage = message;
+    if (this.chatService.isMobile) {
+      this.router.navigate(['thread']);
+    } else {
+      this.threadDrawer.open();
+    }
   }
 
   editMessage(message: Message) {
@@ -286,5 +298,10 @@ export class MainChatComponent implements OnInit {
       this.firestoreService.showSpinner = false;
     }, 2000);
     this.showUploadedFile = true;
+  }
+
+  logOutUser() {
+    this.authService.signOutUser();
+    this.router.navigate(['']);
   }
 }

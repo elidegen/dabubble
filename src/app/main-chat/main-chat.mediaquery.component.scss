@@ -128,6 +128,90 @@
     }
 }
 
+@media (max-width: 799px) {
+    .header-mobile {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 16px;
+        height: 100px;
+        align-items: center;
+    }
+    .profile-container {
+        img {
+            cursor: pointer;
+        }
+    }
+    mat-card {
+        border-radius: 0 !important;
+        height: calc(100vh - 100px);
+        margin-right: 0;
+    }
+    
+    mat-card-header {
+        padding: 0 16px;
+    }
+    h2 {
+        font-size: 22px;
+    }
+    .chat-title {
+        img {
+            height: 26px;
+            width: 26px;
+            margin-bottom: 1px;
+        }
+    }
+    .add-user {
+        height: 40px;
+        width: 40px;
+        img {
+            height: 22px;
+            width: 22px;
+        }
+    }
+    .logo-header-mobile {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        span {
+            font-size: 22px !important;
+            font-weight: bold !important;
+        }
+    }
+    .logo {
+        margin-right: 8px;
+    }
+    .headline {
+        padding-top: 16px;
+    }
+    h1 {
+        font-size: 24px !important;
+        font-weight: bold !important;
+    }
+}
+
+@media (max-width: 450px) {
+    .empty-chat-container {
+        span {
+            font-size: 16px;
+        }
+    }
+    .profile-container {
+        img {
+            height: 50px;
+        }
+    }
+    .logo {
+        height: 40px;
+        margin-right: 0;
+    }
+    .logo-header-mobile {
+        span {
+            font-size: 18px !important;
+        }
+    }
+    
+}
+
 // @media (max-height: 900px) {
 //     .mt-thread {
 //         margin-top: 12px;

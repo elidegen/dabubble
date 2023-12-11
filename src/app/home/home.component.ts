@@ -33,17 +33,19 @@ export class HomeComponent {
   filteredUsers: User[] = [];
   filteredChannelMessages: Message[] = [];
   filteredDirectMessages: Message[] = [];
+
   constructor(public dialog: MatDialog, public auth: AuthService, public router: Router, public userService: UserService, public chatService: ChatService, public firestoreService: FirestoreService) {
     this.userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
     this.firestoreService.setUsersToOffline();
+    this.checkScreenWidth();
   }
 
 
   ngOnInit() {
-
   }
 
+  
   openProfileDialog(id: any): void {
     this.dialog.open(DialogViewProfileComponent, {
       panelClass: 'dialog-container',
@@ -51,10 +53,12 @@ export class HomeComponent {
     });
   }
 
+
   logOutUser() {
     this.auth.signOutUser();
     this.router.navigate(['']);
   }
+
 
   @HostListener('document:click', ['$event'])
   checkClick(event: Event) {
@@ -81,6 +85,7 @@ export class HomeComponent {
     console.log('directs', this.filteredDirectMessages);
   }
 
+
   filterUsers() {
     this.filteredUsers = this.userService.users.filter(user =>
       user.name?.toLowerCase().includes(this.searchInput.toLowerCase())
@@ -97,9 +102,7 @@ export class HomeComponent {
         }
     });
     console.log('channel', this.filteredChannelMessages);
-}
-
-
+  }
 
 
   async filterDirectMessages() {
@@ -117,7 +120,9 @@ export class HomeComponent {
     this.chatService.createDirectMessage(user);
     this.chatService.chatWindow = 'direct';
     this.search.nativeElement.value = '';
+    this.router.navigate(['main']);
   }
+
 
   selectChannel(message: any) {
     this.chatService.getChannelByMessage(message);
@@ -125,13 +130,17 @@ export class HomeComponent {
 
 
   selectDirectMessage(message: any) {
-    console.log("Bei der Suchfunktion ausgewählte Nachricht", message)
     this.chatService.getDirectMessageByMessage(message);
   }
 
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any): void {
+    this.checkScreenWidth();
+  }
 
 
-  
-
+  checkScreenWidth(): void {
+    this.chatService.isMobile = window.innerWidth < 800;
+  }
 }

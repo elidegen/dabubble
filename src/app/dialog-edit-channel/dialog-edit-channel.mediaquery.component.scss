@@ -1,0 +1,34 @@
+@media (max-width: 799px) {
+    mat-card {
+        border-radius: 0 !important;
+        width: 100%;
+    }
+    .header-mobile {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 16px;
+        height: 100px;
+        align-items: center;
+    }
+    .profile-container {
+        img {
+            cursor: pointer;
+        }
+    }
+    .headline {
+        gap: 6px;
+        h3 {
+            font-size: 22px;
+            font-weight: bold !important;
+        }
+    }
+    mat-card-header {
+        padding-left: 0;
+        padding-right: 0;
+        padding-top: 32px;
+        box-shadow: 0px 0px 2px 2px #00000033;
+    }
+    header {
+        padding: 0 16px;
+    }
+}

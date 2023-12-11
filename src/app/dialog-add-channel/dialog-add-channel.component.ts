@@ -1,4 +1,4 @@
-import { Component, HostListener, QueryList, ViewChildren, inject } from '@angular/core';
+import { Component, HostListener, Inject, Optional, QueryList, ViewChildren, inject } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Channel } from 'src/models/channel.class';
@@ -24,9 +24,12 @@ export class DialogAddChannelComponent {
   selectedUsers: any[] = [];
   currentUser;
 
-  constructor(public dialogRef: MatDialogRef<DialogAddChannelComponent>, public chatService: ChatService, public userService: UserService, public firestoreService: FirestoreService) {
+  constructor(@Optional() @Inject(MatDialogRef) public dialogRef: MatDialogRef<DialogAddChannelComponent> | undefined, public chatService: ChatService, public userService: UserService, public firestoreService: FirestoreService) {
     firestoreService.loadUsers()
     this.currentUser = this.userService.currentUser;
+    if (chatService.isMobile) {
+      this.dialogRef = undefined
+    }
   }
 
   @HostListener('document:click', ['$event'])
@@ -46,9 +49,8 @@ export class DialogAddChannelComponent {
     this.getMembers();
     this.channel.creator = this.userService.currentUser.name;
     this.channel.lastTimeViewed = [];
-    
     await this.firestoreService.addChannel(this.channel);
-    this.dialogRef.close();
+    this.dialogRef?.close();
   }
 
   getMembers() {

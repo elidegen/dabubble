@@ -1,4 +1,4 @@
-import { Injectable, OnInit, inject } from '@angular/core';
+import { HostListener, Injectable, OnInit, inject } from '@angular/core';
 import { Firestore, getDoc, getDocs, onSnapshot, orderBy, query, setDoc } from '@angular/fire/firestore';
 import { DocumentData, DocumentReference, collection, doc } from 'firebase/firestore';
 import { Channel } from 'src/models/channel.class';
@@ -6,6 +6,7 @@ import { Chat } from 'src/models/chat.class';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from 'src/models/user.class';
 import { UserService } from './user.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -29,12 +30,14 @@ export class ChatService {
   unSubDirectMessages: any;
   allUsers: any[] = [];
   allMessagesOfDM: any[] = [];
+    isMobile: boolean = false;
 
-  constructor(public userService: UserService) {
+  constructor(public userService: UserService, public router: Router) {
     this.getallChannels();
     this.getAllUsers();
     this.loadAllDirectMessages();
   }
+
 
   ngOnDestroy() {
     this.unSubDirectMessages();
@@ -119,6 +122,10 @@ export class ChatService {
   renderDirectMessage(chat: Chat) {
     this.openDirectMessage = chat;
     this.chatWindow = 'direct';
+    if (this.isMobile) {
+      this.router.navigate(['directMessage'])
+    }
+    
   }
 
   //------------------------------------------------------------------------------------
@@ -224,11 +231,9 @@ export class ChatService {
       }
     });
     console.log(this.yourDirectMessages);
-
-    this.getDMMessages();
   }
 
-  getDMMessages() {
+  async getDMMessages() {
     this.yourDirectMessages.forEach(dm => {
       const messageCol = collection(this.firestore, `direct messages/${dm.id}/messages`);
       this.unSubDMMessages = onSnapshot(messageCol,
@@ -256,17 +261,24 @@ export class ChatService {
     let channel = this.allChannels.find(channel => channel.id === message.channelID);
     this.openChat = channel;
     this.chatWindow = 'channel';
+    this.router.navigate(['main']);
+    
   }
 
   getDirectMessageByMessage(message: any) {
     let direct = this.allLoadedDirectMessages.find(dm => dm.id === message.channelID);
     this.openDirectMessage = direct;
     this.chatWindow = 'direct';
+    this.router.navigate(['main']);
   }
-
+  
   getOtherUser(members: any[]) {
     let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
     let interlocutor = this.allUsers.find(user => user.id == otherUser.id);
     return interlocutor as User;
   }
+
+ 
+
+ 
 }

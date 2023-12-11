@@ -5,7 +5,10 @@
                 <img src="assets/img/icons/tag-black.svg" alt="tag">
                 <h3>{{ currentChat?.name || '' }}</h3>
             </div>
-            <button mat-icon-button (click)="dialogRef.close()">
+            <button *ngIf="!chatService.isMobile" mat-icon-button (click)="dialogRef?.close()">
+                <mat-icon>close</mat-icon>
+            </button>
+            <button *ngIf="chatService.isMobile" mat-icon-button (click)="backToChat()">
                 <mat-icon>close</mat-icon>
             </button>
         </header>
@@ -24,7 +27,6 @@
             <input *ngSwitchCase="true" placeholder="Entwicklerteam" class="edit-name w100" type="text" value="{{ currentChat?.name || '' }}">
         </div>
     </mat-card-content>
-
     <mat-card-content class="w100">
         <div class="channel-info w100" [ngClass]="{'view-state': !editDescription}" [ngSwitch]="editDescription">
             <div class="top-row w100">
@@ -41,7 +43,9 @@
             <h1>Created by</h1>
             <span class="creator">{{currentChat?.creator}}</span>
         </div>
-
+    </mat-card-content>
+    <mat-card-content *ngIf="chatService.isMobile">
+        <app-dialog-show-group-member></app-dialog-show-group-member>
     </mat-card-content>
     <mat-card-content class="button-position">
         <button mat-button class="main-button delete-button" (click)="deleteCurrentUserFromChannel()">
