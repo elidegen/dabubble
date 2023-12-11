@@ -85,7 +85,7 @@ export class ThreadService {
 updateMessage(message:any,time: any) {
 return {
   threadCount: message.threadCount,
-  lastThreadTime: time
+  lastThreadTime: time,
 }
 }
 

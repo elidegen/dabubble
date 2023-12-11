@@ -212,7 +212,7 @@
                       <button class="reaction-emoji-button" *ngFor="let emoji of message.reactionCount | keyvalue; let i = index">
                         <div 
                              (click)="firestoreService.addReaction(emoji.key, message.id, currentChat?.id, 'channels')"
-                             matTooltip="{{message.reaction[i].creator}}" class="emoji-fit">
+                             class="emoji-fit">
                           {{ emoji.key }}
                         </div>
                         <span>{{ emoji.value }}</span>
