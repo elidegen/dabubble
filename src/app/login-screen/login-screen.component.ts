@@ -145,6 +145,7 @@ export class LoginScreenComponent implements OnInit {
     this.firestoreService.showSpinner = true;
     setTimeout(() => {
       if (this.userService.userIsAvailable) {
+        this.showUserCreatedSuccess = true;
         this.changeSwitchCase('avatar');
         this.firestoreService.showSpinner = false;
       } else {
@@ -152,10 +153,13 @@ export class LoginScreenComponent implements OnInit {
         this.firestoreService.showSpinner = false;
         setTimeout(() => {
           this.userAlreadyInUse = false;
+          this.showUserCreatedSuccess = false;
         }, 3000);
       }
     }, 1500);
   }
+
+
 
 /**
  * @method uploadUser
@@ -168,10 +172,7 @@ export class LoginScreenComponent implements OnInit {
     this.newUser.online = true;
     this.userService.addUser(this.newUser as User);
     this.authService.signInUser(this.userService.currentEmail, this.userService.currentPassword);
-    this.showUserCreatedSuccess = true;
-    setTimeout(() => {
-      this.showUserCreatedSuccess = false;
-    }, 1000);
+   
   }
 
  /**
