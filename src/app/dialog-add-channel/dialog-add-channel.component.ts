@@ -49,7 +49,6 @@ export class DialogAddChannelComponent {
   async createChannel() {
     this.getMembers();
     this.channel.creator = this.userService.currentUser.name;
-    this.channel.lastTimeViewed = [];
     await this.firestoreService.addChannel(this.channel);
 
     if (this.chatService.isMobile) {
