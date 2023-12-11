@@ -219,6 +219,16 @@ mat-error {
     position: relative;
     border: 1px solid transparent;
 
+
+    input {
+        outline: none;
+        border: none;
+        background-color: var(--primary);
+        height: 30px;
+        width: 100%;
+        font-size: 20px;
+        cursor: pointer;
+    }
     img {
         margin-left: 20px;
     }
@@ -250,17 +260,6 @@ mat-error {
     gap: 10px;
 }
 
-input {
-    outline: none;
-    border: none;
-    background-color: var(--primary);
-    height: 30px;
-    max-width: 150px;
-    font-size: 20px;
-    cursor: pointer;
-
-
-}
 
 // .submit-buttons {
 //     gap: 30px;
@@ -448,6 +447,10 @@ input[type="email"] {
 }
  
 }
+
+
+
+
 
 
 

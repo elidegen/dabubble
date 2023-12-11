@@ -145,21 +145,24 @@ export class LoginScreenComponent implements OnInit {
     this.firestoreService.showSpinner = true;
     setTimeout(() => {
       if (this.userService.userIsAvailable) {
-        this.showUserCreatedSuccess = true;
         this.changeSwitchCase('avatar');
+        this.clearInputs();
         this.firestoreService.showSpinner = false;
       } else {
         this.userAlreadyInUse = true;
         this.firestoreService.showSpinner = false;
         setTimeout(() => {
           this.userAlreadyInUse = false;
-          this.showUserCreatedSuccess = false;
         }, 3000);
       }
     }, 1500);
   }
 
-
+clearInputs() {
+  this.newUser.name = "";
+  this.newUser.email = "";
+  this.newUser.password = "";
+}
 
 /**
  * @method uploadUser

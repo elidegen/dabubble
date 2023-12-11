@@ -9,6 +9,10 @@
     align-items: center;
     }
 
+    input {
+        max-width: 200px;
+    }
+
     .login{
        max-width: 90%;
       max-height: 90%;
@@ -112,4 +116,9 @@
 .input-container {
     height: 45px;
 }
+    }
+
+
+    .checkbox {
+        width: 10px!important;
     }

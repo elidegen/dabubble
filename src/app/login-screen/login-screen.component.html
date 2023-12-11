@@ -84,7 +84,7 @@
             letters</mat-error> <mat-error class="error" *ngIf="this.userAlreadyInUse">This user already exists</mat-error>
         </div>
 
-        <span class="margin-top gap checkbox-bottom cursor-pointer align-center"><input [formControl]="disableSelect"
+        <span class="margin-top gap checkbox-bottom cursor-pointer align-center"><input class="checkbox" [formControl]="disableSelect"
             class="cursor-pointer" type="checkbox">I accept
           the <a routerLink="/privacy" class="color-purple2-text transform">privacy policy</a></span>
 
