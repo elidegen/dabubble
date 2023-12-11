@@ -19,6 +19,7 @@
     </mat-menu>
   </div>
 </div>
+
 <div [ngSwitch]="firestoreService.messageIsExisting" class="chat-window-container">
   <mat-card-header>
     <button class="br-32 profile-button" (click)="openProfileDialog(interlocutor.id)">

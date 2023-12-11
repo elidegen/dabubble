@@ -7,7 +7,7 @@
             </button>
         </header>
 
-        <h3># Entwicklerteam</h3>
+        <h3># {{currentChat?.name}}</h3>
 
         <div class="add-members-container">
             <input class="w100 input-members" type="text" placeholder="Enter name" [(ngModel)]="searchInput"
@@ -28,8 +28,8 @@
                 <div class="selected-user" *ngFor="let item of this.selectedUsers">
                     <img src="{{item.picture}}" alt="">
                     <span>{{item.name}}</span>
-                    <button mat-icon-button (click)="removeUser(item)">
-                        <mat-icon> close </mat-icon>
+                    <button class="" mat-icon-button (click)="removeUser(item)">
+                        <img src="assets/img/icons/close.svg">
                     </button>
                 </div>
             </div>
