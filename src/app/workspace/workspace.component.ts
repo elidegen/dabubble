@@ -45,33 +45,9 @@ export class WorkspaceComponent implements OnInit {
     this.loadChannels();
     this.loadDirectMessages();
     this.loadUsers();
-
-    // this.chatservice.openChat$.subscribe((openChat) => {
-    //   if (openChat) {
-    //     const newChat = openChat as Channel;
-    //     if (!this.currentChat || this.currentChat.id !== newChat.id) {
-    //       this.currentChat = newChat;
-    //       this.threadService.currentChat = newChat;
-    //       if (this.unSubMessages) {
-    //         this.unSubMessages();
-    //       }
-    //     }
-    //   } else {
-    //     this.currentChat = undefined;
-    //   }
-    // });
-    // Startet das Intervall, um die Funktion alle 1000 Millisekunden (1 Sekunde) aufzurufen
-    // this.unSubInterval = interval(1000).subscribe(() => {
-    //   if (this.currentChat != undefined)
-    //     this.setReadDM();
-    //   this.yourChannels.forEach(channel => {
-    //     this.updateUnreadMsg(channel);
-    //   });
-    // });
   }
 
   ngOnDestroy(): void {
-    // this.unSubInterval;
     this.unsubscribeChannels;
     this.unsubscribeChats;
     this.unsubscribeUsers;
@@ -91,7 +67,7 @@ export class WorkspaceComponent implements OnInit {
           return channel;
         });
         this.getPersonalChannels();
-        
+
       }
     );
   }
@@ -156,99 +132,8 @@ export class WorkspaceComponent implements OnInit {
     }
   }
 
-  async setLastTimeViewed(channelToSet: Channel) {
-    const channelDocRef = doc(collection(this.firestore, 'channels'), channelToSet.id);
-    const channel = (await getDoc(channelDocRef)).data();
-    let channelLTV = channel?.['lastTimeViewed'] ?? [];
-    const lastTimeViewedIndex = channelLTV.findIndex((obj: { userId: string | undefined; }) => obj.userId == this.currentUser.id);
-    if (lastTimeViewedIndex != -1) {
-      channelLTV[lastTimeViewedIndex].timestamp = new Date().getTime();
-    } else {
-      channelLTV.push({
-        userId: this.currentUser.id,
-        timestamp: new Date().getTime()
-      })
-    }
-    channelToSet.lastTimeViewed = channelLTV;
-    this.updateFirestoreLTV(channelToSet);
-  }
-
-  async setReadDM() {
-    if (!('creator' in this.currentChat)) {
-      this.currentChat.unread = false;
-      // const channelDocRef = doc(collection(this.firestore, 'direct messages'), this.currentChat.id);
-    }
-  }
-
   openChat(chat: Chat) {
     this.chatservice.renderDirectMessage(chat);
-    
-    this.currentChat = chat;
-  }
-
-  async updateFirestoreLTV(channelToUpdate: Channel) {
-    const channelDocRef = doc(collection(this.firestore, 'channels'), channelToUpdate.id);
-    await updateDoc(channelDocRef, {
-      lastTimeViewed: channelToUpdate.lastTimeViewed
-    })
-  }
-
-  getLastMsgTimestamp(channel: Channel) {
-    const messageCollection = collection(this.firestore, `channels/${channel.id}/messages`);
-    const q = query(messageCollection, orderBy('timeInMs', 'desc'), limit(1));
-    return new Promise<number>((resolve) => {
-      const unsubscribe = onSnapshot(q, (snapshot) => {
-        if (!snapshot.empty) {
-          const documents = snapshot.docs;
-          const firstDocumentData = documents[0].data();
-          const timeInMs = firstDocumentData['timeInMs'];
-          unsubscribe();
-          resolve(timeInMs);
-        } else {
-          unsubscribe();
-          resolve(0);
-        }
-      });
-    });
-  }
-
-  async updateUnreadMsg(channel: Channel) {
-    if (this.currentChat && 'creator' in this.currentChat) {
-      await this.setLastTimeViewed(this.currentChat);
-    }
-    const lastMsgTimeStamp = await this.getLastMsgTimestamp(channel);
-    const lastTimeViewed = await this.getLastTimeViewed(channel)
-    if (lastMsgTimeStamp > lastTimeViewed) {
-      this.currentUser.unreadChats = [];
-      this.currentUser.unreadChats.push(channel.id);
-      this.userService.updateUser(this.currentUser);
-    }
-    if (this.currentUser.unreadChats != undefined && this.currentChat != undefined) {
-      const index = this.currentUser.unreadChats.findIndex((obj: String) => obj == this.currentChat.id)
-      if (index != -1) {
-        this.currentUser.unreadChats.splice(index, 1);
-      }
-    }
-  }
-
-  getLastTimeViewed(channel: Channel) {
-    let channelLTV = channel['lastTimeViewed'] ?? [];
-    const lastTimeViewedIndex = channelLTV.findIndex((obj: { userId: string | undefined; }) => obj.userId == this.currentUser.id);
-    if (lastTimeViewedIndex != -1) {
-      return channelLTV[lastTimeViewedIndex].timestamp;
-    } else {
-      return 0;
-    }
-  }
-
-  removeUnreadChats(channel: Channel, user: User) {
-    const channelIndex = user.unreadChats.findIndex((obj: string | undefined) => obj == channel.id);
-    user.unreadChats.splice(channelIndex, 1);
-  }
-
-  unreadMsg(channel: Channel) {
-    this.currentUser.unreadChats = this.currentUser.unreadChats ?? [];
-    return this.currentUser.unreadChats.includes(channel.id);
   }
 
   startNewMessage() {
@@ -264,10 +149,6 @@ export class WorkspaceComponent implements OnInit {
     });
     await deleteDoc(directDocRef);
     this.chatservice.chatWindow = 'empty';
-  }
-
-  unreadDM(directMessage: any) {
-    return directMessage.unread == true;
   }
 
   renderNewMainChat() {

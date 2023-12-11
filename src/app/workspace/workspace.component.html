@@ -25,7 +25,6 @@
                 <button (click)="renderChannel(channel)" mat-button>
                   <div class="channel-btn">
                     <span><b>#</b> {{channel.name}}</span>
-                    <div class="unread-msg" *ngIf="unreadMsg(channel)"></div>
                   </div>
                 </button>
               </div>
@@ -67,7 +66,6 @@
                     class="online-status"></div>
                 </div>
                 <h3>{{ chatservice.getOtherUser(directMessage.members).name }}</h3>
-                <div class="unread-msg" *ngIf="unreadDM(directMessage)"></div>
               </button>
               <button matTooltip="Delete chat" class="delete-direct-button" mat-icon-button
                 (click)="deleteDirectMessageChat(directMessage.id)">

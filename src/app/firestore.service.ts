@@ -101,6 +101,8 @@ export class FirestoreService {
       }
     }
     this.organizedMessages = Object.entries(this.messagesByDate).map(([date, messages]) => ({ date, messages }));
+    // this.mainChatComponent.scrollToBottom();
+    // this.mainChatService.scrollToBottom();
   }
 
   async sendMessageInChannel(channel: Channel, message: Message) {

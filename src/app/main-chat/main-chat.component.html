@@ -149,7 +149,7 @@
         </div>
       </mat-card-header>
 
-      <mat-card-content #messageContainer class="p-0 main-chat-container">
+      <mat-card-content #messageContainer class="p-0 main-chat-container" #scrollContainer [scrollTop]="scrollPosition">
         <ng-container *ngFor="let organizedMessage of firestoreService.organizedMessages.slice()">
           <section>
             <div class="date-container">
@@ -318,5 +318,3 @@
     <app-thread style="width: 25%" (closeThread)="onCloseThread()"></app-thread>
   </mat-drawer>
 </mat-drawer-container>
-
-

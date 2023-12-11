@@ -156,7 +156,6 @@ export class ChatService {
     } else {
       this.chat.name = this.userService.currentUser.name;
     }
-    this.chat.unread = true;
   }
 
   convertUser(user: any): any {

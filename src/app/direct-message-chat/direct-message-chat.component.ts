@@ -109,17 +109,9 @@ export class DirectMessageChatComponent implements OnInit {
       this.message.channelID = this.currentChat.id;
       this.message.profilePic = this.userService.currentUser.picture,
         this.message.channel = this.currentChat.name;
-      await this.firestoreService.sendMessageInDirectMessage(this.currentChat.id, this.message)
-      this.setUnreadDM(this.currentChat.id);
+      await this.firestoreService.sendMessageInDirectMessage(this.currentChat.id, this.message);
       this.message = new Message();
     }
-  }
-
-  setUnreadDM(chatId: String) {
-    const subColRef = doc(collection(this.firestore, `direct messages/${chatId}/`));
-    updateDoc(subColRef, {
-      unread: true
-    })
   }
 
   getSentMessageDate() {

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, inject, HostListener } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, inject, HostListener, AfterViewInit, OnChanges, SimpleChanges, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogEditChannelComponent } from '../dialog-edit-channel/dialog-edit-channel.component';
 import { DialogAddToGroupComponent } from '../dialog-add-to-group/dialog-add-to-group.component';
@@ -22,9 +22,9 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-main-chat',
   templateUrl: './main-chat.component.html',
-  styleUrls: ['./main-chat.component.scss','./main-chat.mediaquery.component.scss']
+  styleUrls: ['./main-chat.component.scss', './main-chat.mediaquery.component.scss']
 })
-export class MainChatComponent implements OnInit {
+export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild('messageContainer') messageContainer!: ElementRef;
   firestore: Firestore = inject(Firestore);
   currentChat!: Channel | undefined;
@@ -44,18 +44,29 @@ export class MainChatComponent implements OnInit {
   taggedNames = "";
   dataSrc: any;
   showUploadedFile = false;
+  scrollPosition: any;
+  @ViewChild('scrollContainer') scrollContainer!: ElementRef<HTMLDivElement>;
+  @Input() monitoredVariable: any;
 
   // ------------------ search Input ---------------
   isInputFocused: boolean = false;
   @ViewChild('search') search!: ElementRef;
   // ----------------------------------------------------
 
-  constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, 
-    public threadService: ThreadService, public authService: AuthService, public emojiService: EmojiService, 
+  constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService,
+    public threadService: ThreadService, public authService: AuthService, public emojiService: EmojiService,
     public firestoreService: FirestoreService, public router: Router) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser as User;
     firestoreService.loadUsers();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // if(changes.chatService.chatWindow)
+  }
+
+  ngAfterViewInit(): void {
+    this.scrollToBottom();
   }
 
   ngOnInit() {
@@ -91,7 +102,6 @@ export class MainChatComponent implements OnInit {
     } else {
       this.router.navigate(['editChannel']);
     }
-   
   }
 
   openDialog() {
@@ -129,6 +139,7 @@ export class MainChatComponent implements OnInit {
       this.taggedNames = "";
       this.message = new Message();
     }
+    this.scrollToBottom();
   }
 
   getSentMessageDate() {
@@ -149,7 +160,9 @@ export class MainChatComponent implements OnInit {
   }
 
   scrollToBottom(): void {
-    this.messageContainer.nativeElement.scrollTop = this.messageContainer.nativeElement.scrollHeight;
+    if (this.scrollContainer) {
+      this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
+    }
   }
 
   isToday(date: string): boolean {
