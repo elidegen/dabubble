@@ -4,7 +4,6 @@ export class Channel {
     creator: string | undefined;
     id: string | undefined;
     members: any = [];
-    lastTimeViewed: any = [];
 
     constructor(obj?: any) {
         this.name = obj ? obj.name : '';
@@ -12,7 +11,6 @@ export class Channel {
         this.creator = obj ? obj.creator : '';
         this.id = obj ? obj.id : '';
         this.members = obj ? obj.members : [];
-        this.lastTimeViewed = obj ? obj.lastTimeViewed : [];
     }
 
     public toJSON() {
@@ -22,7 +20,6 @@ export class Channel {
             creator: this.creator,
             id: this.id,
             members: this.members,
-            lastTimeViewed: this.lastTimeViewed,
         }
     }
 }

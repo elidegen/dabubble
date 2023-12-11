@@ -13,7 +13,6 @@ export class Message {
     lastThreadTime: any;
     channel: any;
     channelID: any;
-    viewedBy: any = [];
     messageSelected: boolean;
     files: any = [];
     mentions: any = [];
@@ -31,7 +30,6 @@ export class Message {
         this.reaction = obj ? obj.reaction : [];
         this.threadCount = obj ? obj.threadCount : "";
         this.lastThreadTime = obj ? obj.lastThreadTime: "";
-        this.viewedBy = obj ? obj.viewedBy : [];
         this.channel = obj = obj ? obj.channel: "";
         this.channelID = obj = obj ? obj.channelID : "";
         this.messageSelected = obj ? obj.message : "";
@@ -54,7 +52,6 @@ export class Message {
             lastThreadTime: this.lastThreadTime,
             channel: this.channel,
             channelID: this.channelID,
-            viewedBy: this.viewedBy,
             messageSelected: this.messageSelected,
             files: this.files,
             mentions: this.mentions,
