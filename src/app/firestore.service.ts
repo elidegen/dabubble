@@ -73,6 +73,7 @@ export class FirestoreService {
 
   loadChannelMessages(currentChat: any) {
     if (currentChat.id) {
+      console.log('firestore', currentChat);
       const messageCollection = collection(this.firestore, `channels/${currentChat.id}/messages`);
       const q = query(messageCollection, orderBy('timeInMs', 'desc'), limit(50));
       this.unSubChannelMessages = onSnapshot(q, async (snapshot) => {
@@ -300,6 +301,7 @@ export class FirestoreService {
           const message = doc.data() as Message;
           message.reactionCount = this.setEmojiCount(message.reaction);
           message.id = doc.id;
+          message.threadCount = await this.threadService.countThreadMessages(message.id);
           return message;
         }));
         this.allDirectMessages.reverse();

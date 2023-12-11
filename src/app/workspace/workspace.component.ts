@@ -128,6 +128,7 @@ export class WorkspaceComponent implements OnInit {
   renderChannel(channel: Channel) {
     this.chatservice.openChat = channel;
     this.chatservice.chatWindow = 'channel';
+    this.threadService.changeChat.emit();
     if (this.chatservice.isMobile) {
       this.router.navigate(['main']);
     }
@@ -135,6 +136,9 @@ export class WorkspaceComponent implements OnInit {
 
   openChat(chat: Chat) {
     this.chatservice.renderDirectMessage(chat);
+    if (!this.chatservice.isMobile) {
+      this.threadService.changeChat.emit();
+    }
   }
 
   startNewMessage() {

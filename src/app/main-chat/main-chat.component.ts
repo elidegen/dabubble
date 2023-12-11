@@ -75,17 +75,30 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
         const newChat = openChat as Channel;
         if (!this.currentChat || this.currentChat.id !== newChat.id) {
           this.currentChat = newChat;
+          console.log('currentChat', this.currentChat);
+          
           this.threadService.currentChat = newChat;
           if (this.firestoreService.unSubChannelMessages) {
             this.firestoreService.unSubChannelMessages();
           }
-          this.firestoreService.loadChannelMessages(this.currentChat)
+          this.firestoreService.loadChannelMessages(this.currentChat);
           this.firestoreService.getAllChannelMembers(this.currentChat.id);
         }
       } else {
         this.currentChat = undefined;
       }
     });
+
+    this.threadService.openThread.subscribe(() => {
+      this.threadDrawer.open();
+      this.threadService.isThreadInDM = false;
+    })
+
+    this.threadService.changeChat.subscribe(() => {
+      this.threadDrawer.close();
+      this.threadService.isThreadInDM = false;
+    })
+    
   }
 
   ngOnDestroy() {
@@ -118,6 +131,7 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
 
   onCloseThread() {
     this.threadDrawer.close();
+    this.threadService.isThreadInDM = false;
   }
 
   async sendMessage() {

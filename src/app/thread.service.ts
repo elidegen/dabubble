@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { inject } from '@angular/core';
 import { Firestore, collection, doc, onSnapshot, addDoc,getDocs,updateDoc} from '@angular/fire/firestore';
 import { Router } from '@angular/router';
@@ -22,7 +22,9 @@ export class ThreadService {
   threadMessage: any = [];
   messagesByDate: { [date: string]: Message[] } = {};
   organizedMessages: { date: string, messages: Message[] }[] = [];
-
+  openThread = new EventEmitter<void>();
+  changeChat = new EventEmitter<void>();
+  isThreadInDM: boolean = false;
   constructor(public router: Router, public userService: UserService, public chatService: ChatService) {
 
   }
@@ -70,11 +72,13 @@ export class ThreadService {
 
 
   updateThreadCount(message: Message,time: any) {
-    const subReactionColRef = doc(collection(this.firestore, `channels/${this.currentChat.id}/messages/`), message.id);
-    updateDoc(subReactionColRef, this.updateMessage(message, time));
-    console.log("MessageCount wird geupdated",message);
-    console.log("MessageCount wird geupdated mit der Zeit",time);
-
+    if (this.isThreadInDM) {
+      const subReactionColRef = doc(collection(this.firestore, `direct messages/${message.channelID}/messages/`), message.id);
+      updateDoc(subReactionColRef, this.updateMessage(message, time));
+    } else {
+      const subReactionColRef = doc(collection(this.firestore, `channels/${this.currentChat.id}/messages/`), message.id);
+      updateDoc(subReactionColRef, this.updateMessage(message, time));
+    }
   }
 
 

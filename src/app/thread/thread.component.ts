@@ -81,9 +81,10 @@ export class ThreadComponent implements OnInit {
       this.message.profilePic = this.userService.currentUser.picture;
       this.message.creatorId = this.userService.currentUser.id;
       await this.firestoreService.sendMessageInThread(this.currentMessage.id, this.message);
-      this.message = new Message();
+      this.threadService.updateThreadCount(this.currentMessage, this.message.time);
+      this.message.content = '';
     }
-    this.threadService.updateThreadCount(this.threadService.currentMessage, this.message.time);
+    
   }
 
 

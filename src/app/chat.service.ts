@@ -260,7 +260,10 @@ export class ChatService {
     let channel = this.allChannels.find(channel => channel.id === message.channelID);
     this.openChat = channel;
     this.chatWindow = 'channel';
-    this.router.navigate(['main']);
+    if (this.isMobile) {
+      this.router.navigate(['main']);
+    }
+  
     
   }
 
@@ -268,7 +271,10 @@ export class ChatService {
     let direct = this.allLoadedDirectMessages.find(dm => dm.id === message.channelID);
     this.openDirectMessage = direct;
     this.chatWindow = 'direct';
-    this.router.navigate(['main']);
+    if (this.isMobile) {
+      this.router.navigate(['main']);
+    }
+   
   }
   
   getOtherUser(members: any[]) {

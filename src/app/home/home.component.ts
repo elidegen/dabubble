@@ -101,7 +101,6 @@ export class HomeComponent {
             this.filteredChannelMessages.push(message);
         }
     });
-    console.log('channel', this.filteredChannelMessages);
   }
 
 
@@ -120,7 +119,9 @@ export class HomeComponent {
     this.chatService.createDirectMessage(user);
     this.chatService.chatWindow = 'direct';
     this.search.nativeElement.value = '';
-    this.router.navigate(['main']);
+    if (this.chatService.isMobile) {
+      this.router.navigate(['main']);
+    }
   }
 
 
