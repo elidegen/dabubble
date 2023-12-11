@@ -17,3 +17,14 @@
         border-radius: 0 !important;
     }
 }
+
+@media (max-width: 450px ) {
+    .user-search-container {
+        left: 18px;
+    }
+    .user-container {
+        padding: 6px;
+        max-width: 210px;
+    }
+    
+}

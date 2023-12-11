@@ -24,9 +24,11 @@ h3 {
     justify-content: flex-end;
 }
 
+
 .border {
     border: 2px solid black;
 }
+
 
 p {
     margin-top: 8px !important;
@@ -134,13 +136,11 @@ p {
     width: fit-content;
     background-color: var(--primary);
     border-radius: 24px;
-
     img{
         height: 30px;
         width: 30px;
         border-radius: 50%;
     }
-
     button {
         display: flex;
         align-items: center;
@@ -148,9 +148,66 @@ p {
         height: 30px;
         width: 30px;
         padding: 0;
+        img {
+            height: 20px;
+            width: 20px;
+        }
     }
-
     span {
         font-size: 18px;
+    }
+}
+
+@media (max-width: 799px) {
+    mat-card-content {
+        min-width: 0;
+    }
+    .selected-user-container {
+        max-height: 285px;
+        overflow-y: scroll;
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+    .selected-user {
+       button {
+        img {
+            height: 14px;
+            width: 14px;
+        }
+       }
+    }
+    .user-search-container {
+        left: 15px;
+        max-height: 300px;
+    }
+}
+
+
+@media (max-width: 400px) {
+    .selected-user {
+        span {
+            font-size: 16px;
+        }
+    }
+
+    h1 {
+        font-size: 22px !important;
+    }
+
+
+    .user-container {
+        max-width: 150px;
+        font-size: 12px;
+        padding: 6px;
+        gap: 10px;
+        img {
+            height: 40px;
+        }
+    }
+    .online-status {
+        height: 8px;
+        width: 8px;
+        right: 2px;
     }
 }
