@@ -302,6 +302,9 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
     console.log("Übergebene Datei:", event)
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
+      if (file.size > 500000) {
+        alert("Max file size 500kb !");
+      } else {
       this.authService.uploadProfileImage(file);
       this.firestoreService.showSpinner = true;
     }
@@ -311,6 +314,7 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
       this.firestoreService.showSpinner = false;
     }, 2000);
     this.showUploadedFile = true;
+  }
   }
 
   logOutUser() {

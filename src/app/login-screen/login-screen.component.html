@@ -27,13 +27,18 @@
       <form [formGroup]="login">
         <div class="input-container margin-top ">
           <img src="assets\img\icons\mail.svg">
-          <input matInput [(ngModel)]="email" placeholder="E-mail" [formControl]="loginemail" required>
-          <mat-error *ngIf="!loginemail.valid">{{getErrorMessageLogin()}}</mat-error>
+          <input matInput  placeholder="E-mail" [formControl]="loginemail" required>
+          <mat-error *ngIf="loginemail.invalid && loginemail.touched">
+            {{ getErrorMessageLogin() }}
+          </mat-error>
         </div>
 
         <div class="placeholder"></div>
         <div class="input-container margin-top"><img src="assets\img\icons\lock.svg"><input type="password"
-            [(ngModel)]="password" matInput placeholder="Password" [formControl]="loginpassword" required>
+             matInput placeholder="Password" [formControl]="loginpassword" required>
+             <mat-error *ngIf="loginpassword.invalid && loginpassword.touched">
+              {{ getErrorMessageLoginPassword() }}
+            </mat-error>
           <mat-error>{{getErrorMessageNoUser()}}</mat-error></div>
 
         <span (click)="changeSwitchCase('resetPassword')"
@@ -140,9 +145,11 @@
       <form [formGroup]="getEmailForNewPassword">
         <div class="input-container margin-top">
           <img src="assets\img\icons\mail.svg">
-          <input matInput placeholder="E-mail" [(ngModel)]="resetEmail" formControlName="emailForReset" required>
+          <input matInput placeholder="E-mail"  formControlName="emailForReset" required>
           <div class="placeholder"></div>
-          <mat-error *ngIf="this.emailForReset?.hasError('email')">Enter a valid e-mail</mat-error>
+          <mat-error *ngIf="emailForReset.invalid && emailForReset.touched">
+            {{ getErrorMessageResetEmail() }}
+          </mat-error>
         </div>
         <p  *ngIf="!this.userService.resetEmailFound" class="margin-top25 grey-span-resetpw">Receive an e-mail to reset your password</p>
         <p  *ngIf="this.userService.resetEmailFound"class="margin-top25 grey-span-resetpw">An e-mail to reset your password was sent !</p>

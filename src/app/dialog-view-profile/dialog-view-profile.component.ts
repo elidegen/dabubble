@@ -49,6 +49,9 @@ export class DialogViewProfileComponent {
     console.log("Übergebene Datei:", event)
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
+      if (file.size > 500000) {
+        alert("Max file size 500kb !");
+      } else {
       this.authService.uploadProfileImage(file);
       this.firestoreService.showSpinner = true;
     }
@@ -59,6 +62,6 @@ export class DialogViewProfileComponent {
    
       this.firestoreService.showSpinner = false;
     }, 1500);
-  
+  }
   }
 }

@@ -89,6 +89,9 @@ export class DirectMessageChatComponent implements OnInit {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
       this.authService.uploadProfileImage(file);
+      if (file.size > 500000) {
+        alert("Max file size 500kb !");
+      } else {
       this.firestoreService.showSpinner = true;
     }
     setTimeout(() => {
@@ -96,6 +99,7 @@ export class DirectMessageChatComponent implements OnInit {
       this.firestoreService.showSpinner = false;
     }, 1500);
     this.showUploadedFile = true;
+  }
   }
 
   async sendMessage() {

@@ -6,6 +6,7 @@ import { ChatService } from '../chat.service';
 import { UserService } from '../user.service';
 import { User } from 'src/models/user.class';
 import { FirestoreService } from '../firestore.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dialog-add-channel',
@@ -24,7 +25,7 @@ export class DialogAddChannelComponent {
   selectedUsers: any[] = [];
   currentUser;
 
-  constructor(@Optional() @Inject(MatDialogRef) public dialogRef: MatDialogRef<DialogAddChannelComponent> | undefined, public chatService: ChatService, public userService: UserService, public firestoreService: FirestoreService) {
+  constructor(@Optional() @Inject(MatDialogRef) public dialogRef: MatDialogRef<DialogAddChannelComponent> | undefined, public chatService: ChatService, public userService: UserService, public firestoreService: FirestoreService, public router: Router) {
     firestoreService.loadUsers()
     this.currentUser = this.userService.currentUser;
     if (chatService.isMobile) {
@@ -50,7 +51,12 @@ export class DialogAddChannelComponent {
     this.channel.creator = this.userService.currentUser.name;
     this.channel.lastTimeViewed = [];
     await this.firestoreService.addChannel(this.channel);
-    this.dialogRef?.close();
+
+    if (this.chatService.isMobile) {
+      this.router.navigate(['home']);
+    } else {
+      this.dialogRef?.close();
+    }
   }
 
   getMembers() {

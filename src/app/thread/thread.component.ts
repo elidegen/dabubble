@@ -221,6 +221,9 @@ export class ThreadComponent implements OnInit {
     console.log("Übergebene Datei:", event)
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
+      if (file.size > 500000) {
+        alert("Max file size 500kb !");
+      } else {
       this.authService.uploadProfileImage(file);
       this.firestoreService.showSpinner = true;
     }
@@ -231,7 +234,7 @@ export class ThreadComponent implements OnInit {
     }, 1500);
     this.showUploadedFile = true;
   }
-
+  }
   async updateMessageContent(message: Message) {
     let messageId = message.id
     const messageColRef = doc(collection(this.firestore, `threads/${this.currentMessage?.id}/messages/`), messageId);

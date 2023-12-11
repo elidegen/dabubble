@@ -16,10 +16,7 @@ export class LoginScreenComponent implements OnInit {
   picSrc = "assets/img/avatars/profile.svg";
   switch_expression: any = "login";
   profileImages: any = ["assets/img/avatars/character_1.svg", "assets/img/avatars/character_2.svg", "assets/img/avatars/character_3.svg", "assets/img/avatars/character_4.svg", "assets/img/avatars/character_5.svg", "assets/img/avatars/character_6.svg",]
-  email: string = "";
-  password: string = "";
   newUser: User = new User;
-  resetEmail: string = "";
   uploadFile: string = "";
   userNotFound: any;
   resetEmailNotFound: boolean = false;
@@ -78,11 +75,19 @@ export class LoginScreenComponent implements OnInit {
     return this.addUser.get("disableSelect") as FormControl;
   }
 
-  getErrorMessageLogin() {
-    if (this.loginemail?.hasError('email')) {
-      return 'Not a valid email';
+  getErrorMessageLogin(): string {
+    if (this.loginemail.hasError('required')) {
+      return 'Email is required';
     }
-    return "";
+    return this.loginemail.hasError('email') ? 'Not a valid email' : '';
+  }
+
+  getErrorMessageLoginPassword(): string {
+    if (this.loginpassword.hasError('required')) {
+      return 'Password is required';
+    }
+    // Add any other password validation messages here
+    return '';
   }
 
   getErrorMessageReset() {
@@ -100,6 +105,13 @@ export class LoginScreenComponent implements OnInit {
       return 'Enter a user name with minimum 5 letters';
     }
     return "";
+  }
+
+  getErrorMessageResetEmail(): string {
+    if (this.emailForReset.hasError('required')) {
+      return 'Email is required for password reset';
+    }
+    return this.emailForReset.hasError('email') ? 'Not a valid email' : '';
   }
 
   getErrorMessageNewEmail() {
@@ -145,7 +157,6 @@ export class LoginScreenComponent implements OnInit {
     this.firestoreService.showSpinner = true;
     setTimeout(() => {
       if (this.userService.userIsAvailable) {
-        this.showUserCreatedSuccess = true;
         this.changeSwitchCase('avatar');
         this.firestoreService.showSpinner = false;
       } else {
@@ -153,13 +164,14 @@ export class LoginScreenComponent implements OnInit {
         this.firestoreService.showSpinner = false;
         setTimeout(() => {
           this.userAlreadyInUse = false;
-          this.showUserCreatedSuccess = false;
         }, 3000);
       }
     }, 1500);
   }
 
-
+clearInputs() {
+  this.addUser.reset();
+}
 
 /**
  * @method uploadUser
@@ -170,9 +182,8 @@ export class LoginScreenComponent implements OnInit {
   async uploadUser() {
     this.newUser.picture = this.picSrc;
     this.newUser.online = true;
-    this.userService.addUser(this.newUser as User);
+    await this.userService.addUser(this.newUser as User);
     this.authService.signInUser(this.userService.currentEmail, this.userService.currentPassword);
-   
   }
 
  /**
@@ -182,7 +193,9 @@ export class LoginScreenComponent implements OnInit {
  * On success, a flag is set and on failure, an error message is displayed.
  */
   async loginUser() {
-   await this.authService.signInUser(this.email, this.password);
+    if (this.login.valid) {
+      
+   await this.authService.signInUser(this.loginemail.value, this.loginpassword.value);
     if (this.authService.signInSuccess) {
       this.authService.signInSuccess = true;
       this.userNotFound = false;
@@ -196,6 +209,8 @@ export class LoginScreenComponent implements OnInit {
         this.userNotFound = true;
         this.getErrorMessageNoUser();
     }
+
+  }
   }
 
 
@@ -228,7 +243,9 @@ export class LoginScreenComponent implements OnInit {
  * @param {string} newSwitchCase - The new switch case value to update the component's state.
  */
   changeSwitchCase(newSwitchCase: string) {
+    this.clearInputs();
     this.switch_expression = newSwitchCase;
+  
   }
 
   /**
@@ -237,7 +254,7 @@ export class LoginScreenComponent implements OnInit {
  * Shows a confirmation message upon sending the email.
  */
   sendResetEmail() {
-    this.authService.sendResetEmail(this.resetEmail);
+    this.authService.sendResetEmail(this.loginemail.value);
     this.showEmailSent = true;
     setTimeout(() => {
       this.showEmailSent = false;
@@ -255,6 +272,9 @@ export class LoginScreenComponent implements OnInit {
   onFileSelected(event: any): void {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
+      if (file.size > 500000) {
+        alert("File is too big!");
+      } else {
       this.authService.uploadProfileImage(file);
       this.firestoreService.showSpinner = true;
     }
@@ -262,6 +282,7 @@ export class LoginScreenComponent implements OnInit {
       this.picSrc = this.authService.customPic;
       this.firestoreService.showSpinner = false;
     }, 2500);
+  }
   }
 
 
@@ -271,8 +292,8 @@ export class LoginScreenComponent implements OnInit {
  * Sets the `userNotFound` flag depending on whether the user is found in the user service.
  */
   checkIfUserExists() {
-    let userIndex = this.authService.findUserIndexWithEmail(this.email);
-    if (userIndex !== -1 && this.userService.users[userIndex].password == this.password) {
+    let userIndex = this.authService.findUserIndexWithEmail(this.loginemail.value);
+    if (userIndex !== -1 && this.userService.users[userIndex].password == this.loginpassword.value) {
       this.userNotFound == false
     } else {
       this.userNotFound = true;
