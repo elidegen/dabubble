@@ -222,10 +222,6 @@ export class AuthService {
     );
   }
 
-  onFileSelected($event: any) {
-    console.log($event);
-  }
-  
 
   createId(length: number) {
     let result = '';

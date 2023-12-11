@@ -204,7 +204,7 @@ mat-error {
 //     padding-left: 10px;
 //     padding-right: 10px;
 // }
-
+input
 .input-container {
     display: flex;
     align-items: center;
@@ -225,7 +225,7 @@ mat-error {
         border: none;
         background-color: var(--primary);
         height: 30px;
-        width: 100%;
+        width: 150%;
         font-size: 20px;
         cursor: pointer;
     }
