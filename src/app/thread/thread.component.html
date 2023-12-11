@@ -104,8 +104,8 @@
             </div>
 
             <div class="reaction-emoji-container">
-              <button class="reaction-emoji-button" *ngFor="let emoji of thread.reactionCount | keyvalue">
-                <div (click)="firestoreService.addReaction(emoji.key, this.emojiService.messageId, this.currentMessage.id, 'threads')"
+              <button class="reaction-emoji-button" *ngFor="let emoji of thread.reactionCount | keyvalue; let i = index">
+                <div  (click)="firestoreService.addReaction(emoji.key, thread.id, this.currentMessage.id, 'threads')"
                   class="emoji-fit">{{emoji.key}}</div>
                 <span>{{ emoji.value }}</span>
               </button>
