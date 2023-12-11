@@ -146,7 +146,6 @@ export class LoginScreenComponent implements OnInit {
     setTimeout(() => {
       if (this.userService.userIsAvailable) {
         this.changeSwitchCase('avatar');
-        this.clearInputs();
         this.firestoreService.showSpinner = false;
       } else {
         this.userAlreadyInUse = true;
@@ -173,9 +172,8 @@ clearInputs() {
   async uploadUser() {
     this.newUser.picture = this.picSrc;
     this.newUser.online = true;
-    this.userService.addUser(this.newUser as User);
+    await this.userService.addUser(this.newUser as User);
     this.authService.signInUser(this.userService.currentEmail, this.userService.currentPassword);
-   
   }
 
  /**
