@@ -56,12 +56,14 @@ export class ThreadService {
     }
   }
 
-  async sendMessageInThread(threadId: any, message: Message) {
+  async sendMessageInThread(thread: any, message: Message) {
+    let threadId = thread.id
     const subColRef = collection(this.firestore, `threads/${threadId}/messages`);
     await addDoc(subColRef, message.toJSON())
     .catch((err) => {
       console.log(err);
     })
+  
   }
 
 
@@ -73,7 +75,8 @@ export class ThreadService {
     }
   }
 
-  updateThreadCount(message: Message,time: any) {
+  async updateThreadCount(message: Message,time: any) {
+    message.threadCount = await this.countThreadMessages(message.id);
     if (this.isThreadInDM) {
       const subReactionColRef = doc(collection(this.firestore, `direct messages/${message.channelID}/messages/`), message.id);
       updateDoc(subReactionColRef, this.updateMessage(message, time));
@@ -101,7 +104,7 @@ export class ThreadService {
     }
   }
 
-  async countThreadMessages(messageId: string) {
+  async countThreadMessages(messageId: any) {
     const threadCollection = collection(this.firestore, `threads/${messageId}/messages`);
     return getDocs(threadCollection)
     .then(snapshot => {
