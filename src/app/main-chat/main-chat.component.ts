@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, inject, HostListener, AfterViewInit, OnChanges, SimpleChanges, Input } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, inject, HostListener, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogEditChannelComponent } from '../dialog-edit-channel/dialog-edit-channel.component';
 import { DialogAddToGroupComponent } from '../dialog-add-to-group/dialog-add-to-group.component';
@@ -24,7 +24,7 @@ import { Router } from '@angular/router';
   templateUrl: './main-chat.component.html',
   styleUrls: ['./main-chat.component.scss', './main-chat.mediaquery.component.scss']
 })
-export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
+export class MainChatComponent implements OnInit {
   @ViewChild('messageContainer') messageContainer!: ElementRef;
   firestore: Firestore = inject(Firestore);
   currentChat!: Channel | undefined;
@@ -53,20 +53,10 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild('search') search!: ElementRef;
   // ----------------------------------------------------
 
-  constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService,
-    public threadService: ThreadService, public authService: AuthService, public emojiService: EmojiService,
-    public firestoreService: FirestoreService, public router: Router) {
+  constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public threadService: ThreadService, public authService: AuthService, public emojiService: EmojiService, public firestoreService: FirestoreService, public router: Router) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser as User;
     firestoreService.loadUsers();
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    // if(changes.chatService.chatWindow)
-  }
-
-  ngAfterViewInit(): void {
-    this.scrollToBottom();
   }
 
   ngOnInit() {
@@ -85,19 +75,22 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
       } else {
         this.currentChat = this.currentChat;
       }
-    
     });
+    this.checkEventEmitters();
+  }
 
+  /**
+   * This functions is used for the eventemitters of the thread behavior and scroll behavior of messages
+   */
+  checkEventEmitters() {
     this.threadService.openThread.subscribe(() => {
       this.threadDrawer.open();
       this.threadService.isThreadInDM = false;
     })
-
     this.threadService.changeChat.subscribe(() => {
       this.threadDrawer.close();
       this.threadService.isThreadInDM = false;
     })
-    
     this.firestoreService.messageAdded.subscribe(() => {
       this.scrollToBottom();
     });
@@ -110,8 +103,8 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   /**
- * Opens a dialog to edit the current channel's settings.
- */
+   * Opens a dialog to edit the current channel's settings.
+   */
   openEditChannelDialog() {
     if (!this.chatService.isMobile) {
       this.dialog.open(DialogEditChannelComponent, {
@@ -123,8 +116,8 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   /**
- * Opens a dialog to add new members to the current group.
- */
+   * Opens a dialog to add new members to the current group.
+   */
   openDialog() {
     this.dialog.open(DialogAddToGroupComponent, {
       panelClass: 'dialog-container'
@@ -132,8 +125,8 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   /**
- * Opens a dialog to display group members.
- */
+   * Opens a dialog to display group members.
+   */
   openMemberDialog() {
     this.dialog.open(DialogShowGroupMemberComponent, {
       panelClass: 'dialog-container'
@@ -141,30 +134,22 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   /**
- * Closes the thread drawer in the UI.
- */
+   * Closes the thread drawer in the UI.
+   */
   onCloseThread() {
     this.threadDrawer.close();
     this.threadService.isThreadInDM = false;
   }
 
   /**
- * Sends a chat message in the current channel.
- */
+  * Sends a chat message in the current channel.
+  */
   async sendMessage() {
     console.log('Before sendMessage - allMessagesOfChannel:', this.chatService.allMessagesOfChannel);
     if (this.currentChat?.id && this.message.content?.trim() !== '') {
       this.showUploadedFile = false;
       this.message.content = this.message.content!.replace(this.taggedNames, '');
-      this.getSentMessageTime();
-      this.getSentMessageDate();
-      this.message.creator = this.userService.currentUser.name;
-      this.message.creatorId = this.userService.currentUser.id,
-        this.message.channel = this.currentChat.name;
-      this.message.channelID = this.currentChat.id;
-      this.message.profilePic = this.userService.currentUser.picture,
-        this.message.channel = this.currentChat.name;
-      this.message.channel = this.currentChat.name;
+      this.getSentMessageTimeAndDate();
       this.message.messageSelected = false;
       await this.firestoreService.sendMessageInChannel(this.currentChat, this.message);
       this.taggedNames = "";
@@ -174,33 +159,37 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   /**
- * Formats and sets the date for the sent message.
- */
-  getSentMessageDate() {
-    const currentDate = this.getCurrentDate();
-    const formattedDate = this.formatDate(currentDate);
-    this.message.date = formattedDate;
+   * Sets values for sent Message
+   */
+  setMessageValuesForSentMessage() {
+    if (this.currentChat) {
+      this.message.creator = this.userService.currentUser.name;
+      this.message.creatorId = this.userService.currentUser.id,
+      this.message.channel = this.currentChat.name;
+      this.message.channelID = this.currentChat.id;
+      this.message.profilePic = this.userService.currentUser.picture,
+      this.message.channel = this.currentChat.name;
+      this.message.channel = this.currentChat.name;
+    }
   }
 
   /**
- * Formats and sets the time for the sent message.
- */
-  getSentMessageTime() {
+   * Formats and sets the time and date for the sent message.
+   */
+  getSentMessageTimeAndDate() {
     const currentTime = new Date();
     this.message.timeInMs = currentTime.getTime();
     const formattedTime = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     this.message.time = formattedTime;
-  }
-
-
-  getSentMessageCreator() {
+    const currentDate = this.getCurrentDate();
+    const formattedDate = this.formatDate(currentDate);
+    this.message.date = formattedDate;
     this.message.creator = this.userService.currentUser.id;
   }
 
-
   /**
- * Scrolls the chat window to the bottom, showing the most recent messages.
- */
+   * Scrolls the chat window to the bottom, showing the most recent messages.
+   */
   scrollToBottom(): void {
     if (this.scrollContainer) {
       this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
@@ -208,10 +197,10 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   /**
- * Determines if the given date is the current date.
- * @param {string} date - The date to check.
- * @returns {boolean} - True if the date is today, false otherwise.
- */
+   * Determines if the given date is the current date. ------------------------------------------------
+   * @param {string} date - The date to check.
+   * @returns {boolean} - True if the date is today, false otherwise.
+   */
   isToday(date: string): boolean {
     const currentDate = this.getCurrentDate();
     const formattedDate = this.formatDate(currentDate);
@@ -232,12 +221,12 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     return (months.indexOf(month) + 1).toString().padStart(2, '0');
   }
-
+  //----------------------------------------------------------------------------------------------------
 
   /**
- * Opens the emoji picker for a specific message.
- * @param {any} messageId - The ID of the message to add an emoji to.
- */
+   * Opens the emoji picker for a specific message.
+   * @param {any} messageId - The ID of the message to add an emoji to.
+   */
   openEmojiPicker(messageId: any) {
     setTimeout(() => {
       this.emojiService.showMainChatEmojiPicker = true;
@@ -246,8 +235,8 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   /**
- * Opens the emoji picker for the chat input field.
- */
+   * Opens the emoji picker for the chat input field.
+   */
   openEmojiPickerChat() {
     setTimeout(() => {
       this.emojiService.showTextChatEmojiPicker = true;
@@ -255,8 +244,8 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   /**
- * Closes the emoji picker.
- */
+   * Closes the emoji picker.
+   */
   closeEmojiPicker() {
     if (this.emojiService.showMainChatEmojiPicker == true || this.emojiService.showTextChatEmojiPicker == true && this.emojiService.emojiString == "") {
       this.emojiService.showMainChatEmojiPicker = false;
@@ -266,9 +255,9 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   /**
- * Adds an emoji to a message.
- * @param {any} event - The emoji select event.
- */
+   * Adds an emoji to a message.
+   * @param {any} event - The emoji select event.
+   */
   addEmoji(event: any) {
     if (this.emojiService.messageId != "") {
       this.emojiService.addEmojiMainChat(event);
@@ -279,9 +268,9 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   /**
- * Adds an emoji to the chat input field.
- * @param {any} $event - The emoji select event.
- */
+   * Adds an emoji to the chat input field.
+   * @param {any} $event - The emoji select event.
+   */
   addEmojiTextField($event: any) {
     this.emojiService.addEmojiTextChat($event);
     this.message.content += this.emojiService.emojiString;
@@ -289,12 +278,12 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   /**
- * Opens a thread based on a specific message.
- * @param {Message} message - The message to create a thread for.
- */
+   * Opens a thread based on a specific message.
+   * @param {Message} message - The message to create a thread for.
+   */
   async openThread(message: Message) {
     let messageId = message.id;
-    await this.firestoreService.createThread(messageId, this.newThread);
+    await this.threadService.createThread(messageId, this.newThread);
     this.threadService.openMessage = message;
     if (this.chatService.isMobile) {
       this.router.navigate(['thread']);
@@ -304,9 +293,9 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   /**
- * Enables editing mode for a specific message.
- * @param {Message} message - The message to be edited.
- */
+   * Enables editing mode for a specific message.
+   * @param {Message} message - The message to be edited.
+   */
   editMessage(message: Message) {
     if (this.currentChat) {
       if (message.creator == this.currentUser.name) {
@@ -317,9 +306,9 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   /**
- * Updates the content of a message.
- * @param {Message} message - The message to be updated.
- */
+   * Updates the content of a message.
+   * @param {Message} message - The message to be updated.
+   */
   async updateMessageContent(message: Message) {
     let messageId = message.id
     const messageColRef = doc(collection(this.firestore, `channels/${this.currentChat?.id}/messages/`), messageId);
@@ -336,32 +325,36 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
-  /**
- * Filters users based on search input.
- */
   // ---------------- search Input -------------------------
+  /**
+   * Filters users based on search input.
+   */
   filterUsers(): void {
     this.isInputFocused = true;
     this.firestoreService.filterAllUsers()
   }
 
   /**
- * Stops propagation of a user selection event.
- * @param {Event} event - The DOM event.
- */
+   * Stops propagation of a user selection event.
+   * @param {Event} event - The DOM event.
+   */
   userSelected(event: Event) {
     event.stopPropagation();
   }
 
   /**
- * Selects a user to start a direct message chat.
- * @param {any} user - The selected user.
- */
+   * Selects a user to start a direct message chat.
+   * @param {any} user - The selected user.
+   */
   selectUser(user: any) {
     this.chatService.createDirectMessage(user);
     this.search.nativeElement.value = '';
   }
 
+  /**
+   * 
+   * @param user 
+   */
   getUserNameString(user: any) {
     let taggedName: any;
     taggedName = `@${user.name}`;
@@ -373,9 +366,9 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   /**
- * Opens the profile view dialog for a specific user.
- * @param {any} id - The ID of the user.
- */
+   * Opens the profile view dialog for a specific user.
+   * @param {any} id - The ID of the user.
+   */
   openProfileDialog(id: any): void {
     this.dialog.open(DialogViewProfileComponent, {
       panelClass: 'dialog-container',
@@ -384,9 +377,9 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   /**
- * Checks click events on the document to manage input focus.
- * @param {Event} event - The click event.
- */
+   * Checks click events on the document to manage input focus.
+   * @param {Event} event - The click event.
+   */
   @HostListener('document:click', ['$event'])
   checkClick(event: Event) {
     const clickedElement = event.target as HTMLElement;
@@ -396,19 +389,26 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   /**
- * Handles file selection for uploading images or other files.
- * @param {any} event - The file input event.
- */
+   * Handles file selection for uploading images or other files.
+   * @param {any} event - The file input event.
+   */
   onFileSelected(event: any): void {
-    console.log("Übergebene Datei:", event)
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
       if (file.size > 500000) {
         alert("Max file size 500kb !");
       } else {
-      this.authService.uploadProfileImage(file);
-      this.firestoreService.showSpinner = true;
+        this.authService.uploadProfileImage(file);
+        this.firestoreService.showSpinner = true;
+      }
+      this.resetStatus();
     }
+  }
+
+  /**
+   * Resets status of spinner and uploaded files
+   */
+  resetStatus() {
     setTimeout(() => {
       this.message.files.push(this.authService.customPic);
       console.log(this.message);
@@ -416,11 +416,10 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
     }, 2000);
     this.showUploadedFile = true;
   }
-  }
 
   /**
- * Logs out the current user and navigates to the login screen.
- */
+   * Logs out the current user and navigates to the login screen.
+   */
   logOutUser() {
     this.authService.signOutUser();
     this.router.navigate(['']);

@@ -24,9 +24,9 @@ export class DialogShowGroupMemberComponent implements OnInit {
       }
     }
 
-    /**
- * Opens the dialog to add new members to the group.
- */
+  /**
+   * Opens the dialog to add new members to the group.
+   */
   openDialog() {
     this.dialog.open(DialogAddToGroupComponent, {
       panelClass: 'dialog-container'
@@ -34,9 +34,9 @@ export class DialogShowGroupMemberComponent implements OnInit {
   }
 
   /**
- * Initializes the component and subscribes to the chat service to receive the current chat.
- * When the current chat changes, it fetches the channel members.
- */
+   * Initializes the component and subscribes to the chat service to receive the current chat.
+   * When the current chat changes, it fetches the channel members.
+   */
   ngOnInit() {
     this.chatService.openChat$.subscribe((openChat) => {
       if (openChat) {
@@ -51,29 +51,25 @@ export class DialogShowGroupMemberComponent implements OnInit {
 
 
   /**
- * Fetches all members of the current chat's channel from Firestore and updates their online status.
- */
+   * Fetches all members of the current chat's channel from Firestore and updates their online status.
+   */
   async getAllChannelMembers() {
     if (this.currentChat?.id) {
       const channelDocRef = doc(this.firestore, `channels/${this.currentChat.id}`);
-      try {
-        const channelDocSnap = await getDoc(channelDocRef);
-        if (channelDocSnap.exists()) {
-          const channelData = channelDocSnap.data();
-          this.allChannelMembers = channelData?.['members'];
-          this.updateOnlineStatus();
-        } else {
-          console.log('Channel document does not exist.');
-        }
-      } catch (error) {
-        console.error('Error getting channel document:', error);
+      const channelDocSnap = await getDoc(channelDocRef);
+      if (channelDocSnap.exists()) {
+        const channelData = channelDocSnap.data();
+        this.allChannelMembers = channelData?.['members'];
+        this.updateOnlineStatus();
+      } else {
+        console.log('Channel document does not exist.');
       }
     }
   }
 
   /**
- * Updates the online status of each member in the current chat's channel.
- */
+   * Updates the online status of each member in the current chat's channel.
+   */
   updateOnlineStatus() {
     this.allChannelMembers.forEach(member => {
       let userIndex = this.authService.findUserIndexWithEmail(member.email);
