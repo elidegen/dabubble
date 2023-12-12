@@ -32,7 +32,7 @@
             </div>
             <div class="email">
                 <h2>E-Mail Adress</h2>
-                <span>{{user.email}}</span>
+                <a matTooltip="Mail to"  href="mailto:{{user.email}}">{{user.email}}</a>
             </div>
         </div>
         <button  *ngIf="currentUser.id !== user.id" (click)="selectUser(user)" mat-button class="main-button primary mr-16 align-center" type="submit"> <span class="align-center"> <img src="assets/img/icons/message.svg" alt="">Message</span> </button>

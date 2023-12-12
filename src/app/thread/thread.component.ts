@@ -82,7 +82,7 @@ export class ThreadComponent implements OnInit {
       this.message.creator = this.userService.currentUser.name;
       this.message.profilePic = this.userService.currentUser.picture;
       this.message.creatorId = this.userService.currentUser.id;
-      await this.threadService.sendMessageInThread(this.currentMessage.id, this.message);
+      await this.threadService.sendMessageInThread(this.currentMessage, this.message);
       this.threadService.updateThreadCount(this.currentMessage, this.message.time);
       this.message.content = '';
     }
