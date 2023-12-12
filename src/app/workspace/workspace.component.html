@@ -24,7 +24,7 @@
               <div class="channel-button-container" *ngFor="let channel of this.yourChannels;">
                 <button (click)="renderChannel(channel)" mat-button>
                   <div class="channel-btn">
-                    <span><b>#</b> {{channel.name}}</span>
+                    <span class="channel-name"><b>#</b> {{channel.name}}</span>
                   </div>
                 </button>
               </div>
@@ -65,7 +65,7 @@
                   <div [ngClass]="{'offline-status': !chatservice.getOtherUser(directMessage.members).online}"
                     class="online-status"></div>
                 </div>
-                <h3>{{ chatservice.getOtherUser(directMessage.members).name }}</h3>
+                <h3 class="chat-name">{{ chatservice.getOtherUser(directMessage.members).name }}</h3>
               </button>
               <button matTooltip="Delete chat" class="delete-direct-button" mat-icon-button
                 (click)="deleteDirectMessageChat(directMessage.id)">
@@ -78,9 +78,9 @@
         </mat-expansion-panel>
       </mat-accordion>
     </div>
-   
+
   </mat-card-content>
-  <button class="edit-mobile" *ngIf="chatservice.isMobile" mat-fab color="primary" (click)="renderNewMainChat()">
+  <button class="new-message" *ngIf="chatservice.isMobile" mat-fab color="primary" (click)="renderNewMainChat()">
     <mat-icon>edit_square</mat-icon>
   </button>
 </mat-card>
