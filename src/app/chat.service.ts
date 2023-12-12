@@ -68,6 +68,10 @@ export class ChatService {
 
   // Create direct messages ------------------------------
 
+  /**
+   * This function creates a direct message
+   * @param user 
+   */
   async createDirectMessage(user: User) {
     this.checkUserForDirectMessageName(user);
     const directMessageRef = collection(this.firestore, 'direct messages');
@@ -84,6 +88,10 @@ export class ChatService {
     this.compareNewDirectMessageWithExisting(user);
   }
 
+  /**
+   * This function checks if a direct message is already existing
+   * @param user 
+   */
   compareNewDirectMessageWithExisting(user: User) {
     this.getAllDirectMessages()
       .then(() => {
@@ -91,7 +99,10 @@ export class ChatService {
       });
   }
 
-
+  /**
+   * This funtion loads all direct messages
+   * @returns 
+   */
   getAllDirectMessages(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this.allDirectMessages = [];
@@ -110,7 +121,11 @@ export class ChatService {
     });
   }
 
-
+  
+  /**
+   * This function searches for a existing dm
+   * @param user 
+   */
   findDirectMessage(user: User) {
     let directId: any;
     if (user.id !== this.userService.currentUser.id) {
@@ -120,11 +135,13 @@ export class ChatService {
       directId = this.userService.currentUser.id;
     }
     const foundDirectMessage = this.allDirectMessages.find(message => message.id === directId);
-    console.log('all directs', this.allDirectMessages);
     this.renderDirectMessage(foundDirectMessage);
   }
 
-
+  /**
+   * This function sets the behaviorsubject to curren dm
+   * @param chat 
+   */
   renderDirectMessage(chat: Chat) {
     this.openDirectMessage = chat;
     this.chatWindow = 'direct';
@@ -135,6 +152,12 @@ export class ChatService {
 
 
   //------------------------------------------------------------------------------------
+
+  /**
+   * This function sets the document reference for a dm by combining the user id with the currentUser id
+   * @param user 
+   * @returns id for docRef
+   */
   checkUserForId(user: User) {
     this.chat.members = []
     if (user.id !== this.userService.currentUser.id) {
@@ -154,7 +177,10 @@ export class ChatService {
     }
   }
 
-
+  /**
+   * This function sets the name of a dm by combining the user name with current user name
+   * @param user 
+   */
   checkUserForDirectMessageName(user: User) {
     if (user.id !== this.userService.currentUser.id) {
       let sortedUserNames = [user.name, this.userService.currentUser.name].sort();
@@ -165,7 +191,11 @@ export class ChatService {
     }
   }
 
-
+  /**
+   * Sets values of user
+   * @param user 
+   * @returns 
+   */
   convertUser(user: any): any {
     return {
       name: user.name, email: user.email, password: user.password, id: user.id, picture: user.picture,
@@ -174,6 +204,10 @@ export class ChatService {
 
 
   // ---------------- Search function ----------------------------------------------
+
+  /**
+   * Loads all channels 
+   */
   getallChannels() {
     this.unSubChannels = onSnapshot(
       query(collection(this.firestore, "channels"), orderBy("name")),
@@ -188,7 +222,9 @@ export class ChatService {
     );
   }
 
-
+  /**
+   * Sets personal channels
+   */
   getPersonalChannels() {
     this.yourChannels = [];
     this.allChannels.forEach(channel => {
@@ -200,7 +236,9 @@ export class ChatService {
     });
   }
 
-  
+  /**
+   * Loads all messages of personal channels
+   */
   async getAllChannelMessages() {
     this.allMessagesOfChannel = [];
     for (const channel of this.yourChannels) {
@@ -213,7 +251,9 @@ export class ChatService {
     }
   }
 
-
+  /**
+   * Loads all direct messages
+   */
   loadAllDirectMessages() {
     this.unSubDirectMessages = onSnapshot(
       query(collection(this.firestore, "direct messages"), orderBy("name")),
@@ -228,7 +268,9 @@ export class ChatService {
     );
   }
 
-
+  /**
+   * sets all personal dms
+   */
   getPersonalDirectMessages() {
     this.yourDirectMessages = [];
     this.allLoadedDirectMessages.forEach(dm => {
@@ -238,7 +280,9 @@ export class ChatService {
     });
   }
 
-
+  /**
+   * Loads all messages from personal dms
+   */
   async getDMMessages() {
     this.allMessagesOfDM = [];
     for (const dm of this.yourDirectMessages) {
@@ -251,7 +295,9 @@ export class ChatService {
     }
   }
 
-
+  /**
+   * loads all users
+   */
   getAllUsers() {
     const userCol = collection(this.firestore, 'users');
     this.unSubUsers = onSnapshot(userCol,
@@ -263,7 +309,10 @@ export class ChatService {
     );
   }
 
-
+  /**
+   * Sets current channel
+   * @param message 
+   */
   getChannelByMessage(message: any) {
     let channel = this.allChannels.find(channel => channel.id === message.channelID);
     this.openChat = channel;
@@ -273,7 +322,10 @@ export class ChatService {
     }  
   }
 
-
+  /**
+   * Sets current dm
+   * @param message 
+   */
   getDirectMessageByMessage(message: any) {
     let direct = this.allLoadedDirectMessages.find(dm => dm.id === message.channelID);
     this.openDirectMessage = direct;
@@ -283,7 +335,12 @@ export class ChatService {
     }
   }
   
-
+  
+  /**
+   * Differs user from current user for dm
+   * @param members 
+   * @returns 
+   */
   getOtherUser(members: any[]) {
     let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
     let interlocutor = this.allUsers.find(user => user.id == otherUser.id);

@@ -4,7 +4,6 @@ import { Message } from 'src/models/message.class';
 import { ThreadService } from './thread.service';
 import { UserService } from './user.service';
 import { Channel } from 'src/models/channel.class';
-import { Thread } from 'src/models/thread.class';
 import { AuthService } from './auth.service';
 import { User } from 'src/models/user.class';
 import { deleteDoc, limit } from 'firebase/firestore';
@@ -28,18 +27,18 @@ export class FirestoreService {
   showSpinner = false;
   showThreadSpinner = false;
   messageAdded = new EventEmitter<void>();
-
-  // ----Thread----
   allThreadMessages: Message[] = [];
   unSubThread: any;
   constructor(public threadService: ThreadService, public chatService: ChatService, public userService: UserService, public authService: AuthService) { }
-
-  // ----- Direct Messages --------------
   unSubDirectMessages: any;
   allDirectMessages: Message[] = [];
   messageIsExisting!: boolean;
 
   // ------------------ channel ----------------------------------------------------------
+
+  // --------------------------------------------------------------------------------------------------------
+  //These functions create a channel and update its id
+
   async addChannel(channel: Channel) {
     await addDoc(collection(this.firestore, 'channels'), channel.toJSON())
       .catch((err) => {
@@ -70,6 +69,12 @@ export class FirestoreService {
     };
   }
 
+
+  //--------------------------------------------------------------------------------------------------------------
+  /**
+   * This function loads all messages of the current channel
+   * @param currentChat - channel
+   */
   loadChannelMessages(currentChat: any) {
     if (currentChat.id) {
       console.log('firestore', currentChat);
@@ -90,6 +95,9 @@ export class FirestoreService {
     }
   }
 
+  /**
+   * This function organize all messages by their date
+   */
   organizeMessagesByDate() {
     this.messagesByDate = {};
     for (const message of this.allMessagesOfChannel) {
@@ -104,7 +112,11 @@ export class FirestoreService {
     this.organizedChannelMessages = Object.entries(this.messagesByDate).map(([date, messages]) => ({ date, messages }));
   }
 
-
+  /** -----------------------------------------------------------------------------------------------------------------
+   * This function creates a message inside of a channel
+   * @param channel - channel
+   * @param message - message
+   */
   async sendMessageInChannel(channel: Channel, message: Message) {
     let channelId = channel.id;
     const subColRef = collection(this.firestore, `channels/${channelId}/messages`);
@@ -139,7 +151,11 @@ export class FirestoreService {
       id: message.id,
     };
   }
-
+//----------------------------------------------------------------------------------------------------
+  /**
+   * This function loads all members of a channel
+   * @param channelId 
+   */
   async getAllChannelMembers(channelId: any) {
     if (channelId) {
       const channelDocRef = doc(this.firestore, `channels/${channelId}`);
@@ -152,7 +168,9 @@ export class FirestoreService {
       }
     }
   }
-
+  /**
+   * This function updates the online status of a user
+   */
   updateOnlineStatus() {
     this.allChannelMembers.forEach(member => {
       let userIndex = this.authService.findUserIndexWithEmail(member.email);
@@ -161,6 +179,11 @@ export class FirestoreService {
   }
 
   //----------------------Thread ----------------------------------------------
+
+  /**
+   * This function loads the current thread
+   * @param threadId - thread
+   */
   loadThread(threadId: any) {
     if (threadId) {
       const threadCollection = collection(this.firestore, `threads/${threadId}/messages`);
@@ -179,16 +202,19 @@ export class FirestoreService {
     }
   }
 
- 
-
   //----------- search Input Main Chat ----------------------------------
+  /**
+   * This function loads all users
+   */
   async loadUsers() {
     const querySnapshot = await getDocs(collection(this.firestore, 'users'));
     this.allUsers = querySnapshot.docs.map((doc: { data: () => any; }) => new User(doc.data()));
     this.setUsersToOffline();
   }
 
-
+  /**
+   * This function resets online status of a user
+   */
   async setUsersToOffline() {
     let time = this.getLoginTime();
     this.allUsers.forEach(user => {
@@ -198,7 +224,10 @@ export class FirestoreService {
       }
     });
   }
-
+  /**
+   * 
+   * @returns 
+   */
   getLoginTime() {
     const currentTime = new Date();
     return currentTime.getTime();
