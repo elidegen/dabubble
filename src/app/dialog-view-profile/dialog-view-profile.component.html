@@ -35,6 +35,7 @@
                 <span>{{user.email}}</span>
             </div>
         </div>
+        <button  *ngIf="currentUser.id !== user.id" (click)="selectUser(user)" mat-button class="main-button primary mr-16 align-center" type="submit"> <span class="align-center"> <img src="assets/img/icons/message.svg" alt="">Message</span> </button>
     </mat-card-content>
 
     <mat-card-content *ngSwitchCase="true">

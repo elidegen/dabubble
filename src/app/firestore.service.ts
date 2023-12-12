@@ -147,7 +147,9 @@ export class FirestoreService {
       if (channelDocSnap.exists()) {
         const channelData = channelDocSnap.data();
         this.allChannelMembers = channelData?.['members'];
-        this.updateOnlineStatus();
+        if (this.allChannelMembers) {
+          this.updateOnlineStatus();
+        }
         this.firstThreeItems = this.allChannelMembers.slice(0, 3);
       }
     }
@@ -156,7 +158,9 @@ export class FirestoreService {
   updateOnlineStatus() {
     this.allChannelMembers.forEach(member => {
       let userIndex = this.authService.findUserIndexWithEmail(member.email);
+      console.log("Onlinestatus", member,this.userService.users[userIndex] )
       member.online = this.userService.users[userIndex].online;
+    
     });
   }
 

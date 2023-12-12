@@ -4,6 +4,8 @@ import { UserService } from '../user.service';
 import { AuthService } from '../auth.service';
 import { User } from 'src/models/user.class';
 import { FirestoreService } from '../firestore.service';
+import { ChatService } from '../chat.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -22,7 +24,7 @@ export class DialogViewProfileComponent {
     @Inject(MAT_DIALOG_DATA) public data: { userID: string },
     public userService: UserService,
     public authService: AuthService,
-    public firestoreService: FirestoreService,) {
+    public firestoreService: FirestoreService,public chatService: ChatService,public router: Router) {
       userService.getCurrentUserFromLocalStorage();
       this.currentUser = this.userService.currentUser;
       this.setUser();
@@ -79,6 +81,20 @@ export class DialogViewProfileComponent {
       this.firestoreService.showSpinner = false;
     }, 1500);
   }
+
+  /**
+   * Opens a direct Chat with selected User.
+   */
+  selectUser(user: any) {
+    this.chatService.createDirectMessage(user);
+    this.chatService.chatWindow = 'direct';
+    if (this.chatService.isMobile) {
+      this.router.navigate(['main']);
+    }
+    this.dialogRef.close();
+  }
+ 
+
   }
 
  
