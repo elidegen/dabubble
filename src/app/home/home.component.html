@@ -111,14 +111,14 @@
       <img class="logo" src="assets/img/icons/logo-home.svg" alt="home" />
     </div>
     <div class="profile-container">
-      <div class="profile-picture" [matMenuTriggerFor]="menu">
+      <div class="profile-picture" (click)="openBottomSheet()">
         <img src="{{this.userService.currentUser.picture}}" alt="" />
       </div>
-      <mat-menu class="menu-mobile" #menu="matMenu" xPosition="before">
+      <!-- <mat-menu class="menu-mobile" #menu="matMenu" xPosition="before">
         <div class="separator-mobile"></div>
         <button (click)="openProfileDialog(currentUser.id)" class="menu" mat-menu-item>Profile</button>
         <button (click)="logOutUser()" mat-menu-item>Log Out</button>
-      </mat-menu>
+      </mat-menu> -->
     </div>
   </header>
   <div class="w100 home-mobile">
