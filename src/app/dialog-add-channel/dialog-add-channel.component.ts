@@ -32,7 +32,10 @@ export class DialogAddChannelComponent {
     }
   }
 
-
+/**
+ * Listens for clicks on the document to manage input focus state.
+ * @param {Event} event - The click event on the document.
+ */
   @HostListener('document:click', ['$event'])
   checkClick(event: Event) {
     const clickedElement = event.target as HTMLElement;
@@ -41,13 +44,18 @@ export class DialogAddChannelComponent {
     }
   }
 
-
+/**
+ * Filters users based on the search criteria in the input field.
+ */
   filterUsers(): void {
     this.isInputFocused = true;
     this.firestoreService.filterAllUsers()
   }
 
-
+/**
+ * Creates a new channel with the selected members.
+ * It sets the channel creator to the current user and calls FirestoreService to add the channel.
+ */
   async createChannel() {
     this.getMembers();
     this.channel.creator = this.userService.currentUser.name;
@@ -59,7 +67,9 @@ export class DialogAddChannelComponent {
     }
   }
 
-
+/**
+ * Gathers members for the new channel based on the selected options for all members or just selected ones.
+ */
   getMembers() {
     if (this.allMembers) {
       this.addSelectedUsersToChannel(this.firestoreService.allUsers)
@@ -69,7 +79,10 @@ export class DialogAddChannelComponent {
     }
   }
 
-
+/**
+ * Adds the selected users to the new channel's member list.
+ * @param {any[]} selectedUsers - An array of users selected to be added to the channel.
+ */
   addSelectedUsersToChannel(selectedUsers: any[]) {
     const formattedUsers = selectedUsers.map(user => {
       return {
@@ -84,12 +97,17 @@ export class DialogAddChannelComponent {
     this.channel.members.push(...formattedUsers);
   }
 
-
+/**
+ * Stops event propagation when a user element is selected.
+ * @param {Event} event - The event associated with user selection.
+ */
   userSelected(event: Event) {
     event.stopPropagation();
   }
 
-
+/**
+ * Adds the current user to the list of selected members if they are not already included.
+ */
   addCurrentUser() {
     const userAlreadySelected = this.selectedUsers.some(user => user.id === this.currentUser.id);
     if (!userAlreadySelected) {
@@ -97,7 +115,10 @@ export class DialogAddChannelComponent {
     }
   }
 
-
+/**
+ * Removes a user from the list of selected members.
+ * @param {User} user - The user object to be removed.
+ */
   removeUser(user: User) {
     let index = this.selectedUsers.findIndex(obj => obj.id === user.id);
     if (index !== -1) {
@@ -105,7 +126,11 @@ export class DialogAddChannelComponent {
     }
   }
 
-
+/**
+ * Toggles the selection state of a user when clicked and updates the list of selected members.
+ * @param {any} user - The user object to be selected or deselected.
+ * @param {number} i - The index of the user in the list to highlight the corresponding button.
+ */
   selectUser(user: any, i: number) {
     this.highlightButton(i);
     let index = this.selectedUsers.findIndex(obj => obj.id === user.id);
@@ -116,7 +141,10 @@ export class DialogAddChannelComponent {
     }
   }
 
-
+/**
+ * Toggles the highlighted state of a user container button.
+ * @param {number} index - The index of the user container button to be highlighted.
+ */
   highlightButton(index: number) {
     const userContainer = this.userContainers.toArray()[index];
     if (userContainer) {

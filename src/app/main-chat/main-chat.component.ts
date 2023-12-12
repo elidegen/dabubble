@@ -109,6 +109,9 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
+  /**
+ * Opens a dialog to edit the current channel's settings.
+ */
   openEditChannelDialog() {
     if (!this.chatService.isMobile) {
       this.dialog.open(DialogEditChannelComponent, {
@@ -119,23 +122,35 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
+  /**
+ * Opens a dialog to add new members to the current group.
+ */
   openDialog() {
     this.dialog.open(DialogAddToGroupComponent, {
       panelClass: 'dialog-container'
     });
   }
 
+  /**
+ * Opens a dialog to display group members.
+ */
   openMemberDialog() {
     this.dialog.open(DialogShowGroupMemberComponent, {
       panelClass: 'dialog-container'
     });
   }
 
+  /**
+ * Closes the thread drawer in the UI.
+ */
   onCloseThread() {
     this.threadDrawer.close();
     this.threadService.isThreadInDM = false;
   }
 
+  /**
+ * Sends a chat message in the current channel.
+ */
   async sendMessage() {
     console.log('Before sendMessage - allMessagesOfChannel:', this.chatService.allMessagesOfChannel);
     if (this.currentChat?.id && this.message.content?.trim() !== '') {
@@ -158,12 +173,18 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
+  /**
+ * Formats and sets the date for the sent message.
+ */
   getSentMessageDate() {
     const currentDate = this.getCurrentDate();
     const formattedDate = this.formatDate(currentDate);
     this.message.date = formattedDate;
   }
 
+  /**
+ * Formats and sets the time for the sent message.
+ */
   getSentMessageTime() {
     const currentTime = new Date();
     this.message.timeInMs = currentTime.getTime();
@@ -171,16 +192,26 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
     this.message.time = formattedTime;
   }
 
+
   getSentMessageCreator() {
     this.message.creator = this.userService.currentUser.id;
   }
 
+
+  /**
+ * Scrolls the chat window to the bottom, showing the most recent messages.
+ */
   scrollToBottom(): void {
     if (this.scrollContainer) {
       this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
     }
   }
 
+  /**
+ * Determines if the given date is the current date.
+ * @param {string} date - The date to check.
+ * @returns {boolean} - True if the date is today, false otherwise.
+ */
   isToday(date: string): boolean {
     const currentDate = this.getCurrentDate();
     const formattedDate = this.formatDate(currentDate);
@@ -202,6 +233,11 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
     return (months.indexOf(month) + 1).toString().padStart(2, '0');
   }
 
+
+  /**
+ * Opens the emoji picker for a specific message.
+ * @param {any} messageId - The ID of the message to add an emoji to.
+ */
   openEmojiPicker(messageId: any) {
     setTimeout(() => {
       this.emojiService.showMainChatEmojiPicker = true;
@@ -209,12 +245,18 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
     this.emojiService.messageId = messageId;
   }
 
+  /**
+ * Opens the emoji picker for the chat input field.
+ */
   openEmojiPickerChat() {
     setTimeout(() => {
       this.emojiService.showTextChatEmojiPicker = true;
     }, 1);
   }
 
+  /**
+ * Closes the emoji picker.
+ */
   closeEmojiPicker() {
     if (this.emojiService.showMainChatEmojiPicker == true || this.emojiService.showTextChatEmojiPicker == true && this.emojiService.emojiString == "") {
       this.emojiService.showMainChatEmojiPicker = false;
@@ -223,6 +265,10 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
     this.userService.openUserContainerTextfield.next(false);
   }
 
+  /**
+ * Adds an emoji to a message.
+ * @param {any} event - The emoji select event.
+ */
   addEmoji(event: any) {
     if (this.emojiService.messageId != "") {
       this.emojiService.addEmojiMainChat(event);
@@ -232,12 +278,20 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
+  /**
+ * Adds an emoji to the chat input field.
+ * @param {any} $event - The emoji select event.
+ */
   addEmojiTextField($event: any) {
     this.emojiService.addEmojiTextChat($event);
     this.message.content += this.emojiService.emojiString;
     this.emojiService.emojiString = "";
   }
 
+  /**
+ * Opens a thread based on a specific message.
+ * @param {Message} message - The message to create a thread for.
+ */
   async openThread(message: Message) {
     let messageId = message.id;
     await this.firestoreService.createThread(messageId, this.newThread);
@@ -249,6 +303,10 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
+  /**
+ * Enables editing mode for a specific message.
+ * @param {Message} message - The message to be edited.
+ */
   editMessage(message: Message) {
     if (this.currentChat) {
       if (message.creator == this.currentUser.name) {
@@ -258,6 +316,10 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
+  /**
+ * Updates the content of a message.
+ * @param {Message} message - The message to be updated.
+ */
   async updateMessageContent(message: Message) {
     let messageId = message.id
     const messageColRef = doc(collection(this.firestore, `channels/${this.currentChat?.id}/messages/`), messageId);
@@ -274,16 +336,27 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
+  /**
+ * Filters users based on search input.
+ */
   // ---------------- search Input -------------------------
   filterUsers(): void {
     this.isInputFocused = true;
     this.firestoreService.filterAllUsers()
   }
 
+  /**
+ * Stops propagation of a user selection event.
+ * @param {Event} event - The DOM event.
+ */
   userSelected(event: Event) {
     event.stopPropagation();
   }
 
+  /**
+ * Selects a user to start a direct message chat.
+ * @param {any} user - The selected user.
+ */
   selectUser(user: any) {
     this.chatService.createDirectMessage(user);
     this.search.nativeElement.value = '';
@@ -299,6 +372,10 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
     this.userService.openUserContainerTextfield.next(false);
   }
 
+  /**
+ * Opens the profile view dialog for a specific user.
+ * @param {any} id - The ID of the user.
+ */
   openProfileDialog(id: any): void {
     this.dialog.open(DialogViewProfileComponent, {
       panelClass: 'dialog-container',
@@ -306,6 +383,10 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
     });
   }
 
+  /**
+ * Checks click events on the document to manage input focus.
+ * @param {Event} event - The click event.
+ */
   @HostListener('document:click', ['$event'])
   checkClick(event: Event) {
     const clickedElement = event.target as HTMLElement;
@@ -314,6 +395,10 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
+  /**
+ * Handles file selection for uploading images or other files.
+ * @param {any} event - The file input event.
+ */
   onFileSelected(event: any): void {
     console.log("Übergebene Datei:", event)
     if (event.target.files && event.target.files[0]) {
@@ -333,6 +418,9 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
   }
   }
 
+  /**
+ * Logs out the current user and navigates to the login screen.
+ */
   logOutUser() {
     this.authService.signOutUser();
     this.router.navigate(['']);
