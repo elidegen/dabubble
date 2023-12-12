@@ -107,6 +107,7 @@ export class FirestoreService {
 
   async sendMessageInChannel(channel: Channel, message: Message) {
     let channelId = channel.id;
+    console.log("nachricht in senmessageChannel",message)
     const subColRef = collection(this.firestore, `channels/${channelId}/messages`);
     await addDoc(subColRef, message.toJSON())
     .catch((err) => {

@@ -150,6 +150,7 @@ export class MainChatComponent implements OnInit {
       this.showUploadedFile = false;
       this.message.content = this.message.content!.replace(this.taggedNames, '');
       this.getSentMessageTimeAndDate();
+      this.setMessageValuesForSentMessage();
       this.message.messageSelected = false;
       await this.firestoreService.sendMessageInChannel(this.currentChat, this.message);
       this.taggedNames = "";
@@ -157,6 +158,7 @@ export class MainChatComponent implements OnInit {
       this.scrollToBottom();
     }
   }
+
 
   /**
    * Sets values for sent Message
