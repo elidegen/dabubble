@@ -45,29 +45,25 @@ export class DialogEditChannelComponent implements OnInit {
     });
   }
   
-/**
- * Fetches all members of the current channel from Firestore and assigns them to the local array.
- */
+  /**
+   * Fetches all members of the current channel from Firestore and assigns them to the local array.
+   */
   async getAllChannelMembers() {
     if (this.currentChat?.id) {
       const channelDocRef = doc(this.firestore, `channels/${this.currentChat.id}`);
-      try {
-        const channelDocSnap = await getDoc(channelDocRef);
-        if (channelDocSnap.exists()) {
-          const channelData = channelDocSnap.data();
-          this.allChannelMembers = channelData?.['members'];
-        } else {
-          console.log('Channel document does not exist.');
-        }
-      } catch (error) {
-        console.error('Error getting channel document:', error);
+      const channelDocSnap = await getDoc(channelDocRef);
+      if (channelDocSnap.exists()) {
+        const channelData = channelDocSnap.data();
+        this.allChannelMembers = channelData?.['members'];
+      } else {
+        console.log('Channel document does not exist.');
       }
     }
   }
 
   /**
- * Performs cleanup by unsubscribing from any subscriptions to avoid memory leaks.
- */
+   * Performs cleanup by unsubscribing from any subscriptions to avoid memory leaks.
+   */
   ngOnDestroy() {
     if (this.unSubChannel) {
       this.unSubChannel();
@@ -75,16 +71,13 @@ export class DialogEditChannelComponent implements OnInit {
   }
 
   /**
- * Removes the current user from the channel members list and updates the Firestore document.
- */
+   * Removes the current user from the channel members list and updates the Firestore document.
+   */
   async deleteCurrentUserFromChannel() {
     this.deleteCurrentUser();
     if (this.currentChat) {
       const channelDocRef = doc(collection(this.firestore, 'channels'), this.currentChat.id);
-      this.channel.members = this.newChannelMembers;
-      this.channel.name = this.currentChat.name;
-      this.channel.id = this.currentChat.id;
-      this.channel.description = this.currentChat.description;
+      this.setChannelValues();
       await updateDoc(channelDocRef, this.channel.toJSON()).catch((error) => {
         console.error('Error updating document:', error);
       });
@@ -93,10 +86,22 @@ export class DialogEditChannelComponent implements OnInit {
     this.chatService.chatWindow = 'empty'
     this.chatService.openChat = null;
   }
+  
+  /**
+   * Sets new values for channel
+   */
+  setChannelValues() {
+    if (this.currentChat) {
+      this.channel.members = this.newChannelMembers;
+      this.channel.name = this.currentChat.name;
+      this.channel.id = this.currentChat.id;
+      this.channel.description = this.currentChat.description;
+    }
+  }
 
-/**
- * Filters out the current user from the list of all channel members.
- */
+  /**
+   * Filters out the current user from the list of all channel members.
+   */
   deleteCurrentUser() {
     const currentUserisMember = this.allChannelMembers.some(user => user.id === this.currentUser.id);
     if (currentUserisMember) {
@@ -106,8 +111,8 @@ export class DialogEditChannelComponent implements OnInit {
   }
 
   /**
- * Logs out the current user and navigates back to the login screen.
- */
+   * Logs out the current user and navigates back to the login screen.
+   */
   logOutUser() {
     this.authService.signOutUser();
     this.router.navigate(['']);
@@ -115,9 +120,9 @@ export class DialogEditChannelComponent implements OnInit {
 
 
   /**
- * Opens the profile dialog for viewing the details of a specific user.
- * @param {any} id - The ID of the user whose profile is to be viewed.
- */
+   * Opens the profile dialog for viewing the details of a specific user.
+   * @param {any} id - The ID of the user whose profile is to be viewed.
+   */
   openProfileDialog(id: any): void {
     this.dialog.open(DialogViewProfileComponent, {
       panelClass: 'dialog-container',
@@ -126,8 +131,8 @@ export class DialogEditChannelComponent implements OnInit {
   }
 
   /**
- * Navigates back to the main chat window.
- */
+   * Navigates back to the main chat window.
+   */
   backToChat() {
     this.router.navigate(['main']);
   }

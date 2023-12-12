@@ -49,9 +49,9 @@ export class HomeComponent {
   }
 
   /**
- * Opens a profile dialog for viewing a user's profile based on the provided user ID.
- * @param {any} id - The ID of the user for whom the profile is to be viewed.
- */
+   * Opens a profile dialog for viewing a user's profile based on the provided user ID.
+   * @param {any} id - The ID of the user for whom the profile is to be viewed.
+   */
   openProfileDialog(id: any): void {
     this.dialog.open(DialogViewProfileComponent, {
       panelClass: 'dialog-container',
@@ -59,18 +59,18 @@ export class HomeComponent {
     });
   }
 
-/**
- * Logs out the current user and navigates to the login screen.
- */
+  /**
+   * Logs out the current user and navigates to the login screen.
+   */
   logOutUser() {
     this.auth.signOutUser();
     this.router.navigate(['']);
   }
 
-/**
- * Listens for document click events and checks if the click is outside user search and member inputs to update focus state.
- * @param {Event} event - The DOM event object.
- */
+  /**
+   * Listens for document click events and checks if the click is outside user search and member inputs to update focus state.
+   * @param {Event} event - The DOM event object.
+   */
   @HostListener('document:click', ['$event'])
   checkClick(event: Event) {
     const clickedElement = event.target as HTMLElement;
@@ -79,9 +79,9 @@ export class HomeComponent {
     }
   }
 
-/**
- * Filters users, channels, and direct messages based on the search input. Updates filtered results.
- */
+  /**
+   * Filters users, channels, and direct messages based on the search input. Updates filtered results.
+   */
   filterEverything(): void {
     this.isInputFocused = true;
     if (this.searchInput !== this.lastSearchInput) {
@@ -98,8 +98,8 @@ export class HomeComponent {
   }
 
   /**
- * Shows only channels that belong to the current user when '#' is entered in the search input.
- */
+   * Shows only channels that belong to the current user when '#' is entered in the search input.
+   */
   showOnlyYourChannels() {
    if (this.searchInput == "#") {
     this.filteredChannels = this.chatService.yourChannels;
@@ -107,18 +107,19 @@ export class HomeComponent {
 
   }
 
-/**
- * Filters users based on the search input.
- */
+  /**
+   * Filters users based on the search input.
+   */
   filterUsers() {
     this.filteredUsers = this.userService.users.filter(user =>
       user.name?.toLowerCase().includes(this.searchInput.toLowerCase())
     );
   }
 
-/**
- * Filters channel messages based on the search input.
- */
+
+  /**
+   * Filters channel messages based on the search input.
+   */
   async filterChannels() {
     await this.chatService.getAllChannelMessages();
     this.filteredChannelMessages = [];
@@ -129,9 +130,9 @@ export class HomeComponent {
     });
   }
 
-/**
- * Filters direct messages based on the search input.
- */
+  /**
+   * Filters direct messages based on the search input.
+   */
   async filterDirectMessages() {
     await this.chatService.getDMMessages();
     console.log('filterallDm Ms', this.chatService.allMessagesOfDM);
@@ -145,10 +146,10 @@ export class HomeComponent {
     
   }
 
-/**
- * Navigates to the channel chat window and emits a chat change event.
- * @param {Channel} channel - The channel to be rendered.
- */
+  /**
+   * Navigates to the channel chat window and emits a chat change event.
+   * @param {Channel} channel - The channel to be rendered.
+   */
   renderChannel(channel: Channel) {
     this.chatService.openChat = channel;
     this.chatService.chatWindow = 'channel';
@@ -160,9 +161,9 @@ export class HomeComponent {
 
 
   /**
- * Creates a direct message chat with the selected user and navigates to the direct message chat window.
- * @param {any} user - The user selected for direct messaging.
- */
+   * Creates a direct message chat with the selected user and navigates to the direct message chat window.
+   * @param {any} user - The user selected for direct messaging.
+   */
   selectUser(user: any) {
     this.chatService.createDirectMessage(user);
     this.chatService.chatWindow = 'direct';
@@ -172,34 +173,34 @@ export class HomeComponent {
     }
   }
 
-/**
- * Retrieves and displays the channel associated with a specific message.
- * @param {any} message - The message used to identify the channel.
- */
+  /**
+   * Retrieves and displays the channel associated with a specific message.
+   * @param {any} message - The message used to identify the channel.
+   */
   selectChannel(message: any) {
     this.chatService.getChannelByMessage(message);
   }
 
-/**
- * Retrieves and displays the direct message chat associated with a specific message.
- * @param {any} message - The message used to identify the direct message chat.
- */
+  /**
+   * Retrieves and displays the direct message chat associated with a specific message.
+   * @param {any} message - The message used to identify the direct message chat.
+   */
   selectDirectMessage(message: any) {
     this.chatService.getDirectMessageByMessage(message);
   }
 
-/**
- * Responds to window resize events to check and update the screen width status in the chat service.
- * @param {any} event - The window resize event object.
- */
+  /**
+   * Responds to window resize events to check and update the screen width status in the chat service.
+   * @param {any} event - The window resize event object.
+   */
   @HostListener('window:resize', ['$event'])
   onResize(event: any): void {
     this.checkScreenWidth();
   }
 
-/**
- * Checks the screen width to determine if the current device is a mobile device.
- */
+  /**
+   * Checks the screen width to determine if the current device is a mobile device.
+   */
   checkScreenWidth(): void {
     this.chatService.isMobile = window.innerWidth < 800;
   }

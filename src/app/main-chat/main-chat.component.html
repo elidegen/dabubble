@@ -150,7 +150,7 @@
       </mat-card-header>
 
       <mat-card-content #messageContainer class="p-0 main-chat-container" #scrollContainer [scrollTop]="scrollPosition">
-        <ng-container *ngFor="let organizedMessage of firestoreService.organizedMessages.slice()">
+        <ng-container *ngFor="let organizedMessage of firestoreService.organizedChannelMessages.slice()">
           <section>
             <div class="date-container">
               <div class="separator"></div>
