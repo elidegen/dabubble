@@ -74,4 +74,8 @@ export class DialogViewProfileComponent {
     }, 1500);
   }
   }
+
+  sendPrivateMessage() {
+    
+  }
 }
