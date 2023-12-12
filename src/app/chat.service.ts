@@ -231,7 +231,6 @@ export class ChatService {
       console.log("GoogleUser", channel.member, this.userService.currentUser)
       if (channel.members.some((member: { id: string; }) => member.id === this.userService.currentUser.id)) {
         this.yourChannels.push(channel);
-        console.log("Deine Channels",this.yourChannels);
       }
     });
   }
