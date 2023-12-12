@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { EventEmitter, Injectable, inject } from '@angular/core';
 import { DocumentData, DocumentReference, Firestore, addDoc, collection, doc, getDoc, getDocs, onSnapshot, orderBy, query, setDoc, updateDoc } from '@angular/fire/firestore';
 import { Message } from 'src/models/message.class';
 import { ThreadService } from './thread.service';
@@ -26,6 +26,7 @@ export class FirestoreService {
   searchInput: string = '';
   showSpinner = false;
   showThreadSpinner = false;
+  messageAdded = new EventEmitter<void>();
 
   // ----Thread----
   allThreadMessages: Message[] = [];
@@ -86,6 +87,7 @@ export class FirestoreService {
         }));
         this.allMessagesOfChannel.reverse();
         this.organizeMessagesByDate();
+        this.messageAdded.emit();
       });
     }
   }
