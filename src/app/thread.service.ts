@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { inject } from '@angular/core';
-import { Firestore, collection, doc, onSnapshot, addDoc,getDocs,updateDoc} from '@angular/fire/firestore';
+import { Firestore, collection, doc, onSnapshot, addDoc,getDocs,updateDoc, getDoc, setDoc, DocumentReference, DocumentData} from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { Thread } from 'src/models/thread.class';
 import { Channel } from 'src/models/channel.class';
@@ -25,6 +25,8 @@ export class ThreadService {
   openThread = new EventEmitter<void>();
   changeChat = new EventEmitter<void>();
   isThreadInDM: boolean = false;
+  allThreadMessages: Message[] = [];
+  unSubThread: any;
   constructor(public router: Router, public userService: UserService, public chatService: ChatService) {
 
   }
@@ -40,38 +42,41 @@ export class ThreadService {
     this._openMessageSubject.next(value);
   }
 
-  // private currentMessageSubject = new BehaviorSubject<Message | null>(null);
-  // currentMessage$ = this.currentMessageSubject.asObservable();
-
-  // setCurrentMessage(message: Message): void {
-  //   this.currentMessageSubject.next(message);
-  // }
-
   ngOnInit() {
-    console.log("der currentchat ist:", this.currentChat);
-    console.log("die currentmessage ist ", this.currentMessage);
   }
 
+  async createThread(messageId: any, thread: Thread) {
+    const threadCollectionRef = collection(this.firestore, 'threads');
+    const specificDocRef: DocumentReference<DocumentData> = doc(threadCollectionRef, messageId);
+    const docSnapshot = await getDoc(specificDocRef)
+    if (!docSnapshot.exists()) {
+      await setDoc(specificDocRef, {
+        ...thread.toJSON(),
+      });
+    }
+  }
+
+  async sendMessageInThread(thread: any, message: Message) {
+    let threadId = thread.id
+    const subColRef = collection(this.firestore, `threads/${threadId}/messages`);
+    await addDoc(subColRef, message.toJSON())
+    .catch((err) => {
+      console.log(err);
+    })
   
+  }
+
 
   async addThread(item: Thread) {
     if (this.currentMessage.id) {
       await addDoc(this.getThreadRef(this.currentMessage.id), item.toJSON()).catch(
         (err) => { console.log(err) }
-      ).then(
-        (docRef) => {
-          console.log()
-
-          console.log("Neuer Thread für die Message Id", this.currentMessage.id);
-          console.log(item);
-        }
       )
     }
   }
 
-
-
-  updateThreadCount(message: Message,time: any) {
+  async updateThreadCount(message: Message,time: any) {
+    message.threadCount = await this.countThreadMessages(message.id);
     if (this.isThreadInDM) {
       const subReactionColRef = doc(collection(this.firestore, `direct messages/${message.channelID}/messages/`), message.id);
       updateDoc(subReactionColRef, this.updateMessage(message, time));
@@ -81,19 +86,12 @@ export class ThreadService {
     }
   }
 
-
-
-  
-
-
-updateMessage(message:any,time: any) {
-return {
-  threadCount: message.threadCount,
-  lastThreadTime: time,
-}
-}
-
-
+  updateMessage(message:any,time: any) {
+    return {
+      threadCount: message.threadCount,
+      lastThreadTime: time,
+    }
+  }
 
   setObjectData(obj: any,) {
     return {
@@ -106,32 +104,17 @@ return {
     }
   }
 
-
-  async countThreadMessages(messageId: string) {
+  async countThreadMessages(messageId: any) {
     const threadCollection = collection(this.firestore, `threads/${messageId}/messages`);
     return getDocs(threadCollection)
-      .then(snapshot => {
-        let threadCount = snapshot.size;
-        return threadCount;
-      });
+    .then(snapshot => {
+      let threadCount = snapshot.size;
+      return threadCount;
+    });
   }
 
   getThreadData(thread: Thread) {
-    // Erstellen Sie eine neue Instanz von Thread, falls erforderlich
     const threadInstance = new Thread(thread);
-    
-    // Aktualisieren Sie die Eigenschaften des Thread-Objekts
-    // threadInstance.creator = thread.creator || "";
-    // threadInstance.creatorId = thread.creatorId || "";
-    // threadInstance.content = thread.content || "";
-    // threadInstance.time = thread.time || "";
-    // threadInstance.date = thread.date || "";
-    // threadInstance.timeInMs = thread.timeInMs || 0;
-    // threadInstance.profilePic = thread.profilePic || "";
-    // threadInstance.id = thread.id || "";
-    // threadInstance.reactionCount = thread.reactionCount || "";
-    // threadInstance.reaction = thread.reaction || [];
-
     return threadInstance;
   }
 

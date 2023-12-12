@@ -64,9 +64,9 @@ export class DirectMessageChatComponent implements OnInit {
   }
 
   /**
- * Lifecycle hook that is called when a directive, pipe, or service is destroyed.
- * Unsubscribes from the Firestore direct messages subscription.
- */
+   * Lifecycle hook that is called when a directive, pipe, or service is destroyed.
+   * Unsubscribes from the Firestore direct messages subscription.
+   */
   ngOnDestroy() {
     if (this.firestoreService.unSubDirectMessages) {
       this.firestoreService.unSubDirectMessages;
@@ -74,9 +74,9 @@ export class DirectMessageChatComponent implements OnInit {
   }
 
   /**
- * Retrieves and formats the user's name for tagging in messages.
- * @param {any} user - The user object to retrieve the name from.
- */
+   * Retrieves and formats the user's name for tagging in messages.
+   * @param {any} user - The user object to retrieve the name from.
+   */
   getUserNameString(user: any) {
     let taggedName: any;
     taggedName = `@${user.name}`;
@@ -87,8 +87,8 @@ export class DirectMessageChatComponent implements OnInit {
   }
 
   /**
- * Loads messages from the Firestore database for the current chat.
- */
+   * Loads messages from the Firestore database for the current chat.
+   */
   async loadMessages() {
     if (this.currentChat?.id) {
       await this.firestoreService.loadDirectMessages(this.currentChat.id);
@@ -97,9 +97,9 @@ export class DirectMessageChatComponent implements OnInit {
   }
 
   /**
- * Opens a profile dialog for the given user ID.
- * @param {any} id - The ID of the user whose profile is to be displayed.
- */
+   * Opens a profile dialog for the given user ID.
+   * @param {any} id - The ID of the user whose profile is to be displayed.
+   */
   openProfileDialog(id: any): void {
     this.dialog.open(DialogViewProfileComponent, {
       panelClass: 'dialog-container',
@@ -108,10 +108,10 @@ export class DirectMessageChatComponent implements OnInit {
   }
 
   /**
- * Handles the file selection event for uploading files in chat.
- * Validates the file size and uploads the selected file.
- * @param {Event} event - The event object containing the selected file.
- */
+   * Handles the file selection event for uploading files in chat.
+   * Validates the file size and uploads the selected file.
+   * @param {Event} event - The event object containing the selected file.
+   */
   onFileSelected(event: any): void {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
@@ -120,41 +120,57 @@ export class DirectMessageChatComponent implements OnInit {
         alert("Max file size 500kb !");
       } else {
       this.firestoreService.showSpinner = true;
+      }
+      this.resetStatusAndSpinner()
     }
+  }
+
+  /**
+   * Resets spinner and file status
+   */
+  resetStatusAndSpinner() {
     setTimeout(() => {
       this.message.files.push(this.authService.customPic);
       this.firestoreService.showSpinner = false;
     }, 1500);
     this.showUploadedFile = true;
   }
-  }
 
   /**
- * Sends a message in the direct message chat.
- * Formats and saves the message content and metadata before sending.
- */
+   * Sends a message in the direct message chat.
+   * Formats and saves the message content and metadata before sending.
+   */
   async sendMessage() {
     if (this.currentChat?.id && this.message.content?.trim() !== '') {
       this.message.content = this.message.content!.replace(this.taggedNames, '');
-      this.getSentMessageTime();
-      this.getSentMessageDate();
-      this.message.creator = this.userService.currentUser.name;
-      this.message.creatorId = this.userService.currentUser.id,
-        this.message.channel = this.currentChat.name;
-      this.message.channelID = this.currentChat.id;
-      this.message.profilePic = this.userService.currentUser.picture,
-        this.message.channel = this.currentChat.name;
+      this.determineMessageValues();
       await this.firestoreService.sendMessageInDirectMessage(this.currentChat.id, this.message);
       this.message = new Message();
     }
   }
 
-  // Additional helper functions like getSentMessageDate, getSentMessageTime, etc.
+  /**
+   * Sets values for sent message
+   */
+  determineMessageValues() {
+    if (this.currentChat) {
+      this.getSentMessageTime();
+      this.getSentMessageDate();
+      this.message.creator = this.userService.currentUser.name;
+      this.message.creatorId = this.userService.currentUser.id,
+      this.message.channel = this.currentChat.name;
+      this.message.channelID = this.currentChat.id;
+      this.message.profilePic = this.userService.currentUser.picture,
+      this.message.channel = this.currentChat.name;
+    }
+  }
 
-/**
- * Updates the content of a message in the Firestore database.
- * @param {Message} message - The message object to update.
- */
+  //-------------- Additional helper functions like getSentMessageDate, getSentMessageTime, etc. ------------------
+
+  /**
+   * Updates the content of a message in the Firestore database.
+   * @param {Message} message - The message object to update.
+   */
   getSentMessageDate() {
     const currentDate = this.getCurrentDate();
     const formattedDate = this.formatDate(currentDate);
@@ -204,21 +220,22 @@ export class DirectMessageChatComponent implements OnInit {
     }
   }
 
+  //----------------------------------------------------------------------------------------------------------------
+  
   /**
- * Toggles the display of the emoji picker for a specific message.
- * @param {any} messageId - The ID of the message to show the emoji picker for.
- */
+   * Toggles the display of the emoji picker for a specific message.
+   * @param {any} messageId - The ID of the message to show the emoji picker for.
+   */
   openEmojiPicker(messageId: any) {
     setTimeout(() => {
       this.emojiService.showMainChatEmojiPicker = true;
     }, 1);
-
     this.emojiService.messageId = messageId;
   }
 
   /**
- * Toggles the display of the emoji picker for the text input field in the chat.
- */
+   * Toggles the display of the emoji picker for the text input field in the chat.
+   */
   openEmojiPickerChat() {
     setTimeout(() => {
       this.emojiService.showTextChatEmojiPicker = true;
@@ -226,9 +243,9 @@ export class DirectMessageChatComponent implements OnInit {
   }
 
   /**
- * Initiates the editing of a message by the current user.
- * @param {Message} message - The message object to edit.
- */
+   * Initiates the editing of a message by the current user.
+   * @param {Message} message - The message object to edit.
+   */
   editMessage(message: Message) {
     if (this.currentChat) {
       if (message.creator == this.currentUser.name) {
@@ -239,17 +256,17 @@ export class DirectMessageChatComponent implements OnInit {
   }
 
   /**
- * Automatically scrolls the chat to the bottom to display the most recent messages.
- */
+   * Automatically scrolls the chat to the bottom to display the most recent messages.
+   */
   scrollToBottom(): void {
     this.messageContainer.nativeElement.scrollTop = this.messageContainer.nativeElement.scrollHeight;
   }
 
 
   /**
- * Adds an emoji to the main chat message. Triggers the addition of the emoji to the message and records the reaction in the database.
- * @param {any} event - The event object containing the emoji data.
- */
+   * Adds an emoji to the main chat message. Triggers the addition of the emoji to the message and records the reaction in the database.
+   * @param {any} event - The event object containing the emoji data.
+   */
   addEmoji(event: any) {
     if (this.emojiService.messageId != "") {
       this.emojiService.addEmojiMainChat(event);
@@ -259,29 +276,29 @@ export class DirectMessageChatComponent implements OnInit {
   }
 
   /**
- * Adds an emoji to the text input field in the chat. Appends the selected emoji to the message content.
- * @param {any} $event - The event object containing the emoji data.
- */
+   * Adds an emoji to the text input field in the chat. Appends the selected emoji to the message content.
+   * @param {any} $event - The event object containing the emoji data.
+   */
   addEmojiTextField($event: any) {
     this.emojiService.addEmojiTextChat($event);
     this.message.content += this.emojiService.emojiString;
   }
 
   /**
- * Logs out the current user and navigates to the login screen.
- */
+   * Logs out the current user and navigates to the login screen.
+   */
   logOutUser() {
     this.authService.signOutUser();
     this.router.navigate(['']);
   }
 
   /**
- * Opens a thread related to a direct message. Creates a new thread for the selected message and navigates to the thread view.
- * @param {Message} message - The message object for which the thread is to be opened.
- */
+   * Opens a thread related to a direct message. Creates a new thread for the selected message and navigates to the thread view.
+   * @param {Message} message - The message object for which the thread is to be opened.
+   */
   async openThreadInDirect(message: Message) {
     let messageId = message.id;
-    await this.firestoreService.createThread(messageId, this.newThread);
+    await this.threadService.createThread(messageId, this.newThread);
     this.threadService.openMessage = message;
     if (this.chatService.isMobile) {
       this.router.navigate(['thread']);

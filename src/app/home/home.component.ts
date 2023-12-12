@@ -49,9 +49,9 @@ export class HomeComponent {
     this._bottomSheet.open(BottomSheetOverviewExampleSheet);
   }
   /**
-  * Opens a profile dialog for viewing a user's profile based on the provided user ID.
-  * @param {any} id - The ID of the user for whom the profile is to be viewed.
-  */
+   * Opens a profile dialog for viewing a user's profile based on the provided user ID.
+   * @param {any} id - The ID of the user for whom the profile is to be viewed.
+   */
   openProfileDialog(id: any): void {
     this.dialog.open(DialogViewProfileComponent, {
       panelClass: 'dialog-container',
@@ -98,8 +98,8 @@ export class HomeComponent {
   }
 
   /**
-  * Shows only channels that belong to the current user when '#' is entered in the search input.
-  */
+   * Shows only channels that belong to the current user when '#' is entered in the search input.
+   */
   showOnlyYourChannels() {
     if (this.searchInput == "#") {
       this.filteredChannels = this.chatService.yourChannels;
@@ -115,6 +115,7 @@ export class HomeComponent {
       user.name?.toLowerCase().includes(this.searchInput.toLowerCase())
     );
   }
+
 
   /**
    * Filters channel messages based on the search input.
@@ -160,9 +161,9 @@ export class HomeComponent {
 
 
   /**
-  * Creates a direct message chat with the selected user and navigates to the direct message chat window.
-  * @param {any} user - The user selected for direct messaging.
-  */
+   * Creates a direct message chat with the selected user and navigates to the direct message chat window.
+   * @param {any} user - The user selected for direct messaging.
+   */
   selectUser(user: any) {
     this.chatService.createDirectMessage(user);
     this.chatService.chatWindow = 'direct';

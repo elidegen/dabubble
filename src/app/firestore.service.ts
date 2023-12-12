@@ -4,7 +4,6 @@ import { Message } from 'src/models/message.class';
 import { ThreadService } from './thread.service';
 import { UserService } from './user.service';
 import { Channel } from 'src/models/channel.class';
-import { Thread } from 'src/models/thread.class';
 import { AuthService } from './auth.service';
 import { User } from 'src/models/user.class';
 import { deleteDoc, limit } from 'firebase/firestore';
@@ -18,7 +17,8 @@ export class FirestoreService {
   unSubChannelMessages: any;
   allMessagesOfChannel: Message[] = [];
   messagesByDate: { [date: string]: Message[] } = {};
-  organizedMessages: { date: string, messages: Message[] }[] = []
+  organizedDirectMessages: { date: string, messages: Message[] }[] = []
+  organizedChannelMessages: { date: string, messages: Message[] }[] = []
   allChannelMembers: any[] = [];
   firstThreeItems: any[] = [];
   allUsers: User[] = [];
@@ -27,18 +27,18 @@ export class FirestoreService {
   showSpinner = false;
   showThreadSpinner = false;
   messageAdded = new EventEmitter<void>();
-
-  // ----Thread----
   allThreadMessages: Message[] = [];
   unSubThread: any;
   constructor(public threadService: ThreadService, public chatService: ChatService, public userService: UserService, public authService: AuthService) { }
-
-  // ----- Direct Messages --------------
   unSubDirectMessages: any;
   allDirectMessages: Message[] = [];
   messageIsExisting!: boolean;
 
   // ------------------ channel ----------------------------------------------------------
+
+  // --------------------------------------------------------------------------------------------------------
+  //These functions create a channel and update its id
+
   async addChannel(channel: Channel) {
     await addDoc(collection(this.firestore, 'channels'), channel.toJSON())
       .catch((err) => {
@@ -65,13 +65,16 @@ export class FirestoreService {
 
   getUpdateData(channel: Channel) {
     return {
-      name: channel.name,
-      description: channel.description,
-      creator: channel.creator,
-      id: channel.id,
+      name: channel.name, description: channel.description, creator: channel.creator, id: channel.id,
     };
   }
 
+
+  //--------------------------------------------------------------------------------------------------------------
+  /**
+   * This function loads all messages of the current channel
+   * @param currentChat - channel
+   */
   loadChannelMessages(currentChat: any) {
     if (currentChat.id) {
       console.log('firestore', currentChat);
@@ -92,6 +95,9 @@ export class FirestoreService {
     }
   }
 
+  /**
+   * This function organize all messages by their date
+   */
   organizeMessagesByDate() {
     this.messagesByDate = {};
     for (const message of this.allMessagesOfChannel) {
@@ -103,25 +109,29 @@ export class FirestoreService {
         this.messagesByDate[messageDate].push(message);
       }
     }
-    this.organizedMessages = Object.entries(this.messagesByDate).map(([date, messages]) => ({ date, messages }));
-    // this.mainChatComponent.scrollToBottom();
-    // this.mainChatService.scrollToBottom();
+    this.organizedChannelMessages = Object.entries(this.messagesByDate).map(([date, messages]) => ({ date, messages }));
   }
 
+  /** -----------------------------------------------------------------------------------------------------------------
+   * This function creates a message inside of a channel
+   * @param channel - channel
+   * @param message - message
+   */
   async sendMessageInChannel(channel: Channel, message: Message) {
     let channelId = channel.id;
+    console.log("nachricht in senmessageChannel",message)
     const subColRef = collection(this.firestore, `channels/${channelId}/messages`);
     await addDoc(subColRef, message.toJSON())
-      .catch((err) => {
-        console.log('Error', err);
-      })
-      .then((docRef: void | DocumentReference<DocumentData, DocumentData>) => {
-        if (docRef && docRef instanceof DocumentReference) {
-          if (channelId) {
-            this.updateMessageId(`channels/${channelId}/messages`, message, docRef.id);
-          }
+    .catch((err) => {
+      console.log('Error', err);
+    })
+    .then((docRef: void | DocumentReference<DocumentData, DocumentData>) => {
+      if (docRef && docRef instanceof DocumentReference) {
+        if (channelId) {
+          this.updateMessageId(`channels/${channelId}/messages`, message, docRef.id);
         }
-      });
+      }
+    });
   }
 
   async updateMessageId(colId: string, message: Message, newId: string) {
@@ -142,47 +152,43 @@ export class FirestoreService {
       id: message.id,
     };
   }
-
-  async createThread(messageId: any, thread: Thread) {
-    const threadCollectionRef = collection(this.firestore, 'threads');
-    const specificDocRef: DocumentReference<DocumentData> = doc(threadCollectionRef, messageId);
-    try {
-      const docSnapshot = await getDoc(specificDocRef)
-      if (!docSnapshot.exists()) {
-        await setDoc(specificDocRef, {
-          ...thread.toJSON(),
-        });
-      }
-    } catch (err) {
-      console.error('Fehler beim Hinzufügen oder Aktualisieren des Threads:', err);
-    }
-  }
-
+//----------------------------------------------------------------------------------------------------
+  /**
+   * This function loads all members of a channel
+   * @param channelId 
+   */
   async getAllChannelMembers(channelId: any) {
     if (channelId) {
       const channelDocRef = doc(this.firestore, `channels/${channelId}`);
-      try {
-        const channelDocSnap = await getDoc(channelDocRef);
-        if (channelDocSnap.exists()) {
-          const channelData = channelDocSnap.data();
-          this.allChannelMembers = channelData?.['members'];
+      const channelDocSnap = await getDoc(channelDocRef);
+      if (channelDocSnap.exists()) {
+        const channelData = channelDocSnap.data();
+        this.allChannelMembers = channelData?.['members'];
+        if (this.allChannelMembers) {
           this.updateOnlineStatus();
-          this.firstThreeItems = this.allChannelMembers.slice(0, 3);
         }
-      } catch (error) {
-        console.error('Error getting channel document:', error);
+        this.firstThreeItems = this.allChannelMembers.slice(0, 3);
       }
     }
   }
-
+  /**
+   * This function updates the online status of a user
+   */
   updateOnlineStatus() {
     this.allChannelMembers.forEach(member => {
       let userIndex = this.authService.findUserIndexWithEmail(member.email);
+      console.log("Onlinestatus", member,this.userService.users[userIndex] )
       member.online = this.userService.users[userIndex].online;
+    
     });
   }
 
   //----------------------Thread ----------------------------------------------
+
+  /**
+   * This function loads the current thread
+   * @param threadId - thread
+   */
   loadThread(threadId: any) {
     if (threadId) {
       const threadCollection = collection(this.firestore, `threads/${threadId}/messages`);
@@ -201,39 +207,32 @@ export class FirestoreService {
     }
   }
 
-  async sendMessageInThread(threadId: any, message: Message) {
-    const subColRef = collection(this.firestore, `threads/${threadId}/messages`);
-    await addDoc(subColRef, message.toJSON())
-      .catch((err) => {
-        console.log(err);
-      })
-      .then(() => {
-        console.log('Message sent to thread');
-      });
-  }
-
   //----------- search Input Main Chat ----------------------------------
+  /**
+   * This function loads all users
+   */
   async loadUsers() {
-    try {
-      const querySnapshot = await getDocs(collection(this.firestore, 'users'));
-      this.allUsers = querySnapshot.docs.map((doc: { data: () => any; }) => new User(doc.data()));
-    } catch (error) {
-      console.error('Error loading users:', error);
-    }
+    const querySnapshot = await getDocs(collection(this.firestore, 'users'));
+    this.allUsers = querySnapshot.docs.map((doc: { data: () => any; }) => new User(doc.data()));
     this.setUsersToOffline();
   }
 
+  /**
+   * This function resets online status of a user
+   */
   async setUsersToOffline() {
     let time = this.getLoginTime();
     this.allUsers.forEach(user => {
       if (time - user.loginTime > 10000000 && user.online == true) {
         user.online = false;
-        console.log("User wurde auf offline gesetzt", user);
         this.userService.updateUser(user);
       }
     });
   }
-
+  /**
+   * 
+   * @returns 
+   */
   getLoginTime() {
     const currentTime = new Date();
     return currentTime.getTime();
@@ -256,18 +255,21 @@ export class FirestoreService {
       } else if (colId == 'direct messages') {
         allMessages = this.allDirectMessages;
       }
-      const subReactionColRef = doc(collection(this.firestore, `${colId}/${chatId}/messages/`), messageId);
+      this.pushReaction(allMessages, emoji, messageId, chatId, colId)
+    }
+  }
+
+  pushReaction(allMessages: any[], emoji: any, messageId: any, chatId: any, colId: any) {
+    const subReactionColRef = doc(collection(this.firestore, `${colId}/${chatId}/messages/`), messageId);
       let messageIndex = allMessages.findIndex(message => message.id === messageId);
       let currentMessage = allMessages[messageIndex];
       const reactionItem = { emoji, creatorId: this.userService.currentUser.id, creator: this.userService.currentUser.name };
-      console.log("Reaction Itemin der add Reaction funktion", reactionItem);
       if (currentMessage.reaction.some((emojiArray: { emoji: string; creatorId: string; }) => emojiArray.emoji === emoji && emojiArray.creatorId === this.userService.currentUser.id)) {
         currentMessage.reaction = currentMessage.reaction.filter((emojiArray: { emoji: string; creatorId: string; }) => !(emojiArray.emoji === emoji && emojiArray.creatorId === this.userService.currentUser.id));
       } else {
         currentMessage.reaction.push(reactionItem);
       }
       updateDoc(subReactionColRef, this.updateMessage(allMessages[messageIndex]));
-    }
   }
 
   updateMessage(message: any) {
@@ -295,6 +297,10 @@ export class FirestoreService {
   }
 
   // ---------------- Direct messages ----------------------------------------------
+  /**
+   * Loads all messages of each dm
+   * @param chatId 
+   */
   async loadDirectMessages(chatId: any) {
     if (chatId) {
       const messageCollection = collection(this.firestore, `direct messages/${chatId}/messages`);
@@ -314,6 +320,9 @@ export class FirestoreService {
     }
   }
 
+  /**
+   * Sorts all messages according to their date
+   */
   organizeDirectMessagesByDate() {
     this.messagesByDate = {};
     for (const message of this.allDirectMessages) {
@@ -325,8 +334,7 @@ export class FirestoreService {
         this.messagesByDate[messageDate].push(message);
       }
     }
-    this.organizedMessages = Object.entries(this.messagesByDate).map(([date, messages]) => ({ date, messages }));
-    this.organizedMessages = this.organizedMessages;
+    this.organizedDirectMessages = Object.entries(this.messagesByDate).map(([date, messages]) => ({ date, messages }));
   }
 
   checkMessageNumbers() {
@@ -356,6 +364,12 @@ export class FirestoreService {
     message.messageSelected = !message.messageSelected;
   }
 
+  /**
+   * Deletes messages of every chats --------------------------------------------------------------------
+   * @param colId - collection reference
+   * @param chatId - document reference
+   * @param messageId - id of message
+   */
   async deleteMessageOfChat(colId: any, chatId: any, messageId: any) {
     if (colId == 'channels') {
       this.deletMessage(colId, chatId, messageId)
@@ -370,4 +384,5 @@ export class FirestoreService {
     const messageDocRef = doc(collection(this.firestore, `${colId}/${chatId}/messages`), messageId);
     await deleteDoc(messageDocRef);
   }
+  // ---------------------------------------------------------------------------------------------------
 }
