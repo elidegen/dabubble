@@ -81,7 +81,4 @@ export class DialogViewProfileComponent {
   }
   }
 
-  sendPrivateMessage() {
-    
-  }
-}
+ 
