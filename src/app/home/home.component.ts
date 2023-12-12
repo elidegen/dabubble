@@ -5,9 +5,11 @@ import { UserService } from '../user.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { User } from 'src/models/user.class';
-import { ChatService } from '../chat.service';
 import { Message } from 'src/models/message.class';
 import { FirestoreService } from '../firestore.service';
+import { Channel } from 'src/models/channel.class';
+import { ChatService } from '../chat.service';
+import { ThreadService } from '../thread.service';
 
 
 @Component({
@@ -31,10 +33,11 @@ export class HomeComponent {
   lastSearchInput: string = '';
   isInputFocused: boolean = false;
   filteredUsers: User[] = [];
+  filteredChannels: Channel[] = [];
   filteredChannelMessages: Message[] = [];
   filteredDirectMessages: Message[] = [];
 
-  constructor(public dialog: MatDialog, public auth: AuthService, public router: Router, public userService: UserService, public chatService: ChatService, public firestoreService: FirestoreService) {
+  constructor(public dialog: MatDialog, public auth: AuthService, public router: Router, public userService: UserService, public chatService: ChatService, public firestoreService: FirestoreService, public threadService: ThreadService) {
     this.userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
     this.firestoreService.setUsersToOffline();
@@ -82,7 +85,13 @@ export class HomeComponent {
       this.filteredDirectMessages = [];
       this.filteredChannelMessages = [];
     }
-    console.log('directs', this.filteredDirectMessages);
+  }
+
+  showOnlyYourChannels() {
+   if (this.searchInput == "#") {
+    this.filteredChannels = this.chatService.yourChannels;
+   }
+
   }
 
 
@@ -117,6 +126,17 @@ export class HomeComponent {
     console.log('filter after', this.filteredDirectMessages);
     
   }
+
+
+  renderChannel(channel: Channel) {
+    this.chatService.openChat = channel;
+    this.chatService.chatWindow = 'channel';
+    this.threadService.changeChat.emit();
+    if (this.chatService.isMobile) {
+      this.router.navigate(['main']);
+    }
+  }
+
 
   
   selectUser(user: any) {
