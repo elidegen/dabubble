@@ -106,6 +106,7 @@
             <div class="reaction-emoji-container">
               <button class="reaction-emoji-button" *ngFor="let emoji of thread.reactionCount | keyvalue; let i = index">
                 <div  (click)="firestoreService.addReaction(emoji.key, thread.id, this.currentMessage.id, 'threads')"
+                matTooltip="{{ thread.reaction[i]?.creator}}" 
                   class="emoji-fit">{{emoji.key}}</div>
                 <span>{{ emoji.value }}</span>
               </button>
