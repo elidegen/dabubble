@@ -23,7 +23,7 @@
     <header>
       <div class="header">
         <h2 class="title">Thread</h2>
-        <span class="channel-title color-purple2-text"># {{this.threadService.currentChat.name}}</span>
+        <span class="channel-title color-purple2-text"># {{ currentMessage.channel }}</span>
       </div>
       <button mat-icon-button class="close-thread" (click)="onCloseClick()">
         <img class="close-icon" src="assets/img/icons/close.svg" alt="close">
@@ -104,8 +104,8 @@
             </div>
 
             <div class="reaction-emoji-container">
-              <button class="reaction-emoji-button" *ngFor="let emoji of thread.reactionCount | keyvalue">
-                <div (click)="firestoreService.addReaction(emoji.key, this.emojiService.messageId, this.currentMessage.id, 'threads')"
+              <button class="reaction-emoji-button" *ngFor="let emoji of thread.reactionCount | keyvalue; let i = index">
+                <div  (click)="firestoreService.addReaction(emoji.key, thread.id, this.currentMessage.id, 'threads')"
                   class="emoji-fit">{{emoji.key}}</div>
                 <span>{{ emoji.value }}</span>
               </button>
@@ -170,8 +170,6 @@
               <img *ngIf="this.authService.isPDF(messagefile) && this.showUploadedFile" src="assets/img/icons/pdf.svg" alt="">
           </ng-container>
         </div>
-
-     
 
         <button (click)="addMessageToThread()" mat-icon-button class="textfield-buttons">
           <img src="assets/img/icons/send.svg" alt="" />

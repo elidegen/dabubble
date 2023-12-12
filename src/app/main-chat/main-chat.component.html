@@ -65,15 +65,17 @@
               [(ngModel)]="firestoreService.searchInput" (input)="filterUsers()" (click)="this.isInputFocused = true;">
 
             <div class="user-search-container" *ngIf="isInputFocused" (click)="userSelected($event)">
-              <button class="user-container" *ngFor="let user of firestoreService.filteredUsers"
-                (click)="selectUser(user)">
-                <div class="profile-container">
-                  <img src="{{user.picture}}" alt="profile">
-                  <div [ngClass]="{'offline-status': user.online === false}" class="online-status"></div>
-                </div>
-                <span>{{user.name}}</span>
-              </button>
-              <span *ngIf=" firestoreService.filteredUsers.length < 1">No matching contact</span>
+              <div *ngIf="firestoreService.searchInput.trim() !== '' && firestoreService.filteredUsers.length !== 0">
+                <button class="user-container" *ngFor="let user of firestoreService.filteredUsers"
+                  (click)="selectUser(user)">
+                  <div class="profile-container">
+                    <img src="{{user.picture}}" alt="profile">
+                    <div [ngClass]="{'offline-status': user.online === false}" class="online-status"></div>
+                  </div>
+                  <span>{{user.name}}</span>
+                </button>
+              </div>
+              <span *ngIf="firestoreService.searchInput.trim() === '' || firestoreService.filteredUsers.length == 0">No matching contact</span>
             </div>
           </div>
         </div>
@@ -202,17 +204,12 @@
                     </div>
                   </div>
 
-
-
-
-
-                  
                   <div class="reaction-container">
                     <div class="reaction-emoji-container">
                       <button class="reaction-emoji-button" *ngFor="let emoji of message.reactionCount | keyvalue; let i = index">
                         <div 
                              (click)="firestoreService.addReaction(emoji.key, message.id, currentChat?.id, 'channels')"
-                             matTooltip="{{message.reaction[i].creator}}" class="emoji-fit">
+                             class="emoji-fit">
                           {{ emoji.key }}
                         </div>
                         <span>{{ emoji.value }}</span>

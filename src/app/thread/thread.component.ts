@@ -81,9 +81,10 @@ export class ThreadComponent implements OnInit {
       this.message.profilePic = this.userService.currentUser.picture;
       this.message.creatorId = this.userService.currentUser.id;
       await this.firestoreService.sendMessageInThread(this.currentMessage.id, this.message);
-      this.message = new Message();
+      this.threadService.updateThreadCount(this.currentMessage, this.message.time);
+      this.message.content = '';
     }
-    this.threadService.updateThreadCount(this.threadService.currentMessage, this.message.time);
+    
   }
 
 
@@ -124,7 +125,7 @@ export class ThreadComponent implements OnInit {
  addEmoji($event: any) {
   this.emojiService.addEmojiThread($event);
   this.firestoreService.addReaction(this.emojiService.emojiString, this.emojiService.messageId, this.currentMessage.id, 'threads');
-  console.log(this.emojiService.emojiString, this.emojiService.messageId);
+  console.log("Log des Thread emojis mit addEmojiThrad, also vorher",this.emojiService.emojiString, this.emojiService.messageId, this.currentMessage.id,)
   this.emojiService.showThreadEmojiPicker = false;
   this.emojiService.emojiString = "";
  }
@@ -133,7 +134,6 @@ export class ThreadComponent implements OnInit {
 
  addEmojiTextField($event: any) {
     this.emojiService.addEmojiTextChat($event);
-    console.log("das ist das Emoji für die Textnachricht",this.emojiService.emojiString);
     this.message.content += this.emojiService.emojiString;
     this.emojiService.showThreadTextChatEmojiPicker = false;
     this.emojiService.emojiString = "";

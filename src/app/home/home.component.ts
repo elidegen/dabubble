@@ -101,18 +101,21 @@ export class HomeComponent {
             this.filteredChannelMessages.push(message);
         }
     });
-    console.log('channel', this.filteredChannelMessages);
   }
 
 
   async filterDirectMessages() {
     await this.chatService.getDMMessages();
+    console.log('filterallDm Ms', this.chatService.allMessagesOfDM);
+    
     this.filteredDirectMessages = [];
     this.chatService.allMessagesOfDM.forEach(message => {
       if (message.content?.toLowerCase().includes(this.searchInput.toLowerCase())) {
         this.filteredDirectMessages.push(message);
       }
     });
+    console.log('filter after', this.filteredDirectMessages);
+    
   }
 
   
@@ -120,7 +123,9 @@ export class HomeComponent {
     this.chatService.createDirectMessage(user);
     this.chatService.chatWindow = 'direct';
     this.search.nativeElement.value = '';
-    this.router.navigate(['main']);
+    if (this.chatService.isMobile) {
+      this.router.navigate(['main']);
+    }
   }
 
 

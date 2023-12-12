@@ -51,7 +51,6 @@ export class WorkspaceComponent implements OnInit {
     this.unsubscribeChannels;
     this.unsubscribeChats;
     this.unsubscribeUsers;
-
     if (this.unSubMessages) {
       this.unSubMessages();
     }
@@ -67,7 +66,6 @@ export class WorkspaceComponent implements OnInit {
           return channel;
         });
         this.getPersonalChannels();
-
       }
     );
   }
@@ -85,6 +83,7 @@ export class WorkspaceComponent implements OnInit {
     );
   }
 
+
   loadUsers() {
     this.unsubscribeUsers = onSnapshot(
       query(collection(this.firestore, "users"), orderBy("name")),
@@ -97,14 +96,14 @@ export class WorkspaceComponent implements OnInit {
     );
   }
 
+
   getPersonalChannels() {
     this.yourChannels = [];
-  if (this.userService.currentUser.name == "Guest") {
-    this.yourChannels = this.chatservice.allChannels;
-  } else {
-    this.yourChannels = this.chatservice.yourChannels;
-  }
- 
+    if (this.userService.currentUser.name == "Guest") {
+      this.yourChannels = this.chatservice.allChannels;
+    } else {
+      this.yourChannels = this.chatservice.yourChannels;
+    }
   }
 
   getPersonalDirectMessages() {
@@ -128,6 +127,7 @@ export class WorkspaceComponent implements OnInit {
   renderChannel(channel: Channel) {
     this.chatservice.openChat = channel;
     this.chatservice.chatWindow = 'channel';
+    this.threadService.changeChat.emit();
     if (this.chatservice.isMobile) {
       this.router.navigate(['main']);
     }
@@ -135,6 +135,9 @@ export class WorkspaceComponent implements OnInit {
 
   openChat(chat: Chat) {
     this.chatservice.renderDirectMessage(chat);
+    if (!this.chatservice.isMobile) {
+      this.threadService.changeChat.emit();
+    }
   }
 
   startNewMessage() {
@@ -154,6 +157,8 @@ export class WorkspaceComponent implements OnInit {
 
   renderNewMainChat() {
     this.chatservice.chatWindow = 'newMessage';
-    this.router.navigate(['main']);
+    if (this.chatservice.isMobile) {
+      this.router.navigate(['main']);
+    }
   }
 }

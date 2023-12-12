@@ -204,7 +204,7 @@ mat-error {
 //     padding-left: 10px;
 //     padding-right: 10px;
 // }
-input
+
 .input-container {
     display: flex;
     align-items: center;
@@ -221,13 +221,7 @@ input
 
 
     input {
-        outline: none;
-        border: none;
-        background-color: var(--primary);
-        height: 30px;
-        width: 150%;
-        font-size: 20px;
-        cursor: pointer;
+        width: 100%;
     }
     img {
         margin-left: 20px;
@@ -260,6 +254,14 @@ input
     gap: 10px;
 }
 
+input {
+    outline: none;
+    border: none;
+    background-color: var(--primary);
+    height: 30px;
+    font-size: 20px;
+    cursor: pointer;
+}
 
 // .submit-buttons {
 //     gap: 30px;

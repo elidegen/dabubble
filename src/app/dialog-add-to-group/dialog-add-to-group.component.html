@@ -10,19 +10,19 @@
         <h3># {{currentChat?.name}}</h3>
 
         <div class="add-members-container">
-            <input class="w100 input-members" type="text" placeholder="Enter name" [(ngModel)]="searchInput"
-                (input)="filterUsers()" (click)="this.isInputFocused = true;">
-        
+            <input class="w100 input-members" type="text" placeholder="Enter name" [(ngModel)]="searchInput" (input)="filterUsers()" (click)="this.isInputFocused = true;">
             <div class="user-search-container" *ngIf="isInputFocused" (click)="userSelected($event)">
-                <button #userContainer class="user-container" *ngFor="let user of filteredUsers; let i = index"
-                    (click)="selectUser(user, i)">
-                    <div class="profile-container">
-                        <img src="{{user.picture}}" alt="profile">
-                        <div class="online-status"></div>
-                    </div>
-                    <span>{{user.name}}</span>
-                </button>
-                <span *ngIf="filteredUsers.length <1">No matching contact</span>
+                <div *ngIf="searchInput.trim() !== '' && filterUsers.length !== 0">
+                    <button #userContainer class="user-container" *ngFor="let user of filteredUsers; let i = index"
+                        (click)="selectUser(user, i)">
+                        <div class="profile-container">
+                            <img src="{{user.picture}}" alt="profile">
+                            <div class="online-status"></div>
+                        </div>
+                        <span>{{user.name}}</span>
+                    </button>
+                </div>
+                <span *ngIf="searchInput === '' || filteredUsers.length == 0">No matching contact</span>
             </div>
             <div class="w100 selected-user-container">
                 <div class="selected-user" *ngFor="let item of this.selectedUsers">

@@ -74,6 +74,7 @@ export class FirestoreService {
 
   loadChannelMessages(currentChat: any) {
     if (currentChat.id) {
+      console.log('firestore', currentChat);
       const messageCollection = collection(this.firestore, `channels/${currentChat.id}/messages`);
       const q = query(messageCollection, orderBy('timeInMs', 'desc'), limit(50));
       this.unSubChannelMessages = onSnapshot(q, async (snapshot) => {
@@ -82,7 +83,6 @@ export class FirestoreService {
           message.id = doc.id;
           message.threadCount = await this.threadService.countThreadMessages(message.id);
           message.reactionCount = this.setEmojiCount(message.reaction);
-          console.log(message.reactionCount);
           return message;
         }));
         this.allMessagesOfChannel.reverse();
@@ -129,6 +129,7 @@ export class FirestoreService {
     await this.updateChannelMessage(colId, message);
   }
 
+  
   async updateChannelMessage(colId: string, message: Message) {
     const docRef = doc(collection(this.firestore, colId), message.id);
     await updateDoc(docRef, this.getUpdateChannelMessageData(message)).catch(
@@ -259,6 +260,7 @@ export class FirestoreService {
       let messageIndex = allMessages.findIndex(message => message.id === messageId);
       let currentMessage = allMessages[messageIndex];
       const reactionItem = { emoji, creatorId: this.userService.currentUser.id, creator: this.userService.currentUser.name };
+      console.log("Reaction Itemin der add Reaction funktion", reactionItem);
       if (currentMessage.reaction.some((emojiArray: { emoji: string; creatorId: string; }) => emojiArray.emoji === emoji && emojiArray.creatorId === this.userService.currentUser.id)) {
         currentMessage.reaction = currentMessage.reaction.filter((emojiArray: { emoji: string; creatorId: string; }) => !(emojiArray.emoji === emoji && emojiArray.creatorId === this.userService.currentUser.id));
       } else {
@@ -302,6 +304,7 @@ export class FirestoreService {
           const message = doc.data() as Message;
           message.reactionCount = this.setEmojiCount(message.reaction);
           message.id = doc.id;
+          message.threadCount = await this.threadService.countThreadMessages(message.id);
           return message;
         }));
         this.allDirectMessages.reverse();

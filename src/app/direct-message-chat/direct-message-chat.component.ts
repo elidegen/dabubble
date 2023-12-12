@@ -11,6 +11,8 @@ import { User } from 'src/models/user.class';
 import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-profile.component';
 import { FirestoreService } from '../firestore.service';
 import { Router } from '@angular/router';
+import { ThreadService } from '../thread.service';
+import { Thread } from 'src/models/thread.class';
 
 @Component({
   selector: 'app-direct-message-chat',
@@ -28,13 +30,15 @@ export class DirectMessageChatComponent implements OnInit {
   interlocutor: User = new User();
   taggedNames = "";
   showUploadedFile = false;
+  newThread = new Thread();
   // ------------- for editing of message ----------------
   edit: boolean = false;
   editingMessage: string | undefined;
   @ViewChild('editor') editor!: ElementRef;
 
   constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, 
-    public authService: AuthService, public emojiService: EmojiService, public firestoreService: FirestoreService, public router: Router) {
+    public authService: AuthService, public emojiService: EmojiService, public firestoreService: FirestoreService, 
+    public router: Router,  public threadService: ThreadService) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
   }
@@ -48,8 +52,8 @@ export class DirectMessageChatComponent implements OnInit {
           if (this.firestoreService.unSubDirectMessages) {
             this.firestoreService.unSubDirectMessages();
           }
-          this.loadMessages();
         }
+        this.loadMessages();
       } else {
         this.currentChat = undefined;
       }
@@ -210,5 +214,17 @@ export class DirectMessageChatComponent implements OnInit {
   logOutUser() {
     this.authService.signOutUser();
     this.router.navigate(['']);
+  }
+
+  async openThreadInDirect(message: Message) {
+    let messageId = message.id;
+    await this.firestoreService.createThread(messageId, this.newThread);
+    this.threadService.openMessage = message;
+    if (this.chatService.isMobile) {
+      this.router.navigate(['thread']);
+    } else {
+      this.threadService.openThread.emit();
+      this.threadService.isThreadInDM = true;
+    }
   }
 }
