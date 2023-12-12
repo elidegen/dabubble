@@ -86,6 +86,9 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
         this.currentChat = undefined;
       }
     });
+    this.firestoreService.messageAdded.subscribe(() => {
+      this.scrollToBottom();
+    });
   }
 
   ngOnDestroy() {
@@ -138,8 +141,8 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
       await this.firestoreService.sendMessageInChannel(this.currentChat, this.message);
       this.taggedNames = "";
       this.message = new Message();
+      this.scrollToBottom();
     }
-    this.scrollToBottom();
   }
 
   getSentMessageDate() {
