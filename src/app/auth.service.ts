@@ -86,14 +86,13 @@ export class AuthService {
       .then((result) => {
         const user = result.user;
         console.log('Google Benutzer angemeldet:', user);
-        this.userService.currentUser.name = user.displayName || "",
-        this.userService.currentUser.email = user.email || "",
-        this.userService.currentUser.password = "",
-        this.userService.currentUser.id = user.uid,
-        this.userService.currentUser.picture = user.photoURL || "",
-        this.userService.currentUser.online = true,
-        this.userService.currentUser.loginTime = this.getLoginTime(),
-        this.addGoogleUser();
+        this.userService.currentUser.name = user.displayName || ""
+        this.userService.currentUser.email = user.email || "";
+        this.userService.currentUser.password = "";
+        this.userService.currentUser.picture = user.photoURL || "";
+        this.userService.currentUser.online = true;
+        this.userService.currentUser.loginTime = this.getLoginTime();
+        this.addGoogleUser(user.uid);
       })
       .catch((error) => {
         console.error('Fehler bei Google-Anmeldung:', error);
@@ -123,7 +122,6 @@ export class AuthService {
         this.userService.currentUser = this.newGuest;
         this.userService.currentUser.id = this.createId(10);
         this.userService.setCurrentUserToLocalStorage();
-        this.userService.getCurrentUserFromLocalStorage();
         console.log("Guest ist eingeloggt", this.userService.currentUser);
       })
       .catch((error) => {
@@ -152,13 +150,14 @@ export class AuthService {
   }
 
 
-  async addGoogleUser() {
+  async addGoogleUser(id:any) {
     if (!this.userService.userExists(this.userService.currentUser.email || '')) {
+      this.userService.currentUser.id = id;
       await this.userService.addUser(this.userService.currentUser);
     }
     console.log("googleUser", this.userService.currentUser);
     await this.userService.setCurrentUserToLocalStorage();
-    await this.userService.getCurrentUserFromLocalStorage();
+    console.log("currentUser",this.userService.currentUser);
     await this.router.navigate(['home']);
   }
 

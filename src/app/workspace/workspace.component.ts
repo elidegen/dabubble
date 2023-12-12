@@ -41,12 +41,18 @@ export class WorkspaceComponent implements OnInit {
     this.currentUser = userService.currentUser;
   }
 
+  /**
+ * Initializes the component, loading channels, direct messages, and users.
+ */
   ngOnInit(): void {
     this.loadChannels();
     this.loadDirectMessages();
     this.loadUsers();
   }
 
+  /**
+ * Cleans up subscriptions when the component is destroyed.
+ */
   ngOnDestroy(): void {
     this.unsubscribeChannels;
     this.unsubscribeChats;
@@ -56,6 +62,9 @@ export class WorkspaceComponent implements OnInit {
     }
   }
 
+  /**
+ * Loads all channels from the Firestore and sets up a subscription.
+ */
   loadChannels() {
     this.unsubscribeChannels = onSnapshot(
       query(collection(this.firestore, "channels"), orderBy("name")),
@@ -70,6 +79,9 @@ export class WorkspaceComponent implements OnInit {
     );
   }
 
+  /**
+ * Loads all direct messages from the Firestore and sets up a subscription.
+ */
   loadDirectMessages() {
     this.unsubscribeChats = onSnapshot(
       query(collection(this.firestore, "direct messages"), orderBy("name")),
@@ -83,7 +95,9 @@ export class WorkspaceComponent implements OnInit {
     );
   }
 
-
+/**
+ * Loads all users from the Firestore and sets up a subscription.
+ */
   loadUsers() {
     this.unsubscribeUsers = onSnapshot(
       query(collection(this.firestore, "users"), orderBy("name")),
@@ -96,7 +110,9 @@ export class WorkspaceComponent implements OnInit {
     );
   }
 
-
+/**
+ * Filters the channels to show only those relevant to the current user.
+ */
   getPersonalChannels() {
     this.yourChannels = [];
     if (this.userService.currentUser.name == "Guest") {
@@ -106,6 +122,9 @@ export class WorkspaceComponent implements OnInit {
     }
   }
 
+  /**
+ * Filters the direct messages to show only those relevant to the current user.
+ */
   getPersonalDirectMessages() {
     this.personalDirectMessages = [];
     this.allDirectMessages.forEach(chat => {
@@ -116,6 +135,9 @@ export class WorkspaceComponent implements OnInit {
     // this.chatservice.chatWindow = 'empty';
   }
 
+  /**
+ * Opens a dialog to add a new channel or navigates to the add channel page on mobile.
+ */
   openDialog() {
     if (this.chatservice.isMobile) {
       this.router.navigate(['add-channel'])
@@ -124,6 +146,10 @@ export class WorkspaceComponent implements OnInit {
     }
   }
 
+  /**
+ * Opens a specific channel in the chat service.
+ * @param {Channel} channel - The channel to be opened.
+ */
   renderChannel(channel: Channel) {
     this.chatservice.openChat = channel;
     this.chatservice.chatWindow = 'channel';
@@ -133,6 +159,10 @@ export class WorkspaceComponent implements OnInit {
     }
   }
 
+  /**
+ * Opens a specific chat in the chat service.
+ * @param {Chat} chat - The chat to be opened.
+ */
   openChat(chat: Chat) {
     this.chatservice.renderDirectMessage(chat);
     if (!this.chatservice.isMobile) {
@@ -140,10 +170,17 @@ export class WorkspaceComponent implements OnInit {
     }
   }
 
+  /**
+ * Sets the chat window to start a new message.
+ */
   startNewMessage() {
     this.chatservice.chatWindow = 'newMessage';
   }
 
+  /**
+ * Deletes a specific direct message chat from the Firestore database.
+ * @param {any} chatId - The ID of the chat to be deleted.
+ */
   async deleteDirectMessageChat(chatId: any) {
     const directDocRef = doc(collection(this.firestore, 'direct messages'), chatId);
     const directSubColRef = collection(this.firestore, `direct messages/${chatId}/messages`);
@@ -155,6 +192,9 @@ export class WorkspaceComponent implements OnInit {
     this.chatservice.chatWindow = 'empty';
   }
 
+  /**
+ * Renders a new main chat window.
+ */
   renderNewMainChat() {
     this.chatservice.chatWindow = 'newMessage';
     if (this.chatservice.isMobile) {

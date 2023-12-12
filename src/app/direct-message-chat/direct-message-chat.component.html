@@ -75,7 +75,8 @@
               <div class="reaction-container">
                 <div class="reaction-emoji-container">
                   <button class="reaction-emoji-button" *ngFor="let emoji of message.reactionCount | keyvalue; let i = index">
-                    <div  (click)="firestoreService.addReaction(emoji.key,message.id, currentChat?.id, 'direct messages')" class="emoji-fit">{{emoji.key}}</div>
+                    <div  matTooltip="{{ message.reaction[i]?.creator}}"  (click)="firestoreService.addReaction(emoji.key,message.id, currentChat?.id, 'direct messages')" class="emoji-fit">{{emoji.key}}</div>
+                    
                     <span>{{ emoji.value }}</span>
                   </button>
                 </div>

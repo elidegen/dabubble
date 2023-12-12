@@ -35,6 +35,7 @@ export class DialogEditChannelComponent implements OnInit {
     }
    }
 
+
   ngOnInit() {
     this.chatService.openChat$.subscribe((openChat) => {
       if (openChat) {
@@ -44,7 +45,9 @@ export class DialogEditChannelComponent implements OnInit {
     });
   }
   
-
+/**
+ * Fetches all members of the current channel from Firestore and assigns them to the local array.
+ */
   async getAllChannelMembers() {
     if (this.currentChat?.id) {
       const channelDocRef = doc(this.firestore, `channels/${this.currentChat.id}`);
@@ -62,12 +65,18 @@ export class DialogEditChannelComponent implements OnInit {
     }
   }
 
+  /**
+ * Performs cleanup by unsubscribing from any subscriptions to avoid memory leaks.
+ */
   ngOnDestroy() {
     if (this.unSubChannel) {
       this.unSubChannel();
     }
   }
 
+  /**
+ * Removes the current user from the channel members list and updates the Firestore document.
+ */
   async deleteCurrentUserFromChannel() {
     this.deleteCurrentUser();
     if (this.currentChat) {
@@ -85,20 +94,30 @@ export class DialogEditChannelComponent implements OnInit {
     this.chatService.openChat = null;
   }
 
-
+/**
+ * Filters out the current user from the list of all channel members.
+ */
   deleteCurrentUser() {
     const currentUserisMember = this.allChannelMembers.some(user => user.id === this.currentUser.id);
     if (currentUserisMember) {
       this.allChannelMembers = this.allChannelMembers.filter(user => user.id !== this.currentUser.id);
       this.newChannelMembers = this.allChannelMembers;
-      console.log('no currentUser', this.newChannelMembers );
     }
   }
+
+  /**
+ * Logs out the current user and navigates back to the login screen.
+ */
   logOutUser() {
     this.authService.signOutUser();
     this.router.navigate(['']);
   }
 
+
+  /**
+ * Opens the profile dialog for viewing the details of a specific user.
+ * @param {any} id - The ID of the user whose profile is to be viewed.
+ */
   openProfileDialog(id: any): void {
     this.dialog.open(DialogViewProfileComponent, {
       panelClass: 'dialog-container',
@@ -106,6 +125,9 @@ export class DialogEditChannelComponent implements OnInit {
     });
   }
 
+  /**
+ * Navigates back to the main chat window.
+ */
   backToChat() {
     this.router.navigate(['main']);
   }
