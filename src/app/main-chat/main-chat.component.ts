@@ -85,7 +85,7 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
       } else {
         this.currentChat = this.currentChat;
       }
-    
+
     });
 
     this.threadService.openThread.subscribe(() => {
@@ -97,7 +97,7 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
       this.threadDrawer.close();
       this.threadService.isThreadInDM = false;
     })
-    
+
     this.firestoreService.messageAdded.subscribe(() => {
       this.scrollToBottom();
     });
@@ -321,16 +321,16 @@ export class MainChatComponent implements OnInit, AfterViewInit, OnChanges {
       if (file.size > 500000) {
         alert("Max file size 500kb !");
       } else {
-      this.authService.uploadProfileImage(file);
-      this.firestoreService.showSpinner = true;
+        this.authService.uploadProfileImage(file);
+        this.firestoreService.showSpinner = true;
+      }
+      setTimeout(() => {
+        this.message.files.push(this.authService.customPic);
+        console.log(this.message);
+        this.firestoreService.showSpinner = false;
+      }, 2000);
+      this.showUploadedFile = true;
     }
-    setTimeout(() => {
-      this.message.files.push(this.authService.customPic);
-      console.log(this.message);
-      this.firestoreService.showSpinner = false;
-    }, 2000);
-    this.showUploadedFile = true;
-  }
   }
 
   logOutUser() {

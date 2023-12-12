@@ -1,354 +1,66 @@
 @media (max-width: 1700px) {
     mat-card {
-        width: 395px;
+        width: 320px;
     }
-    .workspace-logo {
-        height: 56px;
-    }
-    h2 {
-        font-size: 28px;
-    }
-    .headline {
-        button {
-            img {
-                height: 20px;
-                width: 20px;
-            }
-        }
-    }
-    mat-expansion-panel-header {
-        mat-panel-title {
-            font-size: 22px;
-        }
-    }
-    .channel-btn {
-        span {
-            font-size: 18px;
-        }
-    }
-    .add_channel_button-container {
- 
-        font-size: 18px;
-        svg {
-            height: 20px;
-            width: 20px;
-        }
-    }
-    h3 {
-        font-size: 18px !important;
+
+    .chat-name,
+    .channel-name {
+        max-width: 250px;
     }
 }
 
-
-@media (max-width: 1500px) {
-    mat-card {
-        width: 345px;
-    }
-    .workspace-logo {
-        height: 50px;
-    }
-}
-
-
-@media (max-width: 1279px) {
-    mat-card {
-        width: 290px;
-    }
-    .workspace-logo {
-        height: 40px;
-    }
-    h2 {
-        font-size: 22px;
-    }
-    .headline {
-        button {
-            height: 30px !important;
-            width: 30px !important;
-            img {
-                height: 16px;
-                width: 16px;
-            }
-        }
-    }
-    mat-expansion-panel-header {
-        mat-panel-title {
-            font-size: 16px;
-        }
-        svg {
-            height: 18px;
-            width: 18px;
-        }
-    }
-    .channel-btn {
-        span {
-            font-size: 14px;
-        }
-    }
-    .add_channel_button-container {
-        font-size: 14px;
-        svg {
-            height: 20px;
-            width: 20px;
-        }
-    }
-    h3 {
-        font-size: 14px !important;
-    }
-    .profile-message-container {
-        img {
-            height: 40px;
-            width: 40px;
-        }
-    }
-    .online-status {
-        bottom: 2px;
-        right: 1px;
-        height: 10px;
-        width: 10px;
-    }
-    .channel-container {
-        gap: 16px;
-    }
-}
-
-
-@media (max-width: 1100px) {
-    mat-card {
-        width: 250px;
-    }
-    .workspace-logo {
-        height: 32px;
-    }
-    h2 {
-        font-size: 18px;
-    }
-    .headline {
-        button {
-            height: 24px !important;
-            width: 24px !important;
-            img {
-                height: 12px;
-                width: 12px;
-            }
-        }
-    }
-    mat-expansion-panel-header {
-        mat-panel-title {
-            font-size: 13px;
-        }
-        svg {
-            height: 16px;
-            width: 16px;
-        }
-    }
-    .channel-btn {
-        span {
-            font-size: 12px;
-        }
-    }
-    .add_channel_button-container {
-        font-size: 12px;
-        svg {
-            height: 14px;
-            width: 14px;
-            margin-bottom: 2px;
-        }
-    }
-    h3 {
-        font-size: 12px !important;
-    }
-    .profile-message-container {
-        img {
-            height: 32px;
-            width: 32px;
-        }
-    }
-    .online-status {
-        bottom: 0px;
-        right: -1px;
-        height: 9px;
-        width: 9px;
-    }
-}
-
-@media (max-width: 900px) {
-    mat-card {
-        width: 210px;
-    }
-    .workspace-logo {
-        height: 28px;
-    }
-    h2 {
-        font-size: 15px;
-    }
-    .headline {
-        button {
-            height: 24px !important;
-            width: 24px !important;
-            img {
-                height: 12px;
-                width: 12px;
-            }
-        }
-    }
-    mat-expansion-panel-header {
-        padding-right: 0 !important ;
-        mat-panel-title {
-            font-size: 11px;
-            margin-right: 0 !important;
-        }
-        svg {
-            height: 14px;
-            width: 14px;
-        }
-    }
-    .channel-btn {
-        span {
-            font-size: 10px;
-        }
-    }
-    .add_channel_button-container {
-        font-size: 10px;
-        svg {
-            height: 12px;
-            width: 12px;
-            margin-bottom: 2px;
-        }
-    }
-    h3 {
-        font-size: 10px !important;
-    }
-    .profile-message-container {
-        img {
-            height: 32px;
-            width: 32px;
-        }
-    }
-    .online-status {
-        bottom: 0px;
-        right: -1px;
-        height: 9px;
-        width: 9px;
-    }
-}
-
-
-@media (max-width: 799px ) {
+@media (max-width: 799px) {
     mat-card {
         width: 100%;
-        height: calc(100vh - 182px);
+        height: fit-content;
+        min-height: calc(100vh - 182px);
         align-items: center;
+        border-radius: 0 !important;
     }
+
     mat-card-content {
         display: flex;
         flex-direction: column;
-        align-items: center;
-        width: 100%;
-    }
-    mat-expansion-panel-header {
-        mat-panel-title {
-            font-size: 23px;
-        }
-        svg {
-            height: 24px;
-            width: 24px;
-        }
-    }
-    .mobile-container {
-       display: flex;
-       flex-direction: column;
-       align-items: center;
-       width: 100%;
-    }
-    mat-accordion {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-    }
-    mat-expansion-panel {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-    .channel-btn {
-        span {
-            font-size: 18px;
-        }
-    }
-    h3 {
-        font-size: 20px !important;
-    }
-    .profile-message-container {
-        img {
-            height: 50px;
-            width: 50px;
-        }
-    }
-    .online-status {
-        bottom: 1px;
-        right: 1px;
-        height: 12px;
-        width: 12px;
-    }
-    .add_channel_button-container {
-        font-size: 18px;
-        svg {
-            height: 20px;
-            width: 20px;
-            margin-bottom: 2px;
-        }
-    }
-    .edit-mobile {
-        position: absolute;
-        bottom: 30px;
-        right: 30px;
-    }
-    .channel-section {
-        margin-left: 90px;
-    }
-    .direct-message-container {
-        margin-left: 93px;
-    }
-    .mr-mobile {
-        margin-right: 80px;
-    }
-   
-}
-
-
-@media (max-height: 990px ) {
-    .channel-container {
-        max-height: 150px;
-    }
-    .direct-message-container {
-        max-height: 185px;
+        align-items: flex-start;
+        width: fit-content;
+        margin: 0 auto;
     }
 
-    .channel-section {
-        gap: 30px;
-        max-height: 300px;
+    .channel-name,
+    .chat-name {
+        max-width: 500px;
     }
 }
 
+@media(max-width: 565px) {
 
-
-
-
-
-@media (max-height: 810px ) {
-    .channel-container {
-
-        max-height: 105px;
-    }
-    .direct-message-container {
-        max-height: 133px;
+    .channel-name {
+        max-width: 400px;
     }
 
-    .channel-section {
-        gap: 30px;
-        max-height: 300px;
+    .chat-name {
+        max-width: 300px;
     }
-
 }
 
+@media(max-width: 465px) {
 
+    .channel-name {
+        max-width: 300px;
+    }
+
+    .chat-name {
+        max-width: 200px;
+    }
+}
+
+@media(max-width: 365px) {
+
+    .channel-name {
+        max-width: 250px;
+    }
+
+    .chat-name {
+        max-width: 150px;
+    }
+}
