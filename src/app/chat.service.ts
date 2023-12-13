@@ -228,7 +228,7 @@ export class ChatService {
   getPersonalChannels() {
     this.yourChannels = [];
     this.allChannels.forEach(channel => {
-      console.log("GoogleUser", channel.member, this.userService.currentUser)
+      // console.log("GoogleUser", channel.member, this.userService.currentUser)
       if (channel.members.some((member: { id: string; }) => member.id === this.userService.currentUser.id)) {
         this.yourChannels.push(channel);
       }

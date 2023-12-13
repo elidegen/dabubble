@@ -177,7 +177,7 @@ export class FirestoreService {
   updateOnlineStatus() {
     this.allChannelMembers.forEach(member => {
       let userIndex = this.authService.findUserIndexWithEmail(member.email);
-      console.log("Onlinestatus", member,this.userService.users[userIndex] )
+      // console.log("Onlinestatus", member,this.userService.users[userIndex]);
       member.online = this.userService.users[userIndex].online;
     
     });

@@ -155,7 +155,7 @@ export class AuthService {
       this.userService.currentUser.id = id;
       await this.userService.addUser(this.userService.currentUser);
     }
-    console.log("googleUser", this.userService.currentUser);
+    // console.log("googleUser", this.userService.currentUser);
     await this.userService.setCurrentUserToLocalStorage();
     console.log("currentUser",this.userService.currentUser);
     await this.router.navigate(['home']);
