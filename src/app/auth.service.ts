@@ -150,7 +150,7 @@ export class AuthService {
     if (!this.userService.userExists(this.userService.currentUser.email || '')) {
       await this.userService.addUser(this.userService.currentUser);
     }
-    console.log("googleUser", this.userService.currentUser);
+    // console.log("googleUser", this.userService.currentUser);
     await this.userService.setCurrentUserToLocalStorage();
     console.log("currentUser",this.userService.currentUser);
     await this.router.navigate(['home']);

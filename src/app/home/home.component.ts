@@ -67,6 +67,9 @@ export class HomeComponent {
   }
 
   toggleWorkspace(workspace: { toggle: () => void; }) {
+    if (window.innerWidth < 1300)
+      console.log('lala');
+
     workspace.toggle()
   }
 

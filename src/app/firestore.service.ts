@@ -27,6 +27,8 @@ export class FirestoreService {
   showSpinner = false;
   showThreadSpinner = false;
   messageAdded = new EventEmitter<void>();
+  messageAddedInDirect = new EventEmitter<void>();
+  messageAddedInThread = new EventEmitter<void>();
   allThreadMessages: Message[] = [];
   unSubThread: any;
   constructor(public threadService: ThreadService, public chatService: ChatService, public userService: UserService, public authService: AuthService) { }
@@ -177,7 +179,7 @@ export class FirestoreService {
   updateOnlineStatus() {
     this.allChannelMembers.forEach(member => {
       let userIndex = this.authService.findUserIndexWithEmail(member.email);
-      console.log("Onlinestatus", member,this.userService.users[userIndex] )
+      // console.log("Onlinestatus", member,this.userService.users[userIndex]);
       member.online = this.userService.users[userIndex].online;
     
     });
@@ -202,6 +204,7 @@ export class FirestoreService {
           return message;
         });
         this.allThreadMessages.reverse()
+        this.messageAddedInThread.emit()
       });
     }
   }
@@ -318,6 +321,7 @@ export class FirestoreService {
         this.allDirectMessages.reverse();
         this.organizeDirectMessagesByDate();
         this.checkMessageNumbers();
+        this.messageAddedInDirect.emit();
       });
     }
   }

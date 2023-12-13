@@ -64,7 +64,7 @@ export class ThreadComponent implements OnInit {
         }
       }
     });
-    this.firestoreService.messageAdded.subscribe(() => {
+    this.firestoreService.messageAddedInThread.subscribe(() => {
       this.scrollToBottom();
     });
   }
