@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Output, OnInit, inject, ViewChild, ElementRef } from '@angular/core';
 import { ThreadService } from '../thread.service';
-import { Thread } from 'src/models/thread.class';
 import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '../user.service';
 import { AuthService } from '../auth.service';
@@ -41,6 +40,8 @@ export class ThreadComponent implements OnInit {
   @Output() closeThread: EventEmitter<void> = new EventEmitter<void>();
   edit: boolean = false;
   editingThreadMessage: string | undefined;
+  scrollPosition: any;
+  @ViewChild('scrollContainer') scrollContainer!: ElementRef<HTMLDivElement>;
 
   constructor(public threadService: ThreadService, public dialog: MatDialog, public userService: UserService,
     public authService: AuthService, public chatService: ChatService, public emojiService: EmojiService, 
@@ -62,6 +63,9 @@ export class ThreadComponent implements OnInit {
           this.firestoreService.loadThread(this.currentMessage.id);
         }
       }
+    });
+    this.firestoreService.messageAdded.subscribe(() => {
+      this.scrollToBottom();
     });
   }
 
@@ -85,6 +89,16 @@ export class ThreadComponent implements OnInit {
       await this.threadService.sendMessageInThread(this.currentMessage, this.message);
       this.threadService.updateThreadCount(this.currentMessage, this.message.time);
       this.message.content = '';
+      this.scrollToBottom();
+    }
+  }
+  
+  /**
+   * Scrolls the chat window to the bottom, showing the most recent messages.
+   */
+  scrollToBottom(): void {
+    if (this.scrollContainer) {
+      this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
     }
   }
 

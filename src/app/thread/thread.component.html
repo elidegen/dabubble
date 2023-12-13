@@ -61,7 +61,7 @@
     </div>
   </mat-card-content>
 
-  <mat-card-content class="p-0 main-chat-container">
+  <mat-card-content class="p-0 main-chat-container" #scrollContainer [scrollTop]="scrollPosition">
 
     <section> 
       <div class="message-row-container" *ngFor="let thread of firestoreService.allThreadMessages;"

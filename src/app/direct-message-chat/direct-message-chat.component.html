@@ -27,7 +27,7 @@
       <span class="mr-16">{{ interlocutor.name }}</span>
     </button>
   </mat-card-header>
-  <mat-card-content #messageContainer class="p-0 main-chat-container" *ngSwitchCase="true">
+  <mat-card-content #messageContainer class="p-0 main-chat-container" *ngSwitchCase="true" #scrollContainer [scrollTop]="scrollPosition">
     <ng-container *ngFor="let organizedMessage of firestoreService.organizedDirectMessages.slice()">
       <section>
         <div class="date-container">

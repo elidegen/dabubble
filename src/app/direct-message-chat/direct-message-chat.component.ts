@@ -35,10 +35,12 @@ export class DirectMessageChatComponent implements OnInit {
   edit: boolean = false;
   editingMessage: string | undefined;
   @ViewChild('editor') editor!: ElementRef;
+  scrollPosition: any;
+  @ViewChild('scrollContainer') scrollContainer!: ElementRef<HTMLDivElement>;
 
-  constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, 
-    public authService: AuthService, public emojiService: EmojiService, public firestoreService: FirestoreService, 
-    public router: Router,  public threadService: ThreadService) {
+  constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService,
+    public authService: AuthService, public emojiService: EmojiService, public firestoreService: FirestoreService,
+    public router: Router, public threadService: ThreadService) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
   }
@@ -60,6 +62,9 @@ export class DirectMessageChatComponent implements OnInit {
       } else {
         this.currentChat = undefined;
       }
+    });
+    this.firestoreService.messageAdded.subscribe(() => {
+      this.scrollToBottom();
     });
   }
 
@@ -119,7 +124,7 @@ export class DirectMessageChatComponent implements OnInit {
       if (file.size > 500000) {
         alert("Max file size 500kb !");
       } else {
-      this.firestoreService.showSpinner = true;
+        this.firestoreService.showSpinner = true;
       }
       this.resetStatusAndSpinner()
     }
@@ -146,6 +151,9 @@ export class DirectMessageChatComponent implements OnInit {
       this.determineMessageValues();
       await this.firestoreService.sendMessageInDirectMessage(this.currentChat.id, this.message);
       this.message = new Message();
+      setTimeout(() => {
+        this.scrollToBottom();
+      }, 100);
     }
   }
 
@@ -158,10 +166,10 @@ export class DirectMessageChatComponent implements OnInit {
       this.getSentMessageDate();
       this.message.creator = this.userService.currentUser.name;
       this.message.creatorId = this.userService.currentUser.id,
-      this.message.channel = this.currentChat.name;
+        this.message.channel = this.currentChat.name;
       this.message.channelID = this.currentChat.id;
       this.message.profilePic = this.userService.currentUser.picture,
-      this.message.channel = this.currentChat.name;
+        this.message.channel = this.currentChat.name;
     }
   }
 
@@ -221,7 +229,7 @@ export class DirectMessageChatComponent implements OnInit {
   }
 
   //----------------------------------------------------------------------------------------------------------------
-  
+
   /**
    * Toggles the display of the emoji picker for a specific message.
    * @param {any} messageId - The ID of the message to show the emoji picker for.
@@ -256,10 +264,12 @@ export class DirectMessageChatComponent implements OnInit {
   }
 
   /**
-   * Automatically scrolls the chat to the bottom to display the most recent messages.
+   * Scrolls the chat window to the bottom, showing the most recent messages.
    */
   scrollToBottom(): void {
-    this.messageContainer.nativeElement.scrollTop = this.messageContainer.nativeElement.scrollHeight;
+    if (this.scrollContainer) {
+      this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
+    }
   }
 
 
