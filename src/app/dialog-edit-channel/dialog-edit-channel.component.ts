@@ -7,6 +7,7 @@ import { Firestore, collection, doc, getDoc, updateDoc } from '@angular/fire/fir
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-profile.component';
+import { FirestoreService } from '../firestore.service';
 
 
 @Component({
@@ -28,7 +29,7 @@ export class DialogEditChannelComponent implements OnInit {
   
   constructor(
     public chatService: ChatService, @Optional() @Inject(MatDialogRef) public dialogRef: MatDialogRef<DialogEditChannelComponent> | undefined,
-     public userService: UserService, public authService: AuthService, public router: Router, public dialog: MatDialog) {
+     public userService: UserService, public authService: AuthService, public router: Router, public dialog: MatDialog, public firestoreService: FirestoreService) {
     this.currentUser = this.userService.currentUser;
     if (chatService.isMobile) {
       this.dialogRef = undefined
@@ -135,6 +136,12 @@ export class DialogEditChannelComponent implements OnInit {
    */
   backToChat() {
     this.router.navigate(['main']);
+  }
+
+  editChannel() {
+    this.editName = false
+    console.log("chat der bearbeitet wird",this.currentChat)
+    this.firestoreService.updateChannel('channels',this.currentChat!);
   }
 
 }

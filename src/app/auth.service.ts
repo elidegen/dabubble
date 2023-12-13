@@ -7,6 +7,7 @@ import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } f
 import { UserService } from './user.service';
 import { User } from 'src/models/user.class';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -123,6 +124,7 @@ export class AuthService {
         this.userService.currentUser.id = this.createId(10);
         this.userService.setCurrentUserToLocalStorage();
         console.log("Guest ist eingeloggt", this.userService.currentUser);
+     
       })
       .catch((error) => {
         const errorCode = error.code;
