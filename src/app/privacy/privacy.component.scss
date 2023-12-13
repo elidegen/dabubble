@@ -1,8 +1,4 @@
-// button {
-//     position: absolute;
-//     top: 16px;
-//     right: 16px;
-// }
+
 
 mat-card {
     margin: 16px;
@@ -23,6 +19,22 @@ header {
 }
 
 .arrow {
-    padding-top: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     left: 10px;
+    top: 10px;
+}
+
+
+
+
+@media (max-width: 500px) {
+    p {
+        font-size: 12px;
+    }
+    a {
+        font-size: 8px;
+    }
+
 }
