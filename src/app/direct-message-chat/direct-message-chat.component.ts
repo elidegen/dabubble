@@ -63,7 +63,7 @@ export class DirectMessageChatComponent implements OnInit {
         this.currentChat = undefined;
       }
     });
-    this.firestoreService.messageAdded.subscribe(() => {
+    this.firestoreService.messageAddedInDirect.subscribe(() => {
       this.scrollToBottom();
     });
   }
