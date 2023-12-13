@@ -16,6 +16,7 @@ import { ChatService } from './chat.service';
 export class AuthService {
   firestore: Firestore = inject(Firestore);
   private auth = getAuth();
+  public storage = getStorage();
   provider = new GoogleAuthProvider();
   customPic: string = "";
   newGuest: User = new User;
@@ -23,16 +24,17 @@ export class AuthService {
   signInSuccess: any;
 
 
-  ngOnInit() { }
-
   constructor(public router: Router, public userService: UserService, public chatService: ChatService) {
     this.newGuest.name = 'Guest';
     this.newGuest.picture = 'assets/img/avatars/profile.svg';
     this.newGuest.online = true;
   }
 
-  ngOnDestroy() { }
 
+  /**
+  * Creates a new user using email and password.
+  * On success, sets a flag indicating availability.
+  */
   createUser() {
     createUserWithEmailAndPassword(this.auth, this.userService.currentEmail, this.userService.currentPassword)
       .then((userCredential) => {
@@ -49,65 +51,91 @@ export class AuthService {
       });
   }
 
-  
 
+  /**
+     * Signs in a user with given email and password.
+     * Updates user's online status and login time.
+     * Navigates to the home route on successful sign-in.
+     * 
+     */
   async signInUser(email: string, password: string) {
     try {
       await signInWithEmailAndPassword(this.auth, email, password);
-
       const activeUserIndex = this.findUserIndexWithEmail(email);
       if (activeUserIndex !== -1) {
-        this.userService.users[activeUserIndex].online = true;
-        this.userService.users[activeUserIndex].loginTime = this.getLoginTime();
-        this.signInSuccess = true;
-        this.userService.updateUser(this.userService.users[activeUserIndex]);
-        console.log("Login Time von User", this.userService.users[activeUserIndex]);
-        this.userService.currentUser = this.userService.users[activeUserIndex];
-        this.userService.setCurrentUserToLocalStorage();
+        this.prepareUser(activeUserIndex);
         setTimeout(() => {
-           this.router.navigate(['home']);
-           this.signInSuccess = false;
+          this.router.navigate(['home']);
+          this.signInSuccess = false;
         }, 1500);
-     
       }
     } catch (error) {
       this.signInSuccess = false;
-      // console.log("Anmeldung Fehlgeschlagen");
+
     }
   }
 
-
-  getLoginTime() {
-    const currentTime = new Date();
-     return currentTime.getTime();
+  /**
+     Prepares user data such as online status and login time and updates the user
+     * 
+     */
+  prepareUser(activeUserIndex: any) {
+    this.userService.users[activeUserIndex].online = true;
+    this.userService.users[activeUserIndex].loginTime = this.getLoginTime();
+    this.signInSuccess = true;
+    this.userService.updateUser(this.userService.users[activeUserIndex]);
+    console.log("Login Time von User", this.userService.users[activeUserIndex]);
+    this.userService.currentUser = this.userService.users[activeUserIndex];
+    this.userService.setCurrentUserToLocalStorage();
   }
 
+  /**
+     * Returns the current time as a timestamp.
+     * 
+     */
+  getLoginTime() {
+    const currentTime = new Date();
+    return currentTime.getTime();
+  }
 
+  /**
+   * Signs in a user with Google authentication.
+   * If the user does not exist, it adds a new user.
+   */
   async signInWithGoogle() {
-    
     await signInWithPopup(this.auth, this.provider)
       .then((result) => {
         const user = result.user;
-        console.log('Google Benutzer angemeldet:', user);
-        this.userService.currentUser.name = user.displayName || ""
-        this.userService.currentUser.email = user.email || "";
-        this.userService.currentUser.picture = 'assets/img/icons/google.png' || "";  
-        this.userService.currentUser.online = true;
-        this.userService.currentUser.loginTime = this.getLoginTime();
+        this.prepareGoogleUser(user)
       })
       .catch((error) => {
         console.error('Fehler bei Google-Anmeldung:', error);
         alert('Fehler bei Google-Anmeldung');
       });
-      await this.addGoogleUser();
-      console.log("das ist der google user der geupadeted wurde",this.userService.currentUser)
-      await this.userService.updateUser(this.userService.currentUser);
-      console.log("alle user",this.userService.users);
-      await this.userService.setCurrentUserToLocalStorage();
+    await this.addGoogleUser();
+    console.log("das ist der google user der geupadeted wurde", this.userService.currentUser)
+    await this.userService.updateUser(this.userService.currentUser);
+    console.log("alle user", this.userService.users);
+    await this.userService.setCurrentUserToLocalStorage();
   }
 
-  
-   async signInGuest() {
+
+  /**
+ * Prepares user data before signing in with google.
+ */
+  prepareGoogleUser(user: any) {
+    console.log('Google Benutzer angemeldet:', user);
+    this.userService.currentUser.name = user.displayName || ""
+    this.userService.currentUser.email = user.email || "";
+    this.userService.currentUser.picture = 'assets/img/icons/google.png' || "";
+    this.userService.currentUser.online = true;
+    this.userService.currentUser.loginTime = this.getLoginTime();
+  }
+
+  /**
+ * Signs in a guest user and updates their login time.
+ */
+  async signInGuest() {
     console.log("Guest logged in");
     this.userService.currentUser = this.newGuest;
     this.userService.currentUser.loginTime = this.getLoginTime();
@@ -116,19 +144,16 @@ export class AuthService {
     await this.userService.setCurrentUserToLocalStorage();
     const auth = getAuth();
     signInAnonymously(auth)
-     .then(() => {
-    
-    
+      .then(() => {
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(error.code);
-        console.log(error.message);
-        // ...
       });
   }
 
+
+  /**
+ * Signs out the current user and updates their online status.
+ */
   async signOutUser() {
     this.userService.removeCurrentUserFromLocalStorage();
     let userIndexToLogout = this.findUserIndexWithEmail(this.userService.currentUser.email);
@@ -145,28 +170,38 @@ export class AuthService {
     });
   }
 
-
+  /**
+     * Adds a Google user if they don't already exist in the system.
+     */
   async addGoogleUser() {
     if (!this.userService.userExists(this.userService.currentUser.email || '')) {
       await this.userService.addUser(this.userService.currentUser);
     }
-    // console.log("googleUser", this.userService.currentUser);
+    console.log("googleUser", this.userService.currentUser);
     await this.userService.setCurrentUserToLocalStorage();
-    console.log("currentUser",this.userService.currentUser);
+    console.log("currentUser", this.userService.currentUser);
     await this.router.navigate(['home']);
   }
 
+
+  /**
+   * Updates the current user's email.
+   * 
+   */
   async updateUserEmail(newEmail: string): Promise<void> {
     const auth = getAuth();
     updateEmail(auth.currentUser!, newEmail).then(() => {
       console.log("User email updatet")
-      // ...
     }).catch((error) => {
       console.log(error)
-      // ...
     });
   }
 
+
+  /**
+ * Sends a password reset email to the given address.
+ * 
+ */
   sendResetEmail(emailAddress: string) {
     sendPasswordResetEmail(this.auth, emailAddress)
       .then(() => {
@@ -186,37 +221,43 @@ export class AuthService {
     return this.userService.users.findIndex(user => user.id === Id);
   }
 
+
+  /**
+   * Uploads a profile image to Firebase storage and updates the customPic URL.
+   * 
+   */
   async uploadProfileImage(file: any) {
-    const storage = getStorage();
-    const storageReference = storageRef(storage, `profileImages/${file.name}`);
+    const storageReference = storageRef(this.storage, `profileImages/${file.name}`);
     const uploadTask = uploadBytesResumable(storageReference, file);
     uploadTask.on('state_changed',
-      (onSnapshot) => {
-        const progress = (onSnapshot.bytesTransferred / onSnapshot.totalBytes) * 100;
-        console.log('Upload is ' + progress + '% done');
-        switch (onSnapshot.state) {
-          case 'paused':
-            console.log('Upload is paused');
-            break;
-          case 'running':
-            console.log('Upload is running');
-            break;
-        }
-      },
-      (error) => {
-        console.error('Upload error:', error);
-      },
-      () => {
+   () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log('File available at', downloadURL);
           this.customPic = downloadURL;
-
         });
       }
     );
   }
 
 
+  /**
+   * Outsource data log function to save space in uploadProfileImage function.
+   * 
+   */
+  dataLogUpload(state: any) {
+    switch (state.state) {
+      case 'paused':
+        console.log('Upload is paused');
+        break;
+      case 'running':
+        console.log('Upload is running');
+        break;
+    }
+  }
+
+/**
+   * Creates a random alphanumeric string of a specified length.
+   * 
+   */
   createId(length: number) {
     let result = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -229,9 +270,11 @@ export class AuthService {
     return result;
   }
 
-
+ /**
+   * Determines the file type based on the file URL.
+   * 
+   */
   getFileType(fileUrl?: any): any | null {
-
     if (fileUrl) {
       const extension = fileUrl.split('.').pop()?.split('?')[0];
       return extension || null;
@@ -239,6 +282,11 @@ export class AuthService {
     return null; // Oder werfen Sie einen Fehler oder geben Sie einen Standardwert zurück
   }
 
+
+   /**
+   * Checks if the file URL points to an image based on common image file extensions.
+   * 
+   */
   isImage(fileUrl: any): any {
     const imageExtensions = ['jpg', 'jpeg', 'png', 'gif'];
     const extension = this.getFileType(fileUrl);
@@ -248,14 +296,15 @@ export class AuthService {
 
   }
 
+
+   /**
+   * Checks if the file URL points to a PDF file.
+   * 
+   */
   isPDF(fileUrl: any): any {
     const extension = this.getFileType(fileUrl);
     if (extension) {
       return extension.toLowerCase() === 'pdf';
     }
   }
-
-
-
-
 }
