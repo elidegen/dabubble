@@ -12,7 +12,7 @@ body {
     // display: flex;
     // justify-content: center;
     // max-width: 1920px;
-   
+
 }
 
 body {
@@ -48,7 +48,7 @@ h3 {
 }
 
 input[type="file"] {
-   display: none;
+    display: none;
 }
 
 .pdf {
@@ -172,6 +172,7 @@ a {
     border: 1px solid var(--purple1) !important;
     color: var(--purple1) !important;
     transition: all 125ms !important;
+
     &:hover {
         opacity: 0.8 !important;
     }
@@ -201,6 +202,7 @@ a {
     flex-direction: column;
     width: fit-content;
     gap: 16px;
+
     &::-webkit-scrollbar {
         display: none;
     }
@@ -313,27 +315,35 @@ h2 {
     }
 }
 
+.more-menu-button {
+    position: relative;
+}
 
 .more-menu {
     display: none;
+    z-index: 2;
     border-radius: 0 32px 32px 32px;
     background: white;
     padding: 16px 24px;
     position: absolute;
     flex-direction: column;
-    right: -140px;
-    box-shadow: 0px 0px 3px 1px rgba(0,0,0, 0.2);
-    top: 24px;
+    right: -166px;
+    box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.2);
+    top: 12px;
     gap: 8px;
     cursor: pointer;
+
     span {
         color: var(--purple3);
+        transition: all 125ms;
+
         &:hover {
             font-weight: bold;
-           
+            transition: all 125ms;
         }
     }
 }
+
 .more-menu.visible {
     display: flex;
 }
@@ -346,6 +356,7 @@ h2 {
 textarea {
     font-family: 'Nunito', 'Roboto', sans-serif !important;
 }
+
 .menu-mobile {
     position: absolute !important;
     width: auto;
@@ -356,11 +367,13 @@ textarea {
     border-radius: 64px 64px 0 0 !important;
     display: flex;
     justify-content: center;
+
     button {
         justify-content: center;
     }
-    
+
 }
+
 .separator-mobile {
     height: 3px;
     background-color: lightgray;
@@ -368,6 +381,7 @@ textarea {
     margin: 16px 0 16px 24px;
     border-radius: 32px;
 }
+
 .overlay-home {
     position: absolute;
     top: 0;

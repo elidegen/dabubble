@@ -199,7 +199,6 @@ export class FirestoreService {
           const message = doc.data() as Message;
           message.id = doc.id;
           message.reactionCount = this.setEmojiCount(message.reaction);
-          console.log('show me', message);
           return message;
         });
         this.allThreadMessages.reverse()

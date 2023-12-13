@@ -84,7 +84,6 @@
     </div>
   </header>
   
-
   <main>
     <mat-drawer-container autosize>
       <mat-drawer style="padding-left: 16px;" #workspace mode="side" [opened]="true">
@@ -95,8 +94,7 @@
       </div>
     </mat-drawer-container>
 
-
-    <button class="workspace-button" type="button" mat-button (click)="workspace.toggle()">
+    <button class="workspace-button" type="button" mat-button (click)="toggleWorkspace(workspace)">
       <span>Workspace-Menu</span>
       <mat-icon>expand_more</mat-icon>
     </button>
@@ -104,7 +102,6 @@
 </div>
 
 <!-- mobile -->
-
 <div class="home-container" *ngIf="chatService.isMobile">
   <header>
     <div>
@@ -135,8 +132,6 @@
               <span>{{user.name}}</span>
             </button>
 
-
-
             <div *ngIf="this.searchInput == '@'">
               <h1 >Users:</h1>
               <button  class="user-container" *ngFor="let user of userService.users" (click)="selectUser(user)">
@@ -147,8 +142,6 @@
                 <span >{{user.name}}</span>
               </button>
             </div>
-
-
             
             <div *ngIf="this.searchInput == '#'">
               <h1>Channels</h1>

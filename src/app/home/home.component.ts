@@ -67,6 +67,10 @@ export class HomeComponent {
     this.router.navigate(['']);
   }
 
+  toggleWorkspace(workspace: { toggle: () => void; }) {
+    workspace.toggle()
+  }
+
   /**
    * Listens for document click events and checks if the click is outside user search and member inputs to update focus state.
    * @param {Event} event - The DOM event object.

@@ -81,7 +81,7 @@ header {
 .reaction-emoji-button {
     background-color: white;
     outline: none;
-    border: 1px solid #ccc; 
+    border: 1px solid #ccc;
     border-radius: 20px;
     display: flex;
     align-items: center;
@@ -90,8 +90,9 @@ header {
     font-size: 10px;
     cursor: pointer;
     text-align: center;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23); 
-    transition: box-shadow 0.2s ease-in-out; 
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    transition: box-shadow 0.2s ease-in-out;
+
     &:hover {
         background-color: white !important;
     }
@@ -100,8 +101,8 @@ header {
         height: 16px;
         width: 15px;
     }
-  }
-  
+}
+
 
 .main-chat-container {
     overflow-y: scroll;
@@ -225,11 +226,12 @@ header {
 
 .date {
     color: gray;
-    font-size: 10px;
+    font-size: 12px;
+    text-align: end;
 }
 
 .name {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 500;
 }
 
@@ -260,6 +262,7 @@ header {
     transition: all 125ms;
     display: flex;
     padding: 2px;
+    margin-top: 2px;
 
     button {
         height: 24px;
@@ -297,7 +300,6 @@ header {
 .comments {
     white-space: nowrap;
     color: var(--border);
-    font-size: 12px;
 }
 
 .reaction-emoji-container {
@@ -308,12 +310,15 @@ header {
 
 }
 
+span {
+    font-size: 18px;
+}
 
 .emojiPicker {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
 }
 
 
@@ -341,6 +346,7 @@ header {
     width: 100%;
     padding: 16px 0;
     background-color: white;
+
     textarea {
         outline: 0;
         border: 0;
@@ -353,6 +359,7 @@ header {
         &::-webkit-scrollbar {
             display: none;
         }
+
         &:disabled {
             background-color: white;
         }
@@ -364,7 +371,7 @@ header {
         svg path {
             fill: var(--textGray);
         }
-    } 
+    }
 }
 
 .mt-thread {
