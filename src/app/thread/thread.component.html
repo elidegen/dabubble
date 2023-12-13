@@ -67,7 +67,7 @@
 
     <section>
       <div class="message-row-container" *ngFor="let thread of firestoreService.allThreadMessages;"
-        [ngClass]="{'my-messages': thread.creatorId == currentUser.id}">
+        [ngClass]="{'my-messages': thread.creatorId == currentUser.id}" (click)="thread.messageSelected = false">
         <div class="message-box">
           <div class="message-avatar-container">
             <img src="assets/img/avatars/avatar_male2.svg" />
@@ -128,8 +128,7 @@
           <button mat-icon-button (click)="toggled = true" (click)="openEmojiPicker(thread.id)">
             <img src="assets/img/icons/add_reaction.svg" alt="">
           </button>
-          <button class="more-menu-button" mat-icon-button *ngIf="thread.creatorId == currentUser.id"
-            (click)="firestoreService.toggleMoreMenu(thread)">
+          <button class="more-menu-button" mat-icon-button *ngIf="thread.creatorId == currentUser.id" (click)="firestoreService.toggleMoreMenu(thread)">
             <img src="assets/img/icons/more.svg" alt="">
             <div class="more-menu" [class.visible]="thread.messageSelected">
               <span (click)="editThreadMessage(thread)">Edit message</span>

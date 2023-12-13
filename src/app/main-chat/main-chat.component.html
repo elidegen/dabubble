@@ -158,7 +158,7 @@
               <div class="separator"></div>
             </div>
 
-            <div class="message-row-container" [ngClass]="{'my-messages': message.creatorId == currentUser.id}"
+            <div (click)="message.messageSelected = false" class="message-row-container" [ngClass]="{'my-messages': message.creatorId == currentUser.id}"
               *ngFor="let message of organizedMessage.messages">
               <div class="message-box">
                 <div class="creator-picture-container">

@@ -36,7 +36,8 @@
           <div class="separator"></div>
         </div>
 
-        <div class="message-row-container" [ngClass]="{ 'my-messages': message.creatorId == currentUser.id }" *ngFor="let message of organizedMessage.messages">
+        <div class="message-row-container" [ngClass]="{ 'my-messages': message.creatorId == currentUser.id }" 
+          *ngFor="let message of organizedMessage.messages" (click)="message.messageSelected = false">
           <div class="message-box">
             <div class="creator-picture-container">
               <img src="{{ message.profilePic }}"/>
@@ -103,7 +104,7 @@
             <button (click)="openThreadInDirect(message)" mat-icon-button>
               <img src="assets/img/icons/comment.svg">
             </button>
-            <button mat-icon-button *ngIf="message.creatorId == currentUser.id" >
+            <button mat-icon-button *ngIf="message.creatorId == currentUser.id" (click)="firestoreService.toggleMoreMenu(message)">
               <img src="assets/img/icons/more.svg"/>
             </button>
             <div class="more-menu" [class.visible]="message.messageSelected">
