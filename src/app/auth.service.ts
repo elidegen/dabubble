@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { UserService } from './user.service';
 import { User } from 'src/models/user.class';
+import { ChatService } from './chat.service';
 
 
 @Injectable({
@@ -24,7 +25,7 @@ export class AuthService {
 
   ngOnInit() { }
 
-  constructor(public router: Router, public userService: UserService) {
+  constructor(public router: Router, public userService: UserService, public chatService: ChatService) {
     this.newGuest.name = 'Guest';
     this.newGuest.picture = 'assets/img/avatars/profile.svg';
     this.newGuest.online = true;
@@ -83,6 +84,7 @@ export class AuthService {
 
 
   async signInWithGoogle() {
+    
     await signInWithPopup(this.auth, this.provider)
       .then((result) => {
         const user = result.user;
@@ -92,26 +94,31 @@ export class AuthService {
         this.userService.currentUser.picture = 'assets/img/icons/google.png' || "";  
         this.userService.currentUser.online = true;
         this.userService.currentUser.loginTime = this.getLoginTime();
-        this.addGoogleUser(user.uid);
       })
       .catch((error) => {
         console.error('Fehler bei Google-Anmeldung:', error);
         alert('Fehler bei Google-Anmeldung');
       });
+      await this.addGoogleUser();
+      console.log("das ist der google user der geupadeted wurde",this.userService.currentUser)
+      await this.userService.updateUser(this.userService.currentUser);
+      console.log("alle user",this.userService.users);
+      await this.userService.setCurrentUserToLocalStorage();
   }
 
   
-  signInGuest() {
+   async signInGuest() {
+    console.log("Guest logged in");
+    this.userService.currentUser = this.newGuest;
+    this.userService.currentUser.loginTime = this.getLoginTime();
+    await this.userService.addUser(this.userService.currentUser);
+    await this.userService.updateUser(this.userService.currentUser);
+    await this.userService.setCurrentUserToLocalStorage();
     const auth = getAuth();
     signInAnonymously(auth)
-      .then(() => {
-        console.log("Guest logged in");
-        this.userService.currentUser = this.newGuest;
-        this.userService.currentUser.id = this.createId(10);
-        this.userService.currentUser.loginTime = this.getLoginTime();
-        this.userService.setCurrentUserToLocalStorage();
-        this.userService.addUser(this.userService.currentUser);
-        console.log("Guest ist eingeloggt", this.userService.currentUser);
+     .then(() => {
+    
+    
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -139,9 +146,8 @@ export class AuthService {
   }
 
 
-  async addGoogleUser(id:any) {
+  async addGoogleUser() {
     if (!this.userService.userExists(this.userService.currentUser.email || '')) {
-      this.userService.currentUser.id = id;
       await this.userService.addUser(this.userService.currentUser);
     }
     console.log("googleUser", this.userService.currentUser);

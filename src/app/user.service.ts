@@ -60,14 +60,13 @@ export class UserService {
       (err) => { console.log(err) }
     ).then(
       (docRef) => {
-        console.log()
+        console.log("hier wird der nutzer hochgeladen",item)
         this.updateUserId(item, docRef!.id);
       }
     )
   }
 
   subUserList() {
-  
     return onSnapshot(this.getUsersRef(), (list) => {
       this.users = [];
       list.forEach(element => {
