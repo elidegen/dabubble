@@ -89,32 +89,18 @@ export class AuthService {
         console.log('Google Benutzer angemeldet:', user);
         this.userService.currentUser.name = user.displayName || ""
         this.userService.currentUser.email = user.email || "";
-        this.userService.currentUser.password = "";
-        this.userService.currentUser.picture = user.photoURL || "";
+        this.userService.currentUser.picture = 'assets/img/icons/google.png' || "";  
         this.userService.currentUser.online = true;
         this.userService.currentUser.loginTime = this.getLoginTime();
         this.addGoogleUser(user.uid);
       })
       .catch((error) => {
         console.error('Fehler bei Google-Anmeldung:', error);
+        alert('Fehler bei Google-Anmeldung');
       });
   }
 
-  //  signInWithApple() {
-  //     const appleAuthRequestResponse = await appleAuth.performRequest({
-  //       requestedOperation: appleAuth.Operation.LOGIN,
-  //       requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
-  //     });
-
-  //     // Erstellt eine Firebase-Anmeldeinformation
-  //     const credential = auth.AppleAuthProvider.credential(
-  //       appleAuthRequestResponse.identityToken
-  //     );
-
-  //     // Anmeldung bei Firebase
-  //     return auth().signInWithCredential(credential);
-  //   }
-
+  
   signInGuest() {
     const auth = getAuth();
     signInAnonymously(auth)
