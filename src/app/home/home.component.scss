@@ -4,9 +4,23 @@ header {
     padding: 0 16px;
     height: 75px;
 }
+
 .logo {
-    width: 220px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: -18px;
+
+    h1 {
+        font-weight: bold;
+        font-size: 30px;
+    }
+
+    img {
+        height: 64px;
+    }
 }
+
 .trans {
     background-color: transparent;
 }
@@ -14,13 +28,34 @@ header {
 .profile-container {
     display: flex;
     align-items: center;
-    gap: 8px;
-    img {
+    margin-top: -14px;
+    gap: 6px;
+    max-width: 23%;
+
+    .profile-pic {
         width: 56px;
         height: 56px;
         border-radius: 50%;
     }
+
+    button {
+        margin-right: -8px;
+        height: 40px !important;
+        width: 40px !important;
+        display: flex;
+        align-items: center !important;
+        justify-content: center !important;
+    }
 }
+
+.user-name {
+    // max-width: 200px;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .profile-picture {
     position: relative;
 }
@@ -39,6 +74,7 @@ header {
 h1 {
     margin: 0;
 }
+
 .home-container {
     padding: 16px 0 16px 0;
     height: 100vh;
@@ -122,17 +158,21 @@ mat-drawer {
     .message-box {
         flex-direction: row-reverse;
     }
+
     .message-data {
         flex-direction: row-reverse;
     }
+
     .my-message-content {
         border-radius: 24px 0 24px 24px;
         background-color: var(--purple2);
         color: white;
     }
+
     .message-container {
         align-items: flex-end;
     }
+
     .reaction-container {
         align-items: flex-end;
     }
@@ -142,10 +182,12 @@ mat-drawer {
 
 .message-row-container {
     padding: 10px;
+
     &:hover {
         background-color: var(--primary);
         cursor: pointer;
         border-radius: 20px;
+
         .my-message-content {
             background-color: var(--purple2) !important;
         }
@@ -189,6 +231,7 @@ mat-drawer {
     box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.4);
     padding: 16px;
     width: 49vw;
+
     &::-webkit-scrollbar {
         display: none;
     }
@@ -273,4 +316,3 @@ mat-drawer {
 b {
     color: var(--purple3);
 }
-

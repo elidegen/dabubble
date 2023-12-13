@@ -1,11 +1,14 @@
 <div class="home-container" *ngIf="!chatService.isMobile">
   <header>
-    <div>
-      <img class="logo" src="assets/img/icons/logo-home.svg" alt="home" />
+    <div class="logo">
+      <img src="assets/img/Logo.png" alt="home"/>
+      <h1>DA Bubble</h1>
     </div>
 
     <div class="add-members-container">
-      <input #search class="w100 input-members search" type="text" placeholder="Search everything, # for channels, @ for users"  [(ngModel)]="searchInput" (input)="filterEverything()" (click)="this.isInputFocused = true;">
+      <input #search class="w100 input-members search" type="text"
+        placeholder="Search everything, # for channels, @ for users" [(ngModel)]="searchInput"
+        (input)="filterEverything()" (click)="this.isInputFocused = true;">
       <div class="user-search-container" *ngIf="isInputFocused">
         <div *ngIf="searchInput.trim() !== '' " class="search-results">
           <h1 *ngIf="this.searchInput != '#'&& this.searchInput != '@'">Users:</h1>
@@ -18,26 +21,28 @@
           </button>
 
           <div *ngIf="this.searchInput == '@'">
-          <h1 >Users:</h1>
-          <button  class="user-container" *ngFor="let user of userService.users" (click)="selectUser(user)">
-            <div  (click)="selectUser(user)" class="profile-container">
-              <img src="{{user.picture}}" alt="profile">
-              <div  class="online-status"></div>
-            </div>
-            <span >{{user.name}}</span>
-          </button>
-        </div>
-
-        <div *ngIf="this.searchInput == '#'">
-          <h1>Channels</h1>
-          <div class="message-row-container" *ngFor="let channel of chatService.yourChannels" (click)="renderChannel(channel)">
-            <span ><b>{{channel.name}}</b></span>
+            <h1>Users:</h1>
+            <button class="user-container" *ngFor="let user of userService.users" (click)="selectUser(user)">
+              <div (click)="selectUser(user)" class="profile-container">
+                <img src="{{user.picture}}" alt="profile">
+                <div class="online-status"></div>
+              </div>
+              <span>{{user.name}}</span>
+            </button>
           </div>
-        </div>
+
+          <div *ngIf="this.searchInput == '#'">
+            <h1>Channels</h1>
+            <div class="message-row-container" *ngFor="let channel of chatService.yourChannels"
+              (click)="renderChannel(channel)">
+              <span><b>{{channel.name}}</b></span>
+            </div>
+          </div>
           <h1 *ngIf="this.searchInput != '#' && this.searchInput != '@'">Channel messages:</h1>
-          <div class="message-row-container" *ngFor="let message of filteredChannelMessages" (click)="selectChannel(message)">
-            <span >Found in <b>{{message.channel}}</b></span>
-            <div class="filtered-message-container"> 
+          <div class="message-row-container" *ngFor="let message of filteredChannelMessages"
+            (click)="selectChannel(message)">
+            <span>Found in <b>{{message.channel}}</b></span>
+            <div class="filtered-message-container">
               <span class="filtered-message">{{message.content}}</span>
               <div class="filtered-message-creator">
                 <span class="by">by</span>
@@ -50,9 +55,10 @@
           </div>
 
           <h1 *ngIf="this.searchInput != '#' && this.searchInput != '@'">Direct Messages:</h1>
-          <div class="message-row-container" *ngFor="let message of filteredDirectMessages" (click)="selectDirectMessage(message)">
-            <span >Found in <b>{{message.channel}}</b></span>
-            <div class="filtered-message-container"> 
+          <div class="message-row-container" *ngFor="let message of filteredDirectMessages"
+            (click)="selectDirectMessage(message)">
+            <span>Found in <b>{{message.channel}}</b></span>
+            <div class="filtered-message-container">
               <span class="filtered-message">{{message.content}}</span>
               <div class="filtered-message-creator">
                 <span class="by">by</span>
@@ -69,13 +75,13 @@
     </div>
 
     <div class="profile-container">
-      <h1>{{this.userService.currentUser.name}}</h1>
+      <h1 class="user-name">{{this.userService.currentUser.name}}</h1>
       <div class="profile-picture">
-        <img src="{{this.userService.currentUser.picture}}" alt="" />
+        <img class="profile-pic" src="{{this.userService.currentUser.picture}}" alt="" />
         <div class="online-status"></div>
       </div>
       <button mat-icon-button [matMenuTriggerFor]="menu">
-        <mat-icon>expand_more</mat-icon>
+        <img src="assets/img/icons/expand_more.svg" alt="">
       </button>
       <mat-menu #menu="matMenu" xPosition="before">
         <button (click)="openProfileDialog(currentUser.id)" class="menu" mat-menu-item>Profile</button>
@@ -83,7 +89,7 @@
       </mat-menu>
     </div>
   </header>
-  
+
   <main>
     <mat-drawer-container autosize>
       <mat-drawer style="padding-left: 16px;" #workspace mode="side" [opened]="true">
@@ -120,68 +126,72 @@
   </header>
   <div class="w100 home-mobile">
     <div class="add-members-container">
-        <input #search class="w100 input-members search" type="text" placeholder="Search  Channel# User@"[(ngModel)]="searchInput" (input)="filterEverything()" (click)="this.isInputFocused = true;">
-        <div class="user-search-container" *ngIf="isInputFocused">
-          <div *ngIf="searchInput.trim() !== ''" class="search-results">
-            <h1 *ngIf="this.searchInput != '#' && this.searchInput != '@'">Users:</h1>
-            <button class="user-container" *ngFor="let user of filteredUsers" (click)="selectUser(user)">
+      <input #search class="w100 input-members search" type="text" placeholder="Search  Channel# User@"
+        [(ngModel)]="searchInput" (input)="filterEverything()" (click)="this.isInputFocused = true;">
+      <div class="user-search-container" *ngIf="isInputFocused">
+        <div *ngIf="searchInput.trim() !== ''" class="search-results">
+          <h1 *ngIf="this.searchInput != '#' && this.searchInput != '@'">Users:</h1>
+          <button class="user-container" *ngFor="let user of filteredUsers" (click)="selectUser(user)">
+            <div (click)="selectUser(user)" class="profile-container">
+              <img src="{{user.picture}}" alt="profile">
+              <div class="online-status"></div>
+            </div>
+            <span>{{user.name}}</span>
+          </button>
+
+          <div *ngIf="this.searchInput == '@'">
+            <h1>Users:</h1>
+            <button class="user-container" *ngFor="let user of userService.users" (click)="selectUser(user)">
               <div (click)="selectUser(user)" class="profile-container">
                 <img src="{{user.picture}}" alt="profile">
                 <div class="online-status"></div>
               </div>
               <span>{{user.name}}</span>
             </button>
+          </div>
 
-            <div *ngIf="this.searchInput == '@'">
-              <h1 >Users:</h1>
-              <button  class="user-container" *ngFor="let user of userService.users" (click)="selectUser(user)">
-                <div  (click)="selectUser(user)" class="profile-container">
-                  <img src="{{user.picture}}" alt="profile">
-                  <div  class="online-status"></div>
-                </div>
-                <span >{{user.name}}</span>
-              </button>
+          <div *ngIf="this.searchInput == '#'">
+            <h1>Channels</h1>
+            <div class="message-row-container" *ngFor="let channel of chatService.yourChannels"
+              (click)="renderChannel(channel)">
+              <span><b>{{channel.name}}</b></span>
             </div>
-            
-            <div *ngIf="this.searchInput == '#'">
-              <h1>Channels</h1>
-              <div class="message-row-container" *ngFor="let channel of chatService.yourChannels" (click)="renderChannel(channel)">
-                <span ><b>{{channel.name}}</b></span>
-              </div>
-            </div>
+          </div>
 
-            <h1 *ngIf="this.searchInput != '#' && this.searchInput != '@'">Channel messages:</h1>
-            <div class="message-row-container" *ngFor="let message of filteredChannelMessages" (click)="selectChannel(message)">
-              <span >Found in <b>{{message.channel}}</b></span>
-              <div class="filtered-message-container"> 
-                <span class="filtered-message">{{message.content}}</span>
-                <div class="filtered-message-creator">
-                  <span class="by">by</span>
-                  <span class="name">{{ message.creator }}</span>
-                  <div class="creator-picture-container">
-                    <img src="{{message.profilePic}}" alt="" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <h1 *ngIf="this.searchInput != '#' && this.searchInput != '@'">Direct Messages:</h1>
-            <div class="message-row-container" *ngFor="let message of filteredDirectMessages" (click)="selectDirectMessage(message)">
-              <span >Found in <b>{{message.channel}}</b></span>
-              <div class="filtered-message-container"> 
-                <span class="filtered-message">{{message.content}}</span>
-                <div class="filtered-message-creator">
-                  <span class="by">by</span>
-                  <span class="name">{{ message.creator }}</span>
-                  <div class="creator-picture-container">
-                    <img src="{{message.profilePic}}" alt="" />
-                  </div>
+          <h1 *ngIf="this.searchInput != '#' && this.searchInput != '@'">Channel messages:</h1>
+          <div class="message-row-container" *ngFor="let message of filteredChannelMessages"
+            (click)="selectChannel(message)">
+            <span>Found in <b>{{message.channel}}</b></span>
+            <div class="filtered-message-container">
+              <span class="filtered-message">{{message.content}}</span>
+              <div class="filtered-message-creator">
+                <span class="by">by</span>
+                <span class="name">{{ message.creator }}</span>
+                <div class="creator-picture-container">
+                  <img src="{{message.profilePic}}" alt="" />
                 </div>
               </div>
             </div>
           </div>
-          <span *ngIf="searchInput.trim() === ''">No matching results</span>
+
+          <h1 *ngIf="this.searchInput != '#' && this.searchInput != '@'">Direct Messages:</h1>
+          <div class="message-row-container" *ngFor="let message of filteredDirectMessages"
+            (click)="selectDirectMessage(message)">
+            <span>Found in <b>{{message.channel}}</b></span>
+            <div class="filtered-message-container">
+              <span class="filtered-message">{{message.content}}</span>
+              <div class="filtered-message-creator">
+                <span class="by">by</span>
+                <span class="name">{{ message.creator }}</span>
+                <div class="creator-picture-container">
+                  <img src="{{message.profilePic}}" alt="" />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+        <span *ngIf="searchInput.trim() === ''">No matching results</span>
+      </div>
     </div>
     <app-workspace></app-workspace>
   </div>
