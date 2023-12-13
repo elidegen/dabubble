@@ -1,5 +1,3 @@
-
-
 <mat-spinner *ngIf="firestoreService.showSpinner == true" class="mat-spinner "></mat-spinner>
 <div *ngIf="this.authService.signInSuccess == true" class="account-popup"><span>Login successfull</span></div>
 <div *ngIf="showUserCreatedSuccess == true" class="account-popup"><span>Account created</span></div>
@@ -10,15 +8,13 @@
     class="start-animation-span">DABubble</span>
 </div>
 
-
-
 <div [ngSwitch]="switch_expression" class="login-container">
  
   <div *ngSwitchCase="'login'" class="top-span"><span class="padding-bottom">New at DABubble ?</span><span
       (click)="changeSwitchCase('createAccount')" class="color-purple2-text cursor-pointer transform">Create
       Account</span></div>
       <img class="start-logo" src="assets\img\icons\logo-home.svg">
-  <div class="impressum-span"><a routerLink="/imprint">Impress</a><a routerLink="/privacy">Privacy Policy</a></div>
+  <div class="impressum-span"><a routerLink="/imprint">Legal Notice</a><a routerLink="/privacy">Privacy Policy</a></div>
 
   <div *ngSwitchCase="'login'" class="login bg-white">
     <div class="form-container">
@@ -161,28 +157,9 @@
     </div>
   </div>
 
-  <!-- <div *ngSwitchCase="'newPassword'" class="login bg-white">
-    <div class="form-container">
-      <img (click)="changeSwitchCase('login')" class="position-relative cursor-pointer transform"
-        src="assets\img\icons\arrow_back.svg">
-      <h1 class="color-purple2-text padding-bottom">Reset password</h1>
-      <p style="font-size:20px;">Create your account with your name and e-mail adress.</p>
-      <form [formGroup]="addUser">
-        <div class="input-container margin-top">
-          <img src="assets\img\icons\mail.svg">
-          <input matInput placeholder="E-mail"  formControlName="resetPasswordForm" required>
-        </div>
-        <p class="margin-top grey-span-resetpw">Receive an e-mail to reset your password</p>
-        <div class="submit-buttons margin-top justify-content-end">
-          <button mat-button (click)="changeSwitchCase('avatar')" class="main-button" type="submit">Send Email</button>
-        </div>
-      </form>
-    </div>
-  </div> -->
-  <div  *ngSwitchCase="'login'" class="responsive-create-account"><span >New at DABubble ?</span>
- 
-    <button   (click)="changeSwitchCase('createAccount')" mat-button class="main-button ">Create Account</button>
-   </div>
+  <div *ngSwitchCase="'login'" class="responsive-create-account"><span >New at DABubble ?</span>
+    <button (click)="changeSwitchCase('createAccount')" mat-button class="main-button ">Create Account</button>
+  </div>
   
 </div>
 
