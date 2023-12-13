@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, inject, HostListener, Input } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, inject, HostListener, Input, Directive } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogEditChannelComponent } from '../dialog-edit-channel/dialog-edit-channel.component';
 import { DialogAddToGroupComponent } from '../dialog-add-to-group/dialog-add-to-group.component';
@@ -24,6 +24,7 @@ import { Router } from '@angular/router';
   templateUrl: './main-chat.component.html',
   styleUrls: ['./main-chat.component.scss', './main-chat.mediaquery.component.scss']
 })
+
 export class MainChatComponent implements OnInit {
   @ViewChild('messageContainer') messageContainer!: ElementRef;
   firestore: Firestore = inject(Firestore);
@@ -47,11 +48,10 @@ export class MainChatComponent implements OnInit {
   scrollPosition: any;
   @ViewChild('scrollContainer') scrollContainer!: ElementRef<HTMLDivElement>;
   @Input() monitoredVariable: any;
-
-  // ------------------ search Input ---------------
   isInputFocused: boolean = false;
   @ViewChild('search') search!: ElementRef;
-  // ----------------------------------------------------
+
+
 
   constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public threadService: ThreadService, public authService: AuthService, public emojiService: EmojiService, public firestoreService: FirestoreService, public router: Router) {
     userService.getCurrentUserFromLocalStorage();
@@ -426,4 +426,5 @@ export class MainChatComponent implements OnInit {
     this.authService.signOutUser();
     this.router.navigate(['']);
   }
+  
 }

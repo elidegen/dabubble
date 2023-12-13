@@ -112,7 +112,6 @@ mat-drawer {
     font-weight: 500;
 }
 
-
 .message-container {
     display: flex;
     flex-direction: column;
@@ -123,21 +122,17 @@ mat-drawer {
     .message-box {
         flex-direction: row-reverse;
     }
-
     .message-data {
         flex-direction: row-reverse;
     }
-
     .my-message-content {
         border-radius: 24px 0 24px 24px;
         background-color: var(--purple2);
         color: white;
     }
-
     .message-container {
         align-items: flex-end;
     }
-
     .reaction-container {
         align-items: flex-end;
     }
@@ -151,8 +146,6 @@ mat-drawer {
         background-color: var(--primary);
         cursor: pointer;
         border-radius: 20px;
-       
-
         .my-message-content {
             background-color: var(--purple2) !important;
         }

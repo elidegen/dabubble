@@ -297,6 +297,7 @@ export class ChatService {
    * loads all users
    */
   getAllUsers() {
+    // this.allUsers = [];
     const userCol = collection(this.firestore, 'users');
     this.unSubUsers = onSnapshot(userCol,
       (list) => {
@@ -341,7 +342,7 @@ export class ChatService {
    */
   getOtherUser(members: any[]) {
     let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
-    let interlocutor = this.allUsers.find(user => user.id == otherUser.id);
+    let interlocutor = this.userService.users.find(user => user.id == otherUser.id);
     return interlocutor as User;
   }
 
