@@ -44,10 +44,10 @@ export class DialogViewProfileComponent {
    * to local storage and updates the user information in the database.
    */
   editUser() {
-    this.userService.currentUser = this.currentUser;
+    this.userService.currentUser = this.user;
     this.userService.setCurrentUserToLocalStorage();
-    this.userService.updateUser(this.currentUser);
-    this.authService.updateUserEmail(this.currentUser.email!);
+    this.userService.updateUser( this.user);
+    this.authService.updateUserEmail(this.user.email!);
     this.dialogRef.close();
   }
 

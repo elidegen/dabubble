@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { User } from 'src/models/user.class';
 import { FirestoreService } from '../firestore.service';
+import { ChatService } from '../chat.service';
 
 @Component({
   selector: 'app-login-screen',
@@ -29,7 +30,7 @@ export class LoginScreenComponent implements OnInit {
     this.hideContentAfterAnimation();
   }
 
-  constructor(public userService: UserService, public router: Router, public authService: AuthService, public firestoreService: FirestoreService) { }
+  constructor(public userService: UserService, public router: Router, public authService: AuthService, public firestoreService: FirestoreService,public chatService: ChatService) { }
 
   getEmailForNewPassword = new FormGroup({
     emailForReset: new FormControl('', [Validators.required, Validators.email]),
@@ -317,6 +318,7 @@ export class LoginScreenComponent implements OnInit {
     setTimeout(() => {
       this.authService.signInSuccess = false;
       this.router.navigate(['home']);
+      this.chatService.chatWindow = 'empty';
     }, 1000);
   }
 }

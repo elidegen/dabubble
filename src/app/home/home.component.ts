@@ -41,7 +41,6 @@ export class HomeComponent {
   constructor(private _bottomSheet: MatBottomSheet, public dialog: MatDialog, public auth: AuthService, public router: Router, public userService: UserService, public chatService: ChatService, public firestoreService: FirestoreService, public threadService: ThreadService) {
     this.userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
-    this.firestoreService.setUsersToOffline();
     this.checkScreenWidth();
   }
 
