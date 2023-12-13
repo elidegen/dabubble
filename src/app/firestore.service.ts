@@ -226,6 +226,9 @@ export class FirestoreService {
         user.online = false;
         this.userService.updateUser(user);
       }
+      if (time - user.loginTime > 10000000  && user.name == "Guest") {
+        this.userService.deleteUser("users",user.id!)
+      }
     });
   }
   /**
@@ -360,7 +363,10 @@ export class FirestoreService {
   }
 
   toggleMoreMenu(message: Message) {
-    message.messageSelected = !message.messageSelected;
+    setTimeout(() => {
+      message.messageSelected = true
+    }, 10);
+   
   }
 
   /**

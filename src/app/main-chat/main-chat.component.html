@@ -158,7 +158,7 @@
               <div class="separator"></div>
             </div>
 
-            <div class="message-row-container" [ngClass]="{'my-messages': message.creator == currentUser.name}"
+            <div (click)="message.messageSelected = false" class="message-row-container" [ngClass]="{'my-messages': message.creatorId == currentUser.id}"
               *ngFor="let message of organizedMessage.messages">
               <div class="message-box">
                 <div class="creator-picture-container">
@@ -171,9 +171,9 @@
                     <span class="date">{{ message.time }}</span>
                   </div>
                 
-                  <div [ngSwitch]="edit && message.creator == currentUser.name && editingMessage === message.id">
+                  <div [ngSwitch]="edit && message.creatorId == currentUser.id && editingMessage === message.id">
                     <div
-                      [ngClass]="{'my-message-content': message.creator == currentUser.name, 'message-content': message.creator != currentUser.name}"
+                      [ngClass]="{'my-message-content': message.creatorId == currentUser.id, 'message-content': message.creatorId != currentUser.id}"
                       *ngSwitchCase="false">
                       <a (click)="openProfileDialog(messagemention['id'])"   *ngFor="let messagemention of message.mentions"> @{{messagemention['name']}}</a>
                       <span> {{message.content}}</span>
@@ -186,7 +186,7 @@
                       </div>
                     </div>
                    
-                    <div *ngIf="message.creator == currentUser.name && editingMessage === message.id">
+                    <div *ngIf="message.creatorId == currentUser.id && editingMessage === message.id">
                       <div *ngSwitchCase="true" class="text-field-container j-flex-end">
                         <textarea #editor cols="30" rows="10">{{message.content}}</textarea>
                         <button class="send-button" mat-icon-button (click)="updateMessageContent(message)"
@@ -201,7 +201,7 @@
                       </div>
                     </div>
                   </div>
-                  
+
                   <div class="reaction-container">
                     <div class="reaction-emoji-container">
                       <button class="reaction-emoji-button" *ngFor="let emoji of message.reactionCount | keyvalue; let i = index">
@@ -226,7 +226,7 @@
                 </div>
               </div>
 
-              <div class="reaction" [ngClass]="{'own-message': message.creator == this.userService.currentUser.name}">
+              <div class="reaction" [ngClass]="{'own-message': message.creatorId == this.userService.currentUser.id}">
                 <button mat-icon-button
                   (click)="firestoreService.addReaction('✅',message.id, currentChat?.id, 'channels')">
                   <img src="assets/img/emojis/checkGreen.svg" alt="">
@@ -241,7 +241,7 @@
                 <button (click)="openThread(message)" mat-icon-button>
                   <img src="assets/img/icons/comment.svg" alt="">
                 </button>
-                <button mat-icon-button *ngIf="message.creator == currentUser.name" (click)="firestoreService.toggleMoreMenu(message)">
+                <button mat-icon-button *ngIf="message.creatorId == currentUser.id" (click)="firestoreService.toggleMoreMenu(message)">
                   <img src="assets/img/icons/more.svg" alt="">
                 </button>
                 <div class="more-menu" [class.visible]="message.messageSelected">
