@@ -139,15 +139,12 @@ export class HomeComponent {
    */
   async filterDirectMessages() {
     await this.chatService.getDMMessages();
-    console.log('filterallDm Ms', this.chatService.allMessagesOfDM);
     this.filteredDirectMessages = [];
     this.chatService.allMessagesOfDM.forEach(message => {
       if (message.content?.toLowerCase().includes(this.searchInput.toLowerCase())) {
         this.filteredDirectMessages.push(message);
       }
     });
-    console.log('filter after', this.filteredDirectMessages);
-
   }
 
   /**
@@ -172,6 +169,7 @@ export class HomeComponent {
     this.chatService.createDirectMessage(user);
     this.chatService.chatWindow = 'direct';
     this.search.nativeElement.value = '';
+    this.isInputFocused = false;
     if (this.chatService.isMobile) {
       this.router.navigate(['main']);
     }
@@ -183,6 +181,7 @@ export class HomeComponent {
    */
   selectChannel(message: any) {
     this.chatService.getChannelByMessage(message);
+    this.isInputFocused = false;
   }
 
   /**
@@ -191,6 +190,7 @@ export class HomeComponent {
    */
   selectDirectMessage(message: any) {
     this.chatService.getDirectMessageByMessage(message);
+    this.isInputFocused = false;
   }
 
   /**
