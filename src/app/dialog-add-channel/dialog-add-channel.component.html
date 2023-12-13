@@ -15,7 +15,7 @@
             <p>Channels serve your team for communication. Ideally, they should be topic-specific, for example, #marketing.</p>
             <div class="channel-name w100">
                 <h3>Channel name</h3>
-                <input class="input-add-channel" [(ngModel)]="channel.name" type="text" placeholder="e.g. Corporation Projects">
+                <input class="input-add-channel" maxlength="30" [(ngModel)]="channel.name" type="text" placeholder="e.g. Corporation Projects">
             </div>
             <div class="w100 description-container">
                 <div class="description">
