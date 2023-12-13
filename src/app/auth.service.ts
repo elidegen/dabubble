@@ -108,9 +108,10 @@ export class AuthService {
         console.log("Guest logged in");
         this.userService.currentUser = this.newGuest;
         this.userService.currentUser.id = this.createId(10);
+        this.userService.currentUser.loginTime = this.getLoginTime();
         this.userService.setCurrentUserToLocalStorage();
+        this.userService.addUser(this.userService.currentUser);
         console.log("Guest ist eingeloggt", this.userService.currentUser);
-     
       })
       .catch((error) => {
         const errorCode = error.code;
