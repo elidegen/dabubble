@@ -363,7 +363,10 @@ export class FirestoreService {
   }
 
   toggleMoreMenu(message: Message) {
-    message.messageSelected = !message.messageSelected;
+    setTimeout(() => {
+      message.messageSelected = true
+    }, 10);
+   
   }
 
   /**
