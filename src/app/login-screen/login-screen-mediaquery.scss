@@ -1,5 +1,9 @@
 
-@media only screen and (max-width: 600px) {
+
+
+
+@media screen and (max-width: 600px), 
+       screen and (max-height: 700px) {
    .responsive-create-account {
     display: flex;
     display: flex;
@@ -10,11 +14,7 @@
     }
 
   
-    .login{
-       max-width: 90%;
-      max-height: 90%;
-    }
-
+  
     .picture-container {
         display: flex;
         justify-content: center;
@@ -42,7 +42,7 @@
     }
 
     .start-logo{
-        top: 10px;
+    top: 10px;
     left: 50%;
     transform: translate(-50%);
 }
