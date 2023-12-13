@@ -107,6 +107,10 @@ mat-card,
     border: none;
 }
 
+.word-break {
+    word-wrap: break-word;
+}
+
 button {
     &:hover {
         background-color: var(--primary) !important;
