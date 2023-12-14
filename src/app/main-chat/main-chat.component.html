@@ -1,6 +1,6 @@
-<!-- <mat-drawer-container (click)="closeEmojiPicker()" autosize [ngSwitch]="chatService.chatWindow">
+<mat-drawer-container (click)="closeEmojiPicker()" autosize [ngSwitch]="chatService.chatWindow">
 
-  <app-header-mobile *ngIf="chatService.isMobile" class="header-mobile"></app-header-mobile>
+  <app-header-mobile *ngIf="chatService.isMobile"></app-header-mobile>
 
   <mat-card class="mr-16">
     <div *ngSwitchCase="'empty'" class="chat-window-container">
@@ -316,4 +316,4 @@
   <mat-drawer style="padding-right: 16px;" #thread mode="side" position="end">
     <app-thread style="width: 25%" (closeThread)="onCloseThread()"></app-thread>
   </mat-drawer>
-</mat-drawer-container> -->
+</mat-drawer-container>

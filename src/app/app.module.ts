@@ -45,7 +45,7 @@ import { PrivacyComponent } from './privacy/privacy.component';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatListModule } from '@angular/material/list';
 import { HeaderMobileComponent } from './header-mobile/header-mobile.component';
-import { BottomSheetComponent } from './bottom-sheet/bottom-sheet.component';
+
 
 @NgModule({
   declarations: [
@@ -64,7 +64,6 @@ import { BottomSheetComponent } from './bottom-sheet/bottom-sheet.component';
     DirectMessageChatComponent,
     PrivacyComponent,
     HeaderMobileComponent,
-    BottomSheetComponent,
   ],
   imports: [
     BrowserModule,

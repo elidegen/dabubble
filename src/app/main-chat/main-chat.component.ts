@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, inject, HostListener, Input, Directive } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, inject, HostListener, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogEditChannelComponent } from '../dialog-edit-channel/dialog-edit-channel.component';
 import { DialogAddToGroupComponent } from '../dialog-add-to-group/dialog-add-to-group.component';
@@ -15,9 +15,8 @@ import { Thread } from 'src/models/thread.class';
 import { AuthService } from '../auth.service';
 import { EmojiService } from '../emoji.service';
 import { User } from 'src/models/user.class';
-import { FirestoreService } from '../firestore.service';
+import { FirestoreService } from '../firestore.service'; import { Router } from '@angular/router';
 import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-profile.component';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-chat',
@@ -82,7 +81,6 @@ export class MainChatComponent implements OnInit {
     });
     this.checkEventEmitters();
   }
-
 
   getCurrentChatFromLocalStorage(): void {
     const chatJson = localStorage.getItem('currentChat');
@@ -173,7 +171,6 @@ export class MainChatComponent implements OnInit {
       this.scrollToBottom();
     }
   }
-
 
   /**
    * Sets values for sent Message
@@ -366,6 +363,17 @@ export class MainChatComponent implements OnInit {
   selectUser(user: any) {
     this.chatService.createDirectMessage(user);
     this.search.nativeElement.value = '';
+  }
+
+  /**
+  * Opens the profile view dialog for a specific user.
+  * @param {any} id - The ID of the user.
+  */
+  openProfileDialog(id: any): void {
+    this.dialog.open(DialogViewProfileComponent, {
+      panelClass: 'dialog-container',
+      data: { userID: id },
+    });
   }
 
   /**
