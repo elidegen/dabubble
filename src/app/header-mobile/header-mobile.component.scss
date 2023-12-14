@@ -1,0 +1,36 @@
+.header-mobile {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    position: relative;
+}
+
+.logo-header-mobile {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    span {
+        font-size: 26px;
+        font-weight: 600;
+
+        @media(max-width: 350px){
+            font-size: 22px;
+        }
+    }
+}
+
+.header-img {
+    height: 60px;
+    width: 60px;
+
+    @media(max-width: 350px){
+        height: 50px;
+        width: 50px;
+    }
+}
+
+.back-button {
+    position: absolute;
+}
