@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogAddChannelComponent } from '../dialog-add-channel/dialog-add-channel.component';
-import { Firestore, collection, doc, getDoc, getDocs, limit, onSnapshot, orderBy, query, updateDoc } from '@angular/fire/firestore';
+import { Firestore, collection, doc, getDocs, onSnapshot, orderBy, query } from '@angular/fire/firestore';
 import { Channel } from 'src/models/channel.class';
 import { ChatService } from '../chat.service';
 import { ThreadService } from '../thread.service';
@@ -199,7 +199,7 @@ export class WorkspaceComponent implements OnInit {
   renderNewMainChat() {
     this.chatservice.chatWindow = 'newMessage';
     if (this.chatservice.isMobile) {
-      this.router.navigate(['main']);
+      this.router.navigate(['newMessage']);
     }
   }
 }

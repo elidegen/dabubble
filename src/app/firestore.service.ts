@@ -31,7 +31,9 @@ export class FirestoreService {
   messageAddedInThread = new EventEmitter<void>();
   allThreadMessages: Message[] = [];
   unSubThread: any;
-  constructor(public threadService: ThreadService, public chatService: ChatService, public userService: UserService, public authService: AuthService) { }
+  constructor(public threadService: ThreadService, public chatService: ChatService, public userService: UserService, public authService: AuthService) { 
+    this.loadUsers();
+  }
   unSubDirectMessages: any;
   allDirectMessages: Message[] = [];
   messageIsExisting!: boolean;

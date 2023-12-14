@@ -55,6 +55,7 @@ export class ThreadComponent implements OnInit {
     this.threadService.openMessage$.subscribe((openMessage) => {
       if (openMessage) {
         const message = openMessage as Message;
+        this.userService.setCurrentChatToLocalStorage(message);
         if (!this.currentMessage || this.currentMessage.id !== message.id) {
           this.currentMessage = message;
           this.threadService.currentMessage = message;
@@ -63,11 +64,25 @@ export class ThreadComponent implements OnInit {
           }
           this.firestoreService.loadThread(this.currentMessage.id);
         }
+      } else {
+        this.getCurrentChatFromLocalStorage();
+        this.firestoreService.loadThread(this.currentMessage.id);
       }
     });
     this.firestoreService.messageAddedInThread.subscribe(() => {
       this.scrollToBottom();
     });
+  }
+
+  getCurrentChatFromLocalStorage(): void {
+    const chatJson = localStorage.getItem('currentChat');
+    if (chatJson) {
+      this.currentMessage = JSON.parse(chatJson) as Message;
+      this.threadService.currentMessage = JSON.parse(chatJson) as Message;
+    } else {
+      console.log('Kein currentChat im LocalStorage gefunden');
+      return
+    }
   }
 
   ngOnDestroy() {
@@ -87,10 +102,13 @@ export class ThreadComponent implements OnInit {
       this.message.creator = this.userService.currentUser.name;
       this.message.profilePic = this.userService.currentUser.picture;
       this.message.creatorId = this.userService.currentUser.id;
+      console.log('thread current message', this.currentMessage);
       await this.threadService.sendMessageInThread(this.currentMessage, this.message);
-      this.threadService.updateThreadCount(this.currentMessage, this.message.time);
+      if (!this.chatService.isMobile) {
+        this.threadService.updateThreadCount(this.currentMessage, this.message.time);
+      }
       this.message.content = '';
-      this.scrollToBottom();
+      this.firestoreService.messageAddedInThread.emit();
     }
   }
   

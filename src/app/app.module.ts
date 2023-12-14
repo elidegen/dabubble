@@ -45,6 +45,7 @@ import { PrivacyComponent } from './privacy/privacy.component';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatListModule } from '@angular/material/list';
 import { HeaderMobileComponent } from './header-mobile/header-mobile.component';
+import { NewMessageComponent } from './new-message/new-message.component';
 
 
 @NgModule({
@@ -64,6 +65,7 @@ import { HeaderMobileComponent } from './header-mobile/header-mobile.component';
     DirectMessageChatComponent,
     PrivacyComponent,
     HeaderMobileComponent,
+    NewMessageComponent,
   ],
   imports: [
     BrowserModule,

@@ -41,10 +41,8 @@ export class MainChatComponent implements OnInit {
   edit: boolean = false;
   toggled: boolean = false;
   showEmojiPick: boolean = false;
-  isInputFocused: boolean = false;
   showUploadedFile: boolean = false;
   @Input() monitoredVariable: any;
-  @ViewChild('search') search!: ElementRef;
   @ViewChild('editor') editor!: ElementRef;
   @ViewChild('thread') threadDrawer!: MatDrawer;
   @ViewChild('emojiPicker') emojiPickerElementRef!: ElementRef;
@@ -339,31 +337,6 @@ export class MainChatComponent implements OnInit {
     }
   }
 
-  // ---------------- search Input -------------------------
-  /**
-   * Filters users based on search input.
-   */
-  filterUsers(): void {
-    this.isInputFocused = true;
-    this.firestoreService.filterAllUsers()
-  }
-
-  /**
-   * Stops propagation of a user selection event.
-   * @param {Event} event - The DOM event.
-   */
-  userSelected(event: Event) {
-    event.stopPropagation();
-  }
-
-  /**
-   * Selects a user to start a direct message chat.
-   * @param {any} user - The selected user.
-   */
-  selectUser(user: any) {
-    this.chatService.createDirectMessage(user);
-    this.search.nativeElement.value = '';
-  }
 
   /**
   * Opens the profile view dialog for a specific user.
@@ -390,17 +363,7 @@ export class MainChatComponent implements OnInit {
     this.userService.openUserContainerTextfield.next(false);
   }
 
-  /**
-   * Checks click events on the document to manage input focus.
-   * @param {Event} event - The click event.
-   */
-  @HostListener('document:click', ['$event'])
-  checkClick(event: Event) {
-    const clickedElement = event.target as HTMLElement;
-    if (!clickedElement.classList.contains('user-search-container') && !clickedElement.classList.contains('user-container') && this.isInputFocused && !clickedElement.classList.contains('input-members')) {
-      this.isInputFocused = false;
-    }
-  }
+  
 
   /**
    * Handles file selection for uploading images or other files.

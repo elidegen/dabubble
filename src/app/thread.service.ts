@@ -70,6 +70,8 @@ export class ThreadService {
    */
   async sendMessageInThread(thread: any, message: Message) {
     let threadId = thread.id
+    console.log('current message in service', thread);
+    
     const subColRef = collection(this.firestore, `threads/${threadId}/messages`);
     await addDoc(subColRef, message.toJSON())
     .catch((err) => {

@@ -44,6 +44,7 @@ export class DirectMessageChatComponent implements OnInit {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
     chatService.checkScreenWidth();
+  
   }
 
   /**
@@ -62,9 +63,10 @@ export class DirectMessageChatComponent implements OnInit {
         }
         this.loadMessages();
       } else {
-        // this.chatService.chatWindow = 'direct';
-        // this.getCurrentChatFromLocalStorage()
-        // this.loadMessages();
+        this.chatService.chatWindow = 'direct';
+        this.getCurrentChatFromLocalStorage()
+        this.chatService.getAllUsers();
+        this.loadMessages();
       }
     });
     this.firestoreService.messageAddedInDirect.subscribe(() => {
@@ -112,7 +114,6 @@ export class DirectMessageChatComponent implements OnInit {
    */
   async loadMessages() {
     if (this.currentChat?.id) {
-      console.log('currentChatINLoadM', this.currentChat.id);
       await this.firestoreService.loadDirectMessages(this.currentChat.id);
     }
     this.interlocutor = this.chatService.getOtherUser(this.currentChat?.members);

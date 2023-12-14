@@ -10,6 +10,7 @@ import { DialogEditChannelComponent } from './dialog-edit-channel/dialog-edit-ch
 import { DirectMessageChatComponent } from './direct-message-chat/direct-message-chat.component';
 import { ThreadComponent } from './thread/thread.component';
 import { DialogAddChannelComponent } from './dialog-add-channel/dialog-add-channel.component';
+import { NewMessageComponent } from './new-message/new-message.component';
 
 const routes: Routes = [
   { path: '', component: LoginScreenComponent },
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'directMessage', component: DirectMessageChatComponent },
   { path: 'thread', component: ThreadComponent },
   { path: 'add-channel', component: DialogAddChannelComponent },
+  { path: 'newMessage', component: NewMessageComponent },
 
 ];
 

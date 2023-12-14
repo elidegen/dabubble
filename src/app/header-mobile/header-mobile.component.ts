@@ -15,6 +15,7 @@ import { UserService } from '../user.service';
 export class HeaderMobileComponent {
   currentUser: User;
   constructor(public userService: UserService, private _bottomSheet: MatBottomSheet, public chatService: ChatService, public authService: AuthService, public router: Router) {
+    userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser as User;
     chatService.checkScreenWidth();
   }

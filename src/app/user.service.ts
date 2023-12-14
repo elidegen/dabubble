@@ -29,9 +29,6 @@ export class UserService {
  
   unsubList;
 
-
- 
-
   ngOnInit() {
     this.getCurrentUserFromLocalStorage();
    

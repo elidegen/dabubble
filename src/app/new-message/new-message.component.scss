@@ -1,0 +1,132 @@
+.chat-window-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    background-color: white;
+    border-radius: 32px;
+}
+
+.headline {
+    padding: 16px;
+}
+
+.add-members-container {
+    margin-top: 8px;
+    position: relative;
+}
+
+.user-search-container {
+    position: absolute;
+    height: fit-content;
+    max-height: 400px;
+    overflow-y: scroll;
+    background-color: white;
+    z-index: 2;
+    left: 50px;
+    top: 56px;
+    border-radius: 0 32px 32px 32px;
+    box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.4);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    gap: 16px;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+
+.offline-status {
+    background-color: grey;
+}
+
+.empty-chat-container {
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 32px;
+    text-align: center;
+    span {
+        font-size: 24px;
+        font-weight: bold;
+        color: var(--textGray);
+    }
+}
+
+.textfield-content {
+    margin-top: 16px;
+}
+
+.text-field-container {
+    border: 1px solid lightgrey;
+    border-radius: 24px;
+    width: 100%;
+    padding: 16px 0;
+    background-color: white;
+
+    textarea {
+        outline: 0;
+        border: 0;
+        width: 100%;
+        padding: 0 16px;
+        resize: none;
+        height: 64px;
+        border-radius: 24px;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        &:disabled {
+            background-color: white;
+        }
+    }
+}
+
+.message-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.attachments {
+    display: flex;
+    align-items: center;
+
+    button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.border-right {
+    border-right: 2px solid lightgrey;
+}
+
+.send-button {
+    &:disabled {
+        svg path {
+            fill: var(--textGray);
+        }
+    }
+}
+
+mat-card-header {
+    border-bottom: 2px solid lightgrey;
+}
+
+@media (max-width: 799px) {
+    .chat-window-container {
+        border-radius: 0;
+        height: calc(100vh - 92px);
+    }
+    .textfield-content {
+        padding: 16px;
+    }
+}

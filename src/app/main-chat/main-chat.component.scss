@@ -433,27 +433,7 @@ mat-drawer {
     position: relative;
 }
 
-.user-search-container {
-    position: absolute;
-    height: fit-content;
-    max-height: 400px;
-    overflow-y: scroll;
-    background-color: white;
-    z-index: 2;
-    left: 50px;
-    top: 56px;
-    border-radius: 0 32px 32px 32px;
-    box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.4);
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    width: fit-content;
-    gap: 16px;
 
-    &::-webkit-scrollbar {
-        display: none;
-    }
-}
 
 .mat-spinner {
     z-index: 10;
