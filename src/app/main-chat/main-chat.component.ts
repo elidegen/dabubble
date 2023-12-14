@@ -55,6 +55,7 @@ export class MainChatComponent implements OnInit {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser as User;
     firestoreService.loadUsers();
+    chatService.checkScreenWidth();
   }
 
   async ngOnInit() {
@@ -72,7 +73,6 @@ export class MainChatComponent implements OnInit {
         this.firestoreService.loadChannelMessages(this.currentChat);
         this.firestoreService.getAllChannelMembers(this.currentChat.id);
       } else {
-        this.chatService.chatWindow = 'channel';
         this.getCurrentChatFromLocalStorage();
         this.firestoreService.loadChannelMessages(this.currentChat);
         this.firestoreService.getAllChannelMembers(this.currentChat?.id);
@@ -81,12 +81,10 @@ export class MainChatComponent implements OnInit {
     this.checkEventEmitters();
   }
 
-  
   getCurrentChatFromLocalStorage(): void {
     const chatJson = localStorage.getItem('currentChat');
     if (chatJson) {
       this.currentChat = JSON.parse(chatJson) as Channel;
-      console.log('currentChat', this.currentChat);
       this.chatService.chatWindow = 'channel';
     } else {
       console.log('Kein currentChat im LocalStorage gefunden');

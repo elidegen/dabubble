@@ -27,8 +27,9 @@ export class DialogAddChannelComponent {
   constructor(@Optional() @Inject(MatDialogRef) public dialogRef: MatDialogRef<DialogAddChannelComponent> | undefined, public chatService: ChatService, public userService: UserService, public firestoreService: FirestoreService, public router: Router) {
     firestoreService.loadUsers()
     this.currentUser = this.userService.currentUser;
+    chatService.checkScreenWidth();
     if (chatService.isMobile) {
-      this.dialogRef = undefined
+      this.dialogRef = undefined;
     }
   }
 

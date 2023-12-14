@@ -43,6 +43,7 @@ export class DirectMessageChatComponent implements OnInit {
     public router: Router, public threadService: ThreadService) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
+    chatService.checkScreenWidth();
   }
 
   /**

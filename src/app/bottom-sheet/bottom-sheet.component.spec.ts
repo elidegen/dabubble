@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BottomSheetComponent } from './bottom-sheet.component';
+import { BottomSheet } from './bottom-sheet.component';
 
 describe('BottomSheetComponent', () => {
-  let component: BottomSheetComponent;
-  let fixture: ComponentFixture<BottomSheetComponent>;
+  let component: BottomSheet;
+  let fixture: ComponentFixture<BottomSheet>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [BottomSheetComponent]
+      declarations: [BottomSheet]
     });
-    fixture = TestBed.createComponent(BottomSheetComponent);
+    fixture = TestBed.createComponent(BottomSheet);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

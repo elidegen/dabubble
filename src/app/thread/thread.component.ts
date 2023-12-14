@@ -48,6 +48,7 @@ export class ThreadComponent implements OnInit {
     public firestoreService: FirestoreService, public router: Router) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
+    chatService.checkScreenWidth();
   }
 
   ngOnInit() {
@@ -318,19 +319,11 @@ export class ThreadComponent implements OnInit {
   }
 
   /**
-   * Logs out the current user and navigates to the login screen.
-   */
-  logOutUser() {
-    this.authService.signOutUser();
-    this.router.navigate(['']);
-  }
-
-   /**
     * Responds to window resize events to check and update the screen width status in the chat service.
     * @param {any} event - The window resize event object.
     */
-   @HostListener('window:resize', ['$event'])
-   onResize(event: any): void {
-     this.chatService.checkScreenWidth();
-   }
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any): void {
+    this.chatService.checkScreenWidth();
+  }
 }

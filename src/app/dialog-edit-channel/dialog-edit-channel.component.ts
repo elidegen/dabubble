@@ -31,6 +31,7 @@ export class DialogEditChannelComponent implements OnInit {
     public chatService: ChatService, @Optional() @Inject(MatDialogRef) public dialogRef: MatDialogRef<DialogEditChannelComponent> | undefined,
      public userService: UserService, public authService: AuthService, public router: Router, public dialog: MatDialog, public firestoreService: FirestoreService) {
     this.currentUser = this.userService.currentUser;
+    chatService.checkScreenWidth();
     if (chatService.isMobile) {
       this.dialogRef = undefined
     }

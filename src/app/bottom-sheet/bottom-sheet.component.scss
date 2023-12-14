@@ -1,0 +1,43 @@
+.link-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    gap: 12px;
+    justify-content: center;
+}
+
+.mini-separator {
+    height: 4px;
+    background-color: lightgrey;
+    border-radius: 32px;
+    width: 48px;
+    margin-bottom: 10px;
+}
+
+.link-buttons {
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    outline: 0;
+    background-color: transparent;
+    border: 0;
+    font-size: 22px;
+    font-weight: bold;
+    border-radius: 32px;
+    padding: 4px 16px;
+    cursor: pointer;
+    &:hover {
+        color: var(--purple3);
+        svg path {
+            fill: var(--purple3);
+        }
+    }
+    svg {
+        height: 32px;
+        width: 32px;
+    }
+
+}

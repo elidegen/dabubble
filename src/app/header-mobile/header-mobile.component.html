@@ -1,13 +1,13 @@
 <div class="header-mobile">
-
-  <button class="back-button" [routerLink]="['/home']" *ngIf="!isHomeRoute()">
-    <img src="assets/img/icons/chevron_left.svg">
-  </button>
-  <div class="logo-header-mobile" *ngIf="!isHomeRoute()">
-    <img class="header-img" src="assets/img/icons/workspace-logo.svg" />
-    <span>Code learning</span>
+  <div class="chat-header" *ngIf="!isHomeRoute()">
+    <button mat-icon-button class="back-button" [routerLink]="['/home']">
+      <img src="assets/img/icons/chevron_left.svg">
+    </button>
+    <div class="logo-header-mobile">
+      <img class="header-img" src="assets/img/icons/workspace-logo.svg" />
+      <span>Code learning</span>
+    </div>
   </div>
-
   <div class="logo-header-mobile" *ngIf="isHomeRoute()">
     <img class="header-img" src="assets/img/Logo.png" />
     <span>DA Bubble</span>

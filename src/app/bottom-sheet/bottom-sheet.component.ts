@@ -1,5 +1,11 @@
 import { Component } from '@angular/core';
 import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
+import { AuthService } from '../auth.service';
+import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-profile.component';
+import { UserService } from '../user.service';
+import { User } from 'src/models/user.class';
 
 
 @Component({
@@ -8,10 +14,32 @@ import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
   styleUrls: ['./bottom-sheet.component.scss'],
 })
 export class BottomSheet {
-  constructor(private _bottomSheetRef: MatBottomSheetRef<BottomSheet>) { }
+  currentUser: User;
+  constructor(private _bottomSheetRef: MatBottomSheetRef<BottomSheet>, public userService: UserService,  
+    public authService: AuthService,  public router: Router, public dialog: MatDialog) { 
+    this.currentUser = this.userService.currentUser as User;
+  }
 
-  openLink(event: MouseEvent): void {
+ 
+
+  /**
+   * Logs out the current user and navigates to the login screen.
+   */
+  logOutUser() {
     this._bottomSheetRef.dismiss();
-    event.preventDefault();
+    this.authService.signOutUser();
+    this.router.navigate(['']);
+  }
+  
+  
+  /**
+  * Opens the profile view dialog for a specific user.
+  * @param {any} id - The ID of the user.
+  */
+  openProfileDialog(): void {
+    this.dialog.open(DialogViewProfileComponent, {
+      panelClass: 'dialog-container',
+      data: { userID: this.currentUser.id },
+    });
   }
 }
