@@ -38,7 +38,10 @@
     }
     .home-mobile {
         background-color: white;
-        height: calc(100vh - 99px);
+        height: calc(100vh - 92px);
+        @media (max-width: 350px) {
+            height: calc(100vh - 82px);            
+        }
     }
     .add-members-container {
         position: relative;
@@ -49,7 +52,7 @@
         width: 100%;
         transform: translate(0);
         border: 2px solid lightgray;
-        margin-top: 32px;
+        margin-top: 16px;
     }
     .profile-container {
         cursor: pointer;
@@ -60,7 +63,7 @@
     }
     .user-search-container {
         position: absolute;
-        top: 88px;
+        top: 70px;
         left: 34px;
         width: 81%;
     }
