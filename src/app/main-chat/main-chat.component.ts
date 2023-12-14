@@ -16,8 +16,8 @@ import { AuthService } from '../auth.service';
 import { EmojiService } from '../emoji.service';
 import { User } from 'src/models/user.class';
 import { FirestoreService } from '../firestore.service';
-import { Router } from '@angular/router';
 import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-profile.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-chat',
@@ -63,17 +63,20 @@ export class MainChatComponent implements OnInit {
         const newChat = openChat as Channel;
         this.userService.setCurrentChatToLocalStorage(newChat);
         if (!this.currentChat || this.currentChat.id !== newChat.id) {
-          this.getCurrentChatFromLocalStorage();
           this.currentChat = newChat;
           this.threadService.currentChat = newChat;
           if (this.firestoreService.unSubChannelMessages) {
             this.firestoreService.unSubChannelMessages();
           }
         }
+        this.getCurrentChatFromLocalStorage();
         this.firestoreService.loadChannelMessages(this.currentChat);
         this.firestoreService.getAllChannelMembers(this.currentChat.id);
       } else {
-        this.currentChat = this.currentChat;
+        this.chatService.chatWindow = 'channel';
+        this.getCurrentChatFromLocalStorage();
+        this.firestoreService.loadChannelMessages(this.currentChat);
+        this.firestoreService.getAllChannelMembers(this.currentChat?.id);
       }
     });
     this.checkEventEmitters();
@@ -83,6 +86,9 @@ export class MainChatComponent implements OnInit {
     const chatJson = localStorage.getItem('currentChat');
     if (chatJson) {
       this.currentChat = JSON.parse(chatJson) as Channel;
+      console.log('currentChat', this.currentChat);
+      
+      this.chatService.chatWindow = 'channel';
     } else {
       console.log('Kein currentChat im LocalStorage gefunden');
       return

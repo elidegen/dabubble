@@ -52,6 +52,7 @@ export class DirectMessageChatComponent implements OnInit {
     this.chatService.openDirectMessage$.subscribe((openDirectMessage) => {
       if (openDirectMessage) {
         const newChat = openDirectMessage as Chat;
+        this.userService.setCurrentChatToLocalStorage(newChat);
         if (!this.currentChat || this.currentChat.id !== newChat.id) {
           this.currentChat = newChat;
           if (this.firestoreService.unSubDirectMessages) {
@@ -60,12 +61,26 @@ export class DirectMessageChatComponent implements OnInit {
         }
         this.loadMessages();
       } else {
-        this.currentChat = undefined;
+        this.chatService.chatWindow = 'direct';
+        this.getCurrentChatFromLocalStorage()
+        this.loadMessages();
       }
     });
     this.firestoreService.messageAddedInDirect.subscribe(() => {
       this.scrollToBottom();
     });
+  }
+
+    getCurrentChatFromLocalStorage(): void {
+    const chatJson = localStorage.getItem('currentChat');
+    if (chatJson) {
+      this.currentChat = JSON.parse(chatJson) as Chat;
+      console.log('currentChat', this.currentChat);
+      
+    } else {
+      console.log('Kein currentChat im LocalStorage gefunden');
+      return 
+    }
   }
 
   /**
@@ -96,6 +111,7 @@ export class DirectMessageChatComponent implements OnInit {
    */
   async loadMessages() {
     if (this.currentChat?.id) {
+      console.log('currentChatINLoadM', this.currentChat.id);
       await this.firestoreService.loadDirectMessages(this.currentChat.id);
     }
     this.interlocutor = this.chatService.getOtherUser(this.currentChat?.members);

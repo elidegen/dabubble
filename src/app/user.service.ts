@@ -6,7 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 import { User } from 'src/models/user.class';
 import { Channel } from 'src/models/channel.class';
 import { Chat } from 'src/models/chat.class';
-
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 
 
@@ -193,4 +193,5 @@ export class UserService {
   userExists(email: string): boolean {
     return this.users.some(user => user.email === email);
   }
+
 }
