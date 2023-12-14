@@ -45,4 +45,11 @@ export class HeaderMobileComponent {
       data: { userID: this.currentUser.id },
     });
   }
+
+  /**
+   * check if routerlink is home
+   */
+  isHomeRoute(): boolean {
+    return this.router.url === '/home';
+  }
 }
