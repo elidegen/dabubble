@@ -341,8 +341,16 @@ export class ChatService {
    * @returns 
    */
   getOtherUser(members: any[]) {
+    console.log('members', members);
+    
     let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
+    console.log('otherUser,', otherUser);
+    
     let interlocutor = this.userService.users.find(user => user.id == otherUser.id);
+    console.log('userService', this.userService.users);
+    
+    console.log('interlocutor', interlocutor);
+    
     return interlocutor as User;
   }
 

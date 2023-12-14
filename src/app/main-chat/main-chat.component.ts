@@ -20,6 +20,7 @@ import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-p
 import { Router } from '@angular/router';
 import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { MatListModule } from '@angular/material/list';
+import { Chat } from 'src/models/chat.class';
 
 
 @Component({
@@ -54,8 +55,6 @@ export class MainChatComponent implements OnInit {
   isInputFocused: boolean = false;
   @ViewChild('search') search!: ElementRef;
 
-
-
   constructor(private _bottomSheet: MatBottomSheet, public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public threadService: ThreadService, public authService: AuthService, public emojiService: EmojiService, public firestoreService: FirestoreService, public router: Router) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser as User;
@@ -66,13 +65,10 @@ export class MainChatComponent implements OnInit {
     this.chatService.openChat$.subscribe((openChat) => {
       if (openChat) {
         const newChat = openChat as Channel;
-      this.userService.setCurrentChatToLocalStorage(newChat);
+        this.userService.setCurrentChatToLocalStorage(newChat);
         console.log("openChat ist vorhanden",newChat)
         if (!this.currentChat || this.currentChat.id !== newChat.id) {
-          this.getCurrentChatFromLocalStorage();
           this.currentChat = newChat;
-         
-          console.log("currentchat = newChat",newChat)
           this.threadService.currentChat = newChat;
           if (this.firestoreService.unSubChannelMessages) {
             this.firestoreService.unSubChannelMessages();
@@ -81,8 +77,10 @@ export class MainChatComponent implements OnInit {
         this.firestoreService.loadChannelMessages(this.currentChat);
         this.firestoreService.getAllChannelMembers(this.currentChat.id);
       } else {
-        this.currentChat = this.currentChat;
-        console.log("currentchat ist vorhanden",this.currentChat)
+        this.chatService.chatWindow = 'channel';
+        this.getCurrentChatFromLocalStorage();
+        this.firestoreService.loadChannelMessages(this.currentChat);
+        this.firestoreService.getAllChannelMembers(this.currentChat?.id);
       }
     });
     this.checkEventEmitters();
@@ -93,6 +91,8 @@ export class MainChatComponent implements OnInit {
     const chatJson = localStorage.getItem('currentChat');
     if (chatJson) {
       this.currentChat = JSON.parse(chatJson) as Channel;
+      console.log('currentChat', this.currentChat);
+      
     } else {
       console.log('Kein currentChat im LocalStorage gefunden');
       return 
