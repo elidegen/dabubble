@@ -43,6 +43,7 @@ import { DirectMessageChatComponent } from './direct-message-chat/direct-message
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { PrivacyComponent } from './privacy/privacy.component';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -76,6 +77,7 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
     MatInputModule,
     BrowserAnimationsModule,
     MatButtonModule,
+    MatListModule,
     MatCardModule,
     MatCheckboxModule,
     MatBottomSheetModule,
@@ -90,7 +92,7 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
     MatExpansionModule,
     ReactiveFormsModule,
     PickerComponent,
-    
+
     // provideFirebaseApp(() => initializeApp({ 
     //   "projectId": "dabubble-81b67", 
     // "appId": "1:983219363350:web:25eacf514195e328531f37", 

@@ -1,53 +1,42 @@
 .custom-file-upload {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 input[type="file"] {
-   display: none;
+  display: none;
 }
 
-
-
-
-
 ::ng-deep .mat-mdc-progress-spinner {
-  position:  absolute!important;
+  position: absolute !important;
   z-index: 20;
   top: 50%;
   left: 50%;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
 }
 
+mat-spinner {
+  display: none;
+  position: absolute;
+  z-index: 20;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 
- mat-spinner{
-    display: none;
-    position:  absolute;
-    z-index: 20;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-  }
+::ng-deep mat-spinner {
+  position: absolute;
+  z-index: 20;
+  top: 50%;
+  display: none;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 
-
-  ::ng-deep  mat-spinner{
-    position:  absolute;
-    z-index: 20;
-    top: 50%;
-    display: none;
-    left: 50%;
-    transform: translate(-50%,-50%);
-  }
-
-  .mat-spinner {
-    position:  absolute;
-    display: none;
-    z-index: 20;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-  }
-  
-  
-
-
-
+.mat-spinner {
+  position: absolute;
+  display: none;
+  z-index: 20;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

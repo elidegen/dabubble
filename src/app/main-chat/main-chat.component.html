@@ -7,8 +7,18 @@
       <img class="logo" src="assets/img/icons/workspace-logo.svg" />
       <span>Code learning</span>
     </div>
-    <div class="profile-container">
+    <!-- <div class="profile-container">
       <div class="profile-picture" [matMenuTriggerFor]="menu">
+        <img src="{{this.userService.currentUser.picture}}" alt="" />
+      </div>
+      <mat-menu class="menu-mobile" #menu="matMenu" xPosition="before">
+        <div class="separator-mobile"></div>
+        <button (click)="openProfileDialog(currentUser.id)" class="menu" mat-menu-item>Profile</button>
+        <button (click)="logOutUser()" mat-menu-item>Log Out</button>
+      </mat-menu>
+    </div> -->
+    <div class="profile-container">
+      <div class="profile-picture" (click)="openBottomSheet()">
         <img src="{{this.userService.currentUser.picture}}" alt="" />
       </div>
       <mat-menu class="menu-mobile" #menu="matMenu" xPosition="before">
@@ -26,7 +36,7 @@
         </div>
       </mat-card-header>
       <mat-card-content class="empty-chat-container" *ngSwitchCase="'empty'">
-        <span>Please choose a channel or direct message.</span>
+        <span class="text-align-center">Please choose a channel or direct message.</span>
       </mat-card-content>
       <mat-card-content class="textfield-content">
         <div class="text-field-container">

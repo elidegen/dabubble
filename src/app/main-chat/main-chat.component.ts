@@ -18,6 +18,9 @@ import { User } from 'src/models/user.class';
 import { FirestoreService } from '../firestore.service';
 import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-profile.component';
 import { Router } from '@angular/router';
+import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
+import { MatListModule } from '@angular/material/list';
+
 
 @Component({
   selector: 'app-main-chat',
@@ -53,7 +56,7 @@ export class MainChatComponent implements OnInit {
 
 
 
-  constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public threadService: ThreadService, public authService: AuthService, public emojiService: EmojiService, public firestoreService: FirestoreService, public router: Router) {
+  constructor(private _bottomSheet: MatBottomSheet, public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public threadService: ThreadService, public authService: AuthService, public emojiService: EmojiService, public firestoreService: FirestoreService, public router: Router) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser as User;
     firestoreService.loadUsers();
@@ -167,10 +170,10 @@ export class MainChatComponent implements OnInit {
     if (this.currentChat) {
       this.message.creator = this.userService.currentUser.name;
       this.message.creatorId = this.userService.currentUser.id,
-      this.message.channel = this.currentChat.name;
+        this.message.channel = this.currentChat.name;
       this.message.channelID = this.currentChat.id;
       this.message.profilePic = this.userService.currentUser.picture,
-      this.message.channel = this.currentChat.name;
+        this.message.channel = this.currentChat.name;
       this.message.channel = this.currentChat.name;
     }
   }
@@ -426,5 +429,23 @@ export class MainChatComponent implements OnInit {
     this.authService.signOutUser();
     this.router.navigate(['']);
   }
-  
+
+  openBottomSheet(): void {
+    this._bottomSheet.open(BottomSheet);
+  }
+}
+
+@Component({
+  selector: 'bottom-sheet-overview-example-sheet',
+  templateUrl: '../main-chat/bottom-sheet.html',
+  standalone: true,
+  imports: [MatListModule],
+})
+export class BottomSheet {
+  constructor(private _bottomSheetRef: MatBottomSheetRef<BottomSheet>) { }
+
+  openLink(event: MouseEvent): void {
+    this._bottomSheetRef.dismiss();
+    event.preventDefault();
+  }
 }
