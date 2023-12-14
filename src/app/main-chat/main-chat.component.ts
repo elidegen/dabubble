@@ -15,13 +15,9 @@ import { Thread } from 'src/models/thread.class';
 import { AuthService } from '../auth.service';
 import { EmojiService } from '../emoji.service';
 import { User } from 'src/models/user.class';
-import { FirestoreService } from '../firestore.service'; import { Router } from '@angular/router';
+import { FirestoreService } from '../firestore.service';
 import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-profile.component';
 import { Router } from '@angular/router';
-import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
-import { MatListModule } from '@angular/material/list';
-import { Chat } from 'src/models/chat.class';
-
 
 @Component({
   selector: 'app-main-chat',
@@ -54,11 +50,8 @@ export class MainChatComponent implements OnInit {
   @ViewChild('emojiPicker') emojiPickerElementRef!: ElementRef;
   @ViewChild('messageContainer') messageContainer!: ElementRef;
   @ViewChild('scrollContainer') scrollContainer!: ElementRef<HTMLDivElement>;
-  @Input() monitoredVariable: any;
-  isInputFocused: boolean = false;
-  @ViewChild('search') search!: ElementRef;
 
-  constructor(private _bottomSheet: MatBottomSheet, public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public threadService: ThreadService, public authService: AuthService, public emojiService: EmojiService, public firestoreService: FirestoreService, public router: Router) {
+  constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public threadService: ThreadService, public authService: AuthService, public emojiService: EmojiService, public firestoreService: FirestoreService, public router: Router) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser as User;
     firestoreService.loadUsers();
@@ -69,13 +62,8 @@ export class MainChatComponent implements OnInit {
       if (openChat) {
         const newChat = openChat as Channel;
         this.userService.setCurrentChatToLocalStorage(newChat);
-        console.log("openChat ist vorhanden",newChat)
-        this.userService.setCurrentChatToLocalStorage(newChat);
-        console.log("openChat ist vorhanden", newChat)
         if (!this.currentChat || this.currentChat.id !== newChat.id) {
           this.currentChat = newChat;
-
-          console.log("currentchat = newChat", newChat)
           this.threadService.currentChat = newChat;
           if (this.firestoreService.unSubChannelMessages) {
             this.firestoreService.unSubChannelMessages();
