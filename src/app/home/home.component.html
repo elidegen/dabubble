@@ -19,7 +19,7 @@
             <span>{{user.name}}</span>
           </button>
 
-          <div *ngIf="this.searchInput == '@'">
+          <div *ngIf="this.searchInput.startsWith('@')">
             <h1>Users:</h1>
             <button class="user-container" *ngFor="let user of userService.users" (click)="selectUser(user)">
               <div (click)="selectUser(user)" class="profile-container">
@@ -30,7 +30,7 @@
             </button>
           </div>
 
-          <div *ngIf="this.searchInput == '#'">
+          <div *ngIf="this.searchInput.startsWith('#')">
             <h1>Channels</h1>
             <div class="message-row-container" *ngFor="let channel of chatService.yourChannels"
               (click)="renderChannel(channel)">
