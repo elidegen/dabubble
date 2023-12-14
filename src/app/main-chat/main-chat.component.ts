@@ -66,15 +66,14 @@ export class MainChatComponent implements OnInit {
       this.userService.setCurrentChatToLocalStorage(newChat);
         console.log("openChat ist vorhanden",newChat)
         if (!this.currentChat || this.currentChat.id !== newChat.id) {
-          this.getCurrentChatFromLocalStorage();
           this.currentChat = newChat;
-         
           console.log("currentchat = newChat",newChat)
           this.threadService.currentChat = newChat;
           if (this.firestoreService.unSubChannelMessages) {
             this.firestoreService.unSubChannelMessages();
           }
         }
+        this.getCurrentChatFromLocalStorage();
         this.firestoreService.loadChannelMessages(this.currentChat);
         this.firestoreService.getAllChannelMembers(this.currentChat.id);
       } else {
@@ -90,6 +89,7 @@ export class MainChatComponent implements OnInit {
     const chatJson = localStorage.getItem('currentChat');
     if (chatJson) {
       this.currentChat = JSON.parse(chatJson) as Channel;
+      this.chatService.chatWindow = 'channel';
     } else {
       console.log('Kein currentChat im LocalStorage gefunden');
       return 
