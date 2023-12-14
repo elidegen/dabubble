@@ -62,12 +62,17 @@ export class MainChatComponent implements OnInit {
     firestoreService.loadUsers();
   }
 
-  ngOnInit() {
+ async ngOnInit() {
     this.chatService.openChat$.subscribe((openChat) => {
       if (openChat) {
         const newChat = openChat as Channel;
+      this.userService.setCurrentChatToLocalStorage(newChat);
+        console.log("openChat ist vorhanden",newChat)
         if (!this.currentChat || this.currentChat.id !== newChat.id) {
+          this.getCurrentChatFromLocalStorage();
           this.currentChat = newChat;
+         
+          console.log("currentchat = newChat",newChat)
           this.threadService.currentChat = newChat;
           if (this.firestoreService.unSubChannelMessages) {
             this.firestoreService.unSubChannelMessages();
@@ -77,9 +82,21 @@ export class MainChatComponent implements OnInit {
         this.firestoreService.getAllChannelMembers(this.currentChat.id);
       } else {
         this.currentChat = this.currentChat;
+        console.log("currentchat ist vorhanden",this.currentChat)
       }
     });
     this.checkEventEmitters();
+  }
+
+
+  getCurrentChatFromLocalStorage(): void {
+    const chatJson = localStorage.getItem('currentChat');
+    if (chatJson) {
+      this.currentChat = JSON.parse(chatJson) as Channel;
+    } else {
+      console.log('Kein currentChat im LocalStorage gefunden');
+      return 
+    }
   }
 
   /**

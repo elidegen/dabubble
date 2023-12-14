@@ -227,29 +227,12 @@ export class AuthService {
    * 
    */
   async uploadProfileImage(file: any) {
-    const storage = getStorage();
-    const storageReference = storageRef(storage, `profileImages/${file.name}`);
+    const storageReference = storageRef(this.storage, `profileImages/${file.name}`);
     const uploadTask = uploadBytesResumable(storageReference, file);
     uploadTask.on('state_changed',
-      (onSnapshot) => {
-        const progress = (onSnapshot.bytesTransferred / onSnapshot.totalBytes) * 100;
-        console.log('Upload is ' + progress + '% done');
-        switch (onSnapshot.state) {
-          case 'paused':
-            console.log('Upload is paused');
-            break;
-          case 'running':
-            console.log('Upload is running');
-            break;}
-      },
-      (error) => {
-        console.error('Upload error:', error);
-      },
-      () => {
+   () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log('File available at', downloadURL);
           this.customPic = downloadURL;
-
         });
       }
     );
