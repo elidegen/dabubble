@@ -112,11 +112,16 @@
         height: 100px;
         align-items: center;
     }
-    .profile-container {
-        img {
-            cursor: pointer;
-        }
+ 
+       
+.profile-container {
+    img {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
     }
+}
+    
     .logo-header-mobile {
         display: flex;
         align-items: center;

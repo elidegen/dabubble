@@ -9,3 +9,14 @@
     }
 }
 }
+
+
+@media (max-width: 500px) {
+    mat-card {
+    width: 90vw;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform: translate(-50%, -50%);
+}
+}
