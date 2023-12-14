@@ -4,6 +4,8 @@ import { Firestore, collection, doc, onSnapshot, addDoc, deleteDoc, updateDoc, }
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { User } from 'src/models/user.class';
+import { Channel } from 'src/models/channel.class';
+import { Chat } from 'src/models/chat.class';
 
 
 
@@ -157,6 +159,22 @@ export class UserService {
     }
    
   }
+
+
+  setCurrentChatToLocalStorage(currentChat: any) {
+    let channelJson = JSON.stringify(currentChat);
+    localStorage.setItem('currentChat', channelJson);
+    console.log('currentchat im LocalStorage gespeichert');
+
+  }
+
+  removeCurrentChatFromLocalStorage() {
+    localStorage.removeItem('currentChat');
+    console.log('currentChat aus LocalStorage entfernt');
+   
+  }
+
+  
 
   /**This is for getting the collection "customers" from firebase */
   getUsersRef() {
