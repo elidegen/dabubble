@@ -1,12 +1,12 @@
 import { EventEmitter, Injectable, inject } from '@angular/core';
-import { DocumentData, DocumentReference, Firestore, addDoc, collection, doc, getDoc, getDocs, onSnapshot, orderBy, query, setDoc, updateDoc } from '@angular/fire/firestore';
+import { DocumentData, DocumentReference, Firestore, addDoc, collection, doc, getDoc, getDocs, onSnapshot, orderBy, query, updateDoc } from '@angular/fire/firestore';
 import { Message } from 'src/models/message.class';
 import { ThreadService } from './thread.service';
 import { UserService } from './user.service';
 import { Channel } from 'src/models/channel.class';
 import { AuthService } from './auth.service';
 import { User } from 'src/models/user.class';
-import { deleteDoc, limit } from 'firebase/firestore';
+import { Query, deleteDoc, limit } from 'firebase/firestore';
 import { ChatService } from './chat.service';
 
 @Injectable({
@@ -35,8 +35,6 @@ export class FirestoreService {
   unSubDirectMessages: any;
   allDirectMessages: Message[] = [];
   messageIsExisting!: boolean;
-
-  // ------------------ channel ----------------------------------------------------------
 
   // --------------------------------------------------------------------------------------------------------
   //These functions create a channel and update its id
@@ -71,7 +69,6 @@ export class FirestoreService {
     };
   }
 
-
   //--------------------------------------------------------------------------------------------------------------
   /**
    * This function loads all messages of the current channel
@@ -79,22 +76,25 @@ export class FirestoreService {
    */
   loadChannelMessages(currentChat: any) {
     if (currentChat.id) {
-      console.log('firestore', currentChat);
       const messageCollection = collection(this.firestore, `channels/${currentChat.id}/messages`);
       const q = query(messageCollection, orderBy('timeInMs', 'desc'), limit(50));
-      this.unSubChannelMessages = onSnapshot(q, async (snapshot) => {
-        this.allMessagesOfChannel = await Promise.all(snapshot.docs.map(async doc => {
-          const message = doc.data() as Message;
-          message.id = doc.id;
-          message.threadCount = await this.threadService.countThreadMessages(message.id);
-          message.reactionCount = this.setEmojiCount(message.reaction);
-          return message;
-        }));
-        this.allMessagesOfChannel.reverse();
-        this.organizeMessagesByDate();
-        this.messageAdded.emit();
-      });
+      this.getChannelSnapshot(q);
     }
+  }
+
+  getChannelSnapshot(q: Query<DocumentData>) {
+    this.unSubChannelMessages = onSnapshot(q, async (snapshot) => {
+      this.allMessagesOfChannel = await Promise.all(snapshot.docs.map(async doc => {
+        const message = doc.data() as Message;
+        message.id = doc.id;
+        message.threadCount = await this.threadService.countThreadMessages(message.id);
+        message.reactionCount = this.setEmojiCount(message.reaction);
+        return message;
+      }));
+      this.allMessagesOfChannel.reverse();
+      this.organizeMessagesByDate();
+      this.messageAdded.emit();
+    });
   }
 
   /**
@@ -121,7 +121,6 @@ export class FirestoreService {
    */
   async sendMessageInChannel(channel: Channel, message: Message) {
     let channelId = channel.id;
-    console.log("nachricht in senmessageChannel",message)
     const subColRef = collection(this.firestore, `channels/${channelId}/messages`);
     await addDoc(subColRef, message.toJSON())
     .catch((err) => {
@@ -179,37 +178,36 @@ export class FirestoreService {
   updateOnlineStatus() {
     this.allChannelMembers.forEach(member => {
       let userIndex = this.authService.findUserIndexWithEmail(member.email);
-      // console.log("Onlinestatus", member,this.userService.users[userIndex]);
       member.online = this.userService.users[userIndex].online;
-    
     });
   }
 
-  //----------------------Thread ----------------------------------------------
-
-  /**
+  /**--------------------------------------------------------------------------------------------
    * This function loads the current thread
    * @param threadId - thread
    */
   loadThread(threadId: any) {
     if (threadId) {
       const threadCollection = collection(this.firestore, `threads/${threadId}/messages`);
-      console.log('message', threadCollection);
       const q = query(threadCollection, orderBy('timeInMs', 'desc'), limit(50));
-      this.unSubThread = onSnapshot(q, (snapshot) => {
-        this.allThreadMessages = snapshot.docs.map(doc => {
-          const message = doc.data() as Message;
-          message.id = doc.id;
-          message.reactionCount = this.setEmojiCount(message.reaction);
-          return message;
-        });
-        this.allThreadMessages.reverse()
-        this.messageAddedInThread.emit()
-      });
+      this.getThreadSnapshot(q);
     }
   }
 
-  //----------- search Input Main Chat ----------------------------------
+  getThreadSnapshot(q: Query<DocumentData>) {
+    this.unSubThread = onSnapshot(q, (snapshot) => {
+      this.allThreadMessages = snapshot.docs.map(doc => {
+        const message = doc.data() as Message;
+        message.id = doc.id;
+        message.reactionCount = this.setEmojiCount(message.reaction);
+        return message;
+      });
+      this.allThreadMessages.reverse()
+      this.messageAddedInThread.emit()
+    });
+  }
+  //------------------------------------------------------------------------------------------------
+
   /**
    * This function loads all users
    */
@@ -234,8 +232,9 @@ export class FirestoreService {
       }
     });
   }
+
   /**
-   * 
+   * This function gets the login time of a user
    * @returns 
    */
   getLoginTime() {
@@ -243,13 +242,23 @@ export class FirestoreService {
     return currentTime.getTime();
   }
 
+  /**
+   * Ths function filters all users
+   */
   filterAllUsers() {
     this.filteredUsers = this.allUsers.filter(user =>
       user.name?.toLowerCase().includes(this.searchInput.toLowerCase())
     );
   }
 
-  //--------------------------------------------------------------------------------
+  /**
+ * Adds a reaction to a message in a chat
+ * @param emoji - The emoji to be added as a reaction
+ * @param messageId - The unique identifier of the message to react to
+ * @param chatId - The unique identifier of the chat where the message belongs
+ * @param colId - The type of chat collection ('channels', 'threads', or 'direct messages')
+ * @returns {Promise<void>} - A Promise that resolves once the reaction is added
+ */
   async addReaction(emoji: any, messageId: any, chatId: any, colId: any) {
     if (chatId) {
       let allMessages: any[] = [];
@@ -264,6 +273,15 @@ export class FirestoreService {
     }
   }
 
+  /**
+ * Updates the reactions for a specific message in a chat.
+ * @param allMessages - An array of messages in the chat
+ * @param emoji - The emoji to be added or removed as a reaction
+ * @param messageId - The unique identifier of the message to update reactions
+ * @param chatId - The unique identifier of the chat where the message belongs
+ * @param colId - The type of chat collection ('channels', 'threads', or 'direct messages')
+ * @returns {void} - This function does not return a value
+ */
   pushReaction(allMessages: any[], emoji: any, messageId: any, chatId: any, colId: any) {
     const subReactionColRef = doc(collection(this.firestore, `${colId}/${chatId}/messages/`), messageId);
       let messageIndex = allMessages.findIndex(message => message.id === messageId);
@@ -283,6 +301,11 @@ export class FirestoreService {
     }
   }
 
+  /**
+   * This function counts a emoji reaction
+   * @param reactions 
+   * @returns - counter
+   */
   setEmojiCount(reactions: any[]) {
     let counter: { [key: string]: number  } = {};
     reactions.forEach(react => {
@@ -301,31 +324,35 @@ export class FirestoreService {
     return counter;
   }
 
-  // ---------------- Direct messages ----------------------------------------------
-  /**
-   * Loads all messages of each dm
+  /** -----------------------------------------------------------------------------------------------------
+   * Loads all messages of each direct message chat
    * @param chatId 
    */
   async loadDirectMessages(chatId: any) {
     if (chatId) {
       const messageCollection = collection(this.firestore, `direct messages/${chatId}/messages`);
       const q = query(messageCollection, orderBy('timeInMs', 'desc'), limit(50));
-      this.unSubDirectMessages = onSnapshot(q, async (snapshot) => {
-        this.allDirectMessages = await Promise.all(snapshot.docs.map(async doc => {
-          const message = doc.data() as Message;
-          message.reactionCount = this.setEmojiCount(message.reaction);
-          message.id = doc.id;
-          message.threadCount = await this.threadService.countThreadMessages(message.id);
-          return message;
-        }));
-        this.allDirectMessages.reverse();
-        this.organizeDirectMessagesByDate();
-        this.checkMessageNumbers();
-        this.messageAddedInDirect.emit();
-      });
+      this.getDirectMessageSnapshot(q)
     }
   }
 
+  getDirectMessageSnapshot(q: Query<DocumentData>) {
+    this.unSubDirectMessages = onSnapshot(q, async (snapshot) => {
+      this.allDirectMessages = await Promise.all(snapshot.docs.map(async doc => {
+        const message = doc.data() as Message;
+        message.reactionCount = this.setEmojiCount(message.reaction);
+        message.id = doc.id;
+        message.threadCount = await this.threadService.countThreadMessages(message.id);
+        return message;
+      }));
+      this.allDirectMessages.reverse();
+      this.organizeDirectMessagesByDate();
+      this.checkMessageNumbers();
+      this.messageAddedInDirect.emit();
+    });
+  }
+  //------------------------------------------------------------------------------------------------------
+  
   /**
    * Sorts all messages according to their date
    */
@@ -351,6 +378,11 @@ export class FirestoreService {
     }
   }
 
+  /**
+   * Sends a message in a direct message chat.
+   * @param chatId - The unique identifier of the direct message chat.
+   * @param message - The message to be sent in the chat.
+   */
   async sendMessageInDirectMessage(chatId: any, message: Message) {
     const subColRef = collection(this.firestore, `direct messages/${chatId}/messages`);
     await addDoc(subColRef, message.toJSON())
@@ -366,11 +398,14 @@ export class FirestoreService {
       });
   }
 
+  /**
+   * Toggles the more menu for a selected message after a short delay
+   * @param message - The message for which the more menu should be toggled
+   */
   toggleMoreMenu(message: Message) {
     setTimeout(() => {
       message.messageSelected = true
     }, 10);
-   
   }
 
   /**
@@ -393,5 +428,4 @@ export class FirestoreService {
     const messageDocRef = doc(collection(this.firestore, `${colId}/${chatId}/messages`), messageId);
     await deleteDoc(messageDocRef);
   }
-  // ---------------------------------------------------------------------------------------------------
 }

@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { inject } from '@angular/core';
-import { Firestore, collection, doc, onSnapshot, addDoc,getDocs,updateDoc, getDoc, setDoc, DocumentReference, DocumentData} from '@angular/fire/firestore';
+import { Firestore, collection, doc, addDoc,getDocs,updateDoc, getDoc, setDoc, DocumentReference, DocumentData} from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { Thread } from 'src/models/thread.class';
 import { Channel } from 'src/models/channel.class';
@@ -45,6 +45,12 @@ export class ThreadService {
   ngOnInit() {
   }
 
+
+  /**
+   * This functions creates a thread
+   * @param messageId - id of message
+   * @param thread - new thread model
+   */
   async createThread(messageId: any, thread: Thread) {
     const threadCollectionRef = collection(this.firestore, 'threads');
     const specificDocRef: DocumentReference<DocumentData> = doc(threadCollectionRef, messageId);
@@ -56,6 +62,12 @@ export class ThreadService {
     }
   }
 
+
+  /**
+   * This function sends a message within a thread
+   * @param thread - document reference
+   * @param message - new message
+   */
   async sendMessageInThread(thread: any, message: Message) {
     let threadId = thread.id
     const subColRef = collection(this.firestore, `threads/${threadId}/messages`);
@@ -67,14 +79,9 @@ export class ThreadService {
   }
 
 
-  async addThread(item: Thread) {
-    if (this.currentMessage.id) {
-      await addDoc(this.getThreadRef(this.currentMessage.id), item.toJSON()).catch(
-        (err) => { console.log(err) }
-      )
-    }
-  }
-
+  /**
+   * This function updates the amount of thread messages of a message
+   */
   async updateThreadCount(message: Message,time: any) {
     message.threadCount = await this.countThreadMessages(message.id);
     if (this.isThreadInDM) {
@@ -86,6 +93,13 @@ export class ThreadService {
     }
   }
 
+
+  /**
+   * This function updates message values
+   * @param message - new message
+   * @param time - sent time
+   * @returns - values
+   */
   updateMessage(message:any,time: any) {
     return {
       threadCount: message.threadCount,
@@ -93,17 +107,12 @@ export class ThreadService {
     }
   }
 
-  setObjectData(obj: any,) {
-    return {
-      name: obj.name || "",
-      email: obj.email || "",
-      password: obj.password || "",
-      id: obj.id,
-      picture: obj.picture || "",
-      online: obj.online || false,
-    }
-  }
-
+  
+  /**
+   * This function counts all messages inside of a thread
+   * @param messageId - document reference
+   * @returns threadCount value
+   */
   async countThreadMessages(messageId: any) {
     const threadCollection = collection(this.firestore, `threads/${messageId}/messages`);
     return getDocs(threadCollection)
@@ -113,40 +122,12 @@ export class ThreadService {
     });
   }
 
-  getThreadData(thread: Thread) {
-    const threadInstance = new Thread(thread);
-    return threadInstance;
-  }
+  
 
-  getAllThreadsRef(messageId: string) {
-    if (!this.currentChat || !this.currentChat.id) {
-      throw new Error('Current chat is not defined');
-    }
-    if (!messageId) {
-      throw new Error('Message ID is not defined');
-    }
-    return collection(this.firestore, `channels/${this.currentChat.id}/messages/${messageId}/threads`);
-  }
 
-  getThreadRef(messageId: string) {
-    if (!this.currentChat || !this.currentChat.id) {
-      throw new Error('Current chat is not defined');
-    }
-    if (!messageId) {
-      throw new Error('Message ID is not defined');
-    }
-    return collection(this.firestore, `channels/${this.currentChat.id}/messages/${messageId}/threads`);
-  }
+ 
 
-  getSingleDocRef(messageId: string, docId: string) {
-    if (!this.currentChat || !this.currentChat.id) {
-      throw new Error('Current chat is not defined');
-    }
-    if (!messageId) {
-      throw new Error('Message ID is not defined');
-    }
-    return doc(collection(this.firestore, `channels/${this.currentChat.id}/messages/${messageId}/threads`), docId);
-  }
+ 
 }
 
 
