@@ -70,7 +70,11 @@
     }
     
     .chat-window-container {
-        height: calc(100vh - 100px);
+        height: calc(100vh - 92px);
         border-radius: 0;
+
+        @media(max-width: 350px){
+            height: calc(100vh - 82px);
+        }
     }
 }

@@ -15,7 +15,8 @@ import { Thread } from 'src/models/thread.class';
 import { AuthService } from '../auth.service';
 import { EmojiService } from '../emoji.service';
 import { User } from 'src/models/user.class';
-import { FirestoreService } from '../firestore.service'; import { Router } from '@angular/router';
+import { FirestoreService } from '../firestore.service';
+import { Router } from '@angular/router';
 import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-profile.component';
 
 @Component({
@@ -61,12 +62,9 @@ export class MainChatComponent implements OnInit {
       if (openChat) {
         const newChat = openChat as Channel;
         this.userService.setCurrentChatToLocalStorage(newChat);
-        console.log("openChat ist vorhanden", newChat)
         if (!this.currentChat || this.currentChat.id !== newChat.id) {
           this.getCurrentChatFromLocalStorage();
           this.currentChat = newChat;
-
-          console.log("currentchat = newChat", newChat)
           this.threadService.currentChat = newChat;
           if (this.firestoreService.unSubChannelMessages) {
             this.firestoreService.unSubChannelMessages();
@@ -76,7 +74,6 @@ export class MainChatComponent implements OnInit {
         this.firestoreService.getAllChannelMembers(this.currentChat.id);
       } else {
         this.currentChat = this.currentChat;
-        console.log("currentchat ist vorhanden", this.currentChat)
       }
     });
     this.checkEventEmitters();
