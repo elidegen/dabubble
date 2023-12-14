@@ -178,7 +178,7 @@
                       *ngSwitchCase="false">
                       <a (click)="openProfileDialog(messagemention['id'])"
                         *ngFor="let messagemention of message.mentions"> @{{messagemention['name']}}</a>
-                      <span class="word-break">{{message.content}}</span>
+                      <span>{{message.content}}</span>
                     </div>
                     <div *ngFor="let messagefile of message.files">
                       <img style="max-height: 100px; margin-top: 10px;" *ngIf="this.authService.isImage(messagefile)"
