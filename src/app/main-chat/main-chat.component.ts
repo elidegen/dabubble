@@ -69,7 +69,6 @@ export class MainChatComponent implements OnInit {
             this.firestoreService.unSubChannelMessages();
           }
         }
-        this.getCurrentChatFromLocalStorage();
         this.firestoreService.loadChannelMessages(this.currentChat);
         this.firestoreService.getAllChannelMembers(this.currentChat.id);
       } else {
@@ -82,12 +81,12 @@ export class MainChatComponent implements OnInit {
     this.checkEventEmitters();
   }
 
+  
   getCurrentChatFromLocalStorage(): void {
     const chatJson = localStorage.getItem('currentChat');
     if (chatJson) {
       this.currentChat = JSON.parse(chatJson) as Channel;
       console.log('currentChat', this.currentChat);
-      
       this.chatService.chatWindow = 'channel';
     } else {
       console.log('Kein currentChat im LocalStorage gefunden');
@@ -433,4 +432,13 @@ export class MainChatComponent implements OnInit {
     }, 2000);
     this.showUploadedFile = true;
   }
+
+   /**
+   * Responds to window resize events to check and update the screen width status in the chat service.
+   * @param {any} event - The window resize event object.
+   */
+   @HostListener('window:resize', ['$event'])
+   onResize(event: any): void {
+     this.chatService.checkScreenWidth();
+   }
 }

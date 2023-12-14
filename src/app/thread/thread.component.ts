@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, OnInit, inject, ViewChild, ElementRef } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit, inject, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { ThreadService } from '../thread.service';
 import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '../user.service';
@@ -324,4 +324,13 @@ export class ThreadComponent implements OnInit {
     this.authService.signOutUser();
     this.router.navigate(['']);
   }
+
+   /**
+    * Responds to window resize events to check and update the screen width status in the chat service.
+    * @param {any} event - The window resize event object.
+    */
+   @HostListener('window:resize', ['$event'])
+   onResize(event: any): void {
+     this.chatService.checkScreenWidth();
+   }
 }

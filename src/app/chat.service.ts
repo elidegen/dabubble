@@ -354,4 +354,14 @@ export class ChatService {
     return interlocutor as User;
   }
 
+    /**
+   * Checks the screen width to determine if the current device is a mobile device.
+   */
+    checkScreenWidth(): void {
+      this.isMobile = window.innerWidth < 800;
+      if(!this.isMobile && this.router.url !== 'home') {
+        this.router.navigate(['home']);
+      }
+    }
+
 }

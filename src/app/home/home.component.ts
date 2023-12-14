@@ -41,7 +41,7 @@ export class HomeComponent {
   constructor(private _bottomSheet: MatBottomSheet, public dialog: MatDialog, public auth: AuthService, public router: Router, public userService: UserService, public chatService: ChatService, public firestoreService: FirestoreService, public threadService: ThreadService) {
     this.userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
-    this.checkScreenWidth();
+    this.chatService.checkScreenWidth();
   }
 
   openBottomSheet(): void {
@@ -195,21 +195,8 @@ export class HomeComponent {
     this.isInputFocused = false;
   }
 
-  /**
-   * Responds to window resize events to check and update the screen width status in the chat service.
-   * @param {any} event - The window resize event object.
-   */
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any): void {
-    this.checkScreenWidth();
-  }
 
-  /**
-   * Checks the screen width to determine if the current device is a mobile device.
-   */
-  checkScreenWidth(): void {
-    this.chatService.isMobile = window.innerWidth < 800;
-  }
+
 }
 export class BottomSheetOverviewExampleSheet {
   constructor(private _bottomSheetRef: MatBottomSheetRef<BottomSheetOverviewExampleSheet>) { }

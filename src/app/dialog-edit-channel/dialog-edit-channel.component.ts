@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, Optional, inject } from '@angular/core';
+import { Component, HostListener, Inject, OnInit, Optional, inject } from '@angular/core';
 import { Channel } from 'src/models/channel.class';
 import { ChatService } from '../chat.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -143,5 +143,14 @@ export class DialogEditChannelComponent implements OnInit {
     console.log("chat der bearbeitet wird",this.currentChat)
     this.firestoreService.updateChannel('channels',this.currentChat!);
   }
+
+    /**
+     * Responds to window resize events to check and update the screen width status in the chat service.
+     * @param {any} event - The window resize event object.
+     */
+    @HostListener('window:resize', ['$event'])
+    onResize(event: any): void {
+      this.chatService.checkScreenWidth();
+    }
 
 }

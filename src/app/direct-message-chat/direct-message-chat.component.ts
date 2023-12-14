@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren, inject } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, QueryList, ViewChild, ViewChildren, inject } from '@angular/core';
 import { Firestore, collection, doc, updateDoc } from '@angular/fire/firestore';
 import { ChatService } from '../chat.service';
 import { UserService } from '../user.service';
@@ -61,9 +61,9 @@ export class DirectMessageChatComponent implements OnInit {
         }
         this.loadMessages();
       } else {
-        this.chatService.chatWindow = 'direct';
-        this.getCurrentChatFromLocalStorage()
-        this.loadMessages();
+        // this.chatService.chatWindow = 'direct';
+        // this.getCurrentChatFromLocalStorage()
+        // this.loadMessages();
       }
     });
     this.firestoreService.messageAddedInDirect.subscribe(() => {
@@ -333,4 +333,13 @@ export class DirectMessageChatComponent implements OnInit {
       this.threadService.isThreadInDM = true;
     }
   }
+
+    /**
+   * Responds to window resize events to check and update the screen width status in the chat service.
+   * @param {any} event - The window resize event object.
+   */
+    @HostListener('window:resize', ['$event'])
+    onResize(event: any): void {
+      this.chatService.checkScreenWidth();
+    }
 }

@@ -153,4 +153,13 @@ export class DialogAddChannelComponent {
       userContainer.nativeElement.classList.toggle('user-container-highlighted');
     }
   }
+
+  /**
+    * Responds to window resize events to check and update the screen width status in the chat service.
+    * @param {any} event - The window resize event object.
+    */
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any): void {
+    this.chatService.checkScreenWidth();
+  }
 }
