@@ -68,7 +68,6 @@
     overflow-y: scroll;
     height: 100%;
     display: flex;
-    flex-direction: column;
 
     &::-webkit-scrollbar {
         display: none;
@@ -246,7 +245,11 @@ section {
         width: 15px;
     }
   }
-    
+      img {
+        height: 16px;
+        width: 15px;
+    }
+
 
 .emojiPicker {
     position: absolute;
@@ -285,7 +288,7 @@ section {
     margin-bottom: 24px;
     img {
         height: 100px;
-        width: 100px;
+        width: 100p;
         margin-right: 16px;
         border-radius: 50%;
     }

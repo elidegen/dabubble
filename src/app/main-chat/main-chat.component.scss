@@ -1,54 +1,11 @@
-.headerChannel {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    min-height: 64px;
-
-    .br-32 {
-        display: flex;
-        justify-content: flex-start;
-        overflow: hidden;
-        flex: 1;
-
-        h2 {
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
-
-            @media (max-width: 1630px) {
-                max-width: 600px;
-            }
-
-            @media (max-width: 1300px) {
-                max-width: 400px;
-            }
-
-            @media (max-width: 1070px) {
-                max-width: 300px;
-            }
-
-            @media (max-width: 980px) {
-                max-width: 180px;
-            }
-        }
-    }
-}
-
-//
-
 .chat-title {
     display: flex;
     align-items: center;
-
     img {
         height: 32px;
         width: 32px;
     }
 }
-
-//
 
 .header {
     display: flex;
@@ -59,8 +16,9 @@
 }
 
 h2 {
-    font-size: 20px;
+    font-size: 30px;
     font-weight: bold;
+    margin-right: 6px !important;
 }
 
 .group-members-container {
@@ -70,7 +28,7 @@ h2 {
 }
 
 .group-members-button {
-    padding: 4px 16px 4px 24px !important;
+    padding: 4px 16px !important;
     border-radius: 24px;
     height: fit-content;
     width: fit-content;
@@ -82,13 +40,8 @@ h2 {
     display: flex;
     align-items: center;
 
-    .d-flex {
-        width: fit-content;
-    }
-
     img {
-        height: 40px;
-        width: 40px;
+        height: 50px;
         margin-left: -20px;
         border-radius: 50%;
         border: 2px solid white;
@@ -111,7 +64,6 @@ h3 {
 
 mat-card-header {
     border-bottom: 2px solid lightgrey;
-    padding: 0 16px;
 }
 
 .text-field-container {
@@ -120,7 +72,6 @@ mat-card-header {
     width: 100%;
     padding: 16px 0;
     background-color: white;
-
     textarea {
         outline: 0;
         border: 0;
@@ -133,7 +84,6 @@ mat-card-header {
         &::-webkit-scrollbar {
             display: none;
         }
-
         &:disabled {
             background-color: white;
         }
@@ -264,10 +214,11 @@ mat-card {
     border-radius: 0 24px 24px 24px;
     padding: 12px 16px;
     width: fit-content;
-    max-width: 90%;
+    max-width: 100%;
     color: black;
     background-color: var(--primary);
     font-size: 18px;
+    max-width: 600px;
 }
 
 .message-row-container {
@@ -321,7 +272,6 @@ section {
     transition: all 125ms;
     display: flex;
     padding: 2px;
-
     button {
         height: 38px;
         width: 38px;
@@ -353,13 +303,8 @@ section {
 }
 
 .name {
-    font-size: 20px;
+    font-size: 24px;
     font-weight: 500;
-}
-
-.more-menu {
-    top: 21px;
-    right: -132px;
 }
 
 .reaction-container {
@@ -379,7 +324,7 @@ section {
 .reaction-emoji-button {
     background-color: white;
     outline: none;
-    border: 1px solid #ccc;
+    border: 1px solid #ccc; 
     border-radius: 20px;
     display: flex;
     align-items: center;
@@ -388,9 +333,8 @@ section {
     font-size: 10px;
     cursor: pointer;
     text-align: center;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-    transition: box-shadow 0.2s ease-in-out;
-
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23); 
+    transition: box-shadow 0.2s ease-in-out; 
     &:hover {
         background-color: white !important;
     }
@@ -399,19 +343,18 @@ section {
         height: 16px;
         width: 15px;
     }
-}
-
+  }
+  
 .emojiPicker {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%,-50%);
 }
 
 .emoji-fit {
     font-size: 20px;
 }
-
 .add-reaction-button {
     display: flex;
     align-items: center;
@@ -431,7 +374,6 @@ section {
     gap: 16px;
     margin-top: 2px;
     width: fit-content;
-
     &:hover .comments {
         font-weight: bold;
     }
@@ -457,7 +399,7 @@ mat-drawer {
         svg path {
             fill: var(--textGray);
         }
-    }
+    } 
 }
 
 .empty-chat-container {
@@ -465,9 +407,7 @@ mat-drawer {
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    text-align: center;
-    padding-bottom: 64px;
-
+    padding-bottom: 32px;
     span {
         font-size: 24px;
         font-weight: bold;
@@ -501,14 +441,16 @@ mat-drawer {
         display: none;
     }
 }
-
 .mat-spinner {
     z-index: 10;
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%,-50%);
 }
+
+
+
 
 .headline {
     padding: 0 16px 16px 16px;
