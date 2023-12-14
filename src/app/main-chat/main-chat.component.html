@@ -172,7 +172,8 @@
                     <span class="date">{{ message.time }}</span>
                   </div>
 
-                  <div [ngSwitch]="edit && message.creatorId == currentUser.id && editingMessage === message.id">
+                  <div [ngSwitch]="edit && message.creatorId == currentUser.id && editingMessage === message.id"
+                    class="d-flex-end">
                     <div
                       [ngClass]="{'my-message-content': message.creatorId == currentUser.id, 'message-content': message.creatorId != currentUser.id}"
                       *ngSwitchCase="false">
@@ -180,12 +181,14 @@
                         *ngFor="let messagemention of message.mentions"> @{{messagemention['name']}}</a>
                       <span class="word-break">{{message.content}}</span>
                     </div>
-                    <div *ngFor="let messagefile of message.files">
-                      <img style="max-height: 100px; margin-top: 10px;" *ngIf="this.authService.isImage(messagefile)"
-                        src="{{messagefile}}" alt="Angehängtes Bild">
-                      <div class="pdf" *ngIf="this.authService.isPDF(messagefile)">
-                        <img src="assets/img/icons/pdf.svg" alt="">
-                        <a href="{{messagefile}}" target="_blank">Show PDF</a>
+                    <div class="d-flex">
+                      <div *ngFor="let messagefile of message.files">
+                        <img style="max-height: 100px; margin-top: 10px;" *ngIf="this.authService.isImage(messagefile)"
+                          src="{{messagefile}}" alt="Angehängtes Bild">
+                        <div class="pdf" *ngIf="this.authService.isPDF(messagefile)">
+                          <img src="assets/img/icons/pdf.svg" alt="">
+                          <a href="{{messagefile}}" target="_blank">Show PDF</a>
+                        </div>
                       </div>
                     </div>
 

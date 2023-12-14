@@ -455,3 +455,13 @@ mat-drawer {
 .headline {
     padding: 0 16px 16px 16px;
 }
+
+.d-flex-end {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.d-flex {
+    display: flex;
+}
