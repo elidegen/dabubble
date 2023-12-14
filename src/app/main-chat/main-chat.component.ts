@@ -18,9 +18,6 @@ import { User } from 'src/models/user.class';
 import { FirestoreService } from '../firestore.service';
 import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-profile.component';
 import { Router } from '@angular/router';
-import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
-import { MatListModule } from '@angular/material/list';
-
 
 @Component({
   selector: 'app-main-chat',
@@ -29,50 +26,48 @@ import { MatListModule } from '@angular/material/list';
 })
 
 export class MainChatComponent implements OnInit {
-  @ViewChild('messageContainer') messageContainer!: ElementRef;
   firestore: Firestore = inject(Firestore);
   currentChat!: Channel | undefined;
-  @ViewChild('thread') threadDrawer!: MatDrawer;
   message: Message = new Message();
   reaction: Reaction = new Reaction;
+  newThread = new Thread();
   currentUser: User;
   allReactionsByMessage: [] = [];
-  threadCount: any = 0;
-  showEmojiPick: boolean = false;
-  toggled: boolean = false;
-  edit: boolean = false;
-  @ViewChild('editor') editor!: ElementRef;
-  @ViewChild('emojiPicker') emojiPickerElementRef!: ElementRef;
   editingMessage: string | undefined;
-  newThread = new Thread();
-  taggedNames = "";
+  taggedNames: string = "";
+  threadCount: any = 0;
   dataSrc: any;
-  showUploadedFile = false;
   scrollPosition: any;
-  @ViewChild('scrollContainer') scrollContainer!: ElementRef<HTMLDivElement>;
-  @Input() monitoredVariable: any;
+  edit: boolean = false;
+  toggled: boolean = false;
+  showEmojiPick: boolean = false;
   isInputFocused: boolean = false;
+  showUploadedFile: boolean = false;
+  @Input() monitoredVariable: any;
   @ViewChild('search') search!: ElementRef;
+  @ViewChild('editor') editor!: ElementRef;
+  @ViewChild('thread') threadDrawer!: MatDrawer;
+  @ViewChild('emojiPicker') emojiPickerElementRef!: ElementRef;
+  @ViewChild('messageContainer') messageContainer!: ElementRef;
+  @ViewChild('scrollContainer') scrollContainer!: ElementRef<HTMLDivElement>;
 
-
-
-  constructor(private _bottomSheet: MatBottomSheet, public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public threadService: ThreadService, public authService: AuthService, public emojiService: EmojiService, public firestoreService: FirestoreService, public router: Router) {
+  constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public threadService: ThreadService, public authService: AuthService, public emojiService: EmojiService, public firestoreService: FirestoreService, public router: Router) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser as User;
     firestoreService.loadUsers();
   }
 
- async ngOnInit() {
+  async ngOnInit() {
     this.chatService.openChat$.subscribe((openChat) => {
       if (openChat) {
         const newChat = openChat as Channel;
-      this.userService.setCurrentChatToLocalStorage(newChat);
-        console.log("openChat ist vorhanden",newChat)
+        this.userService.setCurrentChatToLocalStorage(newChat);
+        console.log("openChat ist vorhanden", newChat)
         if (!this.currentChat || this.currentChat.id !== newChat.id) {
           this.getCurrentChatFromLocalStorage();
           this.currentChat = newChat;
-         
-          console.log("currentchat = newChat",newChat)
+
+          console.log("currentchat = newChat", newChat)
           this.threadService.currentChat = newChat;
           if (this.firestoreService.unSubChannelMessages) {
             this.firestoreService.unSubChannelMessages();
@@ -82,7 +77,7 @@ export class MainChatComponent implements OnInit {
         this.firestoreService.getAllChannelMembers(this.currentChat.id);
       } else {
         this.currentChat = this.currentChat;
-        console.log("currentchat ist vorhanden",this.currentChat)
+        console.log("currentchat ist vorhanden", this.currentChat)
       }
     });
     this.checkEventEmitters();
@@ -95,7 +90,7 @@ export class MainChatComponent implements OnInit {
       this.currentChat = JSON.parse(chatJson) as Channel;
     } else {
       console.log('Kein currentChat im LocalStorage gefunden');
-      return 
+      return
     }
   }
 
@@ -388,17 +383,6 @@ export class MainChatComponent implements OnInit {
   }
 
   /**
-   * Opens the profile view dialog for a specific user.
-   * @param {any} id - The ID of the user.
-   */
-  openProfileDialog(id: any): void {
-    this.dialog.open(DialogViewProfileComponent, {
-      panelClass: 'dialog-container',
-      data: { userID: id },
-    });
-  }
-
-  /**
    * Checks click events on the document to manage input focus.
    * @param {Event} event - The click event.
    */
@@ -437,32 +421,5 @@ export class MainChatComponent implements OnInit {
       this.firestoreService.showSpinner = false;
     }, 2000);
     this.showUploadedFile = true;
-  }
-
-  /**
-   * Logs out the current user and navigates to the login screen.
-   */
-  logOutUser() {
-    this.authService.signOutUser();
-    this.router.navigate(['']);
-  }
-
-  openBottomSheet(): void {
-    this._bottomSheet.open(BottomSheet);
-  }
-}
-
-@Component({
-  selector: 'bottom-sheet-overview-example-sheet',
-  templateUrl: '../main-chat/bottom-sheet.html',
-  standalone: true,
-  imports: [MatListModule],
-})
-export class BottomSheet {
-  constructor(private _bottomSheetRef: MatBottomSheetRef<BottomSheet>) { }
-
-  openLink(event: MouseEvent): void {
-    this._bottomSheetRef.dismiss();
-    event.preventDefault();
   }
 }
