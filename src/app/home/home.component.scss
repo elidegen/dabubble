@@ -280,3 +280,52 @@ mat-drawer {
 b {
     color: var(--purple3);
 }
+
+.found-msg-container {
+    display: flex;
+    padding: 10px;
+    gap: 12px;
+
+    &:hover {
+        background-color: var(--primary);
+        cursor: pointer;
+        border-radius: 20px;
+    }
+
+    img {
+        height: 40px;
+        width: 40px;
+    }
+
+    .message-box {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        gap: 4px;
+        padding: 0;
+    }
+
+    .message-data {
+        display: flex;
+        gap: 8px;
+    }
+
+    .name {
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .found-dm-content {
+        font-size: 16px;
+        word-break: break-word;
+    }
+
+    .found-msg-channel {
+        font-size: 14px;
+        color: grey;
+        white-space: nowrap;
+        max-width: 37vw;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+}

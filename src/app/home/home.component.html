@@ -38,34 +38,30 @@
             </div>
           </div>
           <h1 *ngIf="this.searchInput != '#' && this.searchInput != '@'">Channel messages:</h1>
-          <div class="message-row-container" *ngFor="let message of filteredChannelMessages"
+          <div class="found-msg-container" *ngFor="let message of filteredChannelMessages"
             (click)="selectChannel(message)">
-            <span>Found in <b>{{message.channel}}</b></span>
-            <div class="filtered-message-container">
-              <span class="filtered-message">{{message.content}}</span>
-              <div class="filtered-message-creator">
-                <span class="by">by</span>
+
+            <img src="{{message.profilePic}}" alt="" />
+            <div class="message-box">
+              <div class="message-data">
                 <span class="name">{{ message.creator }}</span>
-                <div class="creator-picture-container">
-                  <img src="{{message.profilePic}}" alt="" />
-                </div>
+                <span class="date">{{ message.time }}</span>
               </div>
+              <span class="found-dm-content">{{message.content}}</span>
+              <span class="found-msg-channel">in #{{message.channel}}</span>
             </div>
           </div>
 
           <h1 *ngIf="this.searchInput != '#' && this.searchInput != '@'">Direct Messages:</h1>
-          <div class="message-row-container" *ngFor="let message of filteredDirectMessages"
+          <div class="found-msg-container" *ngFor="let message of filteredDirectMessages"
             (click)="selectDirectMessage(message)">
-            <span>Found in <b>{{message.channel}}</b></span>
-            <div class="filtered-message-container">
-              <span class="filtered-message">{{message.content}}</span>
-              <div class="filtered-message-creator">
-                <span class="by">by</span>
+            <img src="{{message.profilePic}}" alt="" />
+            <div class="message-box">
+              <div class="message-data">
                 <span class="name">{{ message.creator }}</span>
-                <div class="creator-picture-container">
-                  <img src="{{message.profilePic}}" alt="" />
-                </div>
+                <span class="date">{{ message.time }}</span>
               </div>
+              <span class="found-dm-content">{{message.content}}</span>
             </div>
           </div>
         </div>
