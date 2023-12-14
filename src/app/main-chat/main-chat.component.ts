@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, inject, HostListener, Input, Directive } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, inject, HostListener, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogEditChannelComponent } from '../dialog-edit-channel/dialog-edit-channel.component';
 import { DialogAddToGroupComponent } from '../dialog-add-to-group/dialog-add-to-group.component';
@@ -15,7 +15,7 @@ import { Thread } from 'src/models/thread.class';
 import { AuthService } from '../auth.service';
 import { EmojiService } from '../emoji.service';
 import { User } from 'src/models/user.class';
-import { FirestoreService } from '../firestore.service';
+import { FirestoreService } from '../firestore.service'; import { Router } from '@angular/router';
 import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-profile.component';
 import { Router } from '@angular/router';
 import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
@@ -30,26 +30,29 @@ import { Chat } from 'src/models/chat.class';
 })
 
 export class MainChatComponent implements OnInit {
-  @ViewChild('messageContainer') messageContainer!: ElementRef;
   firestore: Firestore = inject(Firestore);
   currentChat!: Channel | undefined;
-  @ViewChild('thread') threadDrawer!: MatDrawer;
   message: Message = new Message();
   reaction: Reaction = new Reaction;
+  newThread = new Thread();
   currentUser: User;
   allReactionsByMessage: [] = [];
-  threadCount: any = 0;
-  showEmojiPick: boolean = false;
-  toggled: boolean = false;
-  edit: boolean = false;
-  @ViewChild('editor') editor!: ElementRef;
-  @ViewChild('emojiPicker') emojiPickerElementRef!: ElementRef;
   editingMessage: string | undefined;
-  newThread = new Thread();
-  taggedNames = "";
+  taggedNames: string = "";
+  threadCount: any = 0;
   dataSrc: any;
-  showUploadedFile = false;
   scrollPosition: any;
+  edit: boolean = false;
+  toggled: boolean = false;
+  showEmojiPick: boolean = false;
+  isInputFocused: boolean = false;
+  showUploadedFile: boolean = false;
+  @Input() monitoredVariable: any;
+  @ViewChild('search') search!: ElementRef;
+  @ViewChild('editor') editor!: ElementRef;
+  @ViewChild('thread') threadDrawer!: MatDrawer;
+  @ViewChild('emojiPicker') emojiPickerElementRef!: ElementRef;
+  @ViewChild('messageContainer') messageContainer!: ElementRef;
   @ViewChild('scrollContainer') scrollContainer!: ElementRef<HTMLDivElement>;
   @Input() monitoredVariable: any;
   isInputFocused: boolean = false;
@@ -61,19 +64,24 @@ export class MainChatComponent implements OnInit {
     firestoreService.loadUsers();
   }
 
- async ngOnInit() {
+  async ngOnInit() {
     this.chatService.openChat$.subscribe((openChat) => {
       if (openChat) {
         const newChat = openChat as Channel;
         this.userService.setCurrentChatToLocalStorage(newChat);
         console.log("openChat ist vorhanden",newChat)
+        this.userService.setCurrentChatToLocalStorage(newChat);
+        console.log("openChat ist vorhanden", newChat)
         if (!this.currentChat || this.currentChat.id !== newChat.id) {
           this.currentChat = newChat;
+
+          console.log("currentchat = newChat", newChat)
           this.threadService.currentChat = newChat;
           if (this.firestoreService.unSubChannelMessages) {
             this.firestoreService.unSubChannelMessages();
           }
         }
+        this.getCurrentChatFromLocalStorage();
         this.firestoreService.loadChannelMessages(this.currentChat);
         this.firestoreService.getAllChannelMembers(this.currentChat.id);
       } else {
@@ -86,16 +94,16 @@ export class MainChatComponent implements OnInit {
     this.checkEventEmitters();
   }
 
-
   getCurrentChatFromLocalStorage(): void {
     const chatJson = localStorage.getItem('currentChat');
     if (chatJson) {
       this.currentChat = JSON.parse(chatJson) as Channel;
       console.log('currentChat', this.currentChat);
       
+      this.chatService.chatWindow = 'channel';
     } else {
       console.log('Kein currentChat im LocalStorage gefunden');
-      return 
+      return
     }
   }
 
@@ -178,7 +186,6 @@ export class MainChatComponent implements OnInit {
       this.scrollToBottom();
     }
   }
-
 
   /**
    * Sets values for sent Message
@@ -374,6 +381,17 @@ export class MainChatComponent implements OnInit {
   }
 
   /**
+  * Opens the profile view dialog for a specific user.
+  * @param {any} id - The ID of the user.
+  */
+  openProfileDialog(id: any): void {
+    this.dialog.open(DialogViewProfileComponent, {
+      panelClass: 'dialog-container',
+      data: { userID: id },
+    });
+  }
+
+  /**
    * 
    * @param user 
    */
@@ -385,17 +403,6 @@ export class MainChatComponent implements OnInit {
     this.message.content += taggedName!;
     this.message.mentions.push(user);
     this.userService.openUserContainerTextfield.next(false);
-  }
-
-  /**
-   * Opens the profile view dialog for a specific user.
-   * @param {any} id - The ID of the user.
-   */
-  openProfileDialog(id: any): void {
-    this.dialog.open(DialogViewProfileComponent, {
-      panelClass: 'dialog-container',
-      data: { userID: id },
-    });
   }
 
   /**
@@ -437,32 +444,5 @@ export class MainChatComponent implements OnInit {
       this.firestoreService.showSpinner = false;
     }, 2000);
     this.showUploadedFile = true;
-  }
-
-  /**
-   * Logs out the current user and navigates to the login screen.
-   */
-  logOutUser() {
-    this.authService.signOutUser();
-    this.router.navigate(['']);
-  }
-
-  openBottomSheet(): void {
-    this._bottomSheet.open(BottomSheet);
-  }
-}
-
-@Component({
-  selector: 'bottom-sheet-overview-example-sheet',
-  templateUrl: '../main-chat/bottom-sheet.html',
-  standalone: true,
-  imports: [MatListModule],
-})
-export class BottomSheet {
-  constructor(private _bottomSheetRef: MatBottomSheetRef<BottomSheet>) { }
-
-  openLink(event: MouseEvent): void {
-    this._bottomSheetRef.dismiss();
-    event.preventDefault();
   }
 }

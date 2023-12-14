@@ -44,6 +44,8 @@ import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { PrivacyComponent } from './privacy/privacy.component';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatListModule } from '@angular/material/list';
+import { HeaderMobileComponent } from './header-mobile/header-mobile.component';
+
 
 @NgModule({
   declarations: [
@@ -61,6 +63,7 @@ import { MatListModule } from '@angular/material/list';
     ImprintComponent,
     DirectMessageChatComponent,
     PrivacyComponent,
+    HeaderMobileComponent,
   ],
   imports: [
     BrowserModule,
