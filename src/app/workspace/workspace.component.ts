@@ -204,8 +204,12 @@ export class WorkspaceComponent implements OnInit {
   }
 
   getOtherUser(members: any[]) {
-    let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
-    let interlocutor = this.allUsers.find(user => user.id == otherUser.id);
-    return interlocutor;
+    if (members[0].id === this.currentUser.id) {
+      return this.currentUser;
+    } else {
+      let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
+      let interlocutor = this.allUsers.find(user => user.id == otherUser.id);
+      return interlocutor;
+    }
   }
 }
