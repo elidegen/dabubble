@@ -192,9 +192,9 @@
           </section>
         </ng-container>
 
-        <emoji-mart #emojiPicker *ngIf="this.emojiService.showMainChatEmojiPicker == true" class="emojiPicker"
+        <emoji-mart class="emoji-mart" [style]="{ width: 'unset' }" #emojiPicker *ngIf="this.emojiService.showMainChatEmojiPicker == true" class="emojiPicker"
           (emojiClick)="addEmoji($event)"></emoji-mart>
-        <emoji-mart #emojiPicker *ngIf="this.emojiService.showTextChatEmojiPicker == true" class="emojiPicker"
+        <emoji-mart [style]="{ width: 'unset' }" #emojiPicker *ngIf="this.emojiService.showTextChatEmojiPicker == true" class="emojiPicker"
           (emojiClick)="addEmojiTextField($event)"></emoji-mart>
 
       </mat-card-content>
