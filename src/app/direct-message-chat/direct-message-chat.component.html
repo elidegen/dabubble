@@ -2,7 +2,7 @@
 
 <app-header-mobile *ngIf="chatService.isMobile"></app-header-mobile>
 
-<div [ngSwitch]="firestoreService.messageIsExisting" class="chat-window-container">
+<div  (click)="closeEmojiPicker()" [ngSwitch]="firestoreService.messageIsExisting" class="chat-window-container">
   <mat-card-header>
     <button class="br-32 profile-button" (click)="openProfileDialog(getOtherUser(currentChat?.members)?.id)">
       <img src="{{ getOtherUser(currentChat?.members)?.picture }}">

@@ -357,4 +357,15 @@ export class DirectMessageChatComponent implements OnInit {
         return interlocutor;
       }
     }
+
+      /**
+   * Closes the emoji picker.
+   */
+  closeEmojiPicker() {
+    if (this.emojiService.showMainChatEmojiPicker == true || this.emojiService.showTextChatEmojiPicker == true && this.emojiService.emojiString == "") {
+      this.emojiService.showMainChatEmojiPicker = false;
+      this.emojiService.showTextChatEmojiPicker = false;
+    }
+    this.userService.openUserContainerTextfield.next(false);
+  }
 }
