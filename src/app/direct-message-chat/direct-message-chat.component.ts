@@ -331,10 +331,10 @@ export class DirectMessageChatComponent implements OnInit {
    * Responds to window resize events to check and update the screen width status in the chat service.
    * @param {any} event - The window resize event object.
    */
-    @HostListener('window:resize', ['$event'])
-    onResize(event: any): void {
-      this.chatService.checkScreenWidth();
-    }
+    // @HostListener('window:resize', ['$event'])
+    // onResize(event: any): void {
+    //   this.chatService.checkScreenWidth();
+    // }
 
     loadUsers() {
       this.unsubscribeUsers = onSnapshot(

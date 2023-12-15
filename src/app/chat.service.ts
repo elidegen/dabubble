@@ -14,8 +14,8 @@ import { Router } from '@angular/router';
 export class ChatService {
   private _openChatSubject: BehaviorSubject<Channel | null> = new BehaviorSubject<Channel | null>(null);
   private _openDirectMessageSubject: BehaviorSubject<Chat | null> = new BehaviorSubject<Chat | null>(null);
-  private workspaceDrawerStateSubject = new BehaviorSubject<boolean>(true);
-  private threadDrawerStateSubject = new BehaviorSubject<boolean>(false);
+  public workspaceDrawerStateSubject = new BehaviorSubject<boolean>(true);
+  public threadDrawerStateSubject = new BehaviorSubject<boolean>(false);
   workspaceDrawerState$ = this.workspaceDrawerStateSubject.asObservable();
   threadDrawerState$ = this.threadDrawerStateSubject.asObservable();
   firestore: Firestore = inject(Firestore)
@@ -383,4 +383,8 @@ export class ChatService {
     }
   }
 
+  // @HostListener('window:resize', ['$event'])
+  // onResize(): void {
+  //   this.checkScreenWidth();
+  // }
 }
