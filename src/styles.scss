@@ -417,8 +417,14 @@ textarea {
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.4);
 }
-.emoji-mart {
-    width: 350px;
+
+
+
+@media (max-width: 1300px) {
+    .emoji-mart {
+        width: 220px!important;
+    }
+    
 }
 
 @media (max-width: 500px) {

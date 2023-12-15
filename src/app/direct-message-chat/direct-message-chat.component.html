@@ -2,7 +2,7 @@
 
 <app-header-mobile *ngIf="chatService.isMobile"></app-header-mobile>
 
-<div [ngSwitch]="firestoreService.messageIsExisting" class="chat-window-container">
+<div  (click)="closeEmojiPicker()" [ngSwitch]="firestoreService.messageIsExisting" class="chat-window-container">
   <mat-card-header>
     <button class="br-32 profile-button" (click)="openProfileDialog(getOtherUser(currentChat?.members)?.id)">
       <img src="{{ getOtherUser(currentChat?.members)?.picture }}">
@@ -93,8 +93,8 @@
       </section>
     </ng-container>
 
-    <emoji-mart  class="emoji-mart" #emojiPicker *ngIf="this.emojiService.showMainChatEmojiPicker == true" class="emojiPicker" (emojiClick)="addEmoji($event)"></emoji-mart>
-    <emoji-mart class="emoji-mart" #emojiPicker *ngIf="this.emojiService.showTextChatEmojiPicker == true" class="emojiPicker" (emojiClick)="addEmojiTextField($event)"></emoji-mart>
+    <emoji-mart  class="emoji-mart" [style]="{ width: 'unset' }" #emojiPicker *ngIf="this.emojiService.showMainChatEmojiPicker == true" class="emojiPicker" (emojiClick)="addEmoji($event)"></emoji-mart>
+    <emoji-mart class="emoji-mart" [style]="{ width: 'unset' }" #emojiPicker *ngIf="this.emojiService.showTextChatEmojiPicker == true" class="emojiPicker" (emojiClick)="addEmojiTextField($event)"></emoji-mart>
   </mat-card-content>
 
   <mat-card-content *ngSwitchCase="false" class="empty-direct-message-container">
