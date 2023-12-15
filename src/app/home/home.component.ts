@@ -47,6 +47,7 @@ export class HomeComponent {
   openBottomSheet(): void {
     this._bottomSheet.open(BottomSheetOverviewExampleSheet);
   }
+  
   /**
    * Opens a profile dialog for viewing a user's profile based on the provided user ID.
    * @param {any} id - The ID of the user for whom the profile is to be viewed.
@@ -64,13 +65,6 @@ export class HomeComponent {
   logOutUser() {
     this.auth.signOutUser();
     this.router.navigate(['']);
-  }
-
-  toggleWorkspace(workspace: { toggle: () => void; }) {
-    if (window.innerWidth < 1300)
-      console.log('lala');
-
-    workspace.toggle()
   }
 
   /**

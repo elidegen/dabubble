@@ -47,7 +47,7 @@
     <div *ngSwitchCase="'channel'" class="chat-window-container">
       <mat-card-header *ngSwitchCase="'channel'">
         <div class="header">
-          <button (click)="openEditChannelDialog()" mat-button class="br-32">
+          <button (click)="openEditChannelDialog()" mat-button class="br-32 channel-button">
             <div class="chat-title">
               <img src="assets/img/icons/tag-black.svg" alt="" />
               <h2 class="mr-16">{{ currentChat?.name}}</h2>
@@ -259,7 +259,7 @@
     </div>
   </mat-card>
 
-  <mat-drawer style="padding-right: 16px;" #thread mode="side" position="end">
-    <app-thread style="width: 25%" (closeThread)="onCloseThread()"></app-thread>
+  <mat-drawer style="padding-right: 16px;" #thread mode="side" [opened]="chatService.threadDrawerState$ | async" position="end">
+    <app-thread style="width: 25%"></app-thread>
   </mat-drawer>
 </mat-drawer-container>

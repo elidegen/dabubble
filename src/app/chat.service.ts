@@ -14,6 +14,10 @@ import { Router } from '@angular/router';
 export class ChatService {
   private _openChatSubject: BehaviorSubject<Channel | null> = new BehaviorSubject<Channel | null>(null);
   private _openDirectMessageSubject: BehaviorSubject<Chat | null> = new BehaviorSubject<Chat | null>(null);
+  private workspaceDrawerStateSubject = new BehaviorSubject<boolean>(true);
+  private threadDrawerStateSubject = new BehaviorSubject<boolean>(false);
+  workspaceDrawerState$ = this.workspaceDrawerStateSubject.asObservable();
+  threadDrawerState$ = this.threadDrawerStateSubject.asObservable();
   firestore: Firestore = inject(Firestore)
   chatWindow = 'empty';
   chat: Chat = new Chat();
@@ -31,6 +35,8 @@ export class ChatService {
   allUsers: any[] = [];
   allMessagesOfDM: any[] = [];
   isMobile: boolean = false;
+  workspaceOpen: boolean = true;
+  threadOpen: boolean = true;
 
   constructor(public userService: UserService, public router: Router) {
     this.getallChannels();
@@ -38,6 +44,25 @@ export class ChatService {
     this.loadAllDirectMessages();
   }
 
+  async toggleWorkspace() {
+    if (this.threadDrawerStateSubject.value == true && window.innerWidth >= 800 && window.innerWidth < 1300) {
+      this.threadDrawerStateSubject.next(!this.threadDrawerStateSubject.value);
+    }
+
+    this.workspaceDrawerStateSubject.next(!this.workspaceDrawerStateSubject.value);
+  }
+
+  closeWorkspace() {
+    this.workspaceDrawerStateSubject.next(false);
+  }
+
+  closeThread() {
+    this.threadDrawerStateSubject.next(false);
+  }
+
+  openThread() {
+    this.threadDrawerStateSubject.next(true);
+  }
 
   ngOnDestroy() {
     this.unSubDirectMessages();
@@ -121,7 +146,7 @@ export class ChatService {
     });
   }
 
-  
+
   /**
    * This function searches for a existing dm
    * @param user 
@@ -169,11 +194,11 @@ export class ChatService {
       this.chat.id = userId;
       return userId
     } else {
-     let userId = this.userService.currentUser.id;
-     let currentUserData = this.convertUser(this.userService.currentUser);
-     this.chat.members.push(currentUserData);
-     this.chat.id = userId;
-     return userId
+      let userId = this.userService.currentUser.id;
+      let currentUserData = this.convertUser(this.userService.currentUser);
+      this.chat.members.push(currentUserData);
+      this.chat.id = userId;
+      return userId
     }
   }
 
@@ -288,7 +313,7 @@ export class ChatService {
       const messageCol = collection(this.firestore, `direct messages/${messageId}/messages`);
       const querySnapshot = await getDocs(messageCol);
       querySnapshot.forEach((message) => {
-          this.allMessagesOfDM.push(message.data());
+        this.allMessagesOfDM.push(message.data());
       });
     }
   }
@@ -318,7 +343,7 @@ export class ChatService {
     this.chatWindow = 'channel';
     if (this.isMobile) {
       this.router.navigate(['main']);
-    }  
+    }
   }
 
   /**
@@ -333,8 +358,8 @@ export class ChatService {
       this.router.navigate(['main']);
     }
   }
-  
-  
+
+
   /**
    * Differs user from current user for dm
    * @param members 
@@ -348,14 +373,14 @@ export class ChatService {
     return interlocutor as User;
   }
 
-    /**
-   * Checks the screen width to determine if the current device is a mobile device.
-   */
-    checkScreenWidth(): void {
-      this.isMobile = window.innerWidth < 800;
-      if(!this.isMobile && this.router.url !== 'home') {
-        this.router.navigate(['home']);
-      }
+  /**
+ * Checks the screen width to determine if the current device is a mobile device.
+ */
+  checkScreenWidth(): void {
+    this.isMobile = window.innerWidth < 800;
+    if (!this.isMobile && this.router.url !== 'home') {
+      this.router.navigate(['home']);
     }
+  }
 
 }

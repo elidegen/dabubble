@@ -267,7 +267,7 @@ export class ThreadComponent implements OnInit {
     if (this.chatService.isMobile) {
       this.router.navigate(['main'])
     } else {
-      this.closeThread.emit();
+      this.chatService.closeThread();
     }
   }
 

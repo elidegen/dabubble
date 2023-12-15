@@ -72,13 +72,13 @@ export class MainChatComponent implements OnInit {
         this.firestoreService.getAllChannelMembers(this.currentChat.id);
       } else {
         this.getCurrentChatFromLocalStorage();
-          if (this.currentChat?.type == 'channel') {
-            this.chatService.chatWindow = 'channel';
-            this.firestoreService.loadChannelMessages(this.currentChat);
-            this.firestoreService.getAllChannelMembers(this.currentChat?.id);
-          } else {
-            this.chatService.chatWindow = 'direct';
-          }
+        if (this.currentChat?.type == 'channel') {
+          this.chatService.chatWindow = 'channel';
+          this.firestoreService.loadChannelMessages(this.currentChat);
+          this.firestoreService.getAllChannelMembers(this.currentChat?.id);
+        } else {
+          this.chatService.chatWindow = 'direct';
+        }
       }
     });
     this.checkEventEmitters();
@@ -98,14 +98,14 @@ export class MainChatComponent implements OnInit {
    * This functions is used for the eventemitters of the thread behavior and scroll behavior of messages
    */
   checkEventEmitters() {
-    this.threadService.openThread.subscribe(() => {
-      this.threadDrawer.open();
-      this.threadService.isThreadInDM = false;
-    })
-    this.threadService.changeChat.subscribe(() => {
-      this.threadDrawer.close();
-      this.threadService.isThreadInDM = false;
-    })
+    // this.threadService.openThread.subscribe(() => {
+    //   this.threadDrawer.open();
+    //   this.threadService.isThreadInDM = false;
+    // })
+    // this.threadService.changeChat.subscribe(() => {
+    //   this.threadDrawer.close();
+    //   this.threadService.isThreadInDM = false;
+    // })
     this.firestoreService.messageAdded.subscribe(() => {
       this.scrollToBottom();
     });
@@ -304,7 +304,9 @@ export class MainChatComponent implements OnInit {
     if (this.chatService.isMobile) {
       this.router.navigate(['thread']);
     } else {
-      this.threadDrawer.open();
+      this.chatService.openThread();
+      if (window.innerWidth >= 800 && window.innerWidth < 1300)
+        this.chatService.closeWorkspace();
     }
   }
 
@@ -367,7 +369,7 @@ export class MainChatComponent implements OnInit {
     this.userService.openUserContainerTextfield.next(false);
   }
 
-  
+
 
   /**
    * Handles file selection for uploading images or other files.
@@ -398,12 +400,12 @@ export class MainChatComponent implements OnInit {
     this.showUploadedFile = true;
   }
 
-   /**
-   * Responds to window resize events to check and update the screen width status in the chat service.
-   * @param {any} event - The window resize event object.
-   */
-   @HostListener('window:resize', ['$event'])
-   onResize(event: any): void {
-     this.chatService.checkScreenWidth();
-   }
+  /**
+  * Responds to window resize events to check and update the screen width status in the chat service.
+  * @param {any} event - The window resize event object.
+  */
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any): void {
+    this.chatService.checkScreenWidth();
+  }
 }
