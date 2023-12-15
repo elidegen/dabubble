@@ -66,7 +66,7 @@ export class DirectMessageChatComponent implements OnInit {
       } else {
         this.loadUsers();
         this.chatService.chatWindow = 'direct';
-        this.getCurrentChatFromLocalStorage()
+      this.currentChat =  this.userService.getCurrentChatFromLocalStorage()
         this.loadMessages();
       }
     });
@@ -75,15 +75,7 @@ export class DirectMessageChatComponent implements OnInit {
     });
   }
 
-    getCurrentChatFromLocalStorage(): void {
-    const chatJson = localStorage.getItem('currentChat');
-    if (chatJson) {
-      this.currentChat = JSON.parse(chatJson) as Chat;
-    } else {
-      console.log('Kein currentChat im LocalStorage gefunden');
-      return 
-    }
-  }
+ 
 
   /**
    * Lifecycle hook that is called when a directive, pipe, or service is destroyed.

@@ -191,4 +191,14 @@ export class UserService {
     return this.users.some(user => user.email === email);
   }
 
+
+  getCurrentChatFromLocalStorage() {
+    const chatJson = localStorage.getItem('currentChat');
+    if (chatJson) {
+    return JSON.parse(chatJson) as Channel;
+    } else {
+      console.log('Kein currentChat im LocalStorage gefunden');
+      return
+    }
+  }
 }
