@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { User } from 'src/models/user.class';
 import { Chat } from 'src/models/chat.class';
+import { Channel } from 'src/models/channel.class';
 
 
 
@@ -135,6 +136,16 @@ export class UserService {
     localStorage.setItem('currentUser', userJson);
     console.log('currentUser im LocalStorage gespeichert');
 
+  }
+  
+  getCurrentChatFromLocalStorage() {
+    const chatJson = localStorage.getItem('currentChat');
+    if (chatJson) {
+    return JSON.parse(chatJson) as Channel;
+    } else {
+      console.log('Kein currentChat im LocalStorage gefunden');
+      return
+    }
   }
 
   removeCurrentUserFromLocalStorage() {
