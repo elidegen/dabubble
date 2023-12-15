@@ -108,8 +108,8 @@
           </div>
         </div>
       </div>
-      <emoji-mart *ngIf="this.emojiService.showThreadEmojiPicker == true" class="emojiPicker" (emojiClick)="addEmoji($event)"></emoji-mart>
-      <emoji-mart *ngIf="this.emojiService.showThreadTextChatEmojiPicker == true" class="emojiPicker" (emojiClick)="addEmojiTextField($event)"></emoji-mart>
+      <emoji-mart class="emoji-mart" *ngIf="this.emojiService.showThreadEmojiPicker == true" class="emojiPicker" (emojiClick)="addEmoji($event)"></emoji-mart>
+      <emoji-mart class="emoji-mart" *ngIf="this.emojiService.showThreadTextChatEmojiPicker == true" class="emojiPicker" (emojiClick)="addEmojiTextField($event)"></emoji-mart>
     </section>
 
   </mat-card-content>
