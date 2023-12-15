@@ -55,7 +55,9 @@ export class ThreadComponent implements OnInit {
     this.threadService.openMessage$.subscribe((openMessage) => {
       if (openMessage) {
         const message = openMessage as Message;
-        this.userService.setCurrentChatToLocalStorage(message);
+        if (this.chatService.isMobile) {
+          this.userService.setCurrentChatToLocalStorage(message);
+        }
         if (!this.currentMessage || this.currentMessage.id !== message.id) {
           this.currentMessage = message;
           this.threadService.currentMessage = message;
@@ -65,7 +67,7 @@ export class ThreadComponent implements OnInit {
           this.firestoreService.loadThread(this.currentMessage.id);
         }
       } else {
-        this.getCurrentChatFromLocalStorage();
+        this.currentChat = this.userService.getCurrentChatFromLocalStorage();
         this.firestoreService.loadThread(this.currentMessage.id);
       }
     });
@@ -74,17 +76,8 @@ export class ThreadComponent implements OnInit {
     });
   }
 
-  getCurrentChatFromLocalStorage(): void {
-    const chatJson = localStorage.getItem('currentChat');
-    if (chatJson) {
-      this.currentMessage = JSON.parse(chatJson) as Message;
-      this.threadService.currentMessage = JSON.parse(chatJson) as Message;
-    } else {
-      console.log('Kein currentChat im LocalStorage gefunden');
-      return
-    }
-  }
-
+  
+  
   ngOnDestroy() {
     if (this.firestoreService.unSubThread) {
       this.firestoreService.unSubThread(); // Bestehendes Abonnement kündigen

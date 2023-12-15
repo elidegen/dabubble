@@ -66,7 +66,7 @@ export class DirectMessageChatComponent implements OnInit {
       } else {
         this.loadUsers();
         this.chatService.chatWindow = 'direct';
-        this.getCurrentChatFromLocalStorage()
+      this.currentChat =  this.userService.getCurrentChatFromLocalStorage()
         this.loadMessages();
       }
     });
@@ -75,15 +75,7 @@ export class DirectMessageChatComponent implements OnInit {
     });
   }
 
-    getCurrentChatFromLocalStorage(): void {
-    const chatJson = localStorage.getItem('currentChat');
-    if (chatJson) {
-      this.currentChat = JSON.parse(chatJson) as Chat;
-    } else {
-      console.log('Kein currentChat im LocalStorage gefunden');
-      return 
-    }
-  }
+ 
 
   /**
    * Lifecycle hook that is called when a directive, pipe, or service is destroyed.
@@ -357,8 +349,23 @@ export class DirectMessageChatComponent implements OnInit {
     }
 
     getOtherUser(members: any[]) {
-      let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
-      let interlocutor = this.allUsers.find(user => user.id == otherUser.id);
-      return interlocutor;
+      if (members[0].id === this.currentUser.id) {
+        return this.currentUser;
+      } else {
+        let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
+        let interlocutor = this.allUsers.find(user => user.id == otherUser.id);
+        return interlocutor;
+      }
     }
+
+      /**
+   * Closes the emoji picker.
+   */
+  closeEmojiPicker() {
+    if (this.emojiService.showMainChatEmojiPicker == true || this.emojiService.showTextChatEmojiPicker == true && this.emojiService.emojiString == "") {
+      this.emojiService.showMainChatEmojiPicker = false;
+      this.emojiService.showTextChatEmojiPicker = false;
+    }
+    this.userService.openUserContainerTextfield.next(false);
+  }
 }

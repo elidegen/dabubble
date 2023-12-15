@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { inject } from '@angular/core';
-import { Firestore, collection, doc, onSnapshot, addDoc, deleteDoc, updateDoc, } from '@angular/fire/firestore';
+import { Firestore, collection, doc, onSnapshot, addDoc, deleteDoc, updateDoc, DocumentReference, DocumentData, getDoc, setDoc, } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { User } from 'src/models/user.class';
-import { Channel } from 'src/models/channel.class';
 import { Chat } from 'src/models/chat.class';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { Channel } from 'src/models/channel.class';
 
 
 
@@ -26,6 +25,7 @@ export class UserService {
   openUserContainerTextfield = new BehaviorSubject<boolean>(false);
   nameStringForTextfield: any;
   openUserContainerThreadTextfield= new BehaviorSubject<boolean>(false);
+  chat: Chat = new Chat();
  
   unsubList;
 
@@ -34,7 +34,7 @@ export class UserService {
    
   }
 
-  constructor(public router: Router ) {
+  constructor(public router: Router) {
     this.unsubList = this.subUserList();
     console.log("Alle Nutzer",this.users);
   }
@@ -61,6 +61,7 @@ export class UserService {
       (docRef) => {
         console.log("hier wird der nutzer hochgeladen",item)
         this.updateUserId(item, docRef!.id);
+        this.createDirectMessage(item)
       }
     )
   }
@@ -93,9 +94,6 @@ export class UserService {
       (error) => { console.log(error); }
     );
   }
-
-
-
 
   getUpdateData(user: User) {
     return {
@@ -138,6 +136,16 @@ export class UserService {
     localStorage.setItem('currentUser', userJson);
     console.log('currentUser im LocalStorage gespeichert');
 
+  }
+  
+  getCurrentChatFromLocalStorage() {
+    const chatJson = localStorage.getItem('currentChat');
+    if (chatJson) {
+    return JSON.parse(chatJson) as Channel;
+    } else {
+      console.log('Kein currentChat im LocalStorage gefunden');
+      return
+    }
   }
 
   removeCurrentUserFromLocalStorage() {
@@ -191,4 +199,62 @@ export class UserService {
     return this.users.some(user => user.email === email);
   }
 
+  //-------------------------------------- new commit -------------------------------------------------------
+
+  async createDirectMessage(user: User) {
+    this.checkUserForDirectMessageName(user);
+    const directMessageRef = collection(this.firestore, 'direct messages');
+    const specificDocRef: DocumentReference<DocumentData> = doc(directMessageRef, this.checkUserForId(user));
+    const docSnapshot = await getDoc(specificDocRef);
+    if (!docSnapshot.exists()) {
+      await setDoc(specificDocRef, {
+        ...this.chat.toJSON(),
+      })
+      .catch((err) => {
+        console.log('error', err);
+      })
+      this.setPersonalChatToLocalStorage(this.chat);
+    }
+  }
+
+   /**
+   * This function sets the name of a dm by combining the user name with current user name
+   * @param user 
+   */
+   checkUserForDirectMessageName(user: User) {
+      this.chat.name = user.name;
+    }
+  
+
+    /**
+   * This function sets the document reference for a dm by combining the user id with the currentUser id
+   * @param user 
+   * @returns id for docRef
+   */
+    checkUserForId(user: User) {
+      this.chat.members = []
+      let userId = user.id;
+      let currentUserData = this.convertUser(user);
+      this.chat.members.push(currentUserData);
+      this.chat.id = userId;
+      return userId
+      }
+    
+
+     /**
+   * Sets values of user
+   * @param user 
+   * @returns 
+   */
+  convertUser(user: any): any {
+    return {
+      name: user.name, email: user.email, password: user.password, id: user.id, picture: user.picture,
+    };
+  }
+
+  
+  setPersonalChatToLocalStorage(chat: Chat) {
+    let channelJson = JSON.stringify(chat);
+    localStorage.setItem('currentChat', channelJson);
+  }
 }

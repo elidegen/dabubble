@@ -17,7 +17,9 @@ export class DialogAddToGroupComponent {
   
   constructor(public dialogRef: MatDialogRef<DialogAddToGroupComponent>, public chatService: ChatService, 
     public userService: UserService, public firestoreService: FirestoreService) {
+    this.currentChat = this.userService.getCurrentChatFromLocalStorage();
     this.loadUsers();
+    this.getAllChannelMembers();
     this.currentUser = this.userService.currentUser;
   }
 

@@ -78,7 +78,7 @@
       <button mat-icon-button [matMenuTriggerFor]="menu">
         <mat-icon>expand_more</mat-icon>
       </button>
-      <mat-menu #menu="matMenu" xPosition="before">
+      <mat-menu #menu="matMenu" xPosition="before" class="br-32">
         <button (click)="openProfileDialog(currentUser.id)" class="menu" mat-menu-item>Profile</button>
         <button (click)="logOutUser()" mat-menu-item>Log Out</button>
       </mat-menu>
@@ -95,7 +95,6 @@
         <app-main-chat></app-main-chat>
       </div>
     </mat-drawer-container>
-
 
     <button class="workspace-button" type="button" mat-button (click)="chatService.toggleWorkspace()">
       <span>Workspace-Menu</span>

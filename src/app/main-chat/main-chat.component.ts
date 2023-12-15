@@ -71,28 +71,20 @@ export class MainChatComponent implements OnInit {
         this.firestoreService.loadChannelMessages(this.currentChat);
         this.firestoreService.getAllChannelMembers(this.currentChat.id);
       } else {
-        this.getCurrentChatFromLocalStorage();
-        if (this.currentChat?.type == 'channel') {
-          this.chatService.chatWindow = 'channel';
-          this.firestoreService.loadChannelMessages(this.currentChat);
-          this.firestoreService.getAllChannelMembers(this.currentChat?.id);
-        } else {
-          this.chatService.chatWindow = 'direct';
-        }
+        this.currentChat = this.userService.getCurrentChatFromLocalStorage();
+          if (this.currentChat?.type == 'channel') {
+            this.chatService.chatWindow = 'channel';
+            this.firestoreService.loadChannelMessages(this.currentChat);
+            this.firestoreService.getAllChannelMembers(this.currentChat?.id);
+          } else {
+            this.chatService.chatWindow = 'direct';
+          }
       }
     });
     this.checkEventEmitters();
   }
 
-  getCurrentChatFromLocalStorage(): void {
-    const chatJson = localStorage.getItem('currentChat');
-    if (chatJson) {
-      this.currentChat = JSON.parse(chatJson) as Channel;
-    } else {
-      console.log('Kein currentChat im LocalStorage gefunden');
-      return
-    }
-  }
+  
 
   /**
    * This functions is used for the eventemitters of the thread behavior and scroll behavior of messages
