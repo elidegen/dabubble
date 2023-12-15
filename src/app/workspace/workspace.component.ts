@@ -202,4 +202,10 @@ export class WorkspaceComponent implements OnInit {
       this.router.navigate(['newMessage']);
     }
   }
+
+  getOtherUser(members: any[]) {
+    let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
+    let interlocutor = this.allUsers.find(user => user.id == otherUser.id);
+    return interlocutor;
+  }
 }

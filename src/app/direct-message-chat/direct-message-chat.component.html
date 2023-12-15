@@ -4,9 +4,9 @@
 
 <div [ngSwitch]="firestoreService.messageIsExisting" class="chat-window-container">
   <mat-card-header>
-    <button class="br-32 profile-button" (click)="openProfileDialog(interlocutor.id)">
-      <img src="{{ interlocutor.picture}}">
-      <span class="mr-16">{{ interlocutor.name }}</span>
+    <button class="br-32 profile-button" (click)="openProfileDialog(getOtherUser(currentChat?.members)?.id)">
+      <img src="{{ getOtherUser(currentChat?.members)?.picture }}">
+      <span class="mr-16">{{ getOtherUser(currentChat?.members)?.name }}</span>
     </button>
   </mat-card-header>
   <mat-card-content #messageContainer class="p-0 main-chat-container" *ngSwitchCase="true">
@@ -99,12 +99,12 @@
 
   <mat-card-content *ngSwitchCase="false" class="empty-direct-message-container">
     <div class="chat-partner-container">
-      <img src="{{ interlocutor.picture}}" alt="">
-      <span>{{ interlocutor.name }}</span>
+      <img src="{{ getOtherUser(currentChat?.members)?.picture}}" alt="">
+      <span>{{ getOtherUser(currentChat?.members)?.name }}</span>
     </div>
     <div>
       <span>This conversation is only taking place between 
-        <span (click)="openProfileDialog(interlocutor.id)" class="user-highlighted">@{{interlocutor.name }}</span> and you.
+        <span (click)="openProfileDialog(getOtherUser(currentChat?.members)?.id)" class="user-highlighted">@{{getOtherUser(currentChat?.members)?.name }}</span> and you.
       </span>
     </div>
   </mat-card-content>
@@ -122,7 +122,7 @@
   <mat-card-content>
     <div class="textfield-content">
       <div class="text-field-container">
-        <textarea (keyup.enter)="sendMessage()" [(ngModel)]="message.content" placeholder="Message to {{ interlocutor.name }} "></textarea>
+        <textarea (keyup.enter)="sendMessage()" [(ngModel)]="message.content" placeholder="Message to {{ getOtherUser(this.currentChat?.members)?.name }} "></textarea>
         <div class="message-buttons">
           <div class="attachments">
             <div class="border-right">

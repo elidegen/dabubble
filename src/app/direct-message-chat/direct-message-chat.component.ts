@@ -1,5 +1,5 @@
 import { Component, ElementRef, HostListener, OnInit, QueryList, ViewChild, ViewChildren, inject } from '@angular/core';
-import { Firestore, collection, doc, updateDoc } from '@angular/fire/firestore';
+import { Firestore, collection, doc, onSnapshot, orderBy, query, updateDoc } from '@angular/fire/firestore';
 import { ChatService } from '../chat.service';
 import { UserService } from '../user.service';
 import { Message } from 'src/models/message.class';
@@ -27,10 +27,11 @@ export class DirectMessageChatComponent implements OnInit {
   currentUser;
   message: Message = new Message();
   allMessages: Message[] = [];
-  interlocutor: User = new User();
+  allUsers: User[] = [];
   taggedNames = "";
   showUploadedFile = false;
   newThread = new Thread();
+  unsubscribeUsers: any;
   // ------------- for editing of message ----------------
   edit: boolean = false;
   editingMessage: string | undefined;
@@ -44,7 +45,6 @@ export class DirectMessageChatComponent implements OnInit {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
     chatService.checkScreenWidth();
-  
   }
 
   /**
@@ -57,15 +57,16 @@ export class DirectMessageChatComponent implements OnInit {
         this.userService.setCurrentChatToLocalStorage(newChat);
         if (!this.currentChat || this.currentChat.id !== newChat.id) {
           this.currentChat = newChat;
+          this.loadUsers();
           if (this.firestoreService.unSubDirectMessages) {
             this.firestoreService.unSubDirectMessages();
           }
         }
         this.loadMessages();
       } else {
+        this.loadUsers();
         this.chatService.chatWindow = 'direct';
         this.getCurrentChatFromLocalStorage()
-        this.chatService.getAllUsers();
         this.loadMessages();
       }
     });
@@ -78,8 +79,6 @@ export class DirectMessageChatComponent implements OnInit {
     const chatJson = localStorage.getItem('currentChat');
     if (chatJson) {
       this.currentChat = JSON.parse(chatJson) as Chat;
-      console.log('currentChat', this.currentChat);
-      
     } else {
       console.log('Kein currentChat im LocalStorage gefunden');
       return 
@@ -94,6 +93,7 @@ export class DirectMessageChatComponent implements OnInit {
     if (this.firestoreService.unSubDirectMessages) {
       this.firestoreService.unSubDirectMessages;
     }
+    this.unsubscribeUsers;
   }
 
   /**
@@ -116,7 +116,6 @@ export class DirectMessageChatComponent implements OnInit {
     if (this.currentChat?.id) {
       await this.firestoreService.loadDirectMessages(this.currentChat.id);
     }
-    this.interlocutor = this.chatService.getOtherUser(this.currentChat?.members);
   }
 
   /**
@@ -343,5 +342,23 @@ export class DirectMessageChatComponent implements OnInit {
     @HostListener('window:resize', ['$event'])
     onResize(event: any): void {
       this.chatService.checkScreenWidth();
+    }
+
+    loadUsers() {
+      this.unsubscribeUsers = onSnapshot(
+        query(collection(this.firestore, "users"), orderBy("name")),
+        (snapshot) => {
+          this.allUsers = snapshot.docs.map((doc) => {
+            const user = doc.data() as User;
+            return user;
+          });
+        }
+      );
+    }
+
+    getOtherUser(members: any[]) {
+      let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
+      let interlocutor = this.allUsers.find(user => user.id == otherUser.id);
+      return interlocutor;
     }
 }

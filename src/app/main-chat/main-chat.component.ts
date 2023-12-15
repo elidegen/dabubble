@@ -72,8 +72,13 @@ export class MainChatComponent implements OnInit {
         this.firestoreService.getAllChannelMembers(this.currentChat.id);
       } else {
         this.getCurrentChatFromLocalStorage();
-        this.firestoreService.loadChannelMessages(this.currentChat);
-        this.firestoreService.getAllChannelMembers(this.currentChat?.id);
+          if (this.currentChat?.type == 'channel') {
+            this.chatService.chatWindow = 'channel';
+            this.firestoreService.loadChannelMessages(this.currentChat);
+            this.firestoreService.getAllChannelMembers(this.currentChat?.id);
+          } else {
+            this.chatService.chatWindow = 'direct';
+          }
       }
     });
     this.checkEventEmitters();
@@ -83,7 +88,6 @@ export class MainChatComponent implements OnInit {
     const chatJson = localStorage.getItem('currentChat');
     if (chatJson) {
       this.currentChat = JSON.parse(chatJson) as Channel;
-      this.chatService.chatWindow = 'channel';
     } else {
       console.log('Kein currentChat im LocalStorage gefunden');
       return

@@ -60,12 +60,12 @@
             <div *ngFor="let directMessage of personalDirectMessages" class="profile-button-div">
               <button class="direct-message-button br-32" (click)="openChat(directMessage)">
                 <div class="profile-message-container">
-                  <img class="d-flex" src="{{ (chatservice.getOtherUser(directMessage.members)).picture }}"
+                  <img class="d-flex" src="{{ (getOtherUser(directMessage.members))?.picture }}"
                     alt="avatar">
-                  <div [ngClass]="{'offline-status': !chatservice.getOtherUser(directMessage.members).online}"
+                  <div [ngClass]="{'offline-status': !getOtherUser(directMessage.members)?.online}"
                     class="online-status"></div>
                 </div>
-                <h3 class="chat-name">{{ chatservice.getOtherUser(directMessage.members).name }}</h3>
+                <h3 class="chat-name">{{ getOtherUser(directMessage.members)?.name }}</h3>
               </button>
               <button matTooltip="Delete chat" class="delete-direct-button" mat-icon-button
                 (click)="deleteDirectMessageChat(directMessage.id)">
