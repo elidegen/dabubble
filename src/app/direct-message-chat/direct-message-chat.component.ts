@@ -65,7 +65,6 @@ export class DirectMessageChatComponent implements OnInit {
         this.loadMessages();
       } else {
         this.loadUsers();
-        this.chatService.chatWindow = 'direct';
         this.getCurrentChatFromLocalStorage()
         this.loadMessages();
       }
@@ -76,13 +75,13 @@ export class DirectMessageChatComponent implements OnInit {
   }
 
     getCurrentChatFromLocalStorage(): void {
-    const chatJson = localStorage.getItem('currentChat');
-    if (chatJson) {
-      this.currentChat = JSON.parse(chatJson) as Chat;
-    } else {
-      console.log('Kein currentChat im LocalStorage gefunden');
-      return 
-    }
+      const chatJson = localStorage.getItem('currentChat');
+      if (chatJson) {
+        this.currentChat = JSON.parse(chatJson) as Chat;
+      } else {
+        this.currentChat = undefined;
+        return 
+      }
   }
 
   /**

@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import { inject } from '@angular/core';
-import { Firestore, } from '@angular/fire/firestore';
+import { Firestore, doc, } from '@angular/fire/firestore';
 import { getAuth, updateEmail, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, sendPasswordResetEmail, signInAnonymously, } from "firebase/auth";
 import { Router } from '@angular/router';
 import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { UserService } from './user.service';
 import { User } from 'src/models/user.class';
 import { ChatService } from './chat.service';
+import { collection, getDoc } from 'firebase/firestore';
+import { Chat } from 'src/models/chat.class';
+import { Channel } from 'src/models/channel.class';
 
 
 @Injectable({
@@ -22,7 +25,7 @@ export class AuthService {
   newGuest: User = new User;
   uploadFile: any;
   signInSuccess: any;
-
+  chat: Chat = new Chat();
 
   constructor(public router: Router, public userService: UserService, public chatService: ChatService) {
     this.newGuest.name = 'Guest';
@@ -64,6 +67,7 @@ export class AuthService {
       const activeUserIndex = this.findUserIndexWithEmail(email);
       if (activeUserIndex !== -1) {
         this.prepareUser(activeUserIndex);
+        await this.checkLocalStorage(this.userService.currentUser);
         setTimeout(() => {
           this.router.navigate(['home']);
           this.signInSuccess = false;
@@ -88,6 +92,43 @@ export class AuthService {
     this.userService.currentUser = this.userService.users[activeUserIndex];
     this.userService.setCurrentUserToLocalStorage();
   }
+
+
+  async checkLocalStorage(user: User): Promise<void> {
+    const chatJson = localStorage.getItem('currentChat');
+    if (!chatJson) {
+     await this.addPersonalChatToLocalStorage(user.id);
+    } else {
+      let existingChat: Chat | Channel;
+      existingChat = JSON.parse(chatJson);
+      const isUserMember = existingChat.members.some((member: any) => member.id === user.id);
+      if (!isUserMember) {
+        this.addPersonalChatToLocalStorage(user.id);
+      } else {
+        console.log('User bereits Mitglied im Chat');
+      }
+    }
+  }
+
+
+  async addPersonalChatToLocalStorage(userId: any) {
+    console.log('userId', userId);
+    
+     const docRef = doc(collection(this.firestore, 'direct messages'), userId);
+      const directMessage = await getDoc(docRef);
+      if (directMessage.exists()) {
+        const dmData = directMessage.data();
+        const chat = new Chat({
+          name: dmData['name'],
+          members: dmData['members'],
+          id: dmData['id'],
+          type: 'direct',
+        });
+        const directJson = JSON.stringify(chat);
+        localStorage.setItem('currentChat', directJson);
+      }
+  }
+
 
   /**
      * Returns the current time as a timestamp.
@@ -124,7 +165,6 @@ export class AuthService {
  * Prepares user data before signing in with google.
  */
   prepareGoogleUser(user: any) {
-    console.log('Google Benutzer angemeldet:', user);
     this.userService.currentUser.name = user.displayName || ""
     this.userService.currentUser.email = user.email || "";
     this.userService.currentUser.picture = 'assets/img/icons/google.png' || "";
@@ -136,7 +176,6 @@ export class AuthService {
  * Signs in a guest user and updates their login time.
  */
   async signInGuest() {
-    console.log("Guest logged in");
     this.userService.currentUser = this.newGuest;
     this.userService.currentUser.loginTime = this.getLoginTime();
     await this.userService.addUser(this.userService.currentUser);
@@ -158,7 +197,6 @@ export class AuthService {
     this.userService.removeCurrentUserFromLocalStorage();
     let userIndexToLogout = this.findUserIndexWithEmail(this.userService.currentUser.email);
     if (userIndexToLogout != -1) {
-      console.log("Index to Logout", userIndexToLogout);
       this.userService.users[userIndexToLogout].online = false;
       this.userService.updateUser(this.userService.users[userIndexToLogout]);
     }

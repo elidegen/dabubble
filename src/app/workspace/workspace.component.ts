@@ -9,7 +9,6 @@ import { UserService } from '../user.service';
 import { Chat } from 'src/models/chat.class';
 import { User } from 'src/models/user.class';
 import { deleteDoc } from 'firebase/firestore';
-import { first, interval } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Component({

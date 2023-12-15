@@ -67,7 +67,7 @@
                 </div>
                 <h3 class="chat-name">{{ getOtherUser(directMessage.members)?.name }}</h3>
               </button>
-              <button matTooltip="Delete chat" class="delete-direct-button" mat-icon-button
+              <button *ngIf="getOtherUser(directMessage.members)?.id !== currentUser.id" matTooltip="Delete chat" class="delete-direct-button" mat-icon-button
                 (click)="deleteDirectMessageChat(directMessage.id)">
                 <img src="assets/img/icons/close.svg" alt="">
               </button>

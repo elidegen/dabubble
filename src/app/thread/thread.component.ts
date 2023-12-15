@@ -55,7 +55,9 @@ export class ThreadComponent implements OnInit {
     this.threadService.openMessage$.subscribe((openMessage) => {
       if (openMessage) {
         const message = openMessage as Message;
-        this.userService.setCurrentChatToLocalStorage(message);
+        if (this.chatService.isMobile) {
+          this.userService.setCurrentChatToLocalStorage(message);
+        }
         if (!this.currentMessage || this.currentMessage.id !== message.id) {
           this.currentMessage = message;
           this.threadService.currentMessage = message;

@@ -100,12 +100,14 @@
   <mat-card-content *ngSwitchCase="false" class="empty-direct-message-container">
     <div class="chat-partner-container">
       <img src="{{ getOtherUser(currentChat?.members)?.picture}}" alt="">
-      <span>{{ getOtherUser(currentChat?.members)?.name }}</span>
+      <span *ngIf="getOtherUser(currentChat?.members)?.id !== currentUser.id">{{ getOtherUser(currentChat?.members)?.name }}</span>
+      <span *ngIf="getOtherUser(currentChat?.members)?.id === currentUser.id">{{ getOtherUser(currentChat?.members)?.name }} (You)</span>
     </div>
     <div>
-      <span>This conversation is only taking place between 
+      <span *ngIf="getOtherUser(currentChat?.members)?.id !== currentUser.id">This conversation is only taking place between 
         <span (click)="openProfileDialog(getOtherUser(currentChat?.members)?.id)" class="user-highlighted">@{{getOtherUser(currentChat?.members)?.name }}</span> and you.
       </span>
+      <span *ngIf="getOtherUser(currentChat?.members)?.id === currentUser.id"><b>Dieser Raum ist nur für dich da.</b> Mache dir Notizen, liste deine To-dos auf oder bewahre Links und Dateien griffbereit auf. Du kannst hier auch gerne Dinge mit dir selbst besprechen.</span>
     </div>
   </mat-card-content>
 
