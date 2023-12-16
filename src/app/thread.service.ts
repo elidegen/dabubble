@@ -33,7 +33,6 @@ export class ThreadService {
 
   public _openMessageSubject: BehaviorSubject<Message | null> = new BehaviorSubject<Message | null>(null);
   
-
   get openMessage$(): Observable<Message | null> {
     return this._openMessageSubject.asObservable();
   }
@@ -62,7 +61,7 @@ export class ThreadService {
     }
   }
 
-
+  
   /**
    * This function sends a message within a thread
    * @param thread - document reference
@@ -70,8 +69,6 @@ export class ThreadService {
    */
   async sendMessageInThread(thread: any, message: Message) {
     let threadId = thread.id
-    console.log('current message in service', thread);
-    
     const subColRef = collection(this.firestore, `threads/${threadId}/messages`);
     await addDoc(subColRef, message.toJSON())
     .catch((err) => {
@@ -90,7 +87,7 @@ export class ThreadService {
       const subReactionColRef = doc(collection(this.firestore, `direct messages/${message.channelID}/messages/`), message.id);
       updateDoc(subReactionColRef, this.updateMessage(message, time));
     } else {
-      const subReactionColRef = doc(collection(this.firestore, `channels/${this.currentChat.id}/messages/`), message.id);
+      const subReactionColRef = doc(collection(this.firestore, `channels/${message.channelID}/messages/`), message.id);
       updateDoc(subReactionColRef, this.updateMessage(message, time));
     }
   }
@@ -124,12 +121,6 @@ export class ThreadService {
     });
   }
 
-  
-
-
- 
-
- 
 }
 
 

@@ -64,6 +64,7 @@ export class DialogEditChannelComponent implements OnInit {
     }
   }
 
+
   /**
    * Performs cleanup by unsubscribing from any subscriptions to avoid memory leaks.
    */
@@ -72,6 +73,7 @@ export class DialogEditChannelComponent implements OnInit {
       this.unSubChannel();
     }
   }
+
 
   /**
    * Removes the current user from the channel members list and updates the Firestore document.
@@ -86,10 +88,11 @@ export class DialogEditChannelComponent implements OnInit {
       });
     }
     this.dialogRef?.close();
-    this.chatService.chatWindow = 'empty'
+    this.chatService.setEmptyChatToLocalStorage();
     this.chatService.openChat = null;
   }
   
+
   /**
    * Sets new values for channel
    */
@@ -102,6 +105,7 @@ export class DialogEditChannelComponent implements OnInit {
     }
   }
 
+
   /**
    * Filters out the current user from the list of all channel members.
    */
@@ -112,6 +116,7 @@ export class DialogEditChannelComponent implements OnInit {
       this.newChannelMembers = this.allChannelMembers;
     }
   }
+
 
   /**
    * Logs out the current user and navigates back to the login screen.
@@ -133,6 +138,7 @@ export class DialogEditChannelComponent implements OnInit {
     });
   }
 
+
   /**
    * Navigates back to the main chat window.
    */
@@ -140,19 +146,10 @@ export class DialogEditChannelComponent implements OnInit {
     this.router.navigate(['main']);
   }
 
+
   editChannel() {
     this.editName = false
-    console.log("chat der bearbeitet wird",this.currentChat)
     this.firestoreService.updateChannel('channels',this.currentChat!);
   }
-
-    /**
-     * Responds to window resize events to check and update the screen width status in the chat service.
-     * @param {any} event - The window resize event object.
-     */
-    // @HostListener('window:resize', ['$event'])
-    // onResize(event: any): void {
-    //   this.chatService.checkScreenWidth();
-    // }
 
 }

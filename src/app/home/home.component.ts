@@ -12,12 +12,12 @@ import { ChatService } from '../chat.service';
 import { ThreadService } from '../thread.service';
 import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 
-
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss', './home.mediaquery.component.scss']
 })
+
 export class HomeComponent {
   showFiller: any;
   currentUser: any = {
@@ -48,6 +48,7 @@ export class HomeComponent {
     this._bottomSheet.open(BottomSheetOverviewExampleSheet);
   }
   
+
   /**
    * Opens a profile dialog for viewing a user's profile based on the provided user ID.
    * @param {any} id - The ID of the user for whom the profile is to be viewed.
@@ -59,6 +60,7 @@ export class HomeComponent {
     });
   }
 
+
   /**
    * Logs out the current user and navigates to the login screen.
    */
@@ -66,6 +68,7 @@ export class HomeComponent {
     this.auth.signOutUser();
     this.router.navigate(['']);
   }
+
 
   /**
    * Listens for document click events and checks if the click is outside user search and member inputs to update focus state.
@@ -78,6 +81,7 @@ export class HomeComponent {
       this.isInputFocused = false;
     }
   }
+
 
   /**
    * Filters users, channels, and direct messages based on the search input. Updates filtered results.
@@ -97,6 +101,7 @@ export class HomeComponent {
     }
   }
 
+
   /**
    * Shows only channels that belong to the current user when '#' is entered in the search input.
    */
@@ -106,6 +111,7 @@ export class HomeComponent {
     }
 
   }
+
 
   /**
    * Filters users based on the search input.
@@ -130,6 +136,7 @@ export class HomeComponent {
     });
   }
 
+
   /**
    * Filters direct messages based on the search input.
    */
@@ -142,6 +149,7 @@ export class HomeComponent {
       }
     });
   }
+
 
   /**
    * Navigates to the channel chat window and emits a chat change event.
@@ -171,6 +179,7 @@ export class HomeComponent {
     }
   }
 
+
   /**
    * Retrieves and displays the channel associated with a specific message.
    * @param {any} message - The message used to identify the channel.
@@ -180,6 +189,7 @@ export class HomeComponent {
     this.isInputFocused = false;
   }
 
+
   /**
    * Retrieves and displays the direct message chat associated with a specific message.
    * @param {any} message - The message used to identify the direct message chat.
@@ -188,10 +198,9 @@ export class HomeComponent {
     this.chatService.getDirectMessageByMessage(message);
     this.isInputFocused = false;
   }
-
-
-
 }
+
+
 export class BottomSheetOverviewExampleSheet {
   constructor(private _bottomSheetRef: MatBottomSheetRef<BottomSheetOverviewExampleSheet>) { }
 

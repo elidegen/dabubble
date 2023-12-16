@@ -188,8 +188,11 @@ export class WorkspaceComponent implements OnInit {
       await deleteDoc(doc.ref);
     });
     await deleteDoc(directDocRef);
+    this.chatservice.setEmptyChatToLocalStorage();
     this.chatservice.chatWindow = 'empty';
   }
+
+
 
 
   /**

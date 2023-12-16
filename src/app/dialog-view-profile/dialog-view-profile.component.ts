@@ -18,7 +18,6 @@ export class DialogViewProfileComponent {
   currentUser: User;
   user: User = new User();
 
-
   constructor(
     public dialogRef: MatDialogRef<DialogViewProfileComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { userID: string },
@@ -30,6 +29,7 @@ export class DialogViewProfileComponent {
       this.setUser();
   }
 
+
   /**
    * Sets the user profile to be viewed.
    */
@@ -38,6 +38,7 @@ export class DialogViewProfileComponent {
     const index = users.findIndex(user => user.id == this.data.userID);
     this.user = users[index] as User;
   }
+
 
   /**
    * Allows the current user to edit their profile. It saves the updated user data
@@ -50,6 +51,7 @@ export class DialogViewProfileComponent {
     this.authService.updateUserEmail(this.user.email!);
     this.dialogRef.close();
   }
+
 
   /**
    * Handles the selection of a new profile image file.
@@ -70,6 +72,7 @@ export class DialogViewProfileComponent {
     }
   }
 
+
   /**
    * Updates values of user view
    */
@@ -82,6 +85,7 @@ export class DialogViewProfileComponent {
     }, 1500);
   }
 
+
   /**
    * Opens a direct Chat with selected User.
    */
@@ -93,8 +97,6 @@ export class DialogViewProfileComponent {
     }
     this.dialogRef.close();
   }
- 
-
-  }
+}
 
  

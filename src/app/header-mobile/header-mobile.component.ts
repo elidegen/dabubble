@@ -1,4 +1,4 @@
-import { Component, HostListener,} from '@angular/core';
+import { Component } from '@angular/core';
 import { ChatService } from '../chat.service';
 import { BottomSheet } from '../bottom-sheet/bottom-sheet.component';
 import { AuthService } from '../auth.service';
@@ -29,19 +29,11 @@ export class HeaderMobileComponent {
     });
   }
 
+
   /**
-   * check if routerlink is home
+   * Checks if routerlink is home
    */
   isHomeRoute(): boolean {
     return this.router.url === '/home';
   }
-
-     /**
-   * Responds to window resize events to check and update the screen width status in the chat service.
-   * @param {any} event - The window resize event object.
-   */
-    //  @HostListener('window:resize', ['$event'])
-    //  onResize(event: any): void {
-    //    this.chatService.checkScreenWidth();
-    //  }
 }

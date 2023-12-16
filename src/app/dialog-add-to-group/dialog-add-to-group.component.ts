@@ -63,6 +63,7 @@ export class DialogAddToGroupComponent {
     }
   }
 
+
   /**
    * Loads all users from Firestore and initializes them as User instances.
    */
@@ -75,6 +76,7 @@ export class DialogAddToGroupComponent {
     }
   }
 
+
   /**
    * Filters the list of users based on the user's input in the search field.
    */
@@ -85,6 +87,7 @@ export class DialogAddToGroupComponent {
     );
   }
 
+
   /**
    * Prevents event propagation when a user is selected from the list.
    * @param {Event} event - The event associated with user selection.
@@ -93,17 +96,18 @@ export class DialogAddToGroupComponent {
     event.stopPropagation();
   }
 
+
   /**
    * Removes a selected user from the list of selected members.
    * @param {User} user - The user to remove.
    */
   removeUser(user: User) {
-    console.log('selUs', this.selectedUsers);
     let index = this.selectedUsers.findIndex((obj: { id: string | undefined; }) => obj.id === user.id);
     if (index !== -1) {
       this.selectedUsers.splice(index, 1);
     }
   }
+
 
   /**
    * Toggles the selection state of a user when clicked, adding or removing them from the list of selected members.
@@ -111,7 +115,6 @@ export class DialogAddToGroupComponent {
    * @param {number} i - The index of the user in the list to highlight the corresponding button.
    */
   selectUser(user: any, i: number) {
-    console.log('selUs', this.selectedUsers);
     this.highlightButtons();
     let index = this.selectedUsers.findIndex((obj: { id: string | undefined; }) => obj.id === user.id);
     if (index == -1) {
@@ -120,6 +123,7 @@ export class DialogAddToGroupComponent {
       this.removeUser(user)
     }
   }
+
 
   /**
    * Adds or removes highlight from user buttons based on whether they are selected.
@@ -134,6 +138,7 @@ export class DialogAddToGroupComponent {
     });
   }
 
+
   /**
    * Removes highlight from the button associated with a user.
    * @param {User} user - The user whose button should be unhighlighted.
@@ -146,6 +151,7 @@ export class DialogAddToGroupComponent {
     }
   }
 
+
   /**
    * Adds highlight to the button associated with a user.
    * @param {User} user - The user whose button should be highlighted.
@@ -157,6 +163,7 @@ export class DialogAddToGroupComponent {
       userContainer.nativeElement.classList.add('user-container-highlighted');
     }
   }
+
 
   /**
    * Fetches all existing members of the current channel from Firestore.
@@ -175,12 +182,14 @@ export class DialogAddToGroupComponent {
     }
   }
 
+
   /**
    * Shows the existing members of the channel as selected by default.
    */
   showExistingMembers() {
     this.selectedUsers = this.allChannelMembers;
   }
+
 
   /**
    * Adds the selected members to the current channel in Firestore.
@@ -218,6 +227,7 @@ export class DialogAddToGroupComponent {
     return formattedUsers;
   }
 
+
   /**
    * Adds the selected users to the channel members array, preparing them to be added to Firestore.
    * @param {any[]} selectedUsers - The selected users to be added to the channel.
@@ -230,6 +240,7 @@ export class DialogAddToGroupComponent {
       this.addSelectedUsersToChannel(this.selectedUsers);
     }
   }
+
 
   /**
    * Adds the selected users to the channel members array, preparing them to be added to Firestore.
@@ -249,6 +260,7 @@ export class DialogAddToGroupComponent {
     this.channel.members.push(...formattedUsers);
   }
 
+  
   /**
    * Adds the current user to the list of selected members if they are not already included.
    */

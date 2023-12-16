@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, inject, HostListener, Input } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, inject, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogEditChannelComponent } from '../dialog-edit-channel/dialog-edit-channel.component';
 import { DialogAddToGroupComponent } from '../dialog-add-to-group/dialog-add-to-group.component';
@@ -59,45 +59,48 @@ export class MainChatComponent implements OnInit {
   async ngOnInit() {
     this.chatService.openChat$.subscribe((openChat) => {
       if (openChat) {
-        const newChat = openChat as Channel;
-        this.userService.setCurrentChatToLocalStorage(newChat);
-        if (!this.currentChat || this.currentChat.id !== newChat.id) {
-          this.currentChat = newChat;
-          this.threadService.currentChat = newChat;
-          if (this.firestoreService.unSubChannelMessages) {
-            this.firestoreService.unSubChannelMessages();
-          }
-        }
-        this.firestoreService.loadChannelMessages(this.currentChat);
-        this.firestoreService.getAllChannelMembers(this.currentChat.id);
+        this.setCurrentChannel(openChat);
       } else {
-        this.currentChat = this.userService.getCurrentChatFromLocalStorage();
-          if (this.currentChat?.type == 'channel') {
-            this.chatService.chatWindow = 'channel';
-            this.firestoreService.loadChannelMessages(this.currentChat);
-            this.firestoreService.getAllChannelMembers(this.currentChat?.id);
-          } else {
-            this.chatService.chatWindow = 'direct';
-          }
+        this.loadChannelFromLocalStorage();
       }
     });
-    this.checkEventEmitters();
+    this.checkEventEmitter();
   }
 
-  
+  setCurrentChannel(openChat: Channel) {
+    const newChat = openChat as Channel;
+    this.userService.setCurrentChatToLocalStorage(newChat);
+    if (!this.currentChat || this.currentChat.id !== newChat.id) {
+      this.currentChat = newChat;
+      this.threadService.currentChat = newChat;
+      if (this.firestoreService.unSubChannelMessages) {
+        this.firestoreService.unSubChannelMessages();
+      }
+    }
+    this.firestoreService.loadChannelMessages(this.currentChat);
+    this.firestoreService.getAllChannelMembers(this.currentChat.id);
+  }
+
+  /**
+   * Loads channel from LocalStorage
+   */
+  loadChannelFromLocalStorage() {
+    this.currentChat = this.userService.getCurrentChatFromLocalStorage();
+    if (this.currentChat?.type == 'channel') {
+      this.chatService.chatWindow = 'channel';
+      this.firestoreService.loadChannelMessages(this.currentChat);
+      this.firestoreService.getAllChannelMembers(this.currentChat?.id);
+    } else if (this.currentChat?.type == 'direct') {
+      this.chatService.chatWindow = 'direct';
+    } else {
+      this.chatService.chatWindow = 'newMessage';
+    }
+  }
 
   /**
    * This functions is used for the eventemitters of the thread behavior and scroll behavior of messages
    */
-  checkEventEmitters() {
-    // this.threadService.openThread.subscribe(() => {
-    //   this.threadDrawer.open();
-    //   this.threadService.isThreadInDM = false;
-    // })
-    // this.threadService.changeChat.subscribe(() => {
-    //   this.threadDrawer.close();
-    //   this.threadService.isThreadInDM = false;
-    // })
+  checkEventEmitter() {
     this.firestoreService.messageAdded.subscribe(() => {
       this.scrollToBottom();
     });
@@ -152,7 +155,6 @@ export class MainChatComponent implements OnInit {
   * Sends a chat message in the current channel.
   */
   async sendMessage() {
-    console.log('Before sendMessage - allMessagesOfChannel:', this.chatService.allMessagesOfChannel);
     if (this.currentChat?.id && this.message.content?.trim() !== '') {
       this.showUploadedFile = false;
       this.message.content = this.message.content!.replace(this.taggedNames, '');
@@ -293,6 +295,7 @@ export class MainChatComponent implements OnInit {
     let messageId = message.id;
     await this.threadService.createThread(messageId, this.newThread);
     this.threadService.openMessage = message;
+    this.threadService.isThreadInDM = false;
     if (this.chatService.isMobile) {
       this.router.navigate(['thread']);
     } else {
@@ -359,7 +362,6 @@ export class MainChatComponent implements OnInit {
     let taggedName: any;
     taggedName = `@${user.name}`;
     this.taggedNames += `@${user.name}`;
-    console.log(this.taggedNames);
     this.message.content += taggedName!;
     this.message.mentions.push(user);
     this.userService.openUserContainerTextfield.next(false);
@@ -390,18 +392,8 @@ export class MainChatComponent implements OnInit {
   resetStatus() {
     setTimeout(() => {
       this.message.files.push(this.authService.customPic);
-      console.log(this.message);
       this.firestoreService.showSpinner = false;
     }, 2000);
     this.showUploadedFile = true;
   }
-
-  /**
-  * Responds to window resize events to check and update the screen width status in the chat service.
-  * @param {any} event - The window resize event object.
-  */
-  // @HostListener('window:resize', ['$event'])
-  // onResize(event: any): void {
-  //   this.chatService.checkScreenWidth();
-  // }
 }

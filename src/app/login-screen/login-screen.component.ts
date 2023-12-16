@@ -12,6 +12,7 @@ import { ChatService } from '../chat.service';
   templateUrl: './login-screen.component.html',
   styleUrls: ['./login-screen.component.scss','./login-screen-mediaquery.scss']
 })
+
 export class LoginScreenComponent implements OnInit {
   animationIsFinished = false;
   picSrc = "assets/img/avatars/profile.svg";
@@ -22,8 +23,8 @@ export class LoginScreenComponent implements OnInit {
   userNotFound: any;
   resetEmailNotFound: boolean = false;
   userAlreadyInUse: boolean = false;
- showUserCreatedSuccess = false;
- showEmailSent = false;
+  showUserCreatedSuccess = false;
+  showEmailSent = false;
 
 
   ngOnInit() {
@@ -149,6 +150,7 @@ export class LoginScreenComponent implements OnInit {
     this.picSrc = pic;
   }
 
+
   /**
    * @method createUser
    * @description Asynchronously creates a new user using form data from the `addUser` FormGroup.
@@ -158,6 +160,18 @@ export class LoginScreenComponent implements OnInit {
     this.gatherNewUserInfo();
     await this.authService.createUser();
     this.firestoreService.showSpinner = true;
+    this.delayAndPerformActions();
+  }
+
+  
+  /**
+   * Delays the execution of a set of actions using setTimeout.
+   * If the user is available, changes the switch case to 'avatar',
+   * hides the spinner, and sets the userAlreadyInUse flag to false.
+   * If the user is not available, sets the userAlreadyInUse flag to true,
+   * hides the spinner, and resets the userAlreadyInUse flag after a delay.
+   */
+  delayAndPerformActions() {
     setTimeout(() => {
       if (this.userService.userIsAvailable) {
         this.changeSwitchCase('avatar');
@@ -172,6 +186,7 @@ export class LoginScreenComponent implements OnInit {
     }, 1500);
   }
 
+
   /**
    * Sets new user information
    */
@@ -183,12 +198,14 @@ export class LoginScreenComponent implements OnInit {
     this.userService.currentPassword = this.newPassword.value;
   }
 
+
   /**
    * Clears inputs
    */
   clearInputs() {
     this.addUser.reset();
   }
+
 
   /**
    * @method uploadUser
@@ -203,6 +220,7 @@ export class LoginScreenComponent implements OnInit {
     this.authService.signInUser(this.userService.currentEmail, this.userService.currentPassword);
   }
   
+
   /**
    * @method loginUser
    * @description Logs in a user with the provided email and password.
@@ -226,6 +244,7 @@ export class LoginScreenComponent implements OnInit {
     }
   }
 
+
   /**
    * @method loginWithGoogle
    * @description Initiates the login process using Google authentication.
@@ -234,6 +253,7 @@ export class LoginScreenComponent implements OnInit {
   loginWithGoogle() {
     this.authService.signInWithGoogle();
   }
+
 
   /**
    * @method hideContentAfterAnimation
@@ -254,8 +274,8 @@ export class LoginScreenComponent implements OnInit {
   changeSwitchCase(newSwitchCase: string) {
     this.clearInputs();
     this.switch_expression = newSwitchCase;
-
   }
+
 
   /**
    * @method sendResetEmail
@@ -269,6 +289,7 @@ export class LoginScreenComponent implements OnInit {
       this.showEmailSent = false;
     }, 1000);
   }
+
 
   /**
    * @method onFileSelected
@@ -292,6 +313,7 @@ export class LoginScreenComponent implements OnInit {
     }
   }
 
+
   /**
    * @method checkIfUserExists
    * @description Checks if a user exists based on the provided email and password.
@@ -305,6 +327,7 @@ export class LoginScreenComponent implements OnInit {
       this.userNotFound = true;
     }
   }
+
 
   /**
    * @method loginGuest
