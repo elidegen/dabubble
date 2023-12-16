@@ -99,6 +99,7 @@ export class ChatService {
    */
   async createDirectMessage(user: User) {
     this.checkUserForDirectMessageName(user);
+    this.chat.type = 'direct';
     const directMessageRef = collection(this.firestore, 'direct messages');
     const specificDocRef: DocumentReference<DocumentData> = doc(directMessageRef, this.checkUserForId(user));
     const docSnapshot = await getDoc(specificDocRef);
@@ -383,8 +384,14 @@ export class ChatService {
     }
   }
 
-  // @HostListener('window:resize', ['$event'])
-  // onResize(): void {
-  //   this.checkScreenWidth();
-  // }
+  setEmptyChatToLocalStorage() {
+    const emptyChat = new Chat({
+      name: '',
+      id: '',
+      members: [],
+      type: 'empty'
+    });
+    let emptyChatJson = JSON.stringify(emptyChat);
+    localStorage.setItem('currentChat', emptyChatJson);
+  }
 }

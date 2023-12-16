@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit, QueryList, ViewChild, ViewChildren, inject } from '@angular/core';
+import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren, inject } from '@angular/core';
 import { Firestore, collection, doc, onSnapshot, orderBy, query, updateDoc } from '@angular/fire/firestore';
 import { ChatService } from '../chat.service';
 import { UserService } from '../user.service';
@@ -48,26 +48,14 @@ export class DirectMessageChatComponent implements OnInit {
   }
 
   /**
- * Initializes the component by subscribing to openDirectMessage$ to handle direct message chat changes.
- */
+   * Initializes the component by subscribing to openDirectMessage$ to handle direct message chat changes.
+   */
   ngOnInit() {
     this.chatService.openDirectMessage$.subscribe((openDirectMessage) => {
       if (openDirectMessage) {
-        const newChat = openDirectMessage as Chat;
-        this.userService.setCurrentChatToLocalStorage(newChat);
-        if (!this.currentChat || this.currentChat.id !== newChat.id) {
-          this.currentChat = newChat;
-          this.loadUsers();
-          if (this.firestoreService.unSubDirectMessages) {
-            this.firestoreService.unSubDirectMessages();
-          }
-        }
-        this.loadMessages();
+        this.loadSelectedDM(openDirectMessage)
       } else {
-        this.loadUsers();
-        this.chatService.chatWindow = 'direct';
-      this.currentChat =  this.userService.getCurrentChatFromLocalStorage()
-        this.loadMessages();
+        this.loadDMFromLocalStorage();
       }
     });
     this.firestoreService.messageAddedInDirect.subscribe(() => {
@@ -75,7 +63,32 @@ export class DirectMessageChatComponent implements OnInit {
     });
   }
 
- 
+  /**
+   * Loads the selected direct message chat, sets it as the current chat, and loads associated users and messages.
+   * @param {any} openDirectMessage - The direct message chat to be opened.
+   */
+  loadSelectedDM(openDirectMessage: any) {
+    const newChat = openDirectMessage as Chat;
+    this.userService.setCurrentChatToLocalStorage(newChat);
+    if (!this.currentChat || this.currentChat.id !== newChat.id) {
+      this.currentChat = newChat;
+      this.loadUsers();
+      if (this.firestoreService.unSubDirectMessages) {
+        this.firestoreService.unSubDirectMessages();
+      }
+    }
+    this.loadMessages();
+  }
+
+  /**
+   * Loads the direct message chat from local storage, sets it as the current chat, loads associated users, and messages.
+   */
+  loadDMFromLocalStorage() {
+    this.loadUsers();
+    this.currentChat =  this.userService.getCurrentChatFromLocalStorage();
+    this.chatService.chatWindow = 'direct';
+    this.loadMessages();
+  }
 
   /**
    * Lifecycle hook that is called when a directive, pipe, or service is destroyed.
@@ -175,10 +188,10 @@ export class DirectMessageChatComponent implements OnInit {
       this.getSentMessageDate();
       this.message.creator = this.userService.currentUser.name;
       this.message.creatorId = this.userService.currentUser.id,
-        this.message.channel = this.currentChat.name;
+      this.message.channel = this.currentChat.name;
       this.message.channelID = this.currentChat.id;
       this.message.profilePic = this.userService.currentUser.picture,
-        this.message.channel = this.currentChat.name;
+      this.message.channel = this.currentChat.name;
     }
   }
 
@@ -281,7 +294,6 @@ export class DirectMessageChatComponent implements OnInit {
     }
   }
 
-
   /**
    * Adds an emoji to the main chat message. Triggers the addition of the emoji to the message and records the reaction in the database.
    * @param {any} event - The event object containing the emoji data.
@@ -319,13 +331,13 @@ export class DirectMessageChatComponent implements OnInit {
     let messageId = message.id;
     await this.threadService.createThread(messageId, this.newThread);
     this.threadService.openMessage = message;
+    this.threadService.isThreadInDM = true;
     if (this.chatService.isMobile) {
       this.router.navigate(['thread']);
     } else {
       this.chatService.openThread();
       if (window.innerWidth >= 800 && window.innerWidth < 1300)
         this.chatService.closeWorkspace();
-      
     }
   }
 
@@ -333,34 +345,37 @@ export class DirectMessageChatComponent implements OnInit {
    * Responds to window resize events to check and update the screen width status in the chat service.
    * @param {any} event - The window resize event object.
    */
-    // @HostListener('window:resize', ['$event'])
-    // onResize(event: any): void {
-    //   this.chatService.checkScreenWidth();
-    // }
+  loadUsers() {
+    this.unsubscribeUsers = onSnapshot(
+    query(collection(this.firestore, "users"), orderBy("name")),
+    (snapshot) => {
+      this.allUsers = snapshot.docs.map((doc) => {
+      const user = doc.data() as User;
+      return user;
+      });
+    });
+  }
 
-    loadUsers() {
-      this.unsubscribeUsers = onSnapshot(
-        query(collection(this.firestore, "users"), orderBy("name")),
-        (snapshot) => {
-          this.allUsers = snapshot.docs.map((doc) => {
-            const user = doc.data() as User;
-            return user;
-          });
-        }
-      );
-    }
-
-    getOtherUser(members: any[]) {
-      if (members[0].id === this.currentUser.id) {
-        return this.currentUser;
-      } else {
-        let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
+  /**
+   * Retrieves the other user in a conversation based on the provided members array.
+   * @param {any[]} members - An array containing members of the conversation.
+   * @returns {User | null} The other user in the conversation, or null if not found.
+   */
+  getOtherUser(members: any[]) {
+    if (members[0].id === this.currentUser.id) {
+      return this.currentUser;
+    } else {
+      let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
+      if (otherUser) {
         let interlocutor = this.allUsers.find(user => user.id == otherUser.id);
         return interlocutor;
+      } else {
+        return null;
       }
     }
+  }
 
-      /**
+  /**
    * Closes the emoji picker.
    */
   closeEmojiPicker() {

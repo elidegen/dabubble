@@ -33,6 +33,7 @@ export class DialogAddChannelComponent {
     }
   }
 
+
   /**
    * Listens for clicks on the document to manage input focus state.
    * @param {Event} event - The click event on the document.
@@ -45,6 +46,7 @@ export class DialogAddChannelComponent {
     }
   }
 
+
   /**
    * Filters users based on the search criteria in the input field.
    */
@@ -52,6 +54,7 @@ export class DialogAddChannelComponent {
     this.isInputFocused = true;
     this.firestoreService.filterAllUsers()
   }
+
 
   /**
    * Creates a new channel with the selected members.
@@ -68,6 +71,7 @@ export class DialogAddChannelComponent {
     }
   }
 
+
   /**
    * Gathers members for the new channel based on the selected options for all members or just selected ones.
    */
@@ -79,6 +83,7 @@ export class DialogAddChannelComponent {
       this.addSelectedUsersToChannel(this.selectedUsers)
     }
   }
+
 
   /**
    * Adds the selected users to the new channel's member list.
@@ -98,6 +103,7 @@ export class DialogAddChannelComponent {
     this.channel.members.push(...formattedUsers);
   }
 
+
   /**
    * Stops event propagation when a user element is selected.
    * @param {Event} event - The event associated with user selection.
@@ -105,6 +111,7 @@ export class DialogAddChannelComponent {
   userSelected(event: Event) {
     event.stopPropagation();
   }
+
 
   /**
    * Adds the current user to the list of selected members if they are not already included.
@@ -115,6 +122,7 @@ export class DialogAddChannelComponent {
       this.selectedUsers.push(this.currentUser);
     }
   }
+
 
   /**
    * Removes a user from the list of selected members.
@@ -154,13 +162,4 @@ export class DialogAddChannelComponent {
       userContainer.nativeElement.classList.toggle('user-container-highlighted');
     }
   }
-
-  /**
-    * Responds to window resize events to check and update the screen width status in the chat service.
-    * @param {any} event - The window resize event object.
-    */
-  // @HostListener('window:resize', ['$event'])
-  // onResize(event: any): void {
-  //   this.chatService.checkScreenWidth();
-  // }
 }

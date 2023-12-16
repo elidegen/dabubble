@@ -20,7 +20,6 @@ export class BottomSheet {
     this.currentUser = this.userService.currentUser as User;
   }
 
- 
 
   /**
    * Logs out the current user and navigates to the login screen.

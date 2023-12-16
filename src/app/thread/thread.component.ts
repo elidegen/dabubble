@@ -54,21 +54,9 @@ export class ThreadComponent implements OnInit {
   ngOnInit() {
     this.threadService.openMessage$.subscribe((openMessage) => {
       if (openMessage) {
-        const message = openMessage as Message;
-        if (this.chatService.isMobile) {
-          this.userService.setCurrentChatToLocalStorage(message);
-        }
-        if (!this.currentMessage || this.currentMessage.id !== message.id) {
-          this.currentMessage = message;
-          this.threadService.currentMessage = message;
-          if (this.firestoreService.unSubThread) {
-            this.firestoreService.unSubThread();
-          }
-          this.firestoreService.loadThread(this.currentMessage.id);
-        }
+        this.setCurrentThread(openMessage);
       } else {
-        this.currentChat = this.userService.getCurrentChatFromLocalStorage();
-        this.firestoreService.loadThread(this.currentMessage.id);
+        this.loadThreadFromLocalStorage();
       }
     });
     this.firestoreService.messageAddedInThread.subscribe(() => {
@@ -76,6 +64,41 @@ export class ThreadComponent implements OnInit {
     });
   }
 
+  /**
+   * Sets the current thread based on the provided openMessage.
+   * @param {any} openMessage - The open message to extract thread information from.
+   */
+  setCurrentThread(openMessage: any) {
+    const message = openMessage as Message;
+    if (this.chatService.isMobile) {
+      this.userService.setCurrentChatToLocalStorage(message);
+    }
+    if (!this.currentMessage || this.currentMessage.id !== message.id) {
+     this.loadThread(message)
+    }
+  }
+
+  /**
+   * Loads the thread based on the provided message.
+   * @param {Message} message - The message containing information to load the thread.
+   */
+  loadThread(message: Message) {
+    this.currentMessage = message;
+    this.threadService.currentMessage = message;
+    if (this.firestoreService.unSubThread) {
+      this.firestoreService.unSubThread();
+    }
+    this.firestoreService.loadThread(this.currentMessage.id);
+  }
+
+  /**
+   * Loads the thread data from local storage and sets the current message and thread in the respective services: Used for reload of page
+   */
+  loadThreadFromLocalStorage() {
+    this.currentMessage = this.userService.getCurrentChatFromLocalStorage();
+    this.threadService.currentMessage = this.currentMessage;
+    this.firestoreService.loadThread(this.currentMessage.id);
+  }
   
   
   ngOnDestroy() {
@@ -89,13 +112,7 @@ export class ThreadComponent implements OnInit {
    */
   async addMessageToThread() {
     if (this.currentMessage.id && this.message.content?.trim() !== '') {
-      this.message.content = this.message.content!.replace(this.taggedNames, '');
-      this.getSentMessageTime();
-      this.getSentMessageDate();
-      this.message.creator = this.userService.currentUser.name;
-      this.message.profilePic = this.userService.currentUser.picture;
-      this.message.creatorId = this.userService.currentUser.id;
-      console.log('thread current message', this.currentMessage);
+      this.setThreadValues();
       await this.threadService.sendMessageInThread(this.currentMessage, this.message);
       if (!this.chatService.isMobile) {
         this.threadService.updateThreadCount(this.currentMessage, this.message.time);
@@ -104,6 +121,18 @@ export class ThreadComponent implements OnInit {
       this.firestoreService.messageAddedInThread.emit();
     }
     this.scrollToBottom();
+  }
+
+  /**
+   * Sets values for the current thread message, such as content, timestamp, creator information, and profile picture.
+   */
+  setThreadValues() {
+    this.message.content = this.message.content!.replace(this.taggedNames, '');
+    this.getSentMessageTime();
+    this.getSentMessageDate();
+    this.message.creator = this.userService.currentUser.name;
+    this.message.profilePic = this.userService.currentUser.picture;
+    this.message.creatorId = this.userService.currentUser.id;
   }
   
   /**
@@ -163,23 +192,23 @@ export class ThreadComponent implements OnInit {
    * Adds an emoji to a thread message.
    * @param {any} $event - The emoji select event.
    */
- addEmoji($event: any) {
-  this.emojiService.addEmojiThread($event);
-  this.firestoreService.addReaction(this.emojiService.emojiString, this.emojiService.messageId, this.currentMessage.id, 'threads');
-  this.emojiService.showThreadEmojiPicker = false;
-  this.emojiService.emojiString = "";
- }
+  addEmoji($event: any) {
+    this.emojiService.addEmojiThread($event);
+    this.firestoreService.addReaction(this.emojiService.emojiString, this.emojiService.messageId, this.currentMessage.id, 'threads');
+    this.emojiService.showThreadEmojiPicker = false;
+    this.emojiService.emojiString = "";
+  }
 
 
   /**
    * Adds an emoji to the chat input field in a thread.
    * @param {any} $event - The emoji select event.
    */
- addEmojiTextField($event: any) {
+  addEmojiTextField($event: any) {
     this.emojiService.addEmojiTextChat($event);
     this.message.content += this.emojiService.emojiString;
     this.emojiService.showThreadTextChatEmojiPicker = false;
-    this.emojiService.emojiString = "";
+      this.emojiService.emojiString = "";
   }
 
   /**
@@ -329,13 +358,4 @@ export class ThreadComponent implements OnInit {
       content: this.editorThread.nativeElement.value
     }
   }
-
-  /**
-    * Responds to window resize events to check and update the screen width status in the chat service.
-    * @param {any} event - The window resize event object.
-    */
-  // @HostListener('window:resize', ['$event'])
-  // onResize(event: any): void {
-  //   this.chatService.checkScreenWidth();
-  // }
 }

@@ -17,7 +17,7 @@ export class Chat {
             name:  this.name,
             members:  this.members,
             id: this.id,
-            type: 'direct',
+            type: this.type,
         }
     }
 }

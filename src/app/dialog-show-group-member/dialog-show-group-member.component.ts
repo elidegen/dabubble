@@ -26,6 +26,7 @@ export class DialogShowGroupMemberComponent implements OnInit {
       }
     }
 
+
   /**
    * Opens the dialog to add new members to the group.
    */
@@ -34,6 +35,7 @@ export class DialogShowGroupMemberComponent implements OnInit {
       panelClass: 'dialog-container'
     });
   }
+
 
   /**
    * Initializes the component and subscribes to the chat service to receive the current chat.
@@ -69,6 +71,7 @@ export class DialogShowGroupMemberComponent implements OnInit {
     }
   }
 
+  
   /**
    * Updates the online status of each member in the current chat's channel.
    */

@@ -134,8 +134,7 @@ export class UserService {
   setCurrentUserToLocalStorage() {
     let userJson = JSON.stringify(this.currentUser);
     localStorage.setItem('currentUser', userJson);
-    console.log('currentUser im LocalStorage gespeichert');
-
+    console.log('currentUser im LocalStorage gespeichert')
   }
   
   getCurrentChatFromLocalStorage() {
@@ -170,7 +169,6 @@ export class UserService {
     let channelJson = JSON.stringify(currentChat);
     localStorage.setItem('currentChat', channelJson);
     console.log('currentchat im LocalStorage gespeichert');
-
   }
 
   removeCurrentChatFromLocalStorage() {
@@ -203,6 +201,7 @@ export class UserService {
 
   async createDirectMessage(user: User) {
     this.checkUserForDirectMessageName(user);
+    this.chat.type = 'direct';
     const directMessageRef = collection(this.firestore, 'direct messages');
     const specificDocRef: DocumentReference<DocumentData> = doc(directMessageRef, this.checkUserForId(user));
     const docSnapshot = await getDoc(specificDocRef);
