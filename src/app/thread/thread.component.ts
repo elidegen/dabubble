@@ -103,6 +103,7 @@ export class ThreadComponent implements OnInit {
       this.message.content = '';
       this.firestoreService.messageAddedInThread.emit();
     }
+    this.scrollToBottom();
   }
   
   /**

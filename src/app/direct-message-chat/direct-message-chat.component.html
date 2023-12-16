@@ -9,7 +9,7 @@
       <span class="mr-16">{{ getOtherUser(currentChat?.members)?.name }}</span>
     </button>
   </mat-card-header>
-  <mat-card-content #messageContainer class="p-0 main-chat-container" *ngSwitchCase="true">
+  <mat-card-content #messageContainer class="p-0 main-chat-container" #scrollContainer [scrollTop]="scrollPosition" *ngSwitchCase="true">
     <ng-container *ngFor="let organizedMessage of firestoreService.organizedDirectMessages.slice()">
       <section>
         <div class="date-container">
