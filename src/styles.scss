@@ -1,16 +1,12 @@
-/* You can add global styles to this file, and also import other style files */
 @import '@ctrl/ngx-emoji-mart/picker';
-
 @font-face {
     font-family: 'Nunito';
     src: url('assets/fonts/Nunito-Regular.ttf');
 }
 
-html,
-body {
+html,body {
     height: 100%;
 }
-
 
 body {
     margin: 0;
@@ -49,9 +45,7 @@ body {
     background-color: white !important;
 }
 
-h1,
-h2,
-h3 {
+h1,h2,h3 {
     margin: 0 !important;
 }
 
@@ -73,7 +67,6 @@ input[type="file"] {
     gap: 10px;
     margin: 10px;
 }
-
 
 .ml-16 {
     margin-left: 16px;
@@ -146,7 +139,6 @@ button {
     overflow-y: visible;
 }
 
-
 .dialog-edit-channel .mat-mdc-dialog-container .mdc-dialog__surface {
     border-radius: 0 32px 32px 32px;
 }
@@ -168,11 +160,9 @@ input {
     padding: 16px;
     outline: none;
     border: 1px solid var(--border);
-
     &:hover {
         border: 1px solid var(--purple2);
     }
-
     &:focus {
         border: 1px solid var(--purple1);
     }
@@ -185,11 +175,11 @@ a {
 a {
     cursor: pointer;
     text-decoration: none;
-
     &:hover {
         font-weight: bold;
     }
 }
+
 .h100{
     height: 100%;
 }
@@ -204,11 +194,9 @@ a {
     border: 1px solid var(--purple1) !important;
     color: var(--purple1) !important;
     transition: all 125ms !important;
-
     &:hover {
         opacity: 0.8 !important;
     }
-
     &:disabled {
         color: var(--gray) !important;
         border: 1px solid var(--gray) !important;
@@ -234,7 +222,6 @@ a {
     flex-direction: column;
     width: fit-content;
     gap: 16px;
-
     &::-webkit-scrollbar {
         display: none;
     }
@@ -252,16 +239,13 @@ a {
     border: 0;
     max-width: 245px;
     cursor: pointer;
-
     img {
         height: 50px;
         border-radius: 100%;
     }
-
     &:hover {
         background-color: var(--primary);
     }
-
     span {
         overflow: hidden;
         white-space: nowrap;
@@ -278,8 +262,6 @@ a {
 .profile-container {
     position: relative;
 }
-
-
 
 .delete-button {
     border: 1px solid red !important;
@@ -326,7 +308,6 @@ h2 {
     display: flex;
 }
 
-
 .j-flex-end {
     display: flex;
     justify-content: flex-end;
@@ -341,7 +322,6 @@ h2 {
     0% {
         opacity: 0;
     }
-
     100% {
         opacity: 1;
     }
@@ -364,11 +344,9 @@ h2 {
     top: 12px;
     gap: 8px;
     cursor: pointer;
-
     span {
         color: var(--purple3);
         transition: all 125ms;
-
         &:hover {
             font-weight: bold;
             transition: all 125ms;
@@ -404,8 +382,6 @@ textarea {
     }
 }
 
-
-
 .separator-mobile {
     height: 3px;
     background-color: lightgray;
@@ -423,18 +399,14 @@ textarea {
     background-color: rgba(0, 0, 0, 0.4);
 }
 
-
-
 @media (max-width: 1300px) {
     .emoji-mart {
         width: 220px!important;
     }
-    
 }
 
 @media (max-width: 500px) {
     .emoji-mart {
         width: 310px!important;
     }
-    
 }
