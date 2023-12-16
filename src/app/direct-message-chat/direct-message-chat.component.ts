@@ -322,8 +322,10 @@ export class DirectMessageChatComponent implements OnInit {
     if (this.chatService.isMobile) {
       this.router.navigate(['thread']);
     } else {
-      this.threadService.openThread.emit();
-      this.threadService.isThreadInDM = true;
+      this.chatService.openThread();
+      if (window.innerWidth >= 800 && window.innerWidth < 1300)
+        this.chatService.closeWorkspace();
+      
     }
   }
 
