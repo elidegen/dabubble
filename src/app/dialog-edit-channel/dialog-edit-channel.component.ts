@@ -1,13 +1,13 @@
 import { Component, HostListener, Inject, OnInit, Optional, inject } from '@angular/core';
 import { Channel } from 'src/models/channel.class';
-import { ChatService } from '../chat.service';
+import { ChatService } from '../services/chat.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { UserService } from '../user.service';
+import { UserService } from '../services/user.service';
 import { Firestore, collection, doc, getDoc, updateDoc } from '@angular/fire/firestore';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-profile.component';
-import { FirestoreService } from '../firestore.service';
+import { FirestoreService } from '../services/firestore.service';
 
 
 @Component({

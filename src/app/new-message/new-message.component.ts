@@ -1,7 +1,7 @@
 import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
-import { FirestoreService } from '../firestore.service';
-import { ChatService } from '../chat.service';
-import { UserService } from '../user.service';
+import { FirestoreService } from '../services/firestore.service';
+import { ChatService } from '../services/chat.service';
+import { UserService } from '../services/user.service';
 import { User } from 'src/models/user.class';
 
 @Component({
@@ -26,13 +26,16 @@ export class NewMessageComponent {
       this.isInputFocused = false;
     }
   }
+
+
   constructor(public firestoreService: FirestoreService, public chatService: ChatService, public userService: UserService) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser as User;
     chatService.checkScreenWidth();
   }
 
-   /**
+
+  /**
    * Selects a user to start a direct message chat.
    * @param {any} user - The selected user.
    */
@@ -40,6 +43,7 @@ export class NewMessageComponent {
     this.chatService.createDirectMessage(user);
     this.search.nativeElement.value = '';
   }
+
 
   /**
    * Stops propagation of a user selection event.
@@ -50,7 +54,7 @@ export class NewMessageComponent {
   }
 
 
-   /**
+  /**
    * Filters users based on search input.
    */
    filterUsers(): void {

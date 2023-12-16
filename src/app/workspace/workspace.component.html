@@ -58,7 +58,7 @@
 
           <div class="direct-message-container">
             <div *ngFor="let directMessage of personalDirectMessages" class="profile-button-div">
-              <button class="direct-message-button br-32" (click)="openChat(directMessage)">
+              <button class="direct-message-button br-32" (click)="openDirectMessage(directMessage)">
                 <div class="profile-message-container">
                   <img class="d-flex" src="{{ (getOtherUser(directMessage.members))?.picture }}"
                     alt="avatar">

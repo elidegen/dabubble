@@ -3,9 +3,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogAddChannelComponent } from '../dialog-add-channel/dialog-add-channel.component';
 import { Firestore, collection, doc, getDocs, onSnapshot, orderBy, query } from '@angular/fire/firestore';
 import { Channel } from 'src/models/channel.class';
-import { ChatService } from '../chat.service';
-import { ThreadService } from '../thread.service';
-import { UserService } from '../user.service';
+import { ChatService } from '../services/chat.service';
+import { ThreadService } from '../services/thread.service';
+import { UserService } from '../services/user.service';
 import { Chat } from 'src/models/chat.class';
 import { User } from 'src/models/user.class';
 import { deleteDoc } from 'firebase/firestore';
@@ -16,6 +16,7 @@ import { Router } from '@angular/router';
   templateUrl: './workspace.component.html',
   styleUrls: ['./workspace.component.scss', './workspace.component.mediaquery.scss']
 })
+
 export class WorkspaceComponent implements OnInit {
   firestore: Firestore = inject(Firestore);
   panelOpenState: boolean = true;
@@ -40,6 +41,7 @@ export class WorkspaceComponent implements OnInit {
     this.currentUser = userService.currentUser;
   }
 
+
   /**
    * Initializes the component, loading channels, direct messages, and users.
    */
@@ -48,6 +50,7 @@ export class WorkspaceComponent implements OnInit {
     this.loadDirectMessages();
     this.loadUsers();
   }
+
 
   /**
    * Cleans up subscriptions when the component is destroyed.
@@ -78,6 +81,7 @@ export class WorkspaceComponent implements OnInit {
     );
   }
 
+
   /**
    * Loads all direct messages from the Firestore and sets up a subscription.
    */
@@ -94,6 +98,7 @@ export class WorkspaceComponent implements OnInit {
     );
   }
 
+
   /**
    * Loads all users from the Firestore and sets up a subscription.
    */
@@ -109,6 +114,7 @@ export class WorkspaceComponent implements OnInit {
     );
   }
 
+
   /**
    * Filters the channels to show only those relevant to the current user.
    */
@@ -120,6 +126,7 @@ export class WorkspaceComponent implements OnInit {
       this.yourChannels = this.chatservice.yourChannels;
     }
   }
+
 
   /**
    * Filters the direct messages to show only those relevant to the current user.
@@ -133,6 +140,7 @@ export class WorkspaceComponent implements OnInit {
     });
   }
 
+
   /**
    * Opens a dialog to add a new channel or navigates to the add channel page on mobile.
    */
@@ -144,6 +152,7 @@ export class WorkspaceComponent implements OnInit {
     }
   }
 
+
   /**
    * Opens a specific channel in the chat service.
    * @param {Channel} channel - The channel to be opened.
@@ -151,22 +160,27 @@ export class WorkspaceComponent implements OnInit {
   renderChannel(channel: Channel) {
     this.chatservice.openChat = channel;
     this.chatservice.chatWindow = 'channel';
-    this.threadService.changeChat.emit();
     if (this.chatservice.isMobile) {
       this.router.navigate(['main']);
+    } else {
+      this.chatservice.closeThread();
     }
   }
+
 
   /**
    * Opens a specific chat in the chat service.
    * @param {Chat} chat - The chat to be opened.
    */
-  openChat(chat: Chat) {
+  openDirectMessage(chat: Chat) {
     this.chatservice.renderDirectMessage(chat);
     if (!this.chatservice.isMobile) {
       this.threadService.changeChat.emit();
+    } else {
+      this.chatservice.closeThread();
     }
   }
+
 
   /**
    * Sets the chat window to start a new message.
@@ -192,9 +206,6 @@ export class WorkspaceComponent implements OnInit {
     this.chatservice.chatWindow = 'empty';
   }
 
-
-
-
   /**
    * Renders a new main chat window.
    */
@@ -205,6 +216,13 @@ export class WorkspaceComponent implements OnInit {
     }
   }
 
+
+  /**
+   * Retrieves the other user in a conversation based on the provided members array.
+   * Returns the current user if they are the first member; otherwise, finds and returns the other user.
+   * @param {any[]} members - An array containing members of the conversation.
+   * @returns {User | null} The other user in the conversation, or null if not found.
+   */
   getOtherUser(members: any[]) {
     if (members[0].id === this.currentUser.id) {
       return this.currentUser;

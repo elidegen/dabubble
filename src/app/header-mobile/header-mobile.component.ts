@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { ChatService } from '../chat.service';
+import { ChatService } from '../services/chat.service';
 import { BottomSheet } from '../bottom-sheet/bottom-sheet.component';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { User } from 'src/models/user.class';
-import { UserService } from '../user.service';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-header-mobile',

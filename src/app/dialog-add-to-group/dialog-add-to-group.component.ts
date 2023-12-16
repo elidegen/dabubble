@@ -1,12 +1,12 @@
 import { Component, HostListener, QueryList, ViewChildren, inject } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { ChatService } from '../chat.service';
-import { UserService } from '../user.service';
+import { ChatService } from '../services/chat.service';
+import { UserService } from '../services/user.service';
 import { Firestore, collection, doc, getDoc, getDocs } from '@angular/fire/firestore';
 import { Channel } from 'src/models/channel.class';
 import { User } from 'src/models/user.class';
 import { updateDoc } from 'firebase/firestore';
-import { FirestoreService } from '../firestore.service';
+import { FirestoreService } from '../services/firestore.service';
 
 @Component({
   selector: 'app-dialog-add-to-group',
@@ -260,7 +260,7 @@ export class DialogAddToGroupComponent {
     this.channel.members.push(...formattedUsers);
   }
 
-  
+
   /**
    * Adds the current user to the list of selected members if they are not already included.
    */

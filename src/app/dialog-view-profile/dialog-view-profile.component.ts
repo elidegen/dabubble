@@ -1,10 +1,10 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { UserService } from '../user.service';
-import { AuthService } from '../auth.service';
+import { UserService } from '../services/user.service';
+import { AuthService } from '../services/auth.service';
 import { User } from 'src/models/user.class';
-import { FirestoreService } from '../firestore.service';
-import { ChatService } from '../chat.service';
+import { FirestoreService } from '../services/firestore.service';
+import { ChatService } from '../services/chat.service';
 import { Router } from '@angular/router';
 
 

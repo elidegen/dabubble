@@ -1,11 +1,11 @@
 import { Component, Inject, OnInit, Optional, inject } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DialogAddToGroupComponent } from '../dialog-add-to-group/dialog-add-to-group.component';
-import { ChatService } from '../chat.service';
+import { ChatService } from '../services/chat.service';
 import { Channel } from 'src/models/channel.class';
 import { Firestore, doc, getDoc } from '@angular/fire/firestore';
-import { AuthService } from '../auth.service';
-import { UserService } from '../user.service';
+import { AuthService } from '../services/auth.service';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-dialog-show-group-member',
@@ -71,7 +71,7 @@ export class DialogShowGroupMemberComponent implements OnInit {
     }
   }
 
-  
+
   /**
    * Updates the online status of each member in the current chat's channel.
    */

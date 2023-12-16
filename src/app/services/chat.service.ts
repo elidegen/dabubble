@@ -48,7 +48,6 @@ export class ChatService {
     if (this.threadDrawerStateSubject.value == true && window.innerWidth >= 800 && window.innerWidth < 1350) {
       this.threadDrawerStateSubject.next(!this.threadDrawerStateSubject.value);
     }
-
     this.workspaceDrawerStateSubject.next(!this.workspaceDrawerStateSubject.value);
   }
 
@@ -59,7 +58,6 @@ export class ChatService {
   closeThread() {
     this.threadDrawerStateSubject.next(false);
   }
-
   openThread() {
     this.threadDrawerStateSubject.next(true);
   }
@@ -120,9 +118,9 @@ export class ChatService {
    */
   compareNewDirectMessageWithExisting(user: User) {
     this.getAllDirectMessages()
-      .then(() => {
-        this.findDirectMessage(user);
-      });
+    .then(() => {
+      this.findDirectMessage(user);
+    });
   }
 
   /**
@@ -176,7 +174,6 @@ export class ChatService {
     }
   }
 
-
   //------------------------------------------------------------------------------------
 
   /**
@@ -187,20 +184,38 @@ export class ChatService {
   checkUserForId(user: User) {
     this.chat.members = []
     if (user.id !== this.userService.currentUser.id) {
-      let sortedUserIds = [user.id, this.userService.currentUser.id].sort();
-      let userId = sortedUserIds.join('');
-      let userData = this.convertUser(user);
-      let currentUserData = this.convertUser(this.userService.currentUser);
-      this.chat.members.push(userData, currentUserData);
-      this.chat.id = userId;
-      return userId
+      return this.setIdForDirectMessage(user);
     } else {
-      let userId = this.userService.currentUser.id;
-      let currentUserData = this.convertUser(this.userService.currentUser);
-      this.chat.members.push(currentUserData);
-      this.chat.id = userId;
-      return userId
+      return this.setIdForPersonalChat(user);
     }
+  }
+
+  /**
+   * Sets the ID and members for a direct message chat based on the provided user and the current user.
+   * @param user The user for whom to set the direct message chat ID and members.
+   * @returns 
+   */
+  setIdForDirectMessage(user: User) {
+    let sortedUserIds = [user.id, this.userService.currentUser.id].sort();
+    let userId = sortedUserIds.join('');
+    let userData = this.convertUser(user);
+    let currentUserData = this.convertUser(this.userService.currentUser);
+    this.chat.members.push(userData, currentUserData);
+    this.chat.id = userId;
+    return userId
+  }
+
+  /**
+   * Sets the ID and members for a personal chat based on the current user.
+   * @param {User} user - The user for whom to set the personal chat ID and members.
+   * @returns The ID of the personal chat.
+   */
+  setIdForPersonalChat(user: User) {
+    let userId = this.userService.currentUser.id;
+    let currentUserData = this.convertUser(this.userService.currentUser);
+    this.chat.members.push(currentUserData);
+    this.chat.id = userId;
+    return userId
   }
 
   /**
@@ -227,7 +242,6 @@ export class ChatService {
       name: user.name, email: user.email, password: user.password, id: user.id, picture: user.picture,
     };
   }
-
 
   // ---------------- Search function ----------------------------------------------
 
@@ -293,7 +307,7 @@ export class ChatService {
   }
 
   /**
-   * sets all personal dms
+   * Sets all personal dms
    */
   getPersonalDirectMessages() {
     this.yourDirectMessages = [];
@@ -334,6 +348,7 @@ export class ChatService {
     );
   }
 
+
   /**
    * Sets current channel
    * @param message 
@@ -346,6 +361,7 @@ export class ChatService {
       this.router.navigate(['main']);
     }
   }
+
 
   /**
    * Sets current dm
@@ -360,23 +376,9 @@ export class ChatService {
     }
   }
 
-
   /**
-   * Differs user from current user for dm
-   * @param members 
-   * @returns 
+   * Checks the screen width to determine if the current device is a mobile device.
    */
-  getOtherUser(members: any[]) {
-    console.log('members', members);
-    let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
-    console.log('other', otherUser);
-    let interlocutor = this.userService.users.find(user => user.id == otherUser.id);
-    return interlocutor as User;
-  }
-
-  /**
- * Checks the screen width to determine if the current device is a mobile device.
- */
   checkScreenWidth(): void {
     this.isMobile = window.innerWidth < 800;
     if (!this.isMobile && this.router.url !== 'home') {
@@ -384,6 +386,10 @@ export class ChatService {
     }
   }
 
+  /**
+   * Sets an empty chat to local storage with default values.
+   * Used to initialize or reset the current chat in local storage.
+   */
   setEmptyChatToLocalStorage() {
     const emptyChat = new Chat({
       name: '',

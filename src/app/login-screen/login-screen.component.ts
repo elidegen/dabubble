@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { UserService } from '../user.service';
+import { UserService } from '../services/user.service';
 import { Router } from '@angular/router';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../services/auth.service';
 import { User } from 'src/models/user.class';
-import { FirestoreService } from '../firestore.service';
-import { ChatService } from '../chat.service';
+import { FirestoreService } from '../services/firestore.service';
+import { ChatService } from '../services/chat.service';
 
 @Component({
   selector: 'app-login-screen',
@@ -163,7 +163,7 @@ export class LoginScreenComponent implements OnInit {
     this.delayAndPerformActions();
   }
 
-  
+
   /**
    * Delays the execution of a set of actions using setTimeout.
    * If the user is available, changes the switch case to 'avatar',

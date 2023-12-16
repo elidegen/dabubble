@@ -1,17 +1,17 @@
 import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren, inject } from '@angular/core';
 import { Firestore, collection, doc, onSnapshot, orderBy, query, updateDoc } from '@angular/fire/firestore';
-import { ChatService } from '../chat.service';
-import { UserService } from '../user.service';
+import { ChatService } from '../services/chat.service';
+import { UserService } from '../services/user.service';
 import { Message } from 'src/models/message.class';
 import { MatDialog } from '@angular/material/dialog';
-import { AuthService } from '../auth.service';
-import { EmojiService } from '../emoji.service';
+import { AuthService } from '../services/auth.service';
+import { EmojiService } from '../services/emoji.service';
 import { Chat } from 'src/models/chat.class';
 import { User } from 'src/models/user.class';
 import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-profile.component';
-import { FirestoreService } from '../firestore.service';
+import { FirestoreService } from '../services/firestore.service';
 import { Router } from '@angular/router';
-import { ThreadService } from '../thread.service';
+import { ThreadService } from '../services/thread.service';
 import { Thread } from 'src/models/thread.class';
 
 @Component({
@@ -341,7 +341,7 @@ export class DirectMessageChatComponent implements OnInit {
     }
   }
 
-    /**
+  /**
    * Responds to window resize events to check and update the screen width status in the chat service.
    * @param {any} event - The window resize event object.
    */

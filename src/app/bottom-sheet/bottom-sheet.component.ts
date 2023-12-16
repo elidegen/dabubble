@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-profile.component';
-import { UserService } from '../user.service';
+import { UserService } from '../services/user.service';
 import { User } from 'src/models/user.class';
 
 

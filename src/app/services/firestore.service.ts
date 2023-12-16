@@ -174,6 +174,7 @@ export class FirestoreService {
       }
     }
   }
+
   /**
    * This function updates the online status of a user
    */
@@ -254,13 +255,13 @@ export class FirestoreService {
   }
 
   /**
- * Adds a reaction to a message in a chat
- * @param emoji - The emoji to be added as a reaction
- * @param messageId - The unique identifier of the message to react to
- * @param chatId - The unique identifier of the chat where the message belongs
- * @param colId - The type of chat collection ('channels', 'threads', or 'direct messages')
- * @returns {Promise<void>} - A Promise that resolves once the reaction is added
- */
+   * Adds a reaction to a message in a chat
+   * @param emoji - The emoji to be added as a reaction
+   * @param messageId - The unique identifier of the message to react to
+   * @param chatId - The unique identifier of the chat where the message belongs
+   * @param colId - The type of chat collection ('channels', 'threads', or 'direct messages')
+   * @returns - A Promise that resolves once the reaction is added
+   */
   async addReaction(emoji: any, messageId: any, chatId: any, colId: any) {
     if (chatId) {
       let allMessages: any[] = [];
@@ -276,14 +277,14 @@ export class FirestoreService {
   }
 
   /**
- * Updates the reactions for a specific message in a chat.
- * @param allMessages - An array of messages in the chat
- * @param emoji - The emoji to be added or removed as a reaction
- * @param messageId - The unique identifier of the message to update reactions
- * @param chatId - The unique identifier of the chat where the message belongs
- * @param colId - The type of chat collection ('channels', 'threads', or 'direct messages')
- * @returns {void} - This function does not return a value
- */
+   * Updates the reactions for a specific message in a chat.
+   * @param allMessages - An array of messages in the chat
+   * @param emoji - The emoji to be added or removed as a reaction
+   * @param messageId - The unique identifier of the message to update reactions
+   * @param chatId - The unique identifier of the chat where the message belongs
+   * @param colId - The type of chat collection ('channels', 'threads', or 'direct messages')
+   * @returns {void} - This function does not return a value
+   */
   pushReaction(allMessages: any[], emoji: any, messageId: any, chatId: any, colId: any) {
     const subReactionColRef = doc(collection(this.firestore, `${colId}/${chatId}/messages/`), messageId);
       let messageIndex = allMessages.findIndex(message => message.id === messageId);
@@ -388,16 +389,16 @@ export class FirestoreService {
   async sendMessageInDirectMessage(chatId: any, message: Message) {
     const subColRef = collection(this.firestore, `direct messages/${chatId}/messages`);
     await addDoc(subColRef, message.toJSON())
-      .catch((err) => {
-        console.log(err);
-      })
-      .then((docRef: void | DocumentReference<DocumentData, DocumentData>) => {
-        if (docRef && docRef instanceof DocumentReference) {
-          if (chatId) {
-            this.updateMessageId(`direct messages/${chatId}/messages`, message, docRef.id);
-          }
+    .catch((err) => {
+      console.log(err);
+    })
+    .then((docRef: void | DocumentReference<DocumentData, DocumentData>) => {
+      if (docRef && docRef instanceof DocumentReference) {
+        if (chatId) {
+          this.updateMessageId(`direct messages/${chatId}/messages`, message, docRef.id);
         }
-      });
+      }
+    });
   }
 
   /**

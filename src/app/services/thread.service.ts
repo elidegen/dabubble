@@ -27,9 +27,7 @@ export class ThreadService {
   isThreadInDM: boolean = false;
   allThreadMessages: Message[] = [];
   unSubThread: any;
-  constructor(public router: Router, public userService: UserService, public chatService: ChatService) {
-
-  }
+  constructor(public router: Router, public userService: UserService, public chatService: ChatService) {}
 
   public _openMessageSubject: BehaviorSubject<Message | null> = new BehaviorSubject<Message | null>(null);
   
@@ -43,7 +41,6 @@ export class ThreadService {
 
   ngOnInit() {
   }
-
 
   /**
    * This functions creates a thread
@@ -61,7 +58,6 @@ export class ThreadService {
     }
   }
 
-  
   /**
    * This function sends a message within a thread
    * @param thread - document reference
@@ -74,9 +70,7 @@ export class ThreadService {
     .catch((err) => {
       console.log(err);
     })
-  
   }
-
 
   /**
    * This function updates the amount of thread messages of a message
@@ -92,7 +86,6 @@ export class ThreadService {
     }
   }
 
-
   /**
    * This function updates message values
    * @param message - new message
@@ -105,7 +98,6 @@ export class ThreadService {
       lastThreadTime: time,
     }
   }
-
   
   /**
    * This function counts all messages inside of a thread
@@ -120,7 +112,6 @@ export class ThreadService {
       return threadCount;
     });
   }
-
 }
 
 

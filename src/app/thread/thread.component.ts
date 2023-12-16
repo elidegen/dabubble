@@ -1,15 +1,15 @@
 import { Component, EventEmitter, Output, OnInit, inject, ViewChild, ElementRef, HostListener } from '@angular/core';
-import { ThreadService } from '../thread.service';
+import { ThreadService } from '../services/thread.service';
 import { MatDialog } from '@angular/material/dialog';
-import { UserService } from '../user.service';
-import { AuthService } from '../auth.service';
-import { ChatService } from '../chat.service';
+import { UserService } from '../services/user.service';
+import { AuthService } from '../services/auth.service';
+import { ChatService } from '../services/chat.service';
 import { Firestore, collection, doc, updateDoc } from '@angular/fire/firestore';
 import { Channel } from 'src/models/channel.class';
 import { Reaction } from 'src/models/reaction.class';
 import { Message } from 'src/models/message.class';
-import { EmojiService } from '../emoji.service';
-import { FirestoreService } from '../firestore.service';
+import { EmojiService } from '../services/emoji.service';
+import { FirestoreService } from '../services/firestore.service';
 import { User } from 'src/models/user.class';
 import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-profile.component';
 import { Router } from '@angular/router';
@@ -54,7 +54,7 @@ export class ThreadComponent implements OnInit {
   ngOnInit() {
     this.threadService.openMessage$.subscribe((openMessage) => {
       if (openMessage) {
-        this.setCurrentThread(openMessage);
+        this.loadCurrentThread(openMessage);
       } else {
         this.loadThreadFromLocalStorage();
       }
@@ -68,7 +68,7 @@ export class ThreadComponent implements OnInit {
    * Sets the current thread based on the provided openMessage.
    * @param {any} openMessage - The open message to extract thread information from.
    */
-  setCurrentThread(openMessage: any) {
+  loadCurrentThread(openMessage: any) {
     const message = openMessage as Message;
     if (this.chatService.isMobile) {
       this.userService.setCurrentChatToLocalStorage(message);
@@ -99,7 +99,6 @@ export class ThreadComponent implements OnInit {
     this.threadService.currentMessage = this.currentMessage;
     this.firestoreService.loadThread(this.currentMessage.id);
   }
-  
   
   ngOnDestroy() {
     if (this.firestoreService.unSubThread) {
@@ -198,7 +197,6 @@ export class ThreadComponent implements OnInit {
     this.emojiService.showThreadEmojiPicker = false;
     this.emojiService.emojiString = "";
   }
-
 
   /**
    * Adds an emoji to the chat input field in a thread.

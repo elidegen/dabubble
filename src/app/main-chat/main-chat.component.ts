@@ -5,17 +5,17 @@ import { DialogAddToGroupComponent } from '../dialog-add-to-group/dialog-add-to-
 import { DialogShowGroupMemberComponent } from '../dialog-show-group-member/dialog-show-group-member.component';
 import { MatDrawer } from '@angular/material/sidenav';
 import { Firestore, collection, doc, updateDoc } from '@angular/fire/firestore';
-import { ChatService } from '../chat.service';
+import { ChatService } from '../services/chat.service';
 import { Channel } from 'src/models/channel.class';
 import { Message } from 'src/models/message.class';
-import { UserService } from '../user.service';
+import { UserService } from '../services/user.service';
 import { Reaction } from 'src/models/reaction.class';
-import { ThreadService } from '../thread.service';
+import { ThreadService } from '../services/thread.service';
 import { Thread } from 'src/models/thread.class';
-import { AuthService } from '../auth.service';
-import { EmojiService } from '../emoji.service';
+import { AuthService } from '../services/auth.service';
+import { EmojiService } from '../services/emoji.service';
 import { User } from 'src/models/user.class';
-import { FirestoreService } from '../firestore.service';
+import { FirestoreService } from '../services/firestore.service';
 import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-profile.component';
 import { Router } from '@angular/router';
 
@@ -67,6 +67,11 @@ export class MainChatComponent implements OnInit {
     this.checkEventEmitter();
   }
 
+  
+  /**
+   * Loads selected channel as currentChat
+   * @param openChat 
+   */
   setCurrentChannel(openChat: Channel) {
     const newChat = openChat as Channel;
     this.userService.setCurrentChatToLocalStorage(newChat);
@@ -301,7 +306,7 @@ export class MainChatComponent implements OnInit {
     } else {
       this.chatService.openThread();
       if (window.innerWidth >= 800 && window.innerWidth < 1350)
-        this.chatService.closeWorkspace();
+      this.chatService.closeWorkspace();
     }
   }
 
@@ -342,7 +347,6 @@ export class MainChatComponent implements OnInit {
     }
   }
 
-
   /**
   * Opens the profile view dialog for a specific user.
   * @param {any} id - The ID of the user.
@@ -355,8 +359,8 @@ export class MainChatComponent implements OnInit {
   }
 
   /**
-   * 
-   * @param user 
+   * Generates and appends a tagged username string to the message content, updates the taggedNames property, and adds the user to the mentions list.
+   * @param {any} user - The user for whom the tagged username string is generated.
    */
   getUserNameString(user: any) {
     let taggedName: any;
@@ -366,8 +370,6 @@ export class MainChatComponent implements OnInit {
     this.message.mentions.push(user);
     this.userService.openUserContainerTextfield.next(false);
   }
-
-
 
   /**
    * Handles file selection for uploading images or other files.

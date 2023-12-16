@@ -1,15 +1,15 @@
 import { Component, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-profile.component';
-import { UserService } from '../user.service';
+import { UserService } from '../services/user.service';
 import { Router } from '@angular/router';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../services/auth.service';
 import { User } from 'src/models/user.class';
 import { Message } from 'src/models/message.class';
-import { FirestoreService } from '../firestore.service';
+import { FirestoreService } from '../services/firestore.service';
 import { Channel } from 'src/models/channel.class';
-import { ChatService } from '../chat.service';
-import { ThreadService } from '../thread.service';
+import { ChatService } from '../services/chat.service';
+import { ThreadService } from '../services/thread.service';
 import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 
 @Component({

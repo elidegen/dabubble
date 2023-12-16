@@ -1,5 +1,5 @@
 import { Component, HostListener } from '@angular/core';
-import { ChatService } from './chat.service';
+import { ChatService } from './services/chat.service';
 
 @Component({
   selector: 'app-root',
@@ -12,12 +12,14 @@ export class AppComponent {
 
   constructor(private chatService: ChatService) { }
 
+  /**
+   * Event listener for the 'window:resize' event, which triggers actions when the window is resized.
+   * @param {any} event - The window resize event object.
+   */
   @HostListener('window:resize', ['$event'])
   onResize(event: any): void {
-    console.log('lirum');
-    
     this.chatService.checkScreenWidth();
-    if (this.chatService.workspaceDrawerStateSubject.value == true && window.innerWidth >= 800 && window.innerWidth < 1350)
+    if (this.chatService.workspaceDrawerStateSubject.value == true && window.innerWidth >= 800 && window.innerWidth < 1350) {}
       this.chatService.closeThread();
-  }
+    }
 }

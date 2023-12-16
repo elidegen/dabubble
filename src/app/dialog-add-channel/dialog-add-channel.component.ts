@@ -2,10 +2,10 @@ import { Component, HostListener, Inject, Optional, QueryList, ViewChildren, inj
 import { Firestore } from '@angular/fire/firestore';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Channel } from 'src/models/channel.class';
-import { ChatService } from '../chat.service';
-import { UserService } from '../user.service';
+import { ChatService } from '../services/chat.service';
+import { UserService } from '../services/user.service';
 import { User } from 'src/models/user.class';
-import { FirestoreService } from '../firestore.service';
+import { FirestoreService } from '../services/firestore.service';
 import { Router } from '@angular/router';
 
 @Component({
