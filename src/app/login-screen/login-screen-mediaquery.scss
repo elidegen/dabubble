@@ -88,7 +88,18 @@
     overflow: hidden;
 }
 
-
+@media only screen and (max-width: 1100px) { 
+    .start-logo {
+        top: 20px;
+    }
+    
+    .top-span {
+        top: 20px;
+    }
+     
+    }
+    
+    
 
 
 @keyframes moveToTop {
