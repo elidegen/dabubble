@@ -4,6 +4,10 @@ mat-card {
     flex-direction: column;
     justify-content: space-between;
     width: 430px;
+
+        @media(max-width: 930px){
+            width: 350px;
+        }
 }
 
 mat-card-header {
@@ -81,7 +85,7 @@ header {
 .reaction-emoji-button {
     background-color: white;
     outline: none;
-    border: 1px solid #ccc; 
+    border: 1px solid #ccc;
     border-radius: 20px;
     display: flex;
     align-items: center;
@@ -90,8 +94,9 @@ header {
     font-size: 10px;
     cursor: pointer;
     text-align: center;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23); 
-    transition: box-shadow 0.2s ease-in-out; 
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    transition: box-shadow 0.2s ease-in-out;
+
     &:hover {
         background-color: white !important;
     }
@@ -100,8 +105,8 @@ header {
         height: 16px;
         width: 15px;
     }
-  }
-  
+}
+
 
 .main-chat-container {
     overflow-y: scroll;
@@ -225,11 +230,11 @@ header {
 
 .date {
     color: gray;
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .name {
-    font-size: 18px;
+    font-size: 22px;
     font-weight: 500;
 }
 
@@ -273,6 +278,11 @@ header {
             height: 20px;
             width: 20px;
         }
+
+        // .mat-mdc-icon-button .mat-mdc-button-touch-target {
+        //     height: 24px;
+        //     width: 24px;
+        // }
     }
 }
 
@@ -291,13 +301,13 @@ header {
     align-items: center;
     gap: 16px;
     padding: 0 24px;
-    margin: 16px 0;
+    margin: 8px 0;
 }
 
 .comments {
     white-space: nowrap;
     color: var(--border);
-    font-size: 12px;
+    font-size: 16px;
 }
 
 .reaction-emoji-container {
@@ -313,7 +323,7 @@ header {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
 }
 
 
@@ -341,6 +351,7 @@ header {
     width: 100%;
     padding: 16px 0;
     background-color: white;
+
     textarea {
         outline: 0;
         border: 0;
@@ -353,6 +364,7 @@ header {
         &::-webkit-scrollbar {
             display: none;
         }
+
         &:disabled {
             background-color: white;
         }
@@ -364,9 +376,9 @@ header {
         svg path {
             fill: var(--textGray);
         }
-    } 
+    }
 }
 
 .mt-thread {
-    margin-top: 32px;
+    margin-top: 16px;
 }

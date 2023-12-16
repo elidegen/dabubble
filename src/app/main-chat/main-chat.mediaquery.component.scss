@@ -1,132 +1,132 @@
-@media (max-width: 1700px) {
-    h2 {
-        font-size: 28px;
-    }
-    .message-content,
-    .my-message-content { 
-        max-width: 450px;
-        font-size: 14px;
-    }
-    .name {
-        font-size: 22px;
-    }
-    h1 {
-        font-size: 20px !important;
-    }
-}
+// @media (max-width: 1700px) {
+//     h2 {
+//         font-size: 28px;
+//     }
+//     .message-content,
+//     .my-message-content { 
+//         max-width: 450px;
+//         font-size: 14px;
+//     }
+//     .name {
+//         font-size: 22px;
+//     }
+//     h1 {
+//         font-size: 20px !important;
+//     }
+// }
 
-@media (max-width: 1500px) {
-    .name {
-        font-size: 18px;
-    }
-    .message-content,
-    .my-message-content { 
-        max-width: 350px;
-        font-size: 14px;
-    }
-}
+// @media (max-width: 1500px) {
+//     .name {
+//         font-size: 18px;
+//     }
+//     .message-content,
+//     .my-message-content { 
+//         max-width: 350px;
+//         font-size: 14px;
+//     }
+// }
 
 
-@media (max-width: 1279px) {
-    h2 {
-        font-size: 22px;
-    }
-    .chat-title {
-        img {
-            height: 24px;
-            width: 24px;
-            margin-bottom: 2px;
-        }
-    }
-    .group-members {
-        img {
-            height: 40px;
-        }
-    }
-    .group-members-container {
-        gap: 8px;
-    }
-    h3 {
-        font-size: 16px;
-    }
-    .add-user {
-        img {
-            height: 18px;
-            width: 18px;
-        }
-    }
-    .creator-picture-container {
-        img {
-            height: 50px;
-            width: 50px;
-        }
-    }
-    .message-content,
-    .my-message-content { 
-        max-width: 300px;
-        font-size: 12px;
-    }
-    .comments {
-        font-size: 10px;
-    }
-    .date {
-        font-size: 10px;
-    }
-    .name {
-        font-size: 16px;
-    }
-    .time-box {
-        border-radius: 10px;
-        padding: 0px 8px;
-        font-size: 10px;
-    }
-}
+// @media (max-width: 1279px) {
+//     h2 {
+//         font-size: 22px;
+//     }
+//     .chat-title {
+//         img {
+//             height: 24px;
+//             width: 24px;
+//             margin-bottom: 2px;
+//         }
+//     }
+//     .group-members {
+//         img {
+//             height: 40px;
+//         }
+//     }
+//     .group-members-container {
+//         gap: 8px;
+//     }
+//     h3 {
+//         font-size: 16px;
+//     }
+//     .add-user {
+//         img {
+//             height: 18px;
+//             width: 18px;
+//         }
+//     }
+//     .creator-picture-container {
+//         img {
+//             height: 50px;
+//             width: 50px;
+//         }
+//     }
+//     .message-content,
+//     .my-message-content { 
+//         max-width: 300px;
+//         font-size: 12px;
+//     }
+//     .comments {
+//         font-size: 10px;
+//     }
+//     .date {
+//         font-size: 10px;
+//     }
+//     .name {
+//         font-size: 16px;
+//     }
+//     .time-box {
+//         border-radius: 10px;
+//         padding: 0px 8px;
+//         font-size: 10px;
+//     }
+// }
 
-@media (max-width: 1100px) {
-    h2 {
-        font-size: 18px;
-    }
-    .message-content,
-    .my-message-content { 
-        max-width: 250px;
-    }
-    .group-members {
-        img {
-            height: 32px;
-        }
-    }
-    .group-members-container {
-        gap: 8px;
-    }
-    h3 {
-        font-size: 12px;
-    }
-    .add-user {
-        height: 30px;
-        width: 30px;
-        img {
-            height: 14px;
-            width: 14px;
-        }
-    }
-}
+// @media (max-width: 1100px) {
+//     h2 {
+//         font-size: 18px;
+//     }
+//     .message-content,
+//     .my-message-content { 
+//         max-width: 250px;
+//     }
+//     .group-members {
+//         img {
+//             height: 32px;
+//         }
+//     }
+//     .group-members-container {
+//         gap: 8px;
+//     }
+//     h3 {
+//         font-size: 12px;
+//     }
+//     .add-user {
+//         height: 30px;
+//         width: 30px;
+//         img {
+//             height: 14px;
+//             width: 14px;
+//         }
+//     }
+// }
 
-@media (max-width: 900px) {
-    h2 {
-        font-size: 15px;
-    }
-    .chat-title {
-        img {
-            height: 18px;
-            width: 18px;
-            margin-bottom: 1px;
-        }
-    }
-    .message-content,
-    .my-message-content { 
-        font-size: 10px;
-    }
-}
+// @media (max-width: 900px) {
+//     h2 {
+//         font-size: 15px;
+//     }
+//     .chat-title {
+//         img {
+//             height: 18px;
+//             width: 18px;
+//             margin-bottom: 1px;
+//         }
+//     }
+//     .message-content,
+//     .my-message-content { 
+//         font-size: 10px;
+//     }
+// }
 
 @media (max-width: 799px) {
     .header-mobile {

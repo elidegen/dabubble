@@ -297,9 +297,13 @@ export class MainChatComponent implements OnInit {
       this.router.navigate(['thread']);
     } else {
       this.chatService.openThread();
-      if (window.innerWidth >= 800 && window.innerWidth < 1300)
+      if (window.innerWidth >= 800 && window.innerWidth < 1350)
         this.chatService.closeWorkspace();
     }
+  }
+
+  screenSizeBelow1010() {
+    return window.innerWidth > 1010;
   }
 
   /**

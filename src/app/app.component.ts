@@ -17,7 +17,7 @@ export class AppComponent {
     console.log('lirum');
     
     this.chatService.checkScreenWidth();
-    if (this.chatService.workspaceDrawerStateSubject.value == true && window.innerWidth >= 800 && window.innerWidth < 1300)
+    if (this.chatService.workspaceDrawerStateSubject.value == true && window.innerWidth >= 800 && window.innerWidth < 1350)
       this.chatService.closeThread();
   }
 }

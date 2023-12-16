@@ -45,7 +45,7 @@ export class ChatService {
   }
 
   async toggleWorkspace() {
-    if (this.threadDrawerStateSubject.value == true && window.innerWidth >= 800 && window.innerWidth < 1300) {
+    if (this.threadDrawerStateSubject.value == true && window.innerWidth >= 800 && window.innerWidth < 1350) {
       this.threadDrawerStateSubject.next(!this.threadDrawerStateSubject.value);
     }
 
