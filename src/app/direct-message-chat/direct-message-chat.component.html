@@ -62,8 +62,8 @@
                   </button>
                 </div>
                 <div class="comment-section" (click)="openThreadInDirect(message)">
-                  <span *ngIf="message.threadCount == 0" class="comments color-purple2-text">Reply</span>
-                  <span *ngIf="message.threadCount == 1" class="comments color-purple2-text"> 1 Comment</span>
+                  <span (click)="openThreadInDirect(message)" *ngIf="message.threadCount == 0" class="comments color-purple2-text">Reply</span>
+                  <span (click)="openThreadInDirect(message)" *ngIf="message.threadCount == 1" class="comments color-purple2-text"> 1 Comment</span>
                   <span *ngIf="message.threadCount >= 2" class="comments color-purple2-text">{{message.threadCount}} Comments</span>
                   <span *ngIf="message.threadCount > 0" class="last-comment">Last Comment {{message.lastThreadTime}}</span>
                 </div>
