@@ -55,8 +55,8 @@
             </div>
           </button>
 
-          <div *ngIf="!chatService.isMobile" class="group-members-container">
-            <button mat-button class="group-members-button" (click)="openMemberDialog()">
+          <div class="group-members-container" *ngIf="!chatService.isMobile">
+            <button mat-button *ngIf="screenSizeBelow1010()"  class="group-members-button" (click)="openMemberDialog()">
               <div class="group-members-container">
                 <div class="group-members">
                   <div class="d-flex" *ngFor="let member of firestoreService.firstThreeItems">

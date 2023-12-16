@@ -19,6 +19,11 @@ body {
     font-family: 'Nunito', 'Roboto', sans-serif !important;
 }
 
+.mat-mdc-button-touch-target {
+    height: fit-content !important;
+    width: fit-content !important;
+}
+
 ::-webkit-scrollbar {
     width: 8px;
 }
