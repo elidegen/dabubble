@@ -123,7 +123,7 @@
 
                     <div *ngIf="message.creatorId == currentUser.id && editingMessage === message.id">
                       <div *ngSwitchCase="true" class="text-field-container j-flex-end">
-                        <textarea #editor cols="30" rows="10">{{message.content}}</textarea>
+                        <textarea (keyup.enter)="updateMessageContent(message)" #editor cols="30" rows="10">{{message.content}}</textarea>
                         <button class="send-button" mat-icon-button (click)="updateMessageContent(message)"
                           [disabled]="editor.value.length < 1">
                           <svg width="23" height="20" viewBox="0 0 23 20" fill="none"
