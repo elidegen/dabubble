@@ -1,5 +1,6 @@
 import { Component, HostListener } from '@angular/core';
 import { ChatService } from './services/chat.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +11,7 @@ export class AppComponent {
   title = 'dabubble';
   isMobile = true;
 
-  constructor(private chatService: ChatService) { }
+  constructor(private chatService: ChatService, public router: Router) { }
 
   /**
    * Event listener for the 'window:resize' event, which triggers actions when the window is resized.
@@ -18,8 +19,10 @@ export class AppComponent {
    */
   @HostListener('window:resize', ['$event'])
   onResize(event: any): void {
-    this.chatService.checkScreenWidth();
-    if (this.chatService.workspaceDrawerStateSubject.value == true && window.innerWidth >= 800 && window.innerWidth < 1350) {}
-      this.chatService.closeThread();
+    if (this.router.url !== '/') {
+      this.chatService.checkScreenWidth();
+      if (this.chatService.workspaceDrawerStateSubject.value == true && window.innerWidth >= 800 && window.innerWidth < 1350) {}
+        this.chatService.closeThread();
+      }
     }
 }

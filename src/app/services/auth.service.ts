@@ -89,12 +89,13 @@ export class AuthService {
   async checkLocalStorage(user: User): Promise<void> {
     const chatJson = localStorage.getItem('currentChat');
     if (!chatJson) {
-     await this.addPersonalChatToLocalStorage(user.id);
+      await this.addPersonalChatToLocalStorage(user.id);
     } else {
       let existingChat: Chat | Channel;
       existingChat = JSON.parse(chatJson);
       const isUserMember = existingChat.members.some((member: any) => member.id === user.id);
       if (!isUserMember) {
+        console.log("wir sind hier");
         this.addPersonalChatToLocalStorage(user.id);
       }
     }
@@ -103,7 +104,7 @@ export class AuthService {
   /**
    * Asynchronously adds a personal chat to local storage based on the user's ID.
    * @param {any} userId - The ID of the user for whom to add the personal chat.
-   * @returns {Promise<void>} A promise that resolves when the personal chat is added to local storage.
+   * @returns A promise that resolves when the personal chat is added to local storage.
    */
   async addPersonalChatToLocalStorage(userId: any) {
     const docRef = doc(collection(this.firestore, 'direct messages'), userId);
@@ -131,35 +132,6 @@ export class AuthService {
   }
 
 
-  /**
-   * Signs in a user with Google authentication.
-   * If the user does not exist, it adds a new user.
-   */
-  async signInWithGoogle() {
-    await signInWithPopup(this.auth, this.provider)
-      .then((result) => {
-        const user = result.user;
-        this.prepareGoogleUser(user)
-      })
-      .catch((error) => {
-        console.error('Fehler bei Google-Anmeldung:', error);
-        alert('Fehler bei Google-Anmeldung');
-      });
-    await this.addGoogleUser();
-    await this.userService.updateUser(this.userService.currentUser);
-    this.userService.setCurrentUserToLocalStorage();
-  }
-
-  /**
-   * Prepares user data before signing in with google.
-   */
-  prepareGoogleUser(user: any) {
-    this.userService.currentUser.name = user.displayName || ""
-    this.userService.currentUser.email = user.email || "";
-    this.userService.currentUser.picture = 'assets/img/icons/google.png' || "";
-    this.userService.currentUser.online = true;
-    this.userService.currentUser.loginTime = this.getLoginTime();
-  }
 
   /**
    * Signs in a guest user and updates their login time.
@@ -183,6 +155,9 @@ export class AuthService {
    * Signs out the current user and updates their online status.
    */
   async signOutUser() {
+    if (this.userService.currentUser.name == "Guest") {
+      this.removeCurrentChat();
+    }
     this.userService.removeCurrentUserFromLocalStorage();
     let userIndexToLogout = this.findUserIndexWithEmail(this.userService.currentUser.email);
     if (userIndexToLogout != -1) {
@@ -196,14 +171,71 @@ export class AuthService {
     });
   }
 
+
+  removeCurrentChat() {
+    localStorage.removeItem('currentChat');
+  }
+
+
+  /**
+     * Signs in a user with Google authentication.
+     * If the user does not exist, it adds a new user.
+     */
+  async signInWithGoogle() {
+    await signInWithPopup(this.auth, this.provider)
+      .then((result) => {
+        const user = result.user;
+        this.prepareGoogleUser(user)
+      })
+      .catch((error) => {
+        console.error('Fehler bei Google-Anmeldung:', error);
+        alert('Fehler bei Google-Anmeldung');
+      });
+    
+     
+       await this.addGoogleUser()
+      console.log("currentuser im userservice für google",this.userService.currentUser);
+      console.log("alle firebase user",this.userService.users)
+
+  }
+
+  /**
+   * Prepares user data before signing in with google.
+   */
+  prepareGoogleUser(user: any) {
+    if (this.findUserIndexWithEmail(user.email) != -1) {
+    this.userService.currentUser = this.userService.users[this.findUserIndexWithEmail(user.email)] 
+    } else {
+    this.userService.currentUser.name = user.displayName || ""
+    this.userService.currentUser.email = user.email || "";
+    this.userService.currentUser.picture = 'assets/img/icons/google.png' || "";
+    this.userService.currentUser.online = true;
+    this.userService.currentUser.loginTime = this.getLoginTime();
+    console.log("das ist der preparte google user",user.uid);
+    this.userService.currentUser.id = user.uid;
+  }
+  }
+
+
+  
+  
+
+
   /**
     * Adds a Google user if they don't already exist in the system.
     */
   async addGoogleUser() {
+    console.log("currentuser im userservice für google",this.userService.currentUser)
     if (!this.userService.userExists(this.userService.currentUser.email || '')) {
       await this.userService.addUser(this.userService.currentUser);
+      await this.userService.updateUser(this.userService.currentUser);
+      console.log("google user bei der ersten anmeldung", this.userService.currentUser)
     }
-    this.userService.setCurrentUserToLocalStorage();
+    console.log("currentuser im userservice für google",this.userService.currentUser)
+    
+    await this.userService.setCurrentUserToLocalStorage();
+    console.log("google user bei der zweiten anmeldung", this.userService.currentUser)
+    await this.checkLocalStorage(this.userService.currentUser);
     await this.router.navigate(['home']);
   }
 
@@ -215,9 +247,9 @@ export class AuthService {
   async updateUserEmail(newEmail: string): Promise<void> {
     const auth = getAuth();
     updateEmail(auth.currentUser!, newEmail)
-    .catch((error) => {
-      console.log(error)
-    });
+      .catch((error) => {
+        console.log(error)
+      });
   }
 
 
@@ -254,17 +286,17 @@ export class AuthService {
     const storageReference = storageRef(this.storage, `profileImages/${file.name}`);
     const uploadTask = uploadBytesResumable(storageReference, file);
     uploadTask.on('state_changed', () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          this.customPic = downloadURL;
-        });
-      }
+      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+        this.customPic = downloadURL;
+      });
+    }
     );
   }
 
- /**
-   * Determines the file type based on the file URL.
-   * 
-   */
+  /**
+    * Determines the file type based on the file URL.
+    * 
+    */
   getFileType(fileUrl?: any): any | null {
     if (fileUrl) {
       const extension = fileUrl.split('.').pop()?.split('?')[0];
@@ -274,10 +306,10 @@ export class AuthService {
   }
 
 
-   /**
-     * Checks if the file URL points to an image based on common image file extensions.
-     * 
-     */
+  /**
+    * Checks if the file URL points to an image based on common image file extensions.
+    * 
+    */
   isImage(fileUrl: any): any {
     const imageExtensions = ['jpg', 'jpeg', 'png', 'gif'];
     const extension = this.getFileType(fileUrl);
@@ -287,10 +319,10 @@ export class AuthService {
   }
 
 
-   /**
-     * Checks if the file URL points to a PDF file.
-     * 
-     */
+  /**
+    * Checks if the file URL points to a PDF file.
+    * 
+    */
   isPDF(fileUrl: any): any {
     const extension = this.getFileType(fileUrl);
     if (extension) {

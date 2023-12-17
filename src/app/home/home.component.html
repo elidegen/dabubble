@@ -6,7 +6,7 @@
 
     <div class="add-members-container">
       <input #search class="w100 input-members search" type="text"
-        placeholder="Search everything, # for channels, @ for users" [(ngModel)]="searchInput"
+        placeholder="Search" [(ngModel)]="searchInput"
         (input)="filterEverything()" (click)="this.isInputFocused = true;">
       <div class="user-search-container" *ngIf="isInputFocused">
         <div *ngIf="searchInput.trim() !== '' " class="search-results">
