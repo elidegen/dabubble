@@ -95,7 +95,6 @@ export class AuthService {
       existingChat = JSON.parse(chatJson);
       const isUserMember = existingChat.members.some((member: any) => member.id === user.id);
       if (!isUserMember) {
-        console.log("wir sind hier");
         this.addPersonalChatToLocalStorage(user.id);
       }
     }
@@ -194,9 +193,6 @@ export class AuthService {
     
      
        await this.addGoogleUser()
-      console.log("currentuser im userservice für google",this.userService.currentUser);
-      console.log("alle firebase user",this.userService.users)
-
   }
 
   /**
@@ -211,7 +207,6 @@ export class AuthService {
     this.userService.currentUser.picture = 'assets/img/icons/google.png' || "";
     this.userService.currentUser.online = true;
     this.userService.currentUser.loginTime = this.getLoginTime();
-    console.log("das ist der preparte google user",user.uid);
     this.userService.currentUser.id = user.uid;
   }
   }
@@ -225,16 +220,11 @@ export class AuthService {
     * Adds a Google user if they don't already exist in the system.
     */
   async addGoogleUser() {
-    console.log("currentuser im userservice für google",this.userService.currentUser)
     if (!this.userService.userExists(this.userService.currentUser.email || '')) {
       await this.userService.addUser(this.userService.currentUser);
       await this.userService.updateUser(this.userService.currentUser);
-      console.log("google user bei der ersten anmeldung", this.userService.currentUser)
     }
-    console.log("currentuser im userservice für google",this.userService.currentUser)
-    
     await this.userService.setCurrentUserToLocalStorage();
-    console.log("google user bei der zweiten anmeldung", this.userService.currentUser)
     await this.checkLocalStorage(this.userService.currentUser);
     await this.router.navigate(['home']);
   }
@@ -248,7 +238,6 @@ export class AuthService {
     const auth = getAuth();
     updateEmail(auth.currentUser!, newEmail)
       .catch((error) => {
-        console.log(error)
       });
   }
 

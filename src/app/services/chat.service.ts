@@ -106,7 +106,6 @@ export class ChatService {
         ...this.chat.toJSON(),
       })
         .catch((err) => {
-          console.log('error', err);
         });
     }
     this.compareNewDirectMessageWithExisting(user);

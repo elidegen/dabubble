@@ -44,7 +44,6 @@ export class FirestoreService {
   async addChannel(channel: Channel) {
     await addDoc(collection(this.firestore, 'channels'), channel.toJSON())
       .catch((err) => {
-        console.log(err);
       })
       .then((docRef: void | DocumentReference<DocumentData, DocumentData>) => {
         if (docRef && docRef instanceof DocumentReference) {

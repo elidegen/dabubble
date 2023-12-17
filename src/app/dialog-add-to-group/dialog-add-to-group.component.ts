@@ -176,7 +176,6 @@ export class DialogAddToGroupComponent {
         const channelData = channelDocSnap.data();
         this.allChannelMembers = channelData?.['members'];
       } else {
-        console.log('Channel document does not exist.');
       }
       this.showExistingMembers();
     }
