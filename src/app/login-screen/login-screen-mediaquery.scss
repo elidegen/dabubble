@@ -28,11 +28,19 @@
 }
 
 
-@media screen and (max-height: 580px){
+@media screen and (max-height: 600px){
        
     .login{
         position: absolute;
         top: 0;
+        }
+
+        .login-container {
+            height: 90vh;
+        }
+
+        .responsive-create-account {
+            bottom: 30px;
         }
 
 }
@@ -147,7 +155,6 @@
 
 .input-container {
     height: 45px;
-   
     input {
         width: 300px;
     }
@@ -166,7 +173,6 @@
            
             input {
                 width: 160px;
-                min-width: 100px;
             }
         
     }

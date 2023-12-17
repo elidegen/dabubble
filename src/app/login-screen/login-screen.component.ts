@@ -10,7 +10,7 @@ import { ChatService } from '../services/chat.service';
 @Component({
   selector: 'app-login-screen',
   templateUrl: './login-screen.component.html',
-  styleUrls: ['./login-screen.component.scss','./login-screen-mediaquery.scss']
+  styleUrls: ['./login-screen.component.scss', './login-screen-mediaquery.scss']
 })
 
 export class LoginScreenComponent implements OnInit {
@@ -31,7 +31,7 @@ export class LoginScreenComponent implements OnInit {
     this.hideContentAfterAnimation();
   }
 
-  constructor(public userService: UserService, public router: Router, public authService: AuthService, public firestoreService: FirestoreService,public chatService: ChatService) { }
+  constructor(public userService: UserService, public router: Router, public authService: AuthService, public firestoreService: FirestoreService, public chatService: ChatService) { }
 
   getEmailForNewPassword = new FormGroup({
     emailForReset: new FormControl('', [Validators.required, Validators.email]),
@@ -219,7 +219,7 @@ export class LoginScreenComponent implements OnInit {
     await this.userService.addUser(this.newUser as User);
     this.authService.signInUser(this.userService.currentEmail, this.userService.currentPassword);
   }
-  
+
 
   /**
    * @method loginUser
@@ -231,18 +231,26 @@ export class LoginScreenComponent implements OnInit {
     if (this.login.valid) {
       await this.authService.signInUser(this.loginemail.value, this.loginpassword.value);
       if (this.authService.signInSuccess) {
-        this.authService.signInSuccess = true;
-        this.userNotFound = false;
-        setTimeout(() => {
-          this.authService.signInSuccess = false;
-        }, 1000);
+        this.signInSuccess();
       } else {
         this.authService.signInSuccess = false;
         this.userNotFound = true;
         this.getErrorMessageNoUser();
       }
+    } else {
+      this.userNotFound = true;
+      this.getErrorMessageNoUser();
     }
   }
+
+
+signInSuccess() {
+  this.authService.signInSuccess = true;
+  this.userNotFound = false;
+  setTimeout(() => {
+    this.authService.signInSuccess = false;
+  }, 1000);
+}
 
 
   /**
