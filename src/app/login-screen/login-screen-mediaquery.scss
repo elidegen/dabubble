@@ -9,7 +9,35 @@
     align-items: center;
     }
 
+
+    @media screen and (max-height: 640px){
+       
+        .padding-bottom {
+            padding-bottom: 0;
+        }
+        .margin-top {
+            margin-top: 5px;
+        }
+        .margin-top24 {
+            margin-top: 5px;
+        }
+        .start-logo {
+            top: 5px!important;
+        }
+
+}
+
+
+@media screen and (max-height: 580px){
+       
+    .login{
+        position: absolute;
+        top: 0;
+        }
+
+}
   
+
   
     .picture-container {
         display: flex;
