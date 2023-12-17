@@ -52,7 +52,7 @@ main {
 }
 
 .workspace-button {
-    position: fixed;
+    position: absolute;
     bottom: 32px;
     left: 0;
     rotate: -90deg;
@@ -92,6 +92,7 @@ mat-drawer {
     left: 50%;
     transform: translate(-50%, 0);
     width: 50%;
+    max-width: 1000px;
     background: url('../../assets/img/icons/search.svg') no-repeat;
     background-color: white;
     background-position: 98%;
