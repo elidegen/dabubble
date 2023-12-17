@@ -32,7 +32,7 @@
        
     .login{
         position: absolute;
-        top: 0;
+        top: 5px;
         }
 
         .login-container {
@@ -134,9 +134,7 @@
     }
      
     }
-    
-    
-
+     
 
 @keyframes moveToTop {
     from {
@@ -166,14 +164,15 @@
         width: 10px!important;
     }
 
-
-
     @media only screen and (max-width: 500px) { 
         .input-container {
-           
+            width: 90%;
+            min-width: 100px!important;;
             input {
                 width: 160px;
             }
-        
+            .form-container {
+                width: 90vw;
+            }
     }
 }

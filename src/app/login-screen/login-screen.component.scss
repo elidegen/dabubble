@@ -216,7 +216,6 @@ mat-error {
 
     input {
         width: 100%;
-        min-width: 300px;
     }
     img {
         margin-left: 20px;
@@ -274,6 +273,12 @@ input {
 
 .google-button {
     transition: border 0.2s ease;
+    display: flex;
+    img {
+        margin-left: 0;
+    }
+    align-items: center;
+    justify-content: space-around;
     &:hover {
         border: 1px solid #545BEC;
         box-shadow: 0px 2px 10px 0px #00000014;
