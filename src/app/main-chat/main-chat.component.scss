@@ -19,6 +19,11 @@
     }
 }
 
+.mat-mdc-button-touch-target {
+    height: fit-content !important;
+    width: fit-content !important;
+}
+
 .chat-title {
     display: flex;
     align-items: center;
@@ -187,7 +192,7 @@ mat-card-header {
 }
 
 mat-card {
-    height: calc(100vh - 110px);
+    height: calc(100vh - 96px);
 }
 
 .chat-window-container {

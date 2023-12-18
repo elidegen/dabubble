@@ -126,16 +126,16 @@ export class FirestoreService {
     let channelId = channel.id;
     const subColRef = collection(this.firestore, `channels/${channelId}/messages`);
     await addDoc(subColRef, message.toJSON())
-    .catch((err) => {
-      console.log('Error', err);
-    })
-    .then((docRef: void | DocumentReference<DocumentData, DocumentData>) => {
-      if (docRef && docRef instanceof DocumentReference) {
-        if (channelId) {
-          this.updateMessageId(`channels/${channelId}/messages`, message, docRef.id);
+      .catch((err) => {
+        console.log('Error', err);
+      })
+      .then((docRef: void | DocumentReference<DocumentData, DocumentData>) => {
+        if (docRef && docRef instanceof DocumentReference) {
+          if (channelId) {
+            this.updateMessageId(`channels/${channelId}/messages`, message, docRef.id);
+          }
         }
-      }
-    });
+      });
   }
 
   async updateMessageId(colId: string, message: Message, newId: string) {
@@ -143,7 +143,7 @@ export class FirestoreService {
     await this.updateChannelMessage(colId, message);
   }
 
-  
+
   async updateChannelMessage(colId: string, message: Message) {
     const docRef = doc(collection(this.firestore, colId), message.id);
     await updateDoc(docRef, this.getUpdateChannelMessageData(message)).catch(
@@ -156,7 +156,7 @@ export class FirestoreService {
       id: message.id,
     };
   }
-//----------------------------------------------------------------------------------------------------
+  //----------------------------------------------------------------------------------------------------
   /**
    * This function loads all members of a channel
    * @param channelId 
@@ -288,15 +288,15 @@ export class FirestoreService {
    */
   pushReaction(allMessages: any[], emoji: any, messageId: any, chatId: any, colId: any) {
     const subReactionColRef = doc(collection(this.firestore, `${colId}/${chatId}/messages/`), messageId);
-      let messageIndex = allMessages.findIndex(message => message.id === messageId);
-      let currentMessage = allMessages[messageIndex];
-      const reactionItem = { emoji, creatorId: this.userService.currentUser.id, creator: this.userService.currentUser.name };
-      if (currentMessage.reaction.some((emojiArray: { emoji: string; creatorId: string; }) => emojiArray.emoji === emoji && emojiArray.creatorId === this.userService.currentUser.id)) {
-        currentMessage.reaction = currentMessage.reaction.filter((emojiArray: { emoji: string; creatorId: string; }) => !(emojiArray.emoji === emoji && emojiArray.creatorId === this.userService.currentUser.id));
-      } else {
-        currentMessage.reaction.push(reactionItem);
-      }
-      updateDoc(subReactionColRef, this.updateMessage(allMessages[messageIndex]));
+    let messageIndex = allMessages.findIndex(message => message.id === messageId);
+    let currentMessage = allMessages[messageIndex];
+    const reactionItem = { emoji, creatorId: this.userService.currentUser.id, creator: this.userService.currentUser.name };
+    if (currentMessage.reaction.some((emojiArray: { emoji: string; creatorId: string; }) => emojiArray.emoji === emoji && emojiArray.creatorId === this.userService.currentUser.id)) {
+      currentMessage.reaction = currentMessage.reaction.filter((emojiArray: { emoji: string; creatorId: string; }) => !(emojiArray.emoji === emoji && emojiArray.creatorId === this.userService.currentUser.id));
+    } else {
+      currentMessage.reaction.push(reactionItem);
+    }
+    updateDoc(subReactionColRef, this.updateMessage(allMessages[messageIndex]));
   }
 
   updateMessage(message: any) {
@@ -311,7 +311,7 @@ export class FirestoreService {
    * @returns - counter
    */
   setEmojiCount(reactions: any[]) {
-    let counter: { [key: string]: number  } = {};
+    let counter: { [key: string]: number } = {};
     reactions.forEach(react => {
       let key = JSON.stringify(react.emoji);
       if (key) {
@@ -356,7 +356,7 @@ export class FirestoreService {
     });
   }
   //------------------------------------------------------------------------------------------------------
-  
+
   /**
    * Sorts all messages according to their date
    */
@@ -398,16 +398,16 @@ export class FirestoreService {
   async sendMessageInDirectMessage(chatId: any, message: Message) {
     const subColRef = collection(this.firestore, `direct messages/${chatId}/messages`);
     await addDoc(subColRef, message.toJSON())
-    .catch((err) => {
-      console.log(err);
-    })
-    .then((docRef: void | DocumentReference<DocumentData, DocumentData>) => {
-      if (docRef && docRef instanceof DocumentReference) {
-        if (chatId) {
-          this.updateMessageId(`direct messages/${chatId}/messages`, message, docRef.id);
+      .catch((err) => {
+        console.log(err);
+      })
+      .then((docRef: void | DocumentReference<DocumentData, DocumentData>) => {
+        if (docRef && docRef instanceof DocumentReference) {
+          if (chatId) {
+            this.updateMessageId(`direct messages/${chatId}/messages`, message, docRef.id);
+          }
         }
-      }
-    });
+      });
   }
 
   /**
