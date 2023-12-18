@@ -7,6 +7,7 @@ import { Channel } from 'src/models/channel.class';
 import { User } from 'src/models/user.class';
 import { updateDoc } from 'firebase/firestore';
 import { FirestoreService } from '../services/firestore.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dialog-add-to-group',
@@ -16,7 +17,7 @@ import { FirestoreService } from '../services/firestore.service';
 export class DialogAddToGroupComponent {
   
   constructor(public dialogRef: MatDialogRef<DialogAddToGroupComponent>, public chatService: ChatService, 
-    public userService: UserService, public firestoreService: FirestoreService) {
+    public userService: UserService, public firestoreService: FirestoreService, public router: Router) {
     this.currentChat = this.userService.getCurrentChatFromLocalStorage();
     this.loadUsers();
     this.getAllChannelMembers();
@@ -204,6 +205,10 @@ export class DialogAddToGroupComponent {
         console.error('Error updating document:', error);
       });
     }
+    this.checkIfCurrentUserIsMember(this.channel.members)
+    if (!this.chatService.isMobile) {
+      this.getAllChannelMembers();
+    }
     this.dialogRef.close();
   }
 
@@ -224,6 +229,22 @@ export class DialogAddToGroupComponent {
       };
     });
     return formattedUsers;
+  }
+
+
+  checkIfCurrentUserIsMember(members: any[]) {
+    console.log(members);
+    if (this.currentChat) {
+      let activeMember = members.find(member => member.id == this.userService.currentUser.id);
+      console.log("activeMember", activeMember)
+      if (!activeMember) {
+        console.log(members);
+        if (this.chatService.isMobile) {
+          this.router.navigate(['home']);
+        }
+        this.chatService.setEmptyChatToLocalStorage();
+      }
+    }
   }
 
 

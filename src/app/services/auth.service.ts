@@ -28,7 +28,7 @@ export class AuthService {
   chat: Chat = new Chat();
 
   constructor(public router: Router, public userService: UserService, public chatService: ChatService) {
-    this.newGuest.name = 'Guest';
+    this.newGuest.name = "Guest"+ this.getGuestName();
     this.newGuest.picture = 'assets/img/avatars/profile.svg';
     this.newGuest.online = true;
   }
@@ -154,7 +154,7 @@ export class AuthService {
    * Signs out the current user and updates their online status.
    */
   async signOutUser() {
-    if (this.userService.currentUser.name == "Guest") {
+    if (this.userService.currentUser.name?.startsWith('Guest')) {
       this.removeCurrentChat();
     }
     this.userService.removeCurrentUserFromLocalStorage();
@@ -173,6 +173,10 @@ export class AuthService {
 
   removeCurrentChat() {
     localStorage.removeItem('currentChat');
+  }
+
+  getGuestName() {
+   return Math.floor(Math.random() * 100000);
   }
 
 
