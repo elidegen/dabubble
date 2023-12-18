@@ -235,9 +235,7 @@ export class DialogAddToGroupComponent {
   checkIfCurrentUserIsMember(members: any[]) {
     if (this.currentChat) {
       let activeMember = members.find(member => member.id == this.userService.currentUser.id);
-      console.log("activeMember", activeMember)
       if (!activeMember) {
-        console.log(members);
         if (this.chatService.isMobile) {
           this.router.navigate(['home']);
         }

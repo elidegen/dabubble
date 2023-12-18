@@ -125,8 +125,6 @@ export class WorkspaceComponent implements OnInit {
       this.yourChannels = this.chatservice.allChannels;
     } else {
       this.yourChannels = this.chatservice.yourChannels;
-      console.log('workspace', this.yourChannels);
-      
     }
   }
 

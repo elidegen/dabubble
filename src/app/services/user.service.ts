@@ -34,7 +34,6 @@ export class UserService {
 
   constructor(public router: Router) {
     this.unsubList = this.subUserList();
-    console.log("Alle Nutzer",this.users);
   }
 
   ngOnDestroy() {
