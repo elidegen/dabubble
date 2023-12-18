@@ -22,7 +22,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-main-chat',
   templateUrl: './main-chat.component.html',
-  styleUrls: ['./main-chat.component.scss','./main-chat.mediaquery.component.scss','./main-chat2.component.scss',]
+  styleUrls:  ['./main-chat2.component.scss','./main-chat.component.scss','./main-chat.mediaquery.component.scss']
 })
 
 export class MainChatComponent implements OnInit {

@@ -28,9 +28,7 @@ export class AuthService {
   chat: Chat = new Chat();
 
   constructor(public router: Router, public userService: UserService, public chatService: ChatService) {
-    this.newGuest.name = "Guest"+ this.getGuestName();
-    this.newGuest.picture = 'assets/img/avatars/profile.svg';
-    this.newGuest.online = true;
+    
   }
 
   /**
@@ -136,11 +134,13 @@ export class AuthService {
    * Signs in a guest user and updates their login time.
    */
   async signInGuest() {
-    this.userService.currentUser = this.newGuest;
+    this.userService.currentUser.name = "Guest" + this.getGuestName();
+    this.userService.currentUser.picture = 'assets/img/avatars/profile.svg';
+    this.userService.currentUser.online = true;
     this.userService.currentUser.loginTime = this.getLoginTime();
     await this.userService.addUser(this.userService.currentUser);
     await this.userService.updateUser(this.userService.currentUser);
-    this.userService.setCurrentUserToLocalStorage();
+    await this.userService.setCurrentUserToLocalStorage();
     const auth = getAuth();
     signInAnonymously(auth)
       .then(() => {
@@ -165,6 +165,7 @@ export class AuthService {
     }
     this.userService.currentUser = new User;
     this.chatService.openChat = null;
+    this.chatService.openDirectMessage = null;
     await signOut(this.auth).then(() => {
     }).catch((error) => {
       console.error('Fehler beim Abmelden:', error);
@@ -177,7 +178,7 @@ export class AuthService {
   }
 
   getGuestName() {
-   return Math.floor(Math.random() * 100000);
+    return Math.floor(Math.random() * 100000);
   }
 
 
@@ -195,9 +196,9 @@ export class AuthService {
         console.error('Fehler bei Google-Anmeldung:', error);
         alert('Fehler bei Google-Anmeldung');
       });
-    
-     
-       await this.addGoogleUser()
+
+
+    await this.addGoogleUser()
   }
 
   /**
@@ -205,20 +206,20 @@ export class AuthService {
    */
   prepareGoogleUser(user: any) {
     if (this.findUserIndexWithEmail(user.email) != -1) {
-    this.userService.currentUser = this.userService.users[this.findUserIndexWithEmail(user.email)] 
+      this.userService.currentUser = this.userService.users[this.findUserIndexWithEmail(user.email)]
     } else {
-    this.userService.currentUser.name = user.displayName || ""
-    this.userService.currentUser.email = user.email || "";
-    this.userService.currentUser.picture = 'assets/img/icons/google.png' || "";
-    this.userService.currentUser.online = true;
-    this.userService.currentUser.loginTime = this.getLoginTime();
-    this.userService.currentUser.id = user.uid;
-  }
+      this.userService.currentUser.name = user.displayName || ""
+      this.userService.currentUser.email = user.email || "";
+      this.userService.currentUser.picture = 'assets/img/icons/google.png' || "";
+      this.userService.currentUser.online = true;
+      this.userService.currentUser.loginTime = this.getLoginTime();
+      this.userService.currentUser.id = user.uid;
+    }
   }
 
 
-  
-  
+
+
 
 
   /**
