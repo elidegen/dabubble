@@ -158,6 +158,10 @@ mat-expansion-panel-header {
                 fill: var(--purple3);
             }
         }
+
+        .add-channel-btn {
+            background-image: url('../../../src/assets/img/icons/add_purple.svg');
+        }
     }
 
     mat-panel-title {
@@ -252,4 +256,14 @@ mat-expansion-panel-header {
         font-weight: 500;
         white-space: nowrap;
     }
+}
+
+.add-channel-btn {
+    margin-left: auto;
+    height: 25px;
+    width: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url('../../../src/assets/img/icons/add_black.svg');
 }

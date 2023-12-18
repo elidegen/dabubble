@@ -17,7 +17,11 @@
               <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
                 <path
                   d="M480-520q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Zm0-80q33 0 56.5-23.5T560-680q0-33-23.5-56.5T480-760q-33 0-56.5 23.5T400-680q0 33 23.5 56.5T480-600ZM280-120q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Zm0-80q33 0 56.5-23.5T360-280q0-33-23.5-56.5T280-360q-33 0-56.5 23.5T200-280q0 33 23.5 56.5T280-200Zm400 80q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Zm0-80q33 0 56.5-23.5T760-280q0-33-23.5-56.5T680-360q-33 0-56.5 23.5T600-280q0 33 23.5 56.5T680-200ZM480-680ZM280-280Zm400 0Z" />
-              </svg>Channels</mat-panel-title>
+              </svg>Channels
+              <button mat-icon-button class="add-channel-btn" (click)="openAddChannelDialog($event)">
+                <!-- <img src="assets/img/icons/add_black.svg" alt=""> -->
+              </button>
+            </mat-panel-title>
           </mat-expansion-panel-header>
           <div class="channel-section">
             <div class="channel-container">
@@ -60,15 +64,14 @@
             <div *ngFor="let directMessage of personalDirectMessages" class="profile-button-div">
               <button class="direct-message-button br-32" (click)="openDirectMessage(directMessage)">
                 <div class="profile-message-container">
-                  <img class="d-flex" src="{{ (getOtherUser(directMessage.members))?.picture }}"
-                    alt="avatar">
+                  <img class="d-flex" src="{{ (getOtherUser(directMessage.members))?.picture }}" alt="avatar">
                   <div [ngClass]="{'offline-status': !getOtherUser(directMessage.members)?.online}"
                     class="online-status"></div>
                 </div>
                 <h3 class="chat-name">{{ getOtherUser(directMessage.members)?.name }}</h3>
               </button>
-              <button *ngIf="getOtherUser(directMessage.members)?.id !== currentUser.id" matTooltip="Delete chat" class="delete-direct-button" mat-icon-button
-                (click)="deleteDirectMessageChat(directMessage.id)">
+              <button *ngIf="getOtherUser(directMessage.members)?.id !== currentUser.id" matTooltip="Delete chat"
+                class="delete-direct-button" mat-icon-button (click)="deleteDirectMessageChat(directMessage.id)">
                 <img src="assets/img/icons/close.svg" alt="">
               </button>
             </div>
