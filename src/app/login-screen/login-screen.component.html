@@ -20,7 +20,7 @@
     <div class="form-container">
       <h1 class="color-purple2-text padding-bottom">Login</h1>
       <p>We recommend using the email address that you use at work.</p>
-      <form [formGroup]="login">
+      <form  [formGroup]="login">
         <div class="input-container margin-top ">
           <img src="assets\img\icons\mail.svg">
           <input matInput  placeholder="E-mail" [formControl]="loginemail" required>
@@ -43,9 +43,9 @@
           <div class="bottom-line"></div><span class="or">Or</span>
           <div class="bottom-line"></div>
         </div>
-        <div mat-button class="input-container  cursor-pointer align-center  google-button">
+        <div  (click)="loginWithGoogle()"  mat-button class="input-container  cursor-pointer google-button">
           <img src="assets\img\icons\google.svg">
-          <span (click)="loginWithGoogle()" class="color-purple2-text ">Login with google</span>
+          <span class="color-purple2-text ">Login with google</span>
         </div>
 
      
@@ -138,7 +138,7 @@
         src="assets\img\icons\arrow_back.svg">
       <h1 class="color-purple2-text padding-bottom">Reset password</h1>
       <p style="font-size:20px;">Please enter your E-mail adress.</p>
-      <form [formGroup]="getEmailForNewPassword">
+      <form class="align-center" [formGroup]="getEmailForNewPassword">
         <div class="input-container margin-top">
           <img src="assets\img\icons\mail.svg">
           <input matInput placeholder="E-mail"  formControlName="emailForReset" required>
