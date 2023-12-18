@@ -161,6 +161,7 @@ export class MainChatComponent implements OnInit {
   */
   async sendMessage() {
     if (this.currentChat?.id && this.message.content?.trim() !== '') {
+      
       this.showUploadedFile = false;
       this.message.content = this.message.content!.replace(this.taggedNames, '');
       this.getSentMessageTimeAndDate();
