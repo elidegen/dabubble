@@ -13,11 +13,10 @@ body {
     position: relative;
     background-color: var(--primary);
     font-family: 'Nunito', 'Roboto', sans-serif !important;
-        max-width: 1920px;
-        /* Centers the class */
-        margin-left: auto; 
-        margin-right: auto;
-        margin-top: 0;
+    max-width: 1920px;
+    margin-left: auto; 
+    margin-right: auto;
+    margin-top: 0;
 }
 
 ::-webkit-scrollbar {
