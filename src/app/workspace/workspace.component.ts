@@ -143,6 +143,10 @@ export class WorkspaceComponent implements OnInit {
     });
   }
 
+  openAddChannelDialog(event: Event) {
+    event.stopPropagation();
+    this.openDialog();
+  }
 
   /**
    * Opens a dialog to add a new channel or navigates to the add channel page on mobile.
@@ -192,7 +196,7 @@ export class WorkspaceComponent implements OnInit {
     this.chatservice.chatWindow = 'newMessage';
   }
 
-  
+
   /**
    * Deletes a specific direct message chat from the Firestore database.
    * @param {any} chatId - The ID of the chat to be deleted.
