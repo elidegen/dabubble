@@ -11,6 +11,11 @@
     }
 }
 
+.mat-mdc-button-touch-target {
+    height: fit-content !important;
+    width: fit-content !important;
+}
+
 .chat-title {
     display: flex;
     align-items: center;
