@@ -34,6 +34,7 @@ export class DialogShowGroupMemberComponent implements OnInit {
     this.dialog.open(DialogAddToGroupComponent, {
       panelClass: 'dialog-container'
     });
+    this.dialogRef?.close()
   }
 
 

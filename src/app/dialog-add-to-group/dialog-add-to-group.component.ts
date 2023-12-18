@@ -207,7 +207,7 @@ export class DialogAddToGroupComponent {
     }
     this.checkIfCurrentUserIsMember(this.channel.members)
     if (!this.chatService.isMobile) {
-      this.getAllChannelMembers();
+      this.userService.channelEdited.emit();
     }
     this.dialogRef.close();
   }
@@ -233,7 +233,6 @@ export class DialogAddToGroupComponent {
 
 
   checkIfCurrentUserIsMember(members: any[]) {
-    console.log(members);
     if (this.currentChat) {
       let activeMember = members.find(member => member.id == this.userService.currentUser.id);
       console.log("activeMember", activeMember)
@@ -243,6 +242,7 @@ export class DialogAddToGroupComponent {
           this.router.navigate(['home']);
         }
         this.chatService.setEmptyChatToLocalStorage();
+        this.chatService.chatWindow = 'newMessage';
       }
     }
   }

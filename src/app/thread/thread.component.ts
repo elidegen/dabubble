@@ -113,9 +113,7 @@ export class ThreadComponent implements OnInit {
     if (this.currentMessage.id && this.message.content?.trim() !== '') {
       this.setThreadValues();
       await this.threadService.sendMessageInThread(this.currentMessage, this.message);
-      if (!this.chatService.isMobile) {
-        this.threadService.updateThreadCount(this.currentMessage, this.message.time);
-      }
+      this.threadService.updateThreadCount(this.currentMessage, this.message.time);
       this.message.content = '';
       this.firestoreService.messageAddedInThread.emit();
     }

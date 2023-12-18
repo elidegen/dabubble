@@ -84,7 +84,7 @@ export class AuthService {
   /**
    * Asynchronously checks the local storage for the current chat, adds a personal chat if not found and logs a message if the user is already a member in the chat.
    * @param {User} user - The user to check for membership in the current chat.
-   * @returns {Promise<void>} A promise that resolves when the check is complete.
+   * @returns  A promise that resolves when the check is complete.
    */
   async checkLocalStorage(user: User): Promise<void> {
     const chatJson = localStorage.getItem('currentChat');
@@ -164,6 +164,7 @@ export class AuthService {
       this.userService.updateUser(this.userService.users[userIndexToLogout]);
     }
     this.userService.currentUser = new User;
+    this.chatService.openChat = null;
     await signOut(this.auth).then(() => {
     }).catch((error) => {
       console.error('Fehler beim Abmelden:', error);

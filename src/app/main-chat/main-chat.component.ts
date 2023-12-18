@@ -48,7 +48,6 @@ export class MainChatComponent implements OnInit {
   @ViewChild('emojiPicker') emojiPickerElementRef!: ElementRef;
   @ViewChild('messageContainer') messageContainer!: ElementRef;
   @ViewChild('scrollContainer') scrollContainer!: ElementRef<HTMLDivElement>;
-
   constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public threadService: ThreadService, public authService: AuthService, public emojiService: EmojiService, public firestoreService: FirestoreService, public router: Router) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser as User;
@@ -65,6 +64,7 @@ export class MainChatComponent implements OnInit {
       }
     });
     this.checkEventEmitter();
+   
   }
 
   
@@ -90,7 +90,7 @@ export class MainChatComponent implements OnInit {
    * Loads channel from LocalStorage
    */
   loadChannelFromLocalStorage() {
-    this.currentChat = this.userService.getCurrentChatFromLocalStorage();
+    this.currentChat = this.userService.getCurrentChatFromLocalStorage(); 
     if (this.currentChat?.type == 'channel') {
       this.chatService.chatWindow = 'channel';
       this.firestoreService.loadChannelMessages(this.currentChat);
@@ -109,6 +109,9 @@ export class MainChatComponent implements OnInit {
     this.firestoreService.messageAdded.subscribe(() => {
       this.scrollToBottom();
     });
+    this.userService.channelEdited.subscribe(() => {
+      this.firestoreService.getAllChannelMembers(this.currentChat?.id);
+    })
   }
 
   ngOnDestroy() {
@@ -161,7 +164,6 @@ export class MainChatComponent implements OnInit {
   */
   async sendMessage() {
     if (this.currentChat?.id && this.message.content?.trim() !== '') {
-      
       this.showUploadedFile = false;
       this.message.content = this.message.content!.replace(this.taggedNames, '');
       this.getSentMessageTimeAndDate();

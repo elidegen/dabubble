@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { inject } from '@angular/core';
 import { Firestore, collection, doc, onSnapshot, addDoc, deleteDoc, updateDoc, DocumentReference, DocumentData, getDoc, setDoc, } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
@@ -24,8 +24,7 @@ export class UserService {
   nameStringForTextfield: any;
   openUserContainerThreadTextfield= new BehaviorSubject<boolean>(false);
   chat: Chat = new Chat();
-  channelEdited!: boolean;
- 
+  channelEdited = new EventEmitter<void>();
   unsubList;
 
   ngOnInit() {

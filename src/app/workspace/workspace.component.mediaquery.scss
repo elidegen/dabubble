@@ -30,6 +30,12 @@
     .chat-name {
         max-width: 500px;
     }
+    
+    mat-expansion-panel-header {
+        mat-panel-title {
+            width: 240px;
+        }
+    }
 }
 
 @media(max-width: 565px) {
@@ -64,3 +70,4 @@
         max-width: 150px;
     }
 }
+
