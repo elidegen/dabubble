@@ -344,10 +344,12 @@ h2 {
     padding: 16px 24px;
     position: absolute;
     flex-direction: column;
-    right: -166px;
+    left: 20px;
     box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.2);
     top: 12px;
     gap: 8px;
+    font-size: 12px;
+    width: 150px;
     cursor: pointer;
     span {
         color: var(--purple3);

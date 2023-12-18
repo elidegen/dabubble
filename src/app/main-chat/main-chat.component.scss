@@ -8,6 +8,14 @@
     .channel-button {
         display: flex;
         justify-content: flex-start;
+        &:hover {
+            h2 {
+                color: var(--purple3);
+            }
+            svg path {
+                fill: var(--purple3);
+            }
+        }
     }
 }
 
@@ -15,7 +23,7 @@
     display: flex;
     align-items: center;
 
-    img {
+    svg {
         height: 32px;
         width: 32px;
     }
@@ -516,4 +524,21 @@ mat-drawer {
 
 .text-align-center {
     text-align: center;
+}
+.first-chat-box {
+    height: 63%;
+}
+
+.empty-channel-message-container {
+    margin-bottom: 40px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 16px;
+    span:first-child {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 16px;
+    }
 }

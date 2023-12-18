@@ -5,7 +5,6 @@
     <header>
       <div class="header">
         <h2 class="title">Thread</h2>
-        <!-- <span class="channel-title color-purple2-text"># {{ currentMessage.channel }}</span> -->
       </div>
       <button mat-icon-button class="close-thread" (click)="onCloseClick()">
         <img class="close-icon" src="assets/img/icons/close.svg" alt="close">
@@ -13,41 +12,41 @@
     </header>
   </mat-card-header>
 
-  <!-- <mat-card-content> -->
-  <div>
-    <section>
-      <div class="message-row-container mt-thread">
-        <div class="message-box">
-          <div class="message-avatar-container">
-            <img src="{{this.threadService.currentMessage.profilePic}}" alt="" />
-          </div>
-          <div class="message-container">
-            <div class="message-data">
-              <span class="name">{{this.threadService.currentMessage.creator}}</span>
-              <span class="date">{{this.threadService.currentMessage.time}}</span>
-            </div>
-
-            <div class="message message-content">
-              <span>{{this.threadService.currentMessage.content}}</span>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-    <div class="comments-container">
-      <span *ngIf="firestoreService.allThreadMessages.length == 1"
-        class="comments">{{firestoreService.allThreadMessages.length}}
-        Comment</span>
-      <span *ngIf="firestoreService.allThreadMessages.length >= 2"
-        class="comments">{{firestoreService.allThreadMessages.length}}
-        Comments</span>
-      <div class="separator"></div>
-    </div>
-  </div>
-  <!-- </mat-card-content> -->
 
   <mat-card-content #scrollContainer [scrollTop]="scrollPosition" class="p-0 main-chat-container">
+      <section>
+        <div class="message-row-container mt-thread">
+          <div class="message-box">
+            <div class="message-avatar-container">
+              <img src="{{this.threadService.currentMessage.profilePic}}" alt="" />
+            </div>
+            <div class="message-container">
+              <div class="message-data">
+                <span class="name">{{this.threadService.currentMessage.creator}}</span>
+                <span class="date">{{this.threadService.currentMessage.time}}</span>
+              </div>
+  
+              <div class="message message-content">
+                <span>{{this.threadService.currentMessage.content}}</span>
+              </div>
+            </div>
+  
+          </div>
+        </div>
+      </section>
+
+      <div class="comments-container">
+        <span *ngIf="firestoreService.allThreadMessages.length == 1"
+          class="comments">{{firestoreService.allThreadMessages.length}}
+          Comment</span>
+        <span *ngIf="firestoreService.allThreadMessages.length >= 2"
+          class="comments">{{firestoreService.allThreadMessages.length}}
+          Comments</span>
+        <div class="separator"></div>
+      </div>
+
+
+
 
     <section>
       <div class="message-row-container" *ngFor="let thread of firestoreService.allThreadMessages;"
