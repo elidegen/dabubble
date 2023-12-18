@@ -24,7 +24,7 @@
 
             <h3 *ngSwitchCase="false"><img src="assets/img/icons/tag-black.svg" alt=""><h3  >{{ currentChat?.name || '' }}</h3></h3>
 
-            <input [(ngModel)]="currentChat!.name"  *ngSwitchCase="true" placeholder="Entwicklerteam" class="edit-name w100" type="text" value="{{ currentChat?.name || '' }}">
+            <input #newName  *ngSwitchCase="true" placeholder="Entwicklerteam" class="edit-name w100" type="text" value="{{ currentChat?.name || '' }}">
         </div>
     </mat-card-content>
     <mat-card-content class="w100">
@@ -32,11 +32,11 @@
             <div class="top-row w100">
                 <h1>Description</h1>
                 <span (click)="editDescription = true" *ngSwitchCase="false">Edit</span>
-                <span (click)="editDescription = false" *ngSwitchCase="true">Save</span>
+                <span  (click)="editChannel()" *ngSwitchCase="true">Save</span>
             </div>
 
             <h3  *ngSwitchCase="false">{{ currentChat?.description || '' }}</h3>
-            <textarea [(ngModel)]="currentChat!.description"  *ngSwitchCase="true" placeholder="Describe your channel" class="w100" type="text">{{ currentChat?.description || '' }}</textarea>
+            <textarea #newDescription  *ngSwitchCase="true" placeholder="Describe your channel" class="w100"  type="text">{{ currentChat?.description || '' }}</textarea>
             <mat-divider></mat-divider>
 
             <h1>Created by</h1>

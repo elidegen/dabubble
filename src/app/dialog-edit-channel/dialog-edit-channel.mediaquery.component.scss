@@ -2,7 +2,7 @@
     mat-card {
         border-radius: 0 !important;
         width: 100%;
-        height: calc(100% + 140px);
+        height: calc(100% + 300px);
     }
     .header-mobile {
         display: flex;
@@ -22,6 +22,10 @@
         h3 {
             font-size: 22px;
             font-weight: bold !important;
+            text-overflow: ellipsis;
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
         }
     }
     mat-card-header {

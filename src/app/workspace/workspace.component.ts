@@ -120,7 +120,7 @@ export class WorkspaceComponent implements OnInit {
    */
   getPersonalChannels() {
     this.yourChannels = [];
-    if (this.userService.currentUser.name == "Guest") {
+    if (this.userService.currentUser.name?.startsWith('Guest')) {
       this.yourChannels = this.chatservice.allChannels;
     } else {
       this.yourChannels = this.chatservice.yourChannels;

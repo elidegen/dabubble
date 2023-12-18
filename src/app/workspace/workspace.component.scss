@@ -169,7 +169,6 @@ mat-expansion-panel-header {
         font-weight: 700 !important;
         font-size: 24px;
         height: 26px;
-        justify-content: space-between;
     }
 
     svg {
@@ -224,6 +223,10 @@ mat-expansion-panel-header {
         width: 22px;
         margin-bottom: 2px;
     }
+}
+
+.space-between {
+    justify-content: space-between;
 }
 
 .add_channel_button {

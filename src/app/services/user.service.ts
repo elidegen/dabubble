@@ -24,6 +24,7 @@ export class UserService {
   nameStringForTextfield: any;
   openUserContainerThreadTextfield= new BehaviorSubject<boolean>(false);
   chat: Chat = new Chat();
+  channelEdited!: boolean;
  
   unsubList;
 

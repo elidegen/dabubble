@@ -1,4 +1,4 @@
-import { Component, HostListener, Inject, OnInit, Optional, inject } from '@angular/core';
+import { Component, ElementRef, HostListener, Inject, OnInit, Optional, inject } from '@angular/core';
 import { Channel } from 'src/models/channel.class';
 import { ChatService } from '../services/chat.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -8,7 +8,7 @@ import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-profile.component';
 import { FirestoreService } from '../services/firestore.service';
-
+import { ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-dialog-edit-channel',
@@ -25,18 +25,22 @@ export class DialogEditChannelComponent implements OnInit {
   currentUser;
   newChannelMembers: any[] = [];
   unSubChannel: any;
+  newChannelName = this.currentChat?.name;
+  newChannelDescription = this.currentChat?.description;
+  @ViewChild('newName') newName!: ElementRef;
+  @ViewChild('newDescription') newDescription!: ElementRef;
 
-  
+
   constructor(
     public chatService: ChatService, @Optional() @Inject(MatDialogRef) public dialogRef: MatDialogRef<DialogEditChannelComponent> | undefined,
-     public userService: UserService, public authService: AuthService, public router: Router, public dialog: MatDialog, public firestoreService: FirestoreService) {
+    public userService: UserService, public authService: AuthService, public router: Router, public dialog: MatDialog, public firestoreService: FirestoreService) {
     this.currentUser = this.userService.currentUser;
-    this.currentChat =this.userService.getCurrentChatFromLocalStorage();
+    this.currentChat = this.userService.getCurrentChatFromLocalStorage();
     chatService.checkScreenWidth();
     if (chatService.isMobile) {
       this.dialogRef = undefined
     }
-   }
+  }
 
 
   ngOnInit() {
@@ -47,7 +51,7 @@ export class DialogEditChannelComponent implements OnInit {
       }
     });
   }
-  
+
   /**
    * Fetches all members of the current channel from Firestore and assigns them to the local array.
    */
@@ -86,11 +90,15 @@ export class DialogEditChannelComponent implements OnInit {
         console.error('Error updating document:', error);
       });
     }
-    this.dialogRef?.close();
+    if (this.chatService.isMobile) {
+      this.router.navigate(['home']);
+    } else {
+      this.dialogRef?.close();
+    }
     this.chatService.setEmptyChatToLocalStorage();
     this.chatService.openChat = null;
   }
-  
+
 
   /**
    * Sets new values for channel
@@ -142,13 +150,23 @@ export class DialogEditChannelComponent implements OnInit {
    * Navigates back to the main chat window.
    */
   backToChat() {
-    this.router.navigate(['main']);
+    this.router.navigate(['home']);
   }
 
 
   editChannel() {
-    this.editName = false
-    this.firestoreService.updateChannel('channels',this.currentChat!);
+    if (this.editName) {
+      this.editName = false
+      this.currentChat!.name = this.newName.nativeElement.value!;
+    } 
+     if(this.editDescription){
+      this.editDescription = false;
+      this.currentChat!.description = this.newDescription.nativeElement.value!;
+    }
+    this.firestoreService.updateChannel('channels', this.currentChat!);
+    this.userService.setCurrentChatToLocalStorage(this.currentChat!);
+  }
+  
   }
 
-}
+
