@@ -31,7 +31,8 @@ export class FirestoreService {
   messageAddedInThread = new EventEmitter<void>();
   allThreadMessages: Message[] = [];
   unSubThread: any;
-  constructor(public threadService: ThreadService, public chatService: ChatService, public userService: UserService, public authService: AuthService) {
+  messageIsExistingInChannel!: boolean;
+  constructor(public threadService: ThreadService, public chatService: ChatService, public userService: UserService, public authService: AuthService) { 
     this.loadUsers();
   }
   unSubDirectMessages: any;
@@ -94,6 +95,7 @@ export class FirestoreService {
       }));
       this.allMessagesOfChannel.reverse();
       this.organizeMessagesByDate();
+      this.checkMessageNumbersInChannel();
       this.messageAdded.emit();
     });
   }
@@ -377,6 +379,14 @@ export class FirestoreService {
       this.messageIsExisting = true;
     } else {
       this.messageIsExisting = false
+    }
+  }
+
+  checkMessageNumbersInChannel() {
+    if (this.allMessagesOfChannel.length > 0) {
+      this.messageIsExistingInChannel = true;
+    } else {
+      this.messageIsExistingInChannel = false
     }
   }
 
