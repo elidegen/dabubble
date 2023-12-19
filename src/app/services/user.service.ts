@@ -25,6 +25,7 @@ export class UserService {
   openUserContainerThreadTextfield= new BehaviorSubject<boolean>(false);
   chat: Chat = new Chat();
   channelEdited = new EventEmitter<void>();
+  profileEdited = new EventEmitter<void>();
   unsubList;
 
   ngOnInit() {
@@ -136,6 +137,8 @@ export class UserService {
       loginTime: user.loginTime,
     }
   }
+
+
 
   /**
    * Opens the user container text field after a short delay.

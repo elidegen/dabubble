@@ -19,12 +19,12 @@ export class DialogShowGroupMemberComponent implements OnInit {
 
   constructor(public dialog: MatDialog, @Optional() @Inject(MatDialogRef) public dialogRef: MatDialogRef<DialogShowGroupMemberComponent> | undefined,
     public chatService: ChatService, public authService: AuthService, public userService: UserService) {
-      this.currentChat = this.userService.getCurrentChatFromLocalStorage();
-      this.getAllChannelMembers();
-      if (chatService.isMobile) {
-        this.dialogRef = undefined;
-      }
+    this.currentChat = this.userService.getCurrentChatFromLocalStorage();
+    this.getAllChannelMembers();
+    if (chatService.isMobile) {
+      this.dialogRef = undefined;
     }
+  }
 
 
   /**
@@ -52,6 +52,11 @@ export class DialogShowGroupMemberComponent implements OnInit {
         }
       }
     });
+    this.userService.profileEdited.subscribe(() => {
+      console.log('change');
+      
+      this.getAllChannelMembers();
+    });
   }
 
 
@@ -66,7 +71,6 @@ export class DialogShowGroupMemberComponent implements OnInit {
         const channelData = channelDocSnap.data();
         this.allChannelMembers = channelData?.['members'];
         this.updateOnlineStatus();
-      } else {
       }
     }
   }
