@@ -1,5 +1,3 @@
-
-
 <mat-card *ngIf="!userService.currentUser.name?.startsWith('Guest')" [ngSwitch]="editState">
     <mat-spinner *ngIf="firestoreService.showSpinner == true" class="mat-spinner"></mat-spinner>
     <mat-card-content *ngSwitchCase="false">
@@ -9,7 +7,7 @@
                 <mat-icon>close</mat-icon>
             </button>
         </div>
-        <div class="picture"> 
+        <div class="picture">
             <img src="{{user.picture}}" alt="" />
         </div>
         <div class="name">
@@ -32,10 +30,16 @@
             </div>
             <div class="email">
                 <h2>E-Mail Adress</h2>
-                <a matTooltip="Mail to"  href="mailto:{{user.email}}">{{user.email}}</a>
+                <a matTooltip="Mail to" href="mailto:{{user.email}}">{{user.email}}</a>
             </div>
         </div>
-        <button  *ngIf="currentUser.id !== user.id" (click)="selectUser(user)" mat-button class="main-button primary mr-16 align-center" type="submit"> <span class="align-center"> <img src="assets/img/icons/message.svg" alt="">Message</span> </button>
+        <button *ngIf="currentUser.id !== user.id" (click)="selectUser(user)" mat-button
+            class="main-button primary mr-16 align-center" type="submit">
+            <span class="align-center">
+                <img src="assets/img/icons/message.svg" alt="">
+                Message
+            </span>
+        </button>
     </mat-card-content>
 
     <mat-card-content *ngSwitchCase="true">
@@ -45,31 +49,33 @@
                 <mat-icon>close</mat-icon>
             </button>
         </div>
-        <div matTooltip="Change Picture" class="picture">
-            <label class="custom-file-upload">
-                <input class="dataInput" (change)="onFileSelected($event)" type="file" accept="image/jpeg, image/png" >
-                <img src="{{user.picture}}" alt="" />
+        <div class="picture">
+            <label>
+                <input class="dataInput" (change)="onFileSelected($event)" type="file" accept="image/jpeg, image/png">
+                <img matTooltip="Change Picture" class="custom-file-upload" src="{{user.picture}}" alt="" />
             </label>
         </div>
 
-        <form>
+        <form #editForm="ngForm">
             <div class="display-flex">
                 <img class="mr-16" src="assets/img/icons/account_circle_big.svg">
                 <h2>Full Name</h2>
             </div>
-            <input [(ngModel)]="user.name" name="newUserName" type="text">
+            <input [(ngModel)]="editedUser.name" #nameInput="ngModel" required name="editedUserName" type="text">
+            <mat-error *ngIf="nameInput.invalid">Please enter your name</mat-error>
             <div class="display-flex">
                 <img class="mr-16" src="assets/img/icons/mail.svg">
                 <h2>E-Mail Adress</h2>
             </div>
-            <input [(ngModel)]="user.email"  name="newEmail" type="email">
+            <input [(ngModel)]="editedUser.email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" required #mailInput="ngModel" name="editedUserEmail" type="email">
+            <mat-error *ngIf="mailInput.invalid">Please enter valid E-Mail</mat-error>
         </form>
 
         <div class="buttons w100">
             <button mat-button class="main-button mr-16" (click)="editState = false">
                 Cancel
             </button>
-            <button (click)="editUser()" class="main-button primary" mat-button>
+            <button [disabled]="!editForm.valid" (click)="editUser()" class="main-button primary" mat-button>
                 Save
             </button>
         </div>
@@ -79,7 +85,7 @@
 
 
 <mat-card *ngIf="userService.currentUser.name?.startsWith('Guest')">
-    <mat-card-content >
+    <mat-card-content>
         <div class="header">
             <h1>Profile</h1>
             <button mat-icon-button (click)="dialogRef.close()">
@@ -93,7 +99,7 @@
             <h1>Guest</h1>
         </div>
         <div>
-            <div class="status" >
+            <div class="status">
                 <div class="status-circle" style="background-color: #92c83e !important;"></div>
                 <span style="color: #92c83e;">Active</span>
             </div>

@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { UserService } from '../services/user.service';
 import { AuthService } from '../services/auth.service';
@@ -6,7 +6,6 @@ import { User } from 'src/models/user.class';
 import { FirestoreService } from '../services/firestore.service';
 import { ChatService } from '../services/chat.service';
 import { Router } from '@angular/router';
-
 
 @Component({
   selector: 'app-dialog-view-profile',
@@ -17,18 +16,18 @@ export class DialogViewProfileComponent {
   editState: boolean = false;
   currentUser: User;
   user: User = new User();
+  editedUser: User = new User();
 
   constructor(
     public dialogRef: MatDialogRef<DialogViewProfileComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { userID: string },
     public userService: UserService,
     public authService: AuthService,
-    public firestoreService: FirestoreService,public chatService: ChatService,public router: Router) {
-      userService.getCurrentUserFromLocalStorage();
-      this.currentUser = this.userService.currentUser;
-      this.setUser();
+    public firestoreService: FirestoreService, public chatService: ChatService, public router: Router) {
+    userService.getCurrentUserFromLocalStorage();
+    this.currentUser = this.userService.currentUser;
+    this.setUser();
   }
-
 
   /**
    * Sets the user profile to be viewed.
@@ -37,21 +36,21 @@ export class DialogViewProfileComponent {
     const users = this.userService.users;
     const index = users.findIndex(user => user.id == this.data.userID);
     this.user = users[index] as User;
+    this.editedUser = { ...this.user } as User;
   }
-
 
   /**
    * Allows the current user to edit their profile. It saves the updated user data
    * to local storage and updates the user information in the database.
    */
   editUser() {
+    this.user = this.editedUser;
     this.userService.currentUser = this.user;
     this.userService.setCurrentUserToLocalStorage();
-    this.userService.updateUser( this.user);
+    this.userService.updateUser(this.user);
     this.authService.updateUserEmail(this.user.email!);
     this.dialogRef.close();
   }
-
 
   /**
    * Handles the selection of a new profile image file.
@@ -65,13 +64,12 @@ export class DialogViewProfileComponent {
       if (file.size > 500000) {
         alert("Max file size 500kb !");
       } else {
-      this.authService.uploadProfileImage(file);
-      this.firestoreService.showSpinner = true;
+        this.authService.uploadProfileImage(file);
+        this.firestoreService.showSpinner = true;
       }
       this.updateUserView();
     }
   }
-
 
   /**
    * Updates values of user view
@@ -79,12 +77,11 @@ export class DialogViewProfileComponent {
   updateUserView() {
     setTimeout(() => {
       this.user.picture = this.authService.customPic;
-      this.userService.currentUser.picture =  this.user.picture;
+      this.userService.currentUser.picture = this.user.picture;
       this.userService.updateUser(this.user);
       this.firestoreService.showSpinner = false;
     }, 1500);
   }
-
 
   /**
    * Opens a direct Chat with selected User.
@@ -98,5 +95,3 @@ export class DialogViewProfileComponent {
     this.dialogRef.close();
   }
 }
-
- 
