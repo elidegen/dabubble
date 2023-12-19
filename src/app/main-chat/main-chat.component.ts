@@ -248,7 +248,7 @@ export class MainChatComponent implements OnInit {
   openEmojiPicker(messageId: any) {
     setTimeout(() => {
       this.emojiService.showMainChatEmojiPicker = true;
-    }, 1);
+    }, 10);
     this.emojiService.messageId = messageId;
   }
 
@@ -258,7 +258,7 @@ export class MainChatComponent implements OnInit {
   openEmojiPickerChat() {
     setTimeout(() => {
       this.emojiService.showTextChatEmojiPicker = true;
-    }, 1);
+    }, 10);
   }
 
   /**

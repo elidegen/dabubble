@@ -66,7 +66,7 @@
         }
 
         .responsive-create-account {
-            bottom: 25px;
+            bottom: -10px;
         }
 
 }
@@ -166,7 +166,6 @@
         left: 50%;
         transform: translate(-50%, -50%);
     }
-
     to {
         top: 10px;
         left: 50%;
@@ -227,4 +226,12 @@
         top: 40px;
       }
         }
+
+
+        @media only screen and (max-height: 600px) { 
+            .login {
+                margin-left: 8px;
+                margin-right: 8px;
+            }
+            }
     

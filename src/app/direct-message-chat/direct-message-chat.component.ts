@@ -259,7 +259,7 @@ export class DirectMessageChatComponent implements OnInit {
   openEmojiPicker(messageId: any) {
     setTimeout(() => {
       this.emojiService.showMainChatEmojiPicker = true;
-    }, 1);
+    }, 10);
     this.emojiService.messageId = messageId;
   }
 
@@ -267,9 +267,11 @@ export class DirectMessageChatComponent implements OnInit {
    * Toggles the display of the emoji picker for the text input field in the chat.
    */
   openEmojiPickerChat() {
+    console.log("Emojis Textfeld Direct")
     setTimeout(() => {
       this.emojiService.showTextChatEmojiPicker = true;
-    }, 1);
+      console.log (this.emojiService.showTextChatEmojiPicker);
+    }, 100);
   }
 
   /**
