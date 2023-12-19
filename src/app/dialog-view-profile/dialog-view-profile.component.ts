@@ -16,6 +16,7 @@ import { Chat } from 'src/models/chat.class';
   templateUrl: './dialog-view-profile.component.html',
   styleUrls: ['./dialog-view-profile.component.scss', './dialog-view-profile.mediaquery.component.scss']
 })
+
 export class DialogViewProfileComponent {
   firestore: Firestore = inject(Firestore);
   editState: boolean = false;
@@ -42,36 +43,49 @@ export class DialogViewProfileComponent {
   ngOnInit() {
     this.chatService.openChat$.subscribe((openChat) => {
       if (openChat) {
-        const newChat = openChat as Channel;
-        if (!this.currentChat || this.currentChat.id !== newChat.id) {
-          this.currentChat = newChat;
-        }
+        this.loadSelectedChannel(openChat);
       } else {
-        let channel = this.userService.getCurrentChatFromLocalStorage();
-        if (channel?.type == 'channel') {
-          this.currentChat = channel
-        }
+        this.loadChannelFromLocalStorage();
       }
     });
-
-      this.chatService.openDirectMessage$.subscribe((openDirectMessage) => {
-        if (openDirectMessage) {
-          this.loadSelectedDM(openDirectMessage)
-        }
-      });
+    this.chatService.openDirectMessage$.subscribe((openDirectMessage) => {
+      if (openDirectMessage) {
+        this.loadSelectedDirectMessage(openDirectMessage);
+      } else {
+       this.loadDirectMessageFromLocalStorage();
+      }
+    });
   }
 
 
-  loadSelectedDM(openDirectMessage: any) {
+  loadSelectedChannel(openChat: Channel) {
+    const newChat = openChat as Channel;
+    if (!this.currentChat || this.currentChat.id !== newChat.id) {
+      this.currentChat = newChat;
+    }
+  }
+
+
+  loadChannelFromLocalStorage() {
+    let channel = this.userService.getCurrentChatFromLocalStorage();
+    if (channel?.type == 'channel') {
+      this.currentChat = channel
+    }
+  }
+
+
+  loadSelectedDirectMessage(openDirectMessage: Chat) {
     const newChat = openDirectMessage as Chat;
-    this.userService.setCurrentChatToLocalStorage(newChat);
     if (!this.currentChat || this.currentChat.id !== newChat.id) {
       this.currentDM = newChat;
-    } else {
-      let directMessage = this.userService.getCurrentChatFromLocalStorage();
-      if (directMessage?.type == 'direct') {
-        this.currentDM = directMessage;
-      }
+    } 
+  }
+
+
+  loadDirectMessageFromLocalStorage() {
+    let directMessage = this.userService.getCurrentChatFromLocalStorage();
+    if (directMessage?.type == 'direct') {
+      this.currentDM = directMessage;
     }
   }
 
@@ -97,7 +111,8 @@ export class DialogViewProfileComponent {
     this.userService.setCurrentUserToLocalStorage();
     this.userService.updateUser(this.user);
     this.authService.updateUserEmail(this.user.email!);  
-    this.updateCurrentUserInChannel(this.user)  
+    this.updateCurrentUserInChannel(this.user);
+    this.updateCurrentUserInDirect(this.user);  
     this.dialogRef.close();
   }
 
@@ -170,10 +185,15 @@ export class DialogViewProfileComponent {
       let currentUserIndex = this.directMessageMembers.findIndex((user) => user.id === this.userService.currentUser.id);
       this.directMessageMembers[currentUserIndex].name = user.name;
       this.directMessageMembers[currentUserIndex].email = user.email;
+      this.currentDM.name = user.name;
+      
       await updateDoc(dmDocRef, {
         members: this.directMessageMembers,
+        name: user.name
       });
-      this.userService.setCurrentChatToLocalStorage(this.currentChat);
+      console.log('dm', this.currentDM);
+      this.userService.profileEdited.emit();
+      this.userService.setCurrentChatToLocalStorage(this.currentDM);
     }
   }
 }
