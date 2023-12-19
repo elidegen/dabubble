@@ -126,14 +126,15 @@
     width: 200px;
 }
 
-.or {
-    width: 10%;
-    text-align: bottom;
-}
+// .or {
+//     width: 10%;
+//     text-align: bottom;
+// }
 
 .bottom-line {
     border-bottom: 2px solid #B7BADD;
     width: 45%;
+    margin: 10px;
 }
 
 form {
@@ -355,9 +356,10 @@ input[type="email"] {
     gap: 5px;
 }
 
-.upload-picture {
-    gap: 20px;
-}
+
+// .upload-picture {
+//     gap: 20px;
+// }
 
 
 @keyframes moveToLeftCorner {
