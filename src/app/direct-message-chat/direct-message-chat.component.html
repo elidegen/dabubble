@@ -1,3 +1,6 @@
+
+<emoji-mart class="emoji-mart" [style]="{ width: 'unset' }" #emojiPicker *ngIf="this.emojiService.showTextChatEmojiPicker == true" class="emojiPicker" (emojiClick)="addEmojiTextField($event)"></emoji-mart>
+
 <mat-spinner *ngIf="firestoreService.showSpinner == true" class="mat-spinner"></mat-spinner>
 
 <app-header-mobile *ngIf="chatService.isMobile"></app-header-mobile>
@@ -95,7 +98,6 @@
     </ng-container>
 
     <emoji-mart  class="emoji-mart" [style]="{ width: 'unset' }" #emojiPicker *ngIf="this.emojiService.showMainChatEmojiPicker == true" class="emojiPicker" (emojiClick)="addEmoji($event)"></emoji-mart>
-    <emoji-mart class="emoji-mart" [style]="{ width: 'unset' }" #emojiPicker *ngIf="this.emojiService.showTextChatEmojiPicker == true" class="emojiPicker" (emojiClick)="addEmojiTextField($event)"></emoji-mart>
   </mat-card-content>
 
   <mat-card-content *ngSwitchCase="false" class="empty-direct-message-container">
