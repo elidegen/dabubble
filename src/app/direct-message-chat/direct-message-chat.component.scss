@@ -4,6 +4,7 @@
     width: 100%;
     padding: 16px 0;
     background-color: white;
+
     textarea {
         outline: 0;
         border: 0;
@@ -16,6 +17,7 @@
         &::-webkit-scrollbar {
             display: none;
         }
+
         &:disabled {
             background-color: white;
         }
@@ -74,6 +76,11 @@
     }
 }
 
+.d-flex-end {
+    display: flex;
+    flex-direction: column;
+}
+
 .my-messages {
     .message-box {
         flex-direction: row-reverse;
@@ -89,7 +96,8 @@
         color: white;
     }
 
-    .message-container {
+    .d-flex-end {
+        display: flex;
         align-items: flex-end;
     }
 
@@ -135,19 +143,24 @@
 
     &:hover {
         background-color: var(--primary);
+
         .last-comment {
             color: black;
         }
+
         .reaction {
             right: 25px;
             opacity: 1;
         }
+
         .own-message {
             left: 25px;
         }
+
         .message-content {
             background-color: white;
         }
+
         .my-message-content {
             background-color: var(--purple2) !important;
         }
@@ -225,7 +238,7 @@ section {
 .reaction-emoji-button {
     background-color: white;
     outline: none;
-    border: 1px solid #ccc; 
+    border: 1px solid #ccc;
     border-radius: 20px;
     display: flex;
     align-items: center;
@@ -234,8 +247,9 @@ section {
     font-size: 10px;
     cursor: pointer;
     text-align: center;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23); 
-    transition: box-shadow 0.2s ease-in-out; 
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    transition: box-shadow 0.2s ease-in-out;
+
     &:hover {
         background-color: white !important;
     }
@@ -244,14 +258,14 @@ section {
         height: 16px;
         width: 15px;
     }
-  }
-     
+}
+
 
 .emojiPicker {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
 }
 
 .emoji-fit {
@@ -267,7 +281,7 @@ section {
         svg path {
             fill: var(--textGray);
         }
-    } 
+    }
 }
 
 .chat-window-container {
@@ -282,6 +296,7 @@ section {
     font-weight: bold;
     font-size: 24px;
     margin-bottom: 24px;
+
     img {
         height: 100px;
         width: 100px;
@@ -315,12 +330,15 @@ section {
     font-size: 24px;
     font-weight: bold;
     cursor: pointer;
+
     &:hover {
         background-color: var(--primary);
     }
+
     &:active {
         background-color: #d3d3d34d !important;
     }
+
     img {
         height: 64px;
         width: 64px;
@@ -346,6 +364,7 @@ mat-card-header {
     gap: 16px;
     margin-top: 2px;
     width: fit-content;
+
     &:hover .comments {
         font-weight: bold;
     }

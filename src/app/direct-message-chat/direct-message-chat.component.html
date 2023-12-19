@@ -1,19 +1,21 @@
-
-<emoji-mart class="emoji-mart" [style]="{ width: 'unset' }" #emojiPicker *ngIf="this.emojiService.showTextChatEmojiPicker == true" class="emojiPicker" (emojiClick)="addEmojiTextField($event)"></emoji-mart>
+<emoji-mart class="emoji-mart" [style]="{ width: 'unset' }" #emojiPicker
+  *ngIf="this.emojiService.showTextChatEmojiPicker == true" class="emojiPicker"
+  (emojiClick)="addEmojiTextField($event)"></emoji-mart>
 
 <mat-spinner *ngIf="firestoreService.showSpinner == true" class="mat-spinner"></mat-spinner>
 
 <app-header-mobile *ngIf="chatService.isMobile"></app-header-mobile>
 
-<div  (click)="closeEmojiPicker()" [ngSwitch]="firestoreService.messageIsExisting" class="chat-window-container">
+<div (click)="closeEmojiPicker()" [ngSwitch]="firestoreService.messageIsExisting" class="chat-window-container">
   <mat-card-header>
     <button class="br-32 profile-button" (click)="openProfileDialog(getOtherUser(currentChat?.members)?.id)">
       <img src="{{ getOtherUser(currentChat?.members)?.picture }}">
       <span class="mr-16">{{ getOtherUser(currentChat?.members)?.name }}</span>
     </button>
   </mat-card-header>
-  
-  <mat-card-content #messageContainer class="p-0 main-chat-container" #scrollContainer [scrollTop]="scrollPosition" *ngSwitchCase="true">
+
+  <mat-card-content #messageContainer class="p-0 main-chat-container" #scrollContainer [scrollTop]="scrollPosition"
+    *ngSwitchCase="true">
     <ng-container *ngFor="let organizedMessage of firestoreService.organizedDirectMessages.slice()">
       <section>
         <div class="date-container">
@@ -22,10 +24,11 @@
           <div class="separator"></div>
         </div>
 
-        <div class="message-row-container" [ngClass]="{ 'my-messages': message.creator == currentUser.name }" *ngFor="let message of organizedMessage.messages">
+        <div class="message-row-container" [ngClass]="{ 'my-messages': message.creator == currentUser.name }"
+          *ngFor="let message of organizedMessage.messages">
           <div class="message-box">
             <div class="creator-picture-container">
-              <img src="{{ message.profilePic }}"/>
+              <img src="{{ message.profilePic }}" />
             </div>
 
             <div class="message-container">
@@ -34,24 +37,33 @@
                 <span class="date">{{ message.time }}</span>
               </div>
 
-              <div [ngSwitch]="edit && message.creator == currentUser.name && editingMessage === message.id">
-                <div [ngClass]="{'my-message-content': message.creator == currentUser.name, 'message-content': message.creator != currentUser.name}" *ngSwitchCase="false">
-                  <a (click)="openProfileDialog(messagemention['id'])"   *ngFor="let messagemention of message.mentions"> @{{messagemention['name']}}</a>
+              <div [ngSwitch]="edit && message.creator == currentUser.name && editingMessage === message.id" class="d-flex-end">
+                <div
+                  [ngClass]="{'my-message-content': message.creator == currentUser.name, 'message-content': message.creator != currentUser.name}"
+                  *ngSwitchCase="false">
+                  <a (click)="openProfileDialog(messagemention['id'])" *ngFor="let messagemention of message.mentions">
+                    @{{messagemention['name']}}</a>
                   <span>{{ message.content }}</span>
                 </div>
-                <div *ngFor="let messagefile of message.files">
-                  <img style="max-height: 100px; margin-top: 10px;" *ngIf="this.authService.isImage(messagefile)" src="{{messagefile}}" alt="Angehängtes Bild">
-                  <div class="pdf" *ngIf="this.authService.isPDF(messagefile)">
-                    <img src="assets/img/icons/pdf.svg"/>
-                    <a href="{{messagefile}}" target="_blank">Show PDF</a>
+                <div class="d-flex">
+                  <div *ngFor="let messagefile of message.files">
+                    <img style="max-height: 100px; margin-top: 10px;" *ngIf="this.authService.isImage(messagefile)"
+                      src="{{messagefile}}" alt="Angehängtes Bild">
+                    <div class="pdf" *ngIf="this.authService.isPDF(messagefile)">
+                      <img src="assets/img/icons/pdf.svg" />
+                      <a href="{{messagefile}}" target="_blank">Show PDF</a>
+                    </div>
                   </div>
                 </div>
                 <div *ngIf="message.creator == currentUser.name && editingMessage === message.id">
                   <div *ngSwitchCase="true" class="text-field-container j-flex-end">
                     <textarea #editor cols="30" rows="10">{{ message.content }}</textarea>
-                    <button class="send-button" mat-icon-button (click)="updateMessageContent(message)" [disabled]="editor.value.length < 1">
+                    <button class="send-button" mat-icon-button (click)="updateMessageContent(message)"
+                      [disabled]="editor.value.length < 1">
                       <svg width="23" height="20" viewBox="0 0 23 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M2.5 19.2812C2.08333 19.4479 1.6875 19.4112 1.3125 19.1712C0.9375 18.9321 0.75 18.5833 0.75 18.125V13.4687C0.75 13.1771 0.833333 12.9167 1 12.6875C1.16667 12.4583 1.39583 12.3125 1.6875 12.25L10.75 9.99999L1.6875 7.74999C1.39583 7.68749 1.16667 7.54166 1 7.31249C0.833333 7.08333 0.75 6.82291 0.75 6.53124V1.87499C0.75 1.41666 0.9375 1.06749 1.3125 0.827493C1.6875 0.588327 2.08333 0.552076 2.5 0.718743L21.75 8.84374C22.2708 9.07291 22.5312 9.45833 22.5312 9.99999C22.5312 10.5417 22.2708 10.9271 21.75 11.1562L2.5 19.2812Z" fill="#444DF2" />
+                        <path
+                          d="M2.5 19.2812C2.08333 19.4479 1.6875 19.4112 1.3125 19.1712C0.9375 18.9321 0.75 18.5833 0.75 18.125V13.4687C0.75 13.1771 0.833333 12.9167 1 12.6875C1.16667 12.4583 1.39583 12.3125 1.6875 12.25L10.75 9.99999L1.6875 7.74999C1.39583 7.68749 1.16667 7.54166 1 7.31249C0.833333 7.08333 0.75 6.82291 0.75 6.53124V1.87499C0.75 1.41666 0.9375 1.06749 1.3125 0.827493C1.6875 0.588327 2.08333 0.552076 2.5 0.718743L21.75 8.84374C22.2708 9.07291 22.5312 9.45833 22.5312 9.99999C22.5312 10.5417 22.2708 10.9271 21.75 11.1562L2.5 19.2812Z"
+                          fill="#444DF2" />
                       </svg>
                     </button>
                   </div>
@@ -60,101 +72,127 @@
 
               <div class="reaction-container">
                 <div class="reaction-emoji-container">
-                  <button class="reaction-emoji-button" *ngFor="let emoji of message.reactionCount | keyvalue; let i = index">
-                    <div  (click)="firestoreService.addReaction(emoji.key,message.id, currentChat?.id, 'direct messages')" class="emoji-fit">{{emoji.key}}</div>
+                  <button class="reaction-emoji-button"
+                    *ngFor="let emoji of message.reactionCount | keyvalue; let i = index">
+                    <div
+                      (click)="firestoreService.addReaction(emoji.key,message.id, currentChat?.id, 'direct messages')"
+                      class="emoji-fit">{{emoji.key}}</div>
                     <span>{{ emoji.value }}</span>
                   </button>
                 </div>
                 <div class="comment-section" (click)="openThreadInDirect(message)">
-                  <span (click)="openThreadInDirect(message)" *ngIf="message.threadCount == 0" class="comments color-purple2-text">Reply</span>
-                  <span (click)="openThreadInDirect(message)" *ngIf="message.threadCount == 1" class="comments color-purple2-text"> 1 Comment</span>
-                  <span *ngIf="message.threadCount >= 2" class="comments color-purple2-text">{{message.threadCount}} Comments</span>
-                  <span *ngIf="message.threadCount > 0" class="last-comment">Last Comment {{message.lastThreadTime}}</span>
+                  <span (click)="openThreadInDirect(message)" *ngIf="message.threadCount == 0"
+                    class="comments color-purple2-text">Reply</span>
+                  <span (click)="openThreadInDirect(message)" *ngIf="message.threadCount == 1"
+                    class="comments color-purple2-text"> 1 Comment</span>
+                  <span *ngIf="message.threadCount >= 2" class="comments color-purple2-text">{{message.threadCount}}
+                    Comments</span>
+                  <span *ngIf="message.threadCount > 0" class="last-comment">Last Comment
+                    {{message.lastThreadTime}}</span>
                 </div>
               </div>
             </div>
           </div>
 
           <div class="reaction" [ngClass]="{'own-message': message.creator == this.userService.currentUser.name}">
-            <button mat-icon-button (click)="firestoreService.addReaction('✅', message.id, currentChat?.id, 'direct messages')">
-              <img src="assets/img/emojis/checkGreen.svg"/>
+            <button mat-icon-button
+              (click)="firestoreService.addReaction('✅', message.id, currentChat?.id, 'direct messages')">
+              <img src="assets/img/emojis/checkGreen.svg" />
             </button>
-            <button mat-icon-button (click)="firestoreService.addReaction('🙌', message.id, currentChat?.id, 'direct messages')">
-              <img src="assets/img/emojis/hands.svg"/>
+            <button mat-icon-button
+              (click)="firestoreService.addReaction('🙌', message.id, currentChat?.id, 'direct messages')">
+              <img src="assets/img/emojis/hands.svg" />
             </button>
             <button class="hostlistener-dont-trigger" (click)="openEmojiPicker(message.id)" mat-icon-button>
-              <img src="assets/img/icons/add_reaction.svg"/>
+              <img src="assets/img/icons/add_reaction.svg" />
             </button>
-            <button mat-icon-button *ngIf="message.creator == currentUser.name" (click)="firestoreService.toggleMoreMenu(message)">
-              <img src="assets/img/icons/more.svg"/>
+            <button mat-icon-button *ngIf="message.creator == currentUser.name"
+              (click)="firestoreService.toggleMoreMenu(message)">
+              <img src="assets/img/icons/more.svg" />
             </button>
             <div class="more-menu" [class.visible]="message.messageSelected">
               <span (click)="editMessage(message)">Edit message</span>
-              <span class="delete-message" (click)="firestoreService.deleteMessageOfChat('direct messages', currentChat?.id, message.id)">Delete Message</span>
+              <span class="delete-message"
+                (click)="firestoreService.deleteMessageOfChat('direct messages', currentChat?.id, message.id)">Delete
+                Message</span>
             </div>
           </div>
         </div>
       </section>
     </ng-container>
 
-    <emoji-mart  class="emoji-mart" [style]="{ width: 'unset' }" #emojiPicker *ngIf="this.emojiService.showMainChatEmojiPicker == true" class="emojiPicker" (emojiClick)="addEmoji($event)"></emoji-mart>
+    <emoji-mart class="emoji-mart" [style]="{ width: 'unset' }" #emojiPicker
+      *ngIf="this.emojiService.showMainChatEmojiPicker == true" class="emojiPicker"
+      (emojiClick)="addEmoji($event)"></emoji-mart>
   </mat-card-content>
 
   <mat-card-content *ngSwitchCase="false" class="empty-direct-message-container">
     <div class="chat-partner-container">
       <img src="{{ getOtherUser(currentChat?.members)?.picture}}" alt="">
-      <span *ngIf="getOtherUser(currentChat?.members)?.id !== currentUser.id">{{ getOtherUser(currentChat?.members)?.name }}</span>
-      <span *ngIf="getOtherUser(currentChat?.members)?.id === currentUser.id">{{ getOtherUser(currentChat?.members)?.name }} (You)</span>
+      <span *ngIf="getOtherUser(currentChat?.members)?.id !== currentUser.id">{{
+        getOtherUser(currentChat?.members)?.name }}</span>
+      <span *ngIf="getOtherUser(currentChat?.members)?.id === currentUser.id">{{
+        getOtherUser(currentChat?.members)?.name }} (You)</span>
     </div>
     <div>
-      <span class="empty-room-description" *ngIf="getOtherUser(currentChat?.members)?.id !== currentUser.id">This conversation is only taking place between 
-        <span (click)="openProfileDialog(getOtherUser(currentChat?.members)?.id)" class="user-highlighted">@{{getOtherUser(currentChat?.members)?.name }}</span> and you.
+      <span class="empty-room-description" *ngIf="getOtherUser(currentChat?.members)?.id !== currentUser.id">This
+        conversation is only taking place between
+        <span (click)="openProfileDialog(getOtherUser(currentChat?.members)?.id)"
+          class="user-highlighted">@{{getOtherUser(currentChat?.members)?.name }}</span> and you.
       </span>
-      <span class="empty-room-description" *ngIf="getOtherUser(currentChat?.members)?.id === currentUser.id"><b>This room is just for you.</b> Take notes, list your to-dos, or keep links and files handy. Feel free to discuss things with yourself as well.</span>
+      <span class="empty-room-description" *ngIf="getOtherUser(currentChat?.members)?.id === currentUser.id"><b>This
+          room is just for you.</b> Take notes, list your to-dos, or keep links and files handy. Feel free to discuss
+        things with yourself as well.</span>
     </div>
   </mat-card-content>
 
-  <div class="user-search-container-textfield" *ngIf="this.userService.openUserContainerTextfield.value == true" >
-    <button (click)="getUserNameString(user)" class="user-container" *ngFor="let user of this.userService.users" >
-        <div  class="profile-container">
-            <img src="{{user.picture}}" alt="profile">
-            <div class="online-status"></div>
-        </div>
-        <span>{{user.name}}</span>
+  <div class="user-search-container-textfield" *ngIf="this.userService.openUserContainerTextfield.value == true">
+    <button (click)="getUserNameString(user)" class="user-container" *ngFor="let user of this.userService.users">
+      <div class="profile-container">
+        <img src="{{user.picture}}" alt="profile">
+        <div class="online-status"></div>
+      </div>
+      <span>{{user.name}}</span>
     </button>
-        </div>
+  </div>
 
   <mat-card-content class="padding-textarea">
     <div class="textfield-content">
       <div class="text-field-container">
-        <textarea (keyup.enter)="sendMessage()" [(ngModel)]="message.content" placeholder="Message to {{ getOtherUser(this.currentChat?.members)?.name }} "></textarea>
+        <textarea (keyup.enter)="sendMessage()" [(ngModel)]="message.content"
+          placeholder="Message to {{ getOtherUser(this.currentChat?.members)?.name }} "></textarea>
         <div class="message-buttons">
           <div class="attachments">
             <div class="border-right">
-              <button class="mat-icon-button" type="submit"> 
+              <button class="mat-icon-button" type="submit">
                 <label class="custom-file-upload">
-                  <input class="dataInput" (change)="onFileSelected($event)" type="file" accept="image/jpeg, image/png, application/pdf" >
+                  <input class="dataInput" (change)="onFileSelected($event)" type="file"
+                    accept="image/jpeg, image/png, application/pdf">
                   <img style="z-index: 100;" src="assets/img/icons/add.svg" alt="" />
                 </label>
               </button>
             </div>
 
             <button (click)="openEmojiPickerChat()" mat-icon-button>
-              <img src="assets/img/icons/smiley.svg"/>
+              <img src="assets/img/icons/smiley.svg" />
             </button>
 
             <button (click)="this.userService.openUserContainerTextField()" mat-icon-button>
-              <img src="assets/img/icons/@.svg"/>
+              <img src="assets/img/icons/@.svg" />
             </button>
             <ng-container *ngFor="let messagefile of this.message.files">
-              <img *ngIf="this.authService.isImage(messagefile) && this.showUploadedFile" src="assets/img/icons/photo.svg" alt="Angehängtes Bild">
-              <img *ngIf="this.authService.isPDF(messagefile) && this.showUploadedFile" src="assets/img/icons/pdf.svg" alt="">
+              <img *ngIf="this.authService.isImage(messagefile) && this.showUploadedFile"
+                src="assets/img/icons/photo.svg" alt="Angehängtes Bild">
+              <img *ngIf="this.authService.isPDF(messagefile) && this.showUploadedFile" src="assets/img/icons/pdf.svg"
+                alt="">
             </ng-container>
           </div>
 
           <button class="send-button" mat-icon-button (click)="sendMessage()" [disabled]="!message.content">
             <svg width="23" height="20" viewBox="0 0 23 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2.5 19.2812C2.08333 19.4479 1.6875 19.4112 1.3125 19.1712C0.9375 18.9321 0.75 18.5833 0.75 18.125V13.4687C0.75 13.1771 0.833333 12.9167 1 12.6875C1.16667 12.4583 1.39583 12.3125 1.6875 12.25L10.75 9.99999L1.6875 7.74999C1.39583 7.68749 1.16667 7.54166 1 7.31249C0.833333 7.08333 0.75 6.82291 0.75 6.53124V1.87499C0.75 1.41666 0.9375 1.06749 1.3125 0.827493C1.6875 0.588327 2.08333 0.552076 2.5 0.718743L21.75 8.84374C22.2708 9.07291 22.5312 9.45833 22.5312 9.99999C22.5312 10.5417 22.2708 10.9271 21.75 11.1562L2.5 19.2812Z" fill="#444DF2" />
+              <path
+                d="M2.5 19.2812C2.08333 19.4479 1.6875 19.4112 1.3125 19.1712C0.9375 18.9321 0.75 18.5833 0.75 18.125V13.4687C0.75 13.1771 0.833333 12.9167 1 12.6875C1.16667 12.4583 1.39583 12.3125 1.6875 12.25L10.75 9.99999L1.6875 7.74999C1.39583 7.68749 1.16667 7.54166 1 7.31249C0.833333 7.08333 0.75 6.82291 0.75 6.53124V1.87499C0.75 1.41666 0.9375 1.06749 1.3125 0.827493C1.6875 0.588327 2.08333 0.552076 2.5 0.718743L21.75 8.84374C22.2708 9.07291 22.5312 9.45833 22.5312 9.99999C22.5312 10.5417 22.2708 10.9271 21.75 11.1562L2.5 19.2812Z"
+                fill="#444DF2" />
             </svg>
           </button>
         </div>

@@ -246,9 +246,9 @@ mat-card {
         color: white;
     }
 
-    .message-container {
-        align-items: flex-end;
-    }
+    // .message-container {
+    //     align-items: flex-end;
+    // }
 
     .message-row-container {
         &:hover {
@@ -265,7 +265,6 @@ mat-card {
     }
 
     .d-flex-end {
-
         align-items: flex-end;
     }
 }
@@ -330,4 +329,3 @@ mat-card {
 .offline-status {
     background-color: grey;
 }
-
