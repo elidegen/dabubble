@@ -157,11 +157,20 @@ export class LoginScreenComponent implements OnInit {
    * After attempting to create a user, it will navigate to the avatar selection or show an error if the user is already in use.
    */
   async createUser() {
-    this.gatherNewUserInfo();
-    await this.authService.createUser();
-    this.firestoreService.showSpinner = true;
-    this.delayAndPerformActions();
+    const activeUserIndex = this.authService.findUserIndexWithEmail(this.newEmail.value);
+    if (activeUserIndex == -1) {
+      this.userService.userIsAvailable = true;
+      this.gatherNewUserInfo();
+      this.firestoreService.showSpinner = true;
+      this.delayAndPerformActions();
+    } else {
+      this.userAlreadyInUse = true;
+      this.firestoreService.showSpinner = false;
+    }
   }
+
+
+
 
 
   /**
@@ -173,16 +182,11 @@ export class LoginScreenComponent implements OnInit {
    */
   delayAndPerformActions() {
     setTimeout(() => {
-      if (this.userService.userIsAvailable) {
         this.changeSwitchCase('avatar');
-        this.firestoreService.showSpinner = false;
-      } else {
-        this.userAlreadyInUse = true;
         this.firestoreService.showSpinner = false;
         setTimeout(() => {
           this.userAlreadyInUse = false;
-        }, 3000);
-      }
+        }, 1500);
     }, 1500);
   }
 
@@ -216,8 +220,10 @@ export class LoginScreenComponent implements OnInit {
   async uploadUser() {
     this.newUser.picture = this.picSrc;
     this.newUser.online = true;
+    await this.authService.createUser();
+    this.signInSuccess();
     await this.userService.addUser(this.newUser as User);
-    this.authService.signInUser(this.userService.currentEmail, this.userService.currentPassword);
+    await this.authService.signInUser(this.userService.currentEmail, this.userService.currentPassword);
   }
 
 
@@ -249,7 +255,7 @@ signInSuccess() {
   this.userNotFound = false;
   setTimeout(() => {
     this.authService.signInSuccess = false;
-  }, 1000);
+  }, 1500);
 }
 
 

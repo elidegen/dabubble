@@ -192,7 +192,6 @@ export class DialogViewProfileComponent {
         members: this.directMessageMembers,
         name: user.name
       });
-      console.log('dm', this.currentDM);
       this.userService.profileEdited.emit();
       this.userService.setCurrentChatToLocalStorage(this.currentDM);
     }

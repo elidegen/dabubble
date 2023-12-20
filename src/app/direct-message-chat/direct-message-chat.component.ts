@@ -271,10 +271,8 @@ export class DirectMessageChatComponent implements OnInit {
    * Toggles the display of the emoji picker for the text input field in the chat.
    */
   openEmojiPickerChat() {
-    console.log("Emojis Textfeld Direct")
     setTimeout(() => {
       this.emojiService.showTextChatEmojiPicker = true;
-      console.log (this.emojiService.showTextChatEmojiPicker);
     }, 100);
   }
 

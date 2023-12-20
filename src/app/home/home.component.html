@@ -9,7 +9,7 @@
         (input)="filterEverything()" (click)="this.isInputFocused = true;">
       <div class="user-search-container" *ngIf="isInputFocused">
         <div *ngIf="searchInput.trim() !== '' " class="search-results">
-          <h1 *ngIf="this.searchInput != '#'&& this.searchInput != '@'">Users:</h1>
+          <h1 *ngIf="!this.searchInput.startsWith('#') && !this.searchInput.startsWith('@')">Users:</h1>
           <button class="user-container" *ngFor="let user of filteredUsers" (click)="selectUser(user)">
             <div (click)="selectUser(user)" class="profile-container">
               <img src="{{user.picture}}" alt="profile">

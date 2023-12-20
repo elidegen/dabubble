@@ -6,6 +6,8 @@
         <div class="add-members-container">
           <input #search class="w100 input-members" type="text" placeholder="To: @someone"
             [(ngModel)]="firestoreService.searchInput" (input)="filterUsers()" (click)="this.isInputFocused = true;">
+
+
           <div class="user-search-container" *ngIf="isInputFocused" (click)="userSelected($event)">
             <div *ngIf="firestoreService.searchInput.trim() !== '' && firestoreService.filteredUsers.length !== 0">
                 <button class="user-container" *ngFor="let user of firestoreService.filteredUsers"
@@ -19,6 +21,9 @@
             </div>
             <span *ngIf="firestoreService.searchInput.trim() === '' || firestoreService.filteredUsers.length == 0">No matching contact</span>
           </div>
+
+         
+
         </div>
       </div>
     </mat-card-header>

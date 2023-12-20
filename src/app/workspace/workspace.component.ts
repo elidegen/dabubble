@@ -142,8 +142,6 @@ export class WorkspaceComponent implements OnInit {
         this.personalDirectMessages.push(chat);
       }
     });
-    console.log('workspace', this.personalDirectMessages);
-    
   }
 
   openAddChannelDialog(event: Event) {

@@ -380,7 +380,6 @@ export class MainChatComponent implements OnInit {
    */
   onFileSelected(event: any): void {
     if (event.target.files) {
-      console.log("Datei wird hcohgeladen");
       const file = event.target.files[0];
       if (file.size > 500000) {
         alert("Max file size 500kb !");

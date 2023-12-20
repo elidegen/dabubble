@@ -35,11 +35,10 @@ export class AuthService {
   * Creates a new user using email and password.
   * On success, sets a flag indicating availability.
   */
-  createUser() {
-    createUserWithEmailAndPassword(this.auth, this.userService.currentEmail, this.userService.currentPassword)
+  async createUser() {
+   await createUserWithEmailAndPassword(this.auth, this.userService.currentEmail, this.userService.currentPassword)
       .then((userCredential) => {
         const user = userCredential.user;
-        this.userService.userIsAvailable = true;
       })
   }
 
@@ -59,7 +58,7 @@ export class AuthService {
         setTimeout(() => {
           this.router.navigate(['home']);
           this.signInSuccess = false;
-        }, 1500);
+        }, 1000);
       }
     } catch (error) {
       this.signInSuccess = false;
@@ -235,12 +234,10 @@ export class AuthService {
     if (user) {
         try {
             updateEmail(user, newEmail);
-            console.log("E-Mail-Adresse erfolgreich aktualisiert");
         } catch (error) {
             console.error("Fehler beim Aktualisieren der E-Mail-Adresse:", error);
         }
     } else {
-        console.log("Kein Benutzer angemeldet");
     }
 }
 

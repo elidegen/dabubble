@@ -270,9 +270,7 @@ export class ChatService {
       if (channel.members.some((member: { id: string; }) => member.id === this.userService.currentUser.id)) {
         this.yourChannels.push(channel);
       }
-    }); 
-    console.log('chatservice', this.yourChannels);
-    
+    });  
   }
 
   /**

@@ -59,6 +59,10 @@ export class NewMessageComponent {
    */
    filterUsers(): void {
     this.isInputFocused = true;
+    if (this.firestoreService.searchInput.trim() == '@') {
+      this.firestoreService.filteredUsers = this.firestoreService.allUsers;
+    } else if (this.firestoreService.searchInput.startsWith('@')) {
     this.firestoreService.filterAllUsers();
+  }
   }
 }
