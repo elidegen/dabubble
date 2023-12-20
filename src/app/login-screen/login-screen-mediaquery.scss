@@ -1,12 +1,31 @@
+@media (max-width: 600px) {
+    .login-header {
+        width: auto;
+        padding: 0;
+    }
+    
+    .top-span{
+        display: none;
+    }
+}
+
+@media (max-height: 700px) {
+    .userPic {
+        height: 110px;
+    }
+    .top-span {
+        display: none;
+    }
+
+}
+
+
 @media screen and (max-width: 600px), 
        screen and (max-height: 700px) {
    .responsive-create-account {
-    display: flex;
-    display: flex;
-    position: absolute;
-    bottom: 10px;
-    flex-direction: column;
-    align-items: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .google-button {
@@ -16,59 +35,46 @@
 
     .impressum-span {
         width: 100%;
-        justify-content: space-between;
+        justify-content: center;
         padding-left: 10px;
         padding-right: 10px;
-       bottom: 80px;
-        }
+    }
+    .login-container {
+        padding: 12px 0;
+    }
+    .padding-bottom {
+        padding-bottom: 0;
+    }
+    .margin-top {
+        margin-top: 5px;
+    }
+    .margin-top24 {
+        margin-top: 5px;
+    }
+    .start-logo {
+        top: 20px!important;
+    }
 
-
-    @media screen and (max-height: 670px){
-       
-        .padding-bottom {
-            padding-bottom: 0;
-        }
-        .margin-top {
-            margin-top: 5px;
-        }
-        .margin-top24 {
-            margin-top: 5px;
-        }
-        .start-logo {
-            top: 20px!important;
-        }
-
-        .main-button {
-            padding: 12px 16px !important;
-        }
-
+    .main-button {
+        padding: 12px 16px !important;
+    }
 }
 
+    
 
 @media screen and (max-height: 600px){
-       
-    .login{
-        position: absolute;
-        top: 30px;
-        }
+    .impressum-span {
+        top: 5px;
+    }
 
-        .impressum-span {
-           top: 5px;
-            }
+    .start-logo {
+        display: none!important;
+    }
 
-            .start-logo {
-               display: none!important;
-            }
-
-
-        .login-container {
-            height: 90vh;
-        }
-
-        .responsive-create-account {
-            bottom: -10px;
-        }
-
+    .responsive-create-account {
+        bottom: -10px;
+    }
+   
 }
   
 
@@ -84,9 +90,6 @@
 
     
 
-    .top-span{
-        display: none;
-    }
 
     .or-container {
         margin-top: 0;
@@ -100,7 +103,6 @@
     .start-logo{
     top: 10px;
     left: 50%;
-    transform: translate(-50%);
 }
 
 .form-container {
@@ -127,7 +129,7 @@
 }
 
 .margin-top30 {
-    margin-top: 60px;
+    margin-top: 0;
 }
 
 .start-animation {
@@ -180,7 +182,7 @@
         width: 300px;
     }
 }
-    }
+
 
 
     .checkbox {
@@ -227,11 +229,10 @@
       }
         }
 
-
-        @media only screen and (max-height: 600px) { 
-            .login {
-                margin-left: 8px;
-                margin-right: 8px;
-            }
-            }
+ @media only screen and (max-height: 600px) { 
+    .login {
+        margin-left: 8px;
+        margin-right: 8px;
+    }
+}
     

@@ -63,6 +63,8 @@ export class UserService {
    * @returns - A promise that resolves when the user is successfully added and processed.
    */
   async addUser(item: User) {
+    console.log('addUser', item);
+    console.log('currentUser', this.currentUser);
     await addDoc(this.getUsersRef(), item.toJSON()).catch(
       (err) => { console.log(err) })
       .then((docRef) => {
@@ -106,6 +108,7 @@ export class UserService {
    */
   async updateUserId(user: User, newId: string,) {
     user.id = newId;
+    console.log('updateUserId', user.id);
     await this.updateUser(user);
   }
 
@@ -115,7 +118,13 @@ export class UserService {
    * @returns - A promise that resolves when the user document is successfully updated.
    */
   async updateUser(user: User) {
+    console.log('updateUser', user);
     let docRef = this.getSingleDocRef('users', user.id || '');
+    console.log('updateUser docRef', docRef);
+    console.log('updateUser updateDoc',  await updateDoc(docRef, this.getUpdateData(user)).catch(
+      (error) => { console.log(error); }
+    ));
+    
     await updateDoc(docRef, this.getUpdateData(user)).catch(
       (error) => { console.log(error); }
     );

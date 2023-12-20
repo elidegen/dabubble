@@ -343,9 +343,9 @@ signInSuccess() {
    * @description Logs in a user as a guest.
    * Signs out any currently authenticated user, signs in as a guest, and navigates to the home page.
    */
-  loginGuest() {
+  async loginGuest() {
     this.authService.signOutUser();
-    this.authService.signInGuest();
+    await this.authService.signInGuest();
     this.authService.signInSuccess = true;
     setTimeout(() => {
       this.authService.signInSuccess = false;
