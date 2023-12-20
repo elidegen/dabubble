@@ -52,11 +52,6 @@ export class DialogShowGroupMemberComponent implements OnInit {
         }
       }
     });
-    this.userService.profileEdited.subscribe(() => {
-      console.log('change');
-      
-      this.getAllChannelMembers();
-    });
   }
 
 

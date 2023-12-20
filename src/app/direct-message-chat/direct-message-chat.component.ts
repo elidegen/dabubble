@@ -61,6 +61,9 @@ export class DirectMessageChatComponent implements OnInit {
     this.firestoreService.messageAddedInDirect.subscribe(() => {
       this.scrollToBottom();
     });
+    this.userService.profileEdited.subscribe(() => {
+      this.currentUser = this.userService.currentUser;
+    })
   }
 
   /**

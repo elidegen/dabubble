@@ -49,6 +49,10 @@ export class WorkspaceComponent implements OnInit {
     this.loadChannels();
     this.loadDirectMessages();
     this.loadUsers();
+    this.userService.profileEdited.subscribe(() => {
+      this.currentUser = this.userService.currentUser
+      this.loadDirectMessages();
+    })
   }
 
 
@@ -119,7 +123,6 @@ export class WorkspaceComponent implements OnInit {
    * Filters the channels to show only those relevant to the current user.
    */
   getPersonalChannels() {
-    this.chatservice.getPersonalChannels();
     this.yourChannels = [];
     if (this.userService.currentUser.name?.startsWith('Guest')) {
       this.yourChannels = this.chatservice.allChannels;
@@ -139,6 +142,8 @@ export class WorkspaceComponent implements OnInit {
         this.personalDirectMessages.push(chat);
       }
     });
+    console.log('workspace', this.personalDirectMessages);
+    
   }
 
   openAddChannelDialog(event: Event) {

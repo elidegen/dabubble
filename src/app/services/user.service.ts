@@ -2,7 +2,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { inject } from '@angular/core';
 import { Firestore, collection, doc, onSnapshot, addDoc, deleteDoc, updateDoc, DocumentReference, DocumentData, getDoc, setDoc, } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from 'src/models/user.class';
 import { Chat } from 'src/models/chat.class';
 import { Channel } from 'src/models/channel.class';
