@@ -58,11 +58,8 @@ export class MainChatComponent implements OnInit {
   async ngOnInit() {
     this.chatService.openChat$.subscribe((openChat) => {
       if (openChat) {
-        console.log('openChat', openChat);
         this.setCurrentChannel(openChat);
       } else {
-        console.log('kein openchat');
-        
         this.loadChannelFromLocalStorage();
       }
     });
@@ -99,8 +96,6 @@ export class MainChatComponent implements OnInit {
       this.firestoreService.loadChannelMessages(this.currentChat);
       this.firestoreService.getAllChannelMembers(this.currentChat?.id);
     } else if (this.currentChat?.type == 'direct') {
-      console.log('zu direct');
-      
       this.chatService.chatWindow = 'direct';
     } else {
       this.chatService.chatWindow = 'newMessage';

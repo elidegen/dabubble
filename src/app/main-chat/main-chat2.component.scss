@@ -198,7 +198,10 @@ mat-drawer {
     text-align: center;
 }
 .first-chat-box {
-    height: 63%;
+    overflow-y: hidden;
+    &::-webkit-scrollbar {
+        display: none;
+    }
 }
 
 .empty-channel-message-container {

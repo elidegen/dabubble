@@ -89,7 +89,6 @@ export class DirectMessageChatComponent implements OnInit {
   loadDMFromLocalStorage() {
     this.loadUsers();
     this.currentChat = this.userService.getCurrentChatFromLocalStorage();
-    console.log('current dm', this.currentChat);
     this.loadMessages();
   }
 
