@@ -10,13 +10,9 @@ html,body {
 
 body {
     height: 100%;
-    position: relative;
     background-color: var(--primary);
     font-family: 'Nunito', 'Roboto', sans-serif !important;
-    max-width: 1920px;
-    margin-left: auto; 
-    margin-right: auto;
-    margin-top: 0;
+    margin: 0;
 }
 
 ::-webkit-scrollbar {

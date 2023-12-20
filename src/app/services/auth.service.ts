@@ -139,14 +139,12 @@ export class AuthService {
     this.userService.currentUser.online = true;
     this.userService.currentUser.loginTime = this.getLoginTime();
     await this.userService.addUser(this.userService.currentUser);
-    await this.userService.updateUser(this.userService.currentUser);
-    await this.userService.setCurrentUserToLocalStorage();
-    const auth = getAuth();
-    signInAnonymously(auth)
-      .then(() => {
-      })
-      .catch((error) => {
-      });
+    this.userService.setCurrentUserToLocalStorage();
+    signInAnonymously(this.auth)
+    .then(() => {
+    })
+    .catch((error) => {
+    });
   }
 
 
@@ -196,8 +194,6 @@ export class AuthService {
         console.error('Fehler bei Google-Anmeldung:', error);
         alert('Fehler bei Google-Anmeldung');
       });
-
-
     await this.addGoogleUser()
   }
 
@@ -226,7 +222,7 @@ export class AuthService {
       await this.userService.addUser(this.userService.currentUser);
       await this.userService.updateUser(this.userService.currentUser);
     }
-    await this.userService.setCurrentUserToLocalStorage();
+    this.userService.setCurrentUserToLocalStorage();
     await this.checkLocalStorage(this.userService.currentUser);
     await this.router.navigate(['home']);
   }
