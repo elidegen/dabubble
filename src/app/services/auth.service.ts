@@ -236,17 +236,21 @@ export class AuthService {
   }
 
 
-  /**
-   * Updates the current user's email.
-   * 
-   */
-  async updateUserEmail(newEmail: string): Promise<void> {
+  updateUserEmail(newEmail:string) {
     const auth = getAuth();
-    updateEmail(auth.currentUser!, newEmail)
-      .catch((error) => {
-      });
-  }
+    const user = auth.currentUser;
 
+    if (user) {
+        try {
+            updateEmail(user, newEmail);
+            console.log("E-Mail-Adresse erfolgreich aktualisiert");
+        } catch (error) {
+            console.error("Fehler beim Aktualisieren der E-Mail-Adresse:", error);
+        }
+    } else {
+        console.log("Kein Benutzer angemeldet");
+    }
+}
 
   /**
    * Sends a password reset email to the given address.
