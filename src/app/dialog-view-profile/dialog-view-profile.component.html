@@ -1,4 +1,4 @@
-<mat-card *ngIf="!userService.currentUser.name?.startsWith('Guest')" [ngSwitch]="editState">
+<mat-card  [ngSwitch]="editState">
     <mat-spinner *ngIf="firestoreService.showSpinner == true" class="mat-spinner"></mat-spinner>
     <mat-card-content *ngSwitchCase="false">
         <div class="header">
@@ -12,7 +12,7 @@
         </div>
         <div class="name">
             <h1>{{user.name}}</h1>
-            <span (click)="editState = true" *ngIf="currentUser.id == user.id">Edit</span>
+            <span (click)="editState = true" *ngIf="currentUser.id == user.id && !userService.currentUser.name?.startsWith('Guest') && userService.currentUser.picture !== 'assets/img/icons/google.png'">Edit</span>
         </div>
         <div [ngSwitch]="user.online">
             <div class="status" *ngSwitchCase="false">
@@ -24,13 +24,21 @@
                 <span style="color: #92c83e;">Active</span>
             </div>
         </div>
-        <div class="email-container">
+        <div *ngIf="!userService.currentUser.name?.startsWith('Guest')" class="email-container">
             <div class="mail-icon mr-16">
                 <img src="assets/img/icons/mail.svg" alt="">
             </div>
             <div class="email">
                 <h2>E-Mail Adress</h2>
                 <a matTooltip="Mail to" href="mailto:{{user.email}}">{{user.email}}</a>
+            </div>
+        </div>
+        <div *ngIf="userService.currentUser.name?.startsWith('Guest')" class="email-container">
+            <div class="mail-icon mr-16">
+                <img src="assets/img/icons/mail.svg" alt="">
+            </div>
+            <div class="email">
+                <h2>Guest</h2>
             </div>
         </div>
         <button *ngIf="currentUser.id !== user.id" (click)="selectUser(user)" mat-button
@@ -84,7 +92,7 @@
 
 
 
-<mat-card *ngIf="userService.currentUser.name?.startsWith('Guest')">
+<!-- <mat-card >
     <mat-card-content>
         <div class="header">
             <h1>Profile</h1>
@@ -104,13 +112,6 @@
                 <span style="color: #92c83e;">Active</span>
             </div>
         </div>
-        <div class="email-container">
-            <div class="mail-icon mr-16">
-                <img src="assets/img/icons/mail.svg" alt="">
-            </div>
-            <div class="email">
-                <h2>Guest</h2>
-            </div>
-        </div>
+       
     </mat-card-content>
-</mat-card>
+</mat-card> -->

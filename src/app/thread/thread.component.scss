@@ -59,29 +59,6 @@ header {
     width: 20px;
 }
 
-.text-field-container {
-    border: 1px solid lightgrey;
-    border-radius: 24px;
-    width: 100%;
-    padding: 16px 0 8px 0;
-
-    textarea {
-        outline: 0;
-        border: 0;
-        width: 100%;
-        padding: 0 16px;
-        resize: none;
-        height: 64px;
-        border-radius: 24px;
-
-        &::-webkit-scrollbar {
-            display: none;
-        }
-    }
-}
-
-
-
 .reaction-emoji-button {
     background-color: white;
     outline: none;
@@ -318,7 +295,6 @@ header {
     padding-left: 25px;
     gap: 8px;
     margin-top: 4px;
-
 }
 
 
@@ -337,24 +313,23 @@ header {
     height: 20px;
     width: 20px;
     background-color: white;
-
     img {
         height: 16px;
         width: 16px;
     }
 }
 
+
 .textfield-content {
     margin-top: 16px;
 }
 
+
 .text-field-container {
     border: 1px solid lightgrey;
     border-radius: 24px;
-    width: 100%;
     padding: 16px 0;
     background-color: white;
-
     textarea {
         outline: 0;
         border: 0;
@@ -363,16 +338,15 @@ header {
         resize: none;
         height: 64px;
         border-radius: 24px;
-
         &::-webkit-scrollbar {
             display: none;
         }
-
         &:disabled {
             background-color: white;
         }
     }
 }
+
 
 .send-button {
     &:disabled {

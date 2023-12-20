@@ -64,9 +64,9 @@
 .text-field-container {
     border: 1px solid lightgrey;
     border-radius: 24px;
-    width: 100%;
     padding: 16px 0;
     background-color: white;
+    margin: 0 32px;
 
     textarea {
         outline: 0;
@@ -128,5 +128,8 @@ mat-card-header {
     }
     .textfield-content {
         padding: 16px;
+    }
+    .text-field-container {
+        margin: 0;
     }
 }

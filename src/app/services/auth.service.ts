@@ -7,7 +7,7 @@ import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } f
 import { UserService } from './user.service';
 import { User } from 'src/models/user.class';
 import { ChatService } from './chat.service';
-import { collection, getDoc } from 'firebase/firestore';
+import { collection, deleteDoc, getDoc } from 'firebase/firestore';
 import { Chat } from 'src/models/chat.class';
 import { Channel } from 'src/models/channel.class';
 
@@ -91,8 +91,9 @@ export class AuthService {
       let existingChat: Chat | Channel;
       existingChat = JSON.parse(chatJson);
       const isUserMember = existingChat.members.some((member: any) => member.id === user.id);
+      console.log('was passiert hier?', isUserMember);
       if (!isUserMember) {
-        this.addPersonalChatToLocalStorage(user.id);
+        await this.addPersonalChatToLocalStorage(user.id);
       }
     }
   }
@@ -128,7 +129,6 @@ export class AuthService {
   }
 
 
-
   /**
    * Signs in a guest user and updates their login time.
    */
@@ -152,7 +152,7 @@ export class AuthService {
    */
   async signOutUser() {
     if (this.userService.currentUser.name?.startsWith('Guest')) {
-      this.removeCurrentChat();
+      await this.deleteGuest();
     }
     this.userService.removeCurrentUserFromLocalStorage();
     let userIndexToLogout = this.findUserIndexWithEmail(this.userService.currentUser.email);
@@ -167,6 +167,20 @@ export class AuthService {
     }).catch((error) => {
       console.error('Fehler beim Abmelden:', error);
     });
+  }
+
+  /**
+   * This function deletes a guest and resets the currenChat in the local storage
+   */
+  async deleteGuest() {
+    this.removeCurrentChat();
+    try {
+      let guest = this.userService.currentUser;
+      const userDocRef = doc(collection(this.firestore, 'users'), guest.id);
+      await deleteDoc(userDocRef);
+    } catch (error) {
+      console.error('Error deleting guest:', error);
+    }
   }
 
 
@@ -192,7 +206,7 @@ export class AuthService {
       .catch((error) => {
         console.error('Fehler bei Google-Anmeldung:', error);
         alert('Fehler bei Google-Anmeldung');
-      });
+      }); 
     await this.addGoogleUser()
   }
 
@@ -201,7 +215,8 @@ export class AuthService {
    */
   prepareGoogleUser(user: any) {
     if (this.findUserIndexWithEmail(user.email) != -1) {
-      this.userService.currentUser = this.userService.users[this.findUserIndexWithEmail(user.email)]
+      this.userService.currentUser = this.userService.users[this.findUserIndexWithEmail(user.email)];
+      this.userService.currentUser.online = true;
     } else {
       this.userService.currentUser.name = user.displayName || ""
       this.userService.currentUser.email = user.email || "";
@@ -222,6 +237,7 @@ export class AuthService {
       await this.userService.updateUser(this.userService.currentUser);
     }
     this.userService.setCurrentUserToLocalStorage();
+    await this.userService.updateUser(this.userService.currentUser);
     await this.checkLocalStorage(this.userService.currentUser);
     await this.router.navigate(['home']);
   }
@@ -230,7 +246,6 @@ export class AuthService {
   updateUserEmail(newEmail:string) {
     const auth = getAuth();
     const user = auth.currentUser;
-
     if (user) {
         try {
             updateEmail(user, newEmail);

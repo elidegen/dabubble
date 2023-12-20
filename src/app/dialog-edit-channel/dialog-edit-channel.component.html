@@ -18,8 +18,10 @@
         <div class="channel-info w100" [ngClass]="{'view-state': !editName}" [ngSwitch]="editName">
             <div class="top-row w100">
                 <h1>Channel Name</h1>
-                <span (click)="editName = true" *ngSwitchCase="false">Edit</span>
-                <span (click)="editChannel()" *ngSwitchCase="true">Save</span>
+                <div *ngIf="currentUser.name == currentChat?.creator">
+                    <span (click)="editName = true" *ngSwitchCase="false">Edit</span>
+                    <span (click)="editChannel()" *ngSwitchCase="true">Save</span>
+                </div>
             </div>
 
             <h3 *ngSwitchCase="false"><img src="assets/img/icons/tag-black.svg" alt=""><h3  >{{ currentChat?.name || '' }}</h3></h3>
@@ -31,8 +33,10 @@
         <div class="channel-info w100" [ngClass]="{'view-state': !editDescription}" [ngSwitch]="editDescription">
             <div class="top-row w100">
                 <h1>Description</h1>
-                <span (click)="editDescription = true" *ngSwitchCase="false">Edit</span>
-                <span  (click)="editChannel()" *ngSwitchCase="true">Save</span>
+                <div *ngIf="currentUser.name == currentChat?.creator">
+                    <span (click)="editDescription = true" *ngSwitchCase="false">Edit</span>
+                    <span (click)="editChannel()" *ngSwitchCase="true">Save</span>
+                </div>
             </div>
 
             <h3  *ngSwitchCase="false">{{ currentChat?.description || '' }}</h3>

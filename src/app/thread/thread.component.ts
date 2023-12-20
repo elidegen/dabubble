@@ -110,7 +110,7 @@ export class ThreadComponent implements OnInit {
    * Adds a message to the thread associated with the current message.
    */
   async addMessageToThread() {
-    if (this.currentChat?.id && this.message.content?.trim() !== '' || this.showUploadedFile) {
+    if (this.currentMessage.id && this.message.content?.trim() !== '' || this.showUploadedFile) {
       this.setThreadValues();
       await this.threadService.sendMessageInThread(this.currentMessage, this.message);
       this.threadService.updateThreadCount(this.currentMessage, this.message.time);

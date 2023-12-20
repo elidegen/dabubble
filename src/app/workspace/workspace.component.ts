@@ -122,13 +122,16 @@ export class WorkspaceComponent implements OnInit {
   /**
    * Filters the channels to show only those relevant to the current user.
    */
-  getPersonalChannels() {
+  async getPersonalChannels() {
+    console.log('chatservice', this.chatservice.yourChannels);
+
     this.yourChannels = [];
     if (this.userService.currentUser.name?.startsWith('Guest')) {
       this.yourChannels = this.chatservice.allChannels;
     } else {
       this.yourChannels = this.chatservice.yourChannels;
     }
+    console.log('workspace', this.yourChannels)
   }
 
 

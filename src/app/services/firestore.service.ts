@@ -250,9 +250,11 @@ export class FirestoreService {
    * Ths function filters all users
    */
   filterAllUsers() {
-    this.filteredUsers = this.allUsers.filter(user =>
-      user.name?.toLowerCase().includes(this.searchInput.toLowerCase())
-    );
+    const searchTerm = this.searchInput.substring(1).toLowerCase();
+    this.filteredUsers = this.allUsers.filter(user => {
+      const userName = user.name?.toLowerCase();
+      return userName && userName.startsWith(searchTerm);
+    });
   }
 
   /**

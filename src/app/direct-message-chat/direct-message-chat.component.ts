@@ -88,8 +88,8 @@ export class DirectMessageChatComponent implements OnInit {
    */
   loadDMFromLocalStorage() {
     this.loadUsers();
-    this.currentChat =  this.userService.getCurrentChatFromLocalStorage();
-    this.chatService.chatWindow = 'direct';
+    this.currentChat = this.userService.getCurrentChatFromLocalStorage();
+    console.log('current dm', this.currentChat);
     this.loadMessages();
   }
 
@@ -363,7 +363,7 @@ export class DirectMessageChatComponent implements OnInit {
   /**
    * Retrieves the other user in a conversation based on the provided members array.
    * @param {any[]} members - An array containing members of the conversation.
-   * @returns {User | null} The other user in the conversation, or null if not found.
+   * @returns  The other user in the conversation, or null if not found.
    */
   getOtherUser(members: any[]) {
     if (members[0].id === this.currentUser.id) {

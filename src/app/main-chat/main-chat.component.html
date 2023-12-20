@@ -115,7 +115,7 @@
                         *ngSwitchCase="false">
                         <a (click)="openProfileDialog(messagemention['id'])"
                           *ngFor="let messagemention of message.mentions"> @{{messagemention['name']}}</a>
-                        <span  class="word-break">{{message.content}}</span>
+                        <span class="word-break">{{message.content}}</span>
                       </div>
                       <div class="d-flex">
                         <div *ngFor="let messagefile of message.files">
