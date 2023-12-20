@@ -134,6 +134,7 @@ export class DialogViewProfileComponent {
         this.firestoreService.showSpinner = true;
       }
       this.updateUserView();
+      event.target.value = '';
     }
   }
 

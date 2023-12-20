@@ -152,6 +152,7 @@ export class DirectMessageChatComponent implements OnInit {
         this.firestoreService.showSpinner = true;
       }
       this.resetStatusAndSpinner()
+      event.target.value = '';
     }
   }
 
@@ -171,10 +172,10 @@ export class DirectMessageChatComponent implements OnInit {
    * Formats and saves the message content and metadata before sending.
    */
   async sendMessage() {
-    if (this.currentChat?.id && this.message.content?.trim() !== '') {
+    if (this.currentChat?.id && this.message.content?.trim() !== '' || this.showUploadedFile) {
       this.message.content = this.message.content!.replace(this.taggedNames, '');
       this.determineMessageValues();
-      await this.firestoreService.sendMessageInDirectMessage(this.currentChat.id, this.message);
+      await this.firestoreService.sendMessageInDirectMessage(this.currentChat!.id, this.message);
       this.message = new Message();
       setTimeout(() => {
         this.scrollToBottom();

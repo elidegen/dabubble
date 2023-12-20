@@ -317,6 +317,7 @@ signInSuccess() {
       setTimeout(() => {
         this.picSrc = this.authService.customPic;
         this.firestoreService.showSpinner = false;
+        event.target.value = '';
       }, 2500);
     }
   }

@@ -137,5 +137,12 @@
     }
     .message-row-container {
         margin-bottom: 8px;
+        max-height: 300px;
+    }
+
+    @media (max-height: 650px) {
+        .main-chat-container {
+            max-height: 240px;
+        }
     }
 }

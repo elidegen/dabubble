@@ -163,13 +163,13 @@ export class MainChatComponent implements OnInit {
   * Sends a chat message in the current channel.
   */
   async sendMessage() {
-    if (this.currentChat?.id && this.message.content?.trim() !== '') {
+    if (this.currentChat?.id && this.message.content?.trim() !== '' || this.showUploadedFile) {
       this.showUploadedFile = false;
       this.message.content = this.message.content!.replace(this.taggedNames, '');
       this.getSentMessageTimeAndDate();
       this.setMessageValuesForSentMessage();
       this.message.messageSelected = false;
-      await this.firestoreService.sendMessageInChannel(this.currentChat, this.message);
+      await this.firestoreService.sendMessageInChannel(this.currentChat!, this.message);
       this.taggedNames = "";
       this.message = new Message();
       this.scrollToBottom();
@@ -379,7 +379,8 @@ export class MainChatComponent implements OnInit {
    * @param {any} event - The file input event.
    */
   onFileSelected(event: any): void {
-    if (event.target.files && event.target.files[0]) {
+    if (event.target.files) {
+      console.log("Datei wird hcohgeladen");
       const file = event.target.files[0];
       if (file.size > 500000) {
         alert("Max file size 500kb !");
@@ -388,6 +389,7 @@ export class MainChatComponent implements OnInit {
         this.firestoreService.showSpinner = true;
       }
       this.resetStatus();
+      event.target.value = '';
     }
   }
 

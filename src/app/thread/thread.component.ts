@@ -110,14 +110,15 @@ export class ThreadComponent implements OnInit {
    * Adds a message to the thread associated with the current message.
    */
   async addMessageToThread() {
-    if (this.currentMessage.id && this.message.content?.trim() !== '') {
+    if (this.currentChat?.id && this.message.content?.trim() !== '' || this.showUploadedFile) {
       this.setThreadValues();
       await this.threadService.sendMessageInThread(this.currentMessage, this.message);
       this.threadService.updateThreadCount(this.currentMessage, this.message.time);
-      this.message.content = '';
+      this.message = new Message();
       this.firestoreService.messageAddedInThread.emit();
     }
     this.scrollToBottom();
+    this.showUploadedFile = false;
   }
 
   /**
@@ -318,6 +319,7 @@ export class ThreadComponent implements OnInit {
         this.firestoreService.showSpinner = true;
       }
       this.resetStatus()
+      event.target.value = '';
     }
   }
 
