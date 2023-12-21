@@ -1,7 +1,7 @@
 <mat-spinner *ngIf="firestoreService.showSpinner == true" class="mat-spinner "></mat-spinner>
-<div *ngIf="this.authService.signInSuccess == true" class="account-popup"><span>Login successfull</span></div>
+<div *ngIf="true" class="account-popup"><span>Login successfull</span></div>
 <div *ngIf="showUserCreatedSuccess == true" class="account-popup"><span>Account created</span></div>
-<div  *ngIf="showEmailSent == true" class="account-popup"><span>E-mail sent</span></div>
+<div *ngIf="showEmailSent == true" class="account-popup"><span>E-mail sent</span></div>
 <div *ngIf="!animationIsFinished" class="start-animation-container"></div>
 <div *ngIf="!animationIsFinished" class="start-animation start-animation-responsive hideafteranimation">
   <div class="start-animation-logo"><img src="assets\img\icons\logo.svg"></div><span
@@ -13,7 +13,8 @@
     <img class="start-logo" src="assets\img\icons\logo-home.svg">
     <div *ngSwitchCase="'login'" class="top-span">
       <span class="padding-bottom">New at DABubble ?</span>
-      <span (click)="changeSwitchCase('createAccount')" class="color-purple2-text cursor-pointer transform">Create Account</span>
+      <span (click)="changeSwitchCase('createAccount')" class="color-purple2-text cursor-pointer transform">Create
+        Account</span>
     </div>
   </div>
 
@@ -21,22 +22,23 @@
     <div class="form-container">
       <h1 class="color-purple2-text padding-bottom">Login</h1>
       <p>We recommend using the email address that you use at work.</p>
-      <form  [formGroup]="login">
+      <form [formGroup]="login">
         <div class="input-container margin-top ">
           <img src="assets\img\icons\mail.svg">
-          <input matInput  placeholder="E-mail" [formControl]="loginemail" required>
+          <input matInput placeholder="E-mail" [formControl]="loginemail" required>
           <mat-error *ngIf="loginemail.invalid && loginemail.touched">
             {{ getErrorMessageLogin() }}
           </mat-error>
         </div>
 
         <div class="placeholder"></div>
-        <div class="input-container margin-top"><img src="assets\img\icons\lock.svg"><input type="password"
-             matInput placeholder="Password" [formControl]="loginpassword" required>
-             <mat-error *ngIf="loginpassword.invalid && loginpassword.touched">
-              {{ getErrorMessageLoginPassword() }}
-            </mat-error>
-          <mat-error>{{getErrorMessageNoUser()}}</mat-error></div>
+        <div class="input-container margin-top"><img src="assets\img\icons\lock.svg"><input type="password" matInput
+            placeholder="Password" [formControl]="loginpassword" required>
+          <mat-error *ngIf="loginpassword.invalid && loginpassword.touched">
+            {{ getErrorMessageLoginPassword() }}
+          </mat-error>
+          <mat-error>{{getErrorMessageNoUser()}}</mat-error>
+        </div>
 
         <span (click)="changeSwitchCase('resetPassword')"
           class="margin-top25 color-purple2-text cursor-pointer transform">Forgot password ?</span>
@@ -44,12 +46,12 @@
           <div class="bottom-line"></div><span class="or">OR</span>
           <div class="bottom-line"></div>
         </div>
-        <div  (click)="loginWithGoogle()"  mat-button class="input-container  cursor-pointer google-button">
+        <div (click)="loginWithGoogle()" mat-button class="input-container  cursor-pointer google-button">
           <img src="assets\img\icons\google.svg">
           <span class="color-purple2-text ">Login with google</span>
         </div>
 
-     
+
         <div class="submit-buttons margin-top">
           <button (click)="loginUser()" mat-button class="main-button primary mr-16" type="submit">Login</button>
           <button (click)="loginGuest()" mat-button class="main-button ">Guest login</button>
@@ -70,9 +72,10 @@
           <img src="assets\img\icons\person.svg">
           <input minlength="5" [formControl]="newName" matInput placeholder="Name" required>
           <div class="placeholder"></div>
-          <mat-error class="error" *ngIf="this.newName?.hasError('minlength')">Your name need minimum 5 letters</mat-error>
+          <mat-error class="error" *ngIf="this.newName?.hasError('minlength')">Your name need minimum 5
+            letters</mat-error>
         </div>
-        <div  class="input-container margin-top25">
+        <div class="input-container margin-top25">
           <img src="assets\img\icons\mail.svg">
           <input [formControl]="newEmail" matInput placeholder="E-mail" required>
           <div class="placeholder"></div>
@@ -82,8 +85,10 @@
         <div class="input-container margin-top25"><img src="assets\img\icons\lock.svg"><input minlength="6"
             type="password" [formControl]="newPassword" matInput placeholder="Password" required>
           <div class="placeholder"></div>
-          <mat-error class="error error-bottom" *ngIf="this.newPassword?.hasError('minlength')">You need a password with minium 6
-            letters</mat-error> <mat-error class="error" *ngIf="this.userAlreadyInUse">This user already exists</mat-error>
+          <mat-error class="error error-bottom" *ngIf="this.newPassword?.hasError('minlength')">You need a password with
+            minium 6
+            letters</mat-error> <mat-error class="error" *ngIf="this.userAlreadyInUse">This user already
+            exists</mat-error>
         </div>
 
         <span class="margin-top gap checkbox-bottom cursor-pointer align-center"><input [formControl]="disableSelect"
@@ -93,7 +98,7 @@
 
         <div class="submit-buttons justify-content-end">
           <button mat-button class="align-self main-button primary" type="submit"
-            [disabled]= "!disableSelect.value || !addUser.valid ">Next</button>
+            [disabled]="!disableSelect.value || !addUser.valid ">Next</button>
         </div>
       </form>
     </div>
@@ -101,7 +106,7 @@
 
 
 
-  <div  *ngSwitchCase="'avatar'" class="login bg-white margin-top30">
+  <div *ngSwitchCase="'avatar'" class="login bg-white margin-top30">
     <div class="form-container">
       <img (click)="changeSwitchCase('createAccount')" class="position-relative cursor-pointer transform arrow"
         src="assets\img\icons\arrow_back.svg">
@@ -139,29 +144,28 @@
       <form class="align-center" [formGroup]="getEmailForNewPassword">
         <div class="input-container margin-top">
           <img src="assets\img\icons\mail.svg">
-          <input matInput placeholder="E-mail"  formControlName="emailForReset" required>
+          <input matInput placeholder="E-mail" formControlName="emailForReset" required>
           <div class="placeholder"></div>
           <mat-error *ngIf="emailForReset.invalid && emailForReset.touched">
             {{ getErrorMessageResetEmail() }}
           </mat-error>
         </div>
-        <p  *ngIf="!this.userService.resetEmailFound" class="margin-top25 grey-span-resetpw">Receive an e-mail to reset your password</p>
-        <p  *ngIf="this.userService.resetEmailFound"class="margin-top25 grey-span-resetpw">An e-mail to reset your password was sent !</p>
+        <p *ngIf="!this.userService.resetEmailFound" class="margin-top25 grey-span-resetpw">Receive an e-mail to reset
+          your password</p>
+        <p *ngIf="this.userService.resetEmailFound" class="margin-top25 grey-span-resetpw">An e-mail to reset your
+          password was sent !</p>
         <div class="submit-buttons margin-top justify-content-end">
-          <button mat-button (click)="sendResetEmail()" [disabled]="!this.emailForReset.valid" class="main-button primary"
-            type="submit">Send Email</button>
+          <button mat-button (click)="sendResetEmail()" [disabled]="!this.emailForReset.valid"
+            class="main-button primary" type="submit">Send Email</button>
         </div>
       </form>
     </div>
   </div>
 
-  <div *ngSwitchCase="'login'" class="responsive-create-account"><span >New at DABubble ?</span>
+  <div *ngSwitchCase="'login'" class="responsive-create-account"><span>New at DABubble ?</span>
     <button (click)="changeSwitchCase('createAccount')" mat-button class="main-button ">Create Account</button>
   </div>
   <div class="impressum-span">
     <a routerLink="/imprint">Legal Notice</a><a routerLink="/privacy">Privacy Policy</a>
   </div>
 </div>
-
-
-

@@ -62,7 +62,6 @@ export class DialogEditChannelComponent implements OnInit {
       if (channelDocSnap.exists()) {
         const channelData = channelDocSnap.data();
         this.allChannelMembers = channelData?.['members'];
-      } else {
       }
     }
   }

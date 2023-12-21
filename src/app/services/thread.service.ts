@@ -49,6 +49,7 @@ export class ThreadService {
    */
   async createThread(messageId: any, thread: Thread) {
     const threadCollectionRef = collection(this.firestore, 'threads');
+    
     const specificDocRef: DocumentReference<DocumentData> = doc(threadCollectionRef, messageId);
     const docSnapshot = await getDoc(specificDocRef)
     if (!docSnapshot.exists()) {

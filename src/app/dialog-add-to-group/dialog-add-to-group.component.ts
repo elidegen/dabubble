@@ -170,13 +170,12 @@ export class DialogAddToGroupComponent {
    * Fetches all existing members of the current channel from Firestore.
    */
   async getAllChannelMembers() {
-    if (this.currentChat?.id) {
+    if (this.currentChat?.id) { 
       const channelDocRef = doc(this.firestore, `channels/${this.currentChat.id}`);
       const channelDocSnap = await getDoc(channelDocRef);
       if (channelDocSnap.exists()) {
         const channelData = channelDocSnap.data();
         this.allChannelMembers = channelData?.['members'];
-      } else {
       }
       this.showExistingMembers();
     }

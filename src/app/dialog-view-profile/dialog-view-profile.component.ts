@@ -164,7 +164,7 @@ export class DialogViewProfileComponent {
 
 
   async updateCurrentUserInChannel(user: User) {
-    if (this.currentChat) {
+    if (this.currentChat) { 
       const channelDocRef = doc(collection(this.firestore, 'channels'), this.currentChat?.id);
       this.channelMembers = this.currentChat.members;
       let currentUserIndex = this.channelMembers.findIndex((user) => user.id === this.userService.currentUser.id);

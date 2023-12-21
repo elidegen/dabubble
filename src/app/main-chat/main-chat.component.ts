@@ -335,7 +335,7 @@ export class MainChatComponent implements OnInit {
    * @param {Message} message - The message to be updated.
    */
   async updateMessageContent(message: Message) {
-    let messageId = message.id
+    let messageId = message.id;
     const messageColRef = doc(collection(this.firestore, `channels/${this.currentChat?.id}/messages/`), messageId);
     await updateDoc(messageColRef, this.setMessageValues())
       .catch((error) => {
