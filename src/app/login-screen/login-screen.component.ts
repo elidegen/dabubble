@@ -25,6 +25,7 @@ export class LoginScreenComponent implements OnInit {
   userAlreadyInUse: boolean = false;
   showUserCreatedSuccess = false;
   showEmailSent = false;
+  selectedImageIndex: number | null = null
 
   ngOnInit() {
     this.hideContentAfterAnimation();
@@ -143,8 +144,9 @@ export class LoginScreenComponent implements OnInit {
    * Changes picture source
    * @param pic 
    */
-  changePicSrc(pic: string) {
+  changePicSrc(pic: string,i:any) {
     this.picSrc = pic;
+    this.selectedImageIndex = i;
   }
 
   /**

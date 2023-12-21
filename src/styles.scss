@@ -1,10 +1,12 @@
 @import '@ctrl/ngx-emoji-mart/picker';
+
 @font-face {
     font-family: 'Nunito';
     src: url('assets/fonts/Nunito-Regular.ttf');
 }
 
-html,body {
+html,
+body {
     height: 100%;
 }
 
@@ -40,7 +42,9 @@ body {
     background-color: white !important;
 }
 
-h1,h2,h3 {
+h1,
+h2,
+h3 {
     margin: 0 !important;
 }
 
@@ -155,9 +159,11 @@ input {
     padding: 16px;
     outline: none;
     border: 1px solid var(--border);
+
     &:hover {
         border: 1px solid var(--purple2);
     }
+
     &:focus {
         border: 1px solid var(--purple1);
     }
@@ -170,12 +176,13 @@ a {
 a {
     cursor: pointer;
     text-decoration: none;
+
     &:hover {
         font-weight: bold;
     }
 }
 
-.h100{
+.h100 {
     height: 100%;
 }
 
@@ -189,9 +196,11 @@ a {
     border: 1px solid var(--purple1) !important;
     color: var(--purple1) !important;
     transition: all 125ms !important;
+
     &:hover {
         opacity: 0.8 !important;
     }
+
     &:disabled {
         color: var(--gray) !important;
         border: 1px solid var(--gray) !important;
@@ -217,6 +226,7 @@ a {
     flex-direction: column;
     width: fit-content;
     gap: 16px;
+
     &::-webkit-scrollbar {
         display: none;
     }
@@ -234,13 +244,16 @@ a {
     border: 0;
     max-width: 245px;
     cursor: pointer;
+
     img {
         height: 50px;
         border-radius: 100%;
     }
+
     &:hover {
         background-color: var(--primary);
     }
+
     span {
         overflow: hidden;
         white-space: nowrap;
@@ -318,6 +331,7 @@ h2 {
     0% {
         opacity: 0;
     }
+
     100% {
         opacity: 1;
     }
@@ -342,9 +356,11 @@ h2 {
     font-size: 12px;
     width: 150px;
     cursor: pointer;
+
     span {
         color: var(--purple3);
         transition: all 125ms;
+
         &:hover {
             font-weight: bold;
             transition: all 125ms;
@@ -354,6 +370,10 @@ h2 {
 
 .more-menu.visible {
     display: flex;
+}
+
+.emoji-picker {
+    z-index: 10;
 }
 
 
@@ -375,6 +395,7 @@ textarea {
     border-radius: 64px 64px 0 0 !important;
     display: flex;
     justify-content: center;
+
     button {
         justify-content: center;
     }
@@ -399,12 +420,12 @@ textarea {
 
 @media (max-width: 1300px) {
     .emoji-mart {
-        width: 220px!important;
+        width: 220px !important;
     }
 }
 
 @media (max-width: 500px) {
     .emoji-mart {
-        width: 310px!important;
+        width: 310px !important;
     }
 }

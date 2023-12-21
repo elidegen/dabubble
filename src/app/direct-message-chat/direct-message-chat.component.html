@@ -39,8 +39,8 @@
 
               <div [ngSwitch]="edit && message.creatorId == currentUser.id && editingMessage === message.id" class="d-flex-end">
                 <div
-                  [ngClass]="{'my-message-content': message.creatorId == currentUser.id, 'message-content': message.creatorId != currentUser.id, 'display-none': message.content == '', }"
-                  *ngSwitchCase="false">
+                [ngClass]="{'my-message-content': message.creatorId == currentUser.id, 'message-content': message.creatorId != currentUser.id,'display-none': message.content == '' && message.mentions.length == 0,}"
+                *ngSwitchCase="false">
                   <a (click)="openProfileDialog(messagemention['id'])" *ngFor="let messagemention of message.mentions">
                     @{{messagemention['name']}}</a>
                   <span class="word-break">{{ message.content }}</span>
