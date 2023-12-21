@@ -272,8 +272,6 @@ export class ChatService {
         this.yourChannels.push(channel);
       }
     });  
-    console.log('personal channels chatservice', this.yourChannels);
-    
   }
 
   /**

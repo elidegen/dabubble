@@ -23,8 +23,7 @@ export class DialogViewProfileComponent {
   currentUser: User;
   user: User = new User();
   editedUser: User = new User();
-  currentChat!: Channel | undefined;
-  currentDM!: Chat | undefined;
+  currentChat!: any;
   channel: Channel = new Channel;
   dm: Chat = new Chat
   channelMembers!: any[];
@@ -41,53 +40,8 @@ export class DialogViewProfileComponent {
   }
 
   ngOnInit() {
-    this.chatService.openChat$.subscribe((openChat) => {
-      if (openChat) {
-        this.loadSelectedChannel(openChat);
-      } else {
-        this.loadChannelFromLocalStorage();
-      }
-    });
-    this.chatService.openDirectMessage$.subscribe((openDirectMessage) => {
-      if (openDirectMessage) {
-        this.loadSelectedDirectMessage(openDirectMessage);
-      } else {
-       this.loadDirectMessageFromLocalStorage();
-      }
-    });
   }
 
-
-  loadSelectedChannel(openChat: Channel) {
-    const newChat = openChat as Channel;
-    if (!this.currentChat || this.currentChat.id !== newChat.id) {
-      this.currentChat = newChat;
-    }
-  }
-
-
-  loadChannelFromLocalStorage() {
-    let channel = this.userService.getCurrentChatFromLocalStorage();
-    if (channel?.type == 'channel') {
-      this.currentChat = channel
-    }
-  }
-
-
-  loadSelectedDirectMessage(openDirectMessage: Chat) {
-    const newChat = openDirectMessage as Chat;
-    if (!this.currentChat || this.currentChat.id !== newChat.id) {
-      this.currentDM = newChat;
-    } 
-  }
-
-
-  loadDirectMessageFromLocalStorage() {
-    let directMessage = this.userService.getCurrentChatFromLocalStorage();
-    if (directMessage?.type == 'direct') {
-      this.currentDM = directMessage;
-    }
-  }
 
  
 
@@ -114,7 +68,8 @@ export class DialogViewProfileComponent {
     await this.updateCurrentUserInChannel(this.user);
     await this.updateChannelMessages(this.user);  
     await this.updateCurrentUserInDirect(this.user);
-    await this.updateDMMessages(this.user)
+    await this.updateDMMessages(this.user);
+    
     this.userService.profileEdited.emit();
     this.dialogRef.close();
   }
@@ -165,49 +120,53 @@ export class DialogViewProfileComponent {
     this.dialogRef.close();
   }
 
-
+  
   async updateCurrentUserInChannel(user: User) {
-    if (this.currentChat) { 
-      const channelDocRef = doc(collection(this.firestore, 'channels'), this.currentChat?.id);
-      this.channelMembers = this.currentChat.members;
-      let currentUserIndex = this.channelMembers.findIndex((user) => user.id === this.userService.currentUser.id);
-      this.channelMembers[currentUserIndex].name = user.name;
-      this.channelMembers[currentUserIndex].email = user.email;
-      if (this.currentChat.creatorId == user.id) {
-        this.currentChat.creator = user.name;
-        await updateDoc(channelDocRef, {
-          members: this.channelMembers,
-          creator: user.name,
-        });
-      } else {
-        await updateDoc(channelDocRef, {
-          members: this.channelMembers,
-        });
-      }
-      this.userService.setCurrentChatToLocalStorage(this.currentChat);
+    await this.chatService.getallChannels();
+    const yourChannels = this.chatService.yourChannels;
+    for (const channel of yourChannels) {
+      const currentUserIndex = channel.members.findIndex((member: { id: string | undefined; }) => member.id == user.id);
+      if (currentUserIndex !== -1) {
+            channel.members[currentUserIndex].name = user.name;
+            channel.members[currentUserIndex].email = user.email;
+        }
+        const channelDocRef = doc(collection(this.firestore, 'channels'), channel.id);
+        if (channel.creatorId == user.id) {
+          await updateDoc(channelDocRef, {
+            members: channel.members,
+            creator: user.name
+          });
+        } else {
+          await updateDoc(channelDocRef, {
+            members: channel.members,
+          });
+        }
     }
   }
 
+      
   async updateCurrentUserInDirect(user: User) {
-    if (this.currentDM) {
-      const dmDocRef = doc(collection(this.firestore, 'direct messages'), this.currentDM?.id);
-      this.directMessageMembers = this.currentDM.members;
-      let currentUserIndex = this.directMessageMembers.findIndex((user) => user.id === this.userService.currentUser.id);
-      this.directMessageMembers[currentUserIndex].name = user.name;
-      this.directMessageMembers[currentUserIndex].email = user.email;
-      await updateDoc(dmDocRef, {
-        members: this.directMessageMembers,
+    await this.chatService.loadAllDirectMessages();
+    const yourDMs = this.chatService.yourDirectMessages;
+    for(const dm of yourDMs) {
+      const currentUserIndex = dm.members.findIndex((member: { id: string | undefined; }) => member.id == user.id);
+      if (currentUserIndex !== -1) {
+        dm.members[currentUserIndex].name = user.name;
+        dm.members[currentUserIndex].email = user.email;
+      }
+      const directDocRef = doc(collection(this.firestore, 'direct messages'), dm.id);
+      await updateDoc(directDocRef, {
+        members: dm.members,
       });
-      this.userService.setCurrentChatToLocalStorage(this.currentDM);
     }
   }
+
 
   async updateChannelMessages(user: User) {
     let channelMessages: any[];
     await this.chatService.getallChannels();
     await this.chatService.getAllChannelMessages();
     channelMessages = this.chatService.allMessagesOfChannel;
-    console.log('Message', this.chatService.allMessagesOfChannel);
     channelMessages.forEach((message) => {
       if (message.creatorId === user.id) {
         let messageDocRef = doc(collection(this.firestore, `channels/${message.channelID}/messages`), message.id);
@@ -217,6 +176,7 @@ export class DialogViewProfileComponent {
       }
     })
   }
+
 
   async updateDMMessages(user: User) {
     let dmMessages: any[];
@@ -231,5 +191,30 @@ export class DialogViewProfileComponent {
         })
       }
     })
+  }
+
+
+  updateLocalStorage(user: User) {
+    this.currentChat = this.userService.getCurrentUserFromLocalStorage();
+    if (this.currentChat.type == 'direct' && this.currentChat) {
+      const currentUserIndex = this.currentChat.members.findIndex((member: { id: string | undefined; }) => member.id == user.id);
+      if (currentUserIndex !== -1) {
+        this.currentChat.members[currentUserIndex].name = user.name;
+        this.currentChat.members[currentUserIndex].email = user.email;
+        this.userService.setCurrentChatToLocalStorage(this.currentChat);
+      }
+    } else if (this.currentChat.type == 'channel' && this.currentChat) {
+      const currentUserIndex = this.currentChat.members.findIndex((member: { id: string | undefined; }) => member.id == user.id);
+      if (currentUserIndex !== -1) {
+        this.currentChat.members[currentUserIndex].name = user.name;
+        this.currentChat.members[currentUserIndex].email = user.email;
+        if (this.currentChat.creatorId == user.id) {
+          this.currentChat.creator = user.name;
+        }
+        this.userService.setCurrentChatToLocalStorage(this.currentChat);
+      }
+    } else {
+      return
+    }
   }
 }
