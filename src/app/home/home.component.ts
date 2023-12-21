@@ -107,18 +107,26 @@ export class HomeComponent {
    * Filters users based on the search input.
    */
   filterUsers() {
-    if (this.searchInput.trim() == '@') {
-      this.filteredUsers = this.userService.users;
+    this.filteredUsers = []; 
+    const trimmedInput = this.searchInput.trim();
+    if (trimmedInput === '@') {
+      this.filteredUsers = [...this.userService.users];
+    } else if (trimmedInput.startsWith('@') && trimmedInput.length > 1) {
+      const searchTerm = trimmedInput.substring(1).toLowerCase();
+        this.searchUser(searchTerm);
+    } else if (trimmedInput !== '') {
+      const searchTerm = trimmedInput.toLowerCase();
+      this.searchUser(searchTerm);
     } else {
-      const searchTerm = this.searchInput.substring(1).toLowerCase();
-      this.filteredUsers = this.userService.users.filter(user => {
-        const userName = user.name?.toLowerCase();
-        return userName && userName.startsWith(searchTerm);
-      });
+      this.filteredUsers = [];
     }
   }
-
- 
+  
+ searchUser(searchTerm:any) {
+  this.filteredUsers = this.userService.users.filter(user =>
+    user.name?.toLowerCase().startsWith(searchTerm)
+  );
+ }
 
 
   /**
