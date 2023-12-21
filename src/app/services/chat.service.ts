@@ -38,6 +38,29 @@ export class ChatService {
   workspaceOpen: boolean = true;
   threadOpen: boolean = true;
 
+    // -------------- channel -----------------------
+    get openChat$(): Observable<Channel | null> {
+      return this._openChatSubject.asObservable();
+    }
+  
+  
+    set openChat(channel: Channel | null) {
+      this._openChatSubject.next(channel);
+    }
+  
+  
+    // ----------------- Direct Message --------------------------
+    get openDirectMessage$(): Observable<Chat | null> {
+      return this._openDirectMessageSubject.asObservable();
+    }
+  
+  
+    set openDirectMessage(chat: Chat | null) {
+      this._openDirectMessageSubject.next(chat);
+    }
+  
+    // Create direct messages ------------------------------
+
   constructor(public userService: UserService, public router: Router) {
     this.getallChannels();
     this.getAllUsers();
@@ -68,28 +91,6 @@ export class ChatService {
     this.unSubChannels();
   }
 
-  // -------------- channel -----------------------
-  get openChat$(): Observable<Channel | null> {
-    return this._openChatSubject.asObservable();
-  }
-
-
-  set openChat(channel: Channel | null) {
-    this._openChatSubject.next(channel);
-  }
-
-
-  // ----------------- Direct Message --------------------------
-  get openDirectMessage$(): Observable<Chat | null> {
-    return this._openDirectMessageSubject.asObservable();
-  }
-
-
-  set openDirectMessage(chat: Chat | null) {
-    this._openDirectMessageSubject.next(chat);
-  }
-
-  // Create direct messages ------------------------------
 
   /**
    * This function creates a direct message

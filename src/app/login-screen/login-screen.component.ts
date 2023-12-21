@@ -237,13 +237,15 @@ export class LoginScreenComponent implements OnInit {
     }
   }
 
-  signInSuccess() {
-    this.authService.signInSuccess = true;
-    this.userNotFound = false;
-    setTimeout(() => {
-      this.authService.signInSuccess = false;
-    }, 1500);
-  }
+
+signInSuccess() {
+  this.authService.signInSuccess = true;
+  this.userNotFound = false;
+  setTimeout(() => {
+    this.authService.signInSuccess = false;
+  }, 1500);
+}
+
 
   /**
    * @method loginWithGoogle
