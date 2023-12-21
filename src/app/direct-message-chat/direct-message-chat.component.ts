@@ -365,8 +365,8 @@ export class DirectMessageChatComponent implements OnInit {
    * @returns  The other user in the conversation, or null if not found.
    */
   getOtherUser(members: any[]) {
-    if (members[0].id === this.currentUser.id) {
-      return this.currentUser;
+    if (members.length == 1) {
+      return this.userService.currentUser;
     } else {
       let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
       if (otherUser) {

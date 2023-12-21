@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { inject } from '@angular/core';
-import { Firestore, collection, doc, onSnapshot, addDoc, deleteDoc, updateDoc, DocumentReference, DocumentData, getDoc, setDoc, } from '@angular/fire/firestore';
+import { Firestore, collection, doc, onSnapshot, addDoc, deleteDoc, updateDoc, DocumentReference, DocumentData, getDoc, setDoc, arrayUnion, } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from 'src/models/user.class';
@@ -67,9 +67,23 @@ export class UserService {
       (err) => { console.log(err) })
       .then((docRef) => {
         this.updateUserId(item, docRef!.id);
+        this.addNewUserToCommunityChannel(item)
         this.createDirectMessage(item)
       }
       )
+  }
+
+
+  async addNewUserToCommunityChannel(newUser: User) {
+    const communityRef = doc(collection(this.firestore, 'channels'), 'tjgAJvmPnxcHQhuhkubb');
+    try {
+      const newUserJSON = newUser.toJSON();
+      await updateDoc(communityRef, {
+        members: arrayUnion(newUserJSON),
+      });
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   /**
@@ -226,7 +240,7 @@ export class UserService {
    * Removes the serialized current chat object from local storage.
    * Uses the key 'currentChat' for removal in local storage.
    *
-   * @returns {void}
+   * @returns
    */
   removeCurrentChatFromLocalStorage() {
     localStorage.removeItem('currentChat');

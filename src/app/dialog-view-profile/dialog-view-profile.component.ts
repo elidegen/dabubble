@@ -109,12 +109,12 @@ export class DialogViewProfileComponent {
     this.user = this.editedUser;
     this.userService.currentUser = this.user;
     this.userService.setCurrentUserToLocalStorage();
-    // await this.userService.updateUser(this.user);
-    // this.authService.updateUserEmail(this.user.email!);  
-    // await this.updateCurrentUserInChannel(this.user);
+    await this.userService.updateUser(this.user);
+    this.authService.updateUserEmail(this.user.email!);  
+    await this.updateCurrentUserInChannel(this.user);
     await this.updateChannelMessages(this.user);  
-    // await this.updateCurrentUserInDirect(this.user);
-    // await this.updateDMMessages(this.user)
+    await this.updateCurrentUserInDirect(this.user);
+    await this.updateDMMessages(this.user)
     this.userService.profileEdited.emit();
     this.dialogRef.close();
   }
