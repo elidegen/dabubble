@@ -40,6 +40,10 @@
     }
 
     .user-search-container {
-        width: 100%;
+        width: auto;
+        position: absolute;
+        right: 20px;
+        left: 20px;
+        top: 70px;
     }
 }

@@ -37,6 +37,7 @@ export class ChatService {
   isMobile: boolean = false;
   workspaceOpen: boolean = true;
   threadOpen: boolean = true;
+  private allChannelMessagesLoaded = false;
 
     // -------------- channel -----------------------
     get openChat$(): Observable<Channel | null> {
@@ -288,6 +289,8 @@ export class ChatService {
         this.allMessagesOfChannel.push(message.data());
       });
     }
+    console.log('chatservice all channel m', this.allMessagesOfChannel );
+    
   }
 
   /**

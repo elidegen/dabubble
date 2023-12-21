@@ -31,12 +31,13 @@ export class HomeComponent {
 
   @ViewChild('search') search!: ElementRef;
   searchInput: string = '';
-  lastSearchInput: string = '';
   isInputFocused: boolean = false;
   filteredUsers: User[] = [];
   filteredChannels: Channel[] = [];
   filteredChannelMessages: Message[] = [];
   filteredDirectMessages: Message[] = [];
+  allChannelMessagesLoaded = false;
+  allDMMessagesLoaded = false;
 
   constructor(private _bottomSheet: MatBottomSheet, public dialog: MatDialog, public auth: AuthService, public router: Router, public userService: UserService, public chatService: ChatService, public firestoreService: FirestoreService, public threadService: ThreadService) {
     this.userService.getCurrentUserFromLocalStorage();
@@ -84,13 +85,15 @@ export class HomeComponent {
    */
   filterEverything(): void {
     this.isInputFocused = true;
-    if (this.firestoreService.searchInput !== this.lastSearchInput) {
+    if (this.firestoreService.searchInput) {
       this.firestoreService.filterAllUsers();
       this.filterChannelMessages();
       this.filterDirectMessages();
-      this.lastSearchInput = this.firestoreService.searchInput;
     }
     if (this.firestoreService.searchInput.trim() === '') {
+      console.log('test 1');
+      this.allChannelMessagesLoaded = false;
+      this.allDMMessagesLoaded = false
       this.firestoreService.filteredUsers = [];
       this.filteredDirectMessages = [];
       this.filteredChannelMessages = [];
@@ -101,7 +104,11 @@ export class HomeComponent {
    * Filters channel messages based on the search input.
    */
   async filterChannelMessages() {
-    await this.chatService.getAllChannelMessages();
+    if (!this.allChannelMessagesLoaded) {
+      this.allChannelMessagesLoaded = true;
+      await this.chatService.getallChannels();
+      await this.chatService.getAllChannelMessages();
+    }
     this.filteredChannelMessages = [];
     let searchTerm: any;
     if (this.firestoreService.searchInput == '#') {
@@ -118,19 +125,27 @@ export class HomeComponent {
         this.filteredChannelMessages.push(message);
       }
     });
-  }
+  
+    }
+  
+  
 
   /**
    * Filters direct messages based on the search input.
    */
   async filterDirectMessages() {
-    await this.chatService.getDMMessages();
+    if (!this.allDMMessagesLoaded) {
+      this.allDMMessagesLoaded = true;
+      await this.chatService.loadAllDirectMessages();
+      await this.chatService.getDMMessages();
+    }
     this.filteredDirectMessages = [];
     this.chatService.allMessagesOfDM.forEach(message => {
       if (message.content?.toLowerCase().includes(this.firestoreService.searchInput.toLowerCase().trim())) {
         this.filteredDirectMessages.push(message);
       }
     });
+
   }
 
   /**
