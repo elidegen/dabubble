@@ -113,20 +113,20 @@ export class HomeComponent {
       this.filteredUsers = [...this.userService.users];
     } else if (trimmedInput.startsWith('@') && trimmedInput.length > 1) {
       const searchTerm = trimmedInput.substring(1).toLowerCase();
-      this.filteredUsers = this.userService.users.filter(user =>
-        user.name?.toLowerCase().startsWith(searchTerm)
-      );
+        this.searchUser(searchTerm);
     } else if (trimmedInput !== '') {
       const searchTerm = trimmedInput.toLowerCase();
-      this.filteredUsers = this.userService.users.filter(user =>
-        user.name?.toLowerCase().startsWith(searchTerm)
-      );
+      this.searchUser(searchTerm);
     } else {
       this.filteredUsers = [];
     }
   }
   
- 
+ searchUser(searchTerm:any) {
+  this.filteredUsers = this.userService.users.filter(user =>
+    user.name?.toLowerCase().startsWith(searchTerm)
+  );
+ }
 
 
   /**
