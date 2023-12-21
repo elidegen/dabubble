@@ -39,7 +39,7 @@ export class NewMessageComponent {
    * Selects a user to start a direct message chat.
    * @param {any} user - The selected user.
    */
-   selectUser(user: any) {
+  selectUser(user: any) {
     this.chatService.createDirectMessage(user);
     this.search.nativeElement.value = '';
   }
@@ -57,12 +57,12 @@ export class NewMessageComponent {
   /**
    * Filters users based on search input.
    */
-   filterUsers(): void {
-    this.isInputFocused = true;
-    if (this.firestoreService.searchInput.trim() == '@') {
-      this.firestoreService.filteredUsers = this.firestoreService.allUsers;
-    } else if (this.firestoreService.searchInput.startsWith('@')) {
-      this.firestoreService.filterAllUsers();
-    }
-  }
+  // filterUsers(): void {
+  //   this.isInputFocused = true;
+  //   if (this.firestoreService.searchInput.trim() == '@') {
+  //     this.firestoreService.filteredUsers = this.firestoreService.allUsers;
+  //   } else if (this.firestoreService.searchInput.startsWith('@')) {
+  //     this.firestoreService.filterAllUsers();
+  //   }
+  // }
 }

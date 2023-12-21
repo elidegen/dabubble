@@ -32,7 +32,7 @@ export class FirestoreService {
   allThreadMessages: Message[] = [];
   unSubThread: any;
   messageIsExistingInChannel!: boolean;
-  constructor(public threadService: ThreadService, public chatService: ChatService, public userService: UserService, public authService: AuthService) { 
+  constructor(public threadService: ThreadService, public chatService: ChatService, public userService: UserService, public authService: AuthService) {
     this.loadUsers();
   }
   unSubDirectMessages: any;
@@ -250,11 +250,21 @@ export class FirestoreService {
    * Ths function filters all users
    */
   filterAllUsers() {
-    const searchTerm = this.searchInput.substring(1).toLowerCase();
-    this.filteredUsers = this.allUsers.filter(user => {
-      const userName = user.name?.toLowerCase();
-      return userName && userName.startsWith(searchTerm);
-    });
+    let searchTerm: any;
+    this.searchInput = this.searchInput.trim();
+    if (this.searchInput == '@') {
+      this.filteredUsers = this.allUsers;
+    } else {
+      if (this.searchInput.startsWith('@')) {
+        searchTerm = this.searchInput.substring(1).toLowerCase().trim();
+      } else {
+        searchTerm = this.searchInput.toLowerCase().trim();
+      }
+      this.filteredUsers = this.allUsers.filter(user => {
+        const userName = user.name?.toLowerCase();
+        return userName && userName.includes(searchTerm);
+      });
+    }
   }
 
   /**

@@ -53,7 +53,7 @@
 
 
             <div class="add-members-container" *ngIf="allMembers == false" [ngClass]="{'show': allMembers === false}">
-                <input class="w100 input-members" type="text" placeholder="Enter name" [(ngModel)]="firestoreService.searchInput" (input)="filterUsers()" (click)="this.isInputFocused = true;">
+                <input class="w100 input-members" type="text" placeholder="Enter name" [(ngModel)]="firestoreService.searchInput" (input)="firestoreService.filterAllUsers()" (click)="this.isInputFocused = true;">
                 <div class="user-search-container" *ngIf="isInputFocused" (click)="userSelected($event)">
                     <div *ngIf="firestoreService.searchInput.trim() !== '' && firestoreService.filteredUsers.length !== 0">
                         <button #userContainer class="user-container" *ngFor="let user of firestoreService.filteredUsers; let i = index" (click)="selectUser(user, i)">

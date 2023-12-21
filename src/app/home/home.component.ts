@@ -47,7 +47,6 @@ export class HomeComponent {
   openBottomSheet(): void {
     this._bottomSheet.open(BottomSheetOverviewExampleSheet);
   }
-  
 
   /**
    * Opens a profile dialog for viewing a user's profile based on the provided user ID.
@@ -60,7 +59,6 @@ export class HomeComponent {
     });
   }
 
-
   /**
    * Logs out the current user and navigates to the login screen.
    */
@@ -68,7 +66,6 @@ export class HomeComponent {
     this.auth.signOutUser();
     this.router.navigate(['']);
   }
-
 
   /**
    * Listens for document click events and checks if the click is outside user search and member inputs to update focus state.
@@ -82,52 +79,23 @@ export class HomeComponent {
     }
   }
 
-
   /**
    * Filters users, channels, and direct messages based on the search input. Updates filtered results.
    */
   filterEverything(): void {
     this.isInputFocused = true;
-    if (this.searchInput !== this.lastSearchInput) {
-      this.filterUsers();
-      console.log('erster');
-      
+    if (this.firestoreService.searchInput !== this.lastSearchInput) {
+      this.firestoreService.filterAllUsers();
       this.filterChannelMessages();
       this.filterDirectMessages();
-      this.lastSearchInput = this.searchInput;
+      this.lastSearchInput = this.firestoreService.searchInput;
     }
-    if (this.searchInput.trim() === '') {
-      this.filteredUsers = [];
+    if (this.firestoreService.searchInput.trim() === '') {
+      this.firestoreService.filteredUsers = [];
       this.filteredDirectMessages = [];
       this.filteredChannelMessages = [];
     }
   }
-
-  /**
-   * Filters users based on the search input.
-   */
-  filterUsers() {
-    this.filteredUsers = []; 
-    const trimmedInput = this.searchInput.trim();
-    if (trimmedInput === '@') {
-      this.filteredUsers = [...this.userService.users];
-    } else if (trimmedInput.startsWith('@') && trimmedInput.length > 1) {
-      const searchTerm = trimmedInput.substring(1).toLowerCase();
-        this.searchUser(searchTerm);
-    } else if (trimmedInput !== '') {
-      const searchTerm = trimmedInput.toLowerCase();
-      this.searchUser(searchTerm);
-    } else {
-      this.filteredUsers = [];
-    }
-  }
-  
- searchUser(searchTerm:any) {
-  this.filteredUsers = this.userService.users.filter(user =>
-    user.name?.toLowerCase().startsWith(searchTerm)
-  );
- }
-
 
   /**
    * Filters channel messages based on the search input.
@@ -135,14 +103,22 @@ export class HomeComponent {
   async filterChannelMessages() {
     await this.chatService.getAllChannelMessages();
     this.filteredChannelMessages = [];
-    const searchTerm = this.searchInput.substring(1).toLowerCase();
+    let searchTerm: any;
+    if (this.firestoreService.searchInput == '#') {
+      this.filteredChannelMessages = this.chatService.allMessagesOfChannel;
+    } else {
+      if (this.firestoreService.searchInput.startsWith('#')) {
+        searchTerm = this.firestoreService.searchInput.substring(1).toLowerCase().trim();
+      } else {
+        searchTerm = this.firestoreService.searchInput.toLowerCase().trim();
+      }
+    }
     this.chatService.allMessagesOfChannel.forEach(message => {
-      if (message.content?.toLowerCase().startsWith(searchTerm)) {
+      if (message.content?.toLowerCase().includes(searchTerm)) {
         this.filteredChannelMessages.push(message);
       }
     });
   }
-
 
   /**
    * Filters direct messages based on the search input.
@@ -151,12 +127,11 @@ export class HomeComponent {
     await this.chatService.getDMMessages();
     this.filteredDirectMessages = [];
     this.chatService.allMessagesOfDM.forEach(message => {
-      if (message.content?.toLowerCase().includes(this.searchInput.toLowerCase())) {
+      if (message.content?.toLowerCase().includes(this.firestoreService.searchInput.toLowerCase().trim())) {
         this.filteredDirectMessages.push(message);
       }
     });
   }
-
 
   /**
    * Navigates to the channel chat window and emits a chat change event.
@@ -170,7 +145,6 @@ export class HomeComponent {
       this.router.navigate(['main']);
     }
   }
-
 
   /**
    * Creates a direct message chat with the selected user and navigates to the direct message chat window.

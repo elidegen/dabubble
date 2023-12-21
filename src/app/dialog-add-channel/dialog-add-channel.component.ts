@@ -33,7 +33,6 @@ export class DialogAddChannelComponent {
     }
   }
 
-
   /**
    * Listens for clicks on the document to manage input focus state.
    * @param {Event} event - The click event on the document.
@@ -45,16 +44,6 @@ export class DialogAddChannelComponent {
       this.isInputFocused = false;
     }
   }
-
-
-  /**
-   * Filters users based on the search criteria in the input field.
-   */
-  filterUsers(): void {
-    this.isInputFocused = true;
-    this.firestoreService.filterAllUsers()
-  }
-
 
   /**
    * Creates a new channel with the selected members.
@@ -72,7 +61,6 @@ export class DialogAddChannelComponent {
     }
   }
 
-
   /**
    * Gathers members for the new channel based on the selected options for all members or just selected ones.
    */
@@ -84,7 +72,6 @@ export class DialogAddChannelComponent {
       this.addSelectedUsersToChannel(this.selectedUsers)
     }
   }
-
 
   /**
    * Adds the selected users to the new channel's member list.

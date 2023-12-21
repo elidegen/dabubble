@@ -288,9 +288,6 @@ export class ChatService {
         this.allMessagesOfChannel.push(message.data());
       });
     }
-
-    console.log('chatservice', this.allMessagesOfChannel);
-    
   }
 
   /**

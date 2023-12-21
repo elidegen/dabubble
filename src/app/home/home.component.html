@@ -5,13 +5,15 @@
     </div>
 
     <div class="add-members-container">
-      <input #search class="w100 input-members search" type="text" placeholder="Search @" [(ngModel)]="searchInput" (input)="filterEverything()" (click)="this.isInputFocused = true;">
+      <input #search class="w100 input-members search" type="text" placeholder="Search @"
+        [(ngModel)]="firestoreService.searchInput" (input)="filterEverything()" (click)="this.isInputFocused = true;">
       <div class="user-search-container" *ngIf="isInputFocused">
-        <div *ngIf="this.searchInput.trim() !== ''" class="search-results">
+        <div *ngIf="this.firestoreService.searchInput.trim() !== '' && !(filteredChannelMessages.length === 0 && firestoreService.filteredUsers.length === 0 && filteredChannelMessages.length === 0)" class="search-results">
 
-          <div *ngIf="filteredUsers.length !== 0">
-            <h1>Users:</h1>
-            <button class="user-container" *ngFor="let user of filteredUsers" (click)="selectUser(user)">
+          <h1>Users:</h1>
+          <div *ngIf="firestoreService.filteredUsers.length !== 0">
+            <button class="user-container" *ngFor="let user of firestoreService.filteredUsers"
+              (click)="selectUser(user)">
               <div (click)="selectUser(user)" class="profile-container">
                 <img src="{{user.picture}}" alt="profile">
                 <div class="online-status"></div>
@@ -19,10 +21,12 @@
               <span>{{user.name}}</span>
             </button>
           </div>
+          <span *ngIf="firestoreService.filteredUsers.length === 0">No matching results</span>
 
-          <div *ngIf="this.searchInput.startsWith('#') && filteredChannelMessages.length !== 0">
-            <h1 >Channel messages:</h1>
-            <div class="found-msg-container" *ngFor="let message of filteredChannelMessages" (click)="selectChannel(message)">
+          <h1>Channel messages:</h1>
+          <div *ngIf="filteredChannelMessages.length !== 0 ">
+            <div class="found-msg-container" *ngFor="let message of filteredChannelMessages"
+              (click)="selectChannel(message)">
               <img src="{{message.profilePic}}" alt="" />
               <div class="message-box">
                 <div class="message-data">
@@ -34,9 +38,10 @@
               </div>
             </div>
           </div>
+          <span *ngIf="filteredChannelMessages.length === 0">No matching results</span>
 
-          <div *ngIf="!this.searchInput.startsWith('#') && !this.searchInput.startsWith('@') && filteredDirectMessages.length !== 0">
-            <h1>Direct Messages:</h1>
+          <h1>Direct Messages:</h1>
+          <div *ngIf="filteredDirectMessages.length !== 0">
             <div class="found-msg-container" *ngFor="let message of filteredDirectMessages"
               (click)="selectDirectMessage(message)">
               <img src="{{message.profilePic}}" alt="" />
@@ -49,13 +54,16 @@
               </div>
             </div>
           </div>
+          <span *ngIf="filteredDirectMessages.length === 0">No matching results</span>
 
         </div>
-        <span *ngIf="searchInput.trim() === '' || filteredUsers.length === 0 && filteredChannelMessages.length === 0 && filteredDirectMessages.length === 0">No matching results</span>
+        <span
+          *ngIf="firestoreService.searchInput.trim() === '' || filteredChannelMessages.length === 0 && firestoreService.filteredUsers.length === 0 && filteredChannelMessages.length === 0">No
+          matching results</span>
       </div>
     </div>
 
-    <div class="profile-container"  [matMenuTriggerFor]="menu">
+    <div class=" profile-container" [matMenuTriggerFor]="menu">
       <h1>{{this.userService.currentUser.name}}</h1>
       <div class="profile-picture">
         <img src="{{this.userService.currentUser.picture}}" alt="" />
