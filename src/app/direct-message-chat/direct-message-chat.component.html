@@ -24,7 +24,7 @@
           <div class="separator"></div>
         </div>
 
-        <div class="message-row-container" [ngClass]="{ 'my-messages': message.creator == currentUser.name }"
+        <div class="message-row-container" [ngClass]="{ 'my-messages': message.creatorId == currentUser.id }"
           *ngFor="let message of organizedMessage.messages">
           <div class="message-box">
             <div class="creator-picture-container">
@@ -37,9 +37,9 @@
                 <span class="date">{{ message.time }}</span>
               </div>
 
-              <div [ngSwitch]="edit && message.creator == currentUser.name && editingMessage === message.id" class="d-flex-end">
+              <div [ngSwitch]="edit && message.creatorId == currentUser.id && editingMessage === message.id" class="d-flex-end">
                 <div
-                  [ngClass]="{'my-message-content': message.creator == currentUser.name, 'message-content': message.creator != currentUser.name, 'display-none': message.content == '', }"
+                  [ngClass]="{'my-message-content': message.creatorId == currentUser.id, 'message-content': message.creatorId != currentUser.id, 'display-none': message.content == '', }"
                   *ngSwitchCase="false">
                   <a (click)="openProfileDialog(messagemention['id'])" *ngFor="let messagemention of message.mentions">
                     @{{messagemention['name']}}</a>
@@ -55,7 +55,7 @@
                     </div>
                   </div>
                 </div>
-                <div *ngIf="message.creator == currentUser.name && editingMessage === message.id">
+                <div *ngIf="message.creatorId == currentUser.id && editingMessage === message.id">
                   <div *ngSwitchCase="true" class="text-field-container j-flex-end">
                     <textarea #editor cols="30" rows="10">{{ message.content }}</textarea>
                     <button class="send-button" mat-icon-button (click)="updateMessageContent(message)"
@@ -94,7 +94,7 @@
             </div>
           </div>
 
-          <div class="reaction" [ngClass]="{'own-message': message.creator == this.userService.currentUser.name}">
+          <div class="reaction" [ngClass]="{'own-message': message.creatorId == this.userService.currentUser.id}">
             <button mat-icon-button
               (click)="firestoreService.addReaction('✅', message.id, currentChat?.id, 'direct messages')">
               <img src="assets/img/emojis/checkGreen.svg" />
@@ -106,7 +106,7 @@
             <button class="hostlistener-dont-trigger" (click)="openEmojiPicker(message.id)" mat-icon-button>
               <img src="assets/img/icons/add_reaction.svg" />
             </button>
-            <button mat-icon-button *ngIf="message.creator == currentUser.name"
+            <button mat-icon-button *ngIf="message.creatorId == currentUser.id"
               (click)="firestoreService.toggleMoreMenu(message)">
               <img src="assets/img/icons/more.svg" />
             </button>

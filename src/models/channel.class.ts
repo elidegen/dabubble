@@ -2,6 +2,7 @@ export class Channel {
     name: string | undefined;
     description: string | undefined;
     creator: string | undefined;
+    creatorId: string | undefined;
     id: string | undefined;
     members: any = [];
     type: string;
@@ -13,6 +14,7 @@ export class Channel {
         this.id = obj ? obj.id : '';
         this.members = obj ? obj.members : [];
         this.type = obj ? obj.type : '';
+        this.creatorId = obj ? obj.creatorId : '';
     }
 
     public toJSON() {
@@ -22,6 +24,7 @@ export class Channel {
             creator: this.creator,
             id: this.id,
             members: this.members,
+            creatorId: this.creatorId,
             type: 'channel',
         }
     }

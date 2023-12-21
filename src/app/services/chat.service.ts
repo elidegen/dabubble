@@ -295,7 +295,7 @@ export class ChatService {
   /**
    * Loads all direct messages
    */
-  loadAllDirectMessages() {
+  async loadAllDirectMessages() {
     this.unSubDirectMessages = onSnapshot(
       query(collection(this.firestore, "direct messages"), orderBy("name")),
       (snapshot) => {
