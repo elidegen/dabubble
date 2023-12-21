@@ -253,7 +253,7 @@ signInSuccess() {
   hideContentAfterAnimation() {
     setTimeout(() => {
       this.animationIsFinished = true;
-    }, 2500);
+    }, 4000);
   }
 
   /**
