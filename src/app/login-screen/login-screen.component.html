@@ -1,5 +1,5 @@
 <mat-spinner *ngIf="firestoreService.showSpinner == true" class="mat-spinner "></mat-spinner>
-<div *ngIf="true" class="account-popup"><span>Login successfull</span></div>
+<div *ngIf="this.authService.signInSuccess == true" class="account-popup"><span>Login successfull</span></div>
 <div *ngIf="showUserCreatedSuccess == true" class="account-popup"><span>Account created</span></div>
 <div *ngIf="showEmailSent == true" class="account-popup"><span>E-mail sent</span></div>
 <div *ngIf="!animationIsFinished" class="start-animation-container"></div>
