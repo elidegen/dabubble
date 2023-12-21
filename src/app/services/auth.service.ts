@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { inject } from '@angular/core';
-import { Firestore, doc, } from '@angular/fire/firestore';
+import { Firestore, doc, updateDoc, } from '@angular/fire/firestore';
 import { getAuth, updateEmail, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, sendPasswordResetEmail, signInAnonymously, } from "firebase/auth";
 import { Router } from '@angular/router';
 import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from "firebase/storage";
@@ -151,6 +151,8 @@ export class AuthService {
    */
   async signOutUser() {
     if (this.userService.currentUser.name?.startsWith('Guest')) {
+      await this.removeGuestFromEveryChannel();
+      await this.deleteDMWithGuest();
       await this.deleteGuest();
     }
     this.userService.removeCurrentUserFromLocalStorage();
@@ -193,9 +195,9 @@ export class AuthService {
 
 
   /**
-     * Signs in a user with Google authentication.
-     * If the user does not exist, it adds a new user.
-     */
+   * Signs in a user with Google authentication.
+   * If the user does not exist, it adds a new user.
+   */
   async signInWithGoogle() {
     await signInWithPopup(this.auth, this.provider)
       .then((result) => {
@@ -246,14 +248,13 @@ export class AuthService {
     const auth = getAuth();
     const user = auth.currentUser;
     if (user) {
-        try {
-            updateEmail(user, newEmail);
-        } catch (error) {
-            console.error("Fehler beim Aktualisieren der E-Mail-Adresse:", error);
-        }
-    } else {
-    }
-}
+      try {
+        updateEmail(user, newEmail);
+      } catch (error) {
+        console.error("Fehler beim Aktualisieren der E-Mail-Adresse:", error);
+      }
+    } 
+  }
 
   /**
    * Sends a password reset email to the given address.
@@ -330,6 +331,41 @@ export class AuthService {
     const extension = this.getFileType(fileUrl);
     if (extension) {
       return extension.toLowerCase() === 'pdf';
+    }
+  }
+
+  /**
+   * Removes the current user (guest) from the members list of every channel.
+   */
+  async removeGuestFromEveryChannel() {
+    let guest = this.userService.currentUser;
+    await this.chatService.getallChannels();
+    let allChannels = this.chatService.allChannels;
+    for (const channel of allChannels) {
+      const guestIndex = channel.members.findIndex((oldGuest: { name: string | undefined; }) => oldGuest.name == guest.name);
+      if (guestIndex !== -1) {
+        channel.members.splice(guestIndex, 1);
+        const channelDocRef = doc(collection(this.firestore, 'channels'), channel.id);
+        await updateDoc(channelDocRef, {
+          members: channel.members,
+        });
+      }
+    }
+  }
+
+  /**
+   * Deletes all direct message documents involving the current user (guest).
+   */
+  async deleteDMWithGuest() {
+    let guest = this.userService.currentUser;
+    await this.chatService.loadAllDirectMessages();
+    let allDMs = this.chatService.allLoadedDirectMessages;
+    for (const dm of allDMs) {
+      const guestIndex = dm.members.findIndex((oldGuest: { name: string | undefined; }) => oldGuest.name == guest.name);
+      if (guestIndex !== -1) {
+        const dmDocRef = doc(collection(this.firestore, 'direct messages'), dm.id);
+        await deleteDoc(dmDocRef);
+      }
     }
   }
 }
