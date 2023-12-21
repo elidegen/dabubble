@@ -10,10 +10,6 @@
 }
 
 @media(max-height: 700px) {
-    .userPic {
-        height: 110px;
-    }
-
     .top-span {
         display: none;
     }
@@ -63,7 +59,7 @@
     }
 }
 
-@media screen and (max-height: 600px) {
+@media(max-height: 600px) {
     .impressum-span {
         top: 5px;
     }
@@ -133,7 +129,7 @@
     overflow: hidden;
 }
 
-@media only screen and (max-width: 1100px) {
+@media(max-width: 1100px) {
     .start-logo {
         top: 20px;
     }
@@ -161,14 +157,14 @@
     width: 10px !important;
 }
 
-@media only screen and (max-width: 500px) {
+@media(max-width: 500px) {
     .login {
         margin-left: 8px;
         margin-right: 8px;
     }
 }
 
-@media only screen and (max-width: 1050px) {
+@media(max-width: 1050px) {
     .start-logo {
         top: 40px;
     }
