@@ -6,8 +6,8 @@ import { User } from 'src/models/user.class';
 import { FirestoreService } from '../services/firestore.service';
 import { ChatService } from '../services/chat.service';
 import { Router } from '@angular/router';
-import { collection, doc } from 'firebase/firestore';
-import { Firestore, updateDoc } from '@angular/fire/firestore';
+import { DocumentData, collection, doc } from 'firebase/firestore';
+import { Firestore, getDoc, getDocs, query, updateDoc, where } from '@angular/fire/firestore';
 import { Channel } from 'src/models/channel.class';
 import { Chat } from 'src/models/chat.class';
 
@@ -105,14 +105,17 @@ export class DialogViewProfileComponent {
    * Allows the current user to edit their profile. It saves the updated user data
    * to local storage and updates the user information in the database.
    */
-  editUser() {
+  async editUser() {
     this.user = this.editedUser;
     this.userService.currentUser = this.user;
     this.userService.setCurrentUserToLocalStorage();
-    this.userService.updateUser(this.user);
+    await this.userService.updateUser(this.user);
     this.authService.updateUserEmail(this.user.email!);  
-    this.updateCurrentUserInChannel(this.user);
-    this.updateCurrentUserInDirect(this.user);  
+    await this.updateCurrentUserInChannel(this.user);
+    await this.updateChannelMessages(this.user);  
+    await this.updateCurrentUserInDirect(this.user);
+    await this.updateDMMessages(this.user)
+    this.userService.profileEdited.emit();
     this.dialogRef.close();
   }
 
@@ -170,11 +173,17 @@ export class DialogViewProfileComponent {
       let currentUserIndex = this.channelMembers.findIndex((user) => user.id === this.userService.currentUser.id);
       this.channelMembers[currentUserIndex].name = user.name;
       this.channelMembers[currentUserIndex].email = user.email;
-      this.currentChat.creator = user.name;
-      await updateDoc(channelDocRef, {
-        members: this.channelMembers,
-        creator: user.name,
-      });
+      if (this.currentChat.creatorId == user.id) {
+        this.currentChat.creator = user.name;
+        await updateDoc(channelDocRef, {
+          members: this.channelMembers,
+          creator: user.name,
+        });
+      } else {
+        await updateDoc(channelDocRef, {
+          members: this.channelMembers,
+        });
+      }
       this.userService.setCurrentChatToLocalStorage(this.currentChat);
     }
   }
@@ -186,14 +195,41 @@ export class DialogViewProfileComponent {
       let currentUserIndex = this.directMessageMembers.findIndex((user) => user.id === this.userService.currentUser.id);
       this.directMessageMembers[currentUserIndex].name = user.name;
       this.directMessageMembers[currentUserIndex].email = user.email;
-      this.currentDM.name = user.name;
-      
       await updateDoc(dmDocRef, {
         members: this.directMessageMembers,
-        name: user.name
       });
-      this.userService.profileEdited.emit();
       this.userService.setCurrentChatToLocalStorage(this.currentDM);
     }
+  }
+
+  async updateChannelMessages(user: User) {
+    let channelMessages: any[];
+    await this.chatService.getallChannels();
+    await this.chatService.getAllChannelMessages();
+    channelMessages = this.chatService.allMessagesOfChannel;
+    console.log('Message', this.chatService.allMessagesOfChannel);
+    channelMessages.forEach((message) => {
+      if (message.creatorId === user.id) {
+        let messageDocRef = doc(collection(this.firestore, `channels/${message.channelID}/messages`), message.id);
+        updateDoc(messageDocRef, {
+          creator: user.name
+        })
+      }
+    })
+  }
+
+  async updateDMMessages(user: User) {
+    let dmMessages: any[];
+    await this.chatService.loadAllDirectMessages();
+    await this.chatService.getDMMessages();
+    dmMessages = this.chatService.allMessagesOfDM;
+    dmMessages.forEach((message) => {
+      if (message.creatorId === user.id) {
+        let messageDocRef = doc(collection(this.firestore, `direct messages/${message.channelID}/messages`), message.id);
+        updateDoc(messageDocRef, {
+          creator: user.name
+        })
+      }
+    })
   }
 }

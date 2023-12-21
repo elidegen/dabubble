@@ -63,6 +63,7 @@ export class DialogAddChannelComponent {
   async createChannel() {
     this.getMembers();
     this.channel.creator = this.userService.currentUser.name;
+    this.channel.creatorId = this.userService.currentUser.id;
     await this.firestoreService.addChannel(this.channel);
     if (this.chatService.isMobile) {
       this.router.navigate(['home']);

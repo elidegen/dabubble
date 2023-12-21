@@ -50,8 +50,6 @@
           <img src="assets\img\icons\google.svg">
           <span class="color-purple2-text ">Login with google</span>
         </div>
-
-
         <div class="submit-buttons margin-top">
           <button (click)="loginUser()" mat-button class="main-button primary mr-16" type="submit">Login</button>
           <button (click)="loginGuest()" mat-button class="main-button ">Guest login</button>
@@ -75,6 +73,7 @@
           <mat-error class="error" *ngIf="addUser.get('newName')?.hasError('minlength')">Your name need minimum 5
             letters</mat-error>
         </div>
+      
         <div class="input-container margin-top25">
           <img src="assets\img\icons\mail.svg">
           <input formControlName="newEmail" matInput placeholder="E-mail" required>
@@ -92,12 +91,10 @@
             letters</mat-error> <mat-error class="error" *ngIf="this.userAlreadyInUse">This user already
             exists</mat-error>
         </div>
-
+  
         <span class="margin-top gap checkbox-bottom cursor-pointer align-center"><input [formControl]="disableSelect"
             class="cursor-pointer" type="checkbox">I accept
           the <a routerLink="/privacy" class="color-purple2-text transform">privacy policy</a></span>
-
-
         <div class="submit-buttons justify-content-end">
           <button mat-button class="align-self main-button primary" type="submit"
             [disabled]="!disableSelect.value || !addUser.valid ">Next</button>
@@ -117,8 +114,8 @@
       <h2>{{newUser.name}}</h2>
       <form [formGroup]="addUser">
         <div class="choose-profile-pic margin-top"><span class="font-size20 w100 ">Choose from list</span>
-          <div class="picture-container w100"> <img class="transform cursor-pointer "
-              *ngFor="let pic of profileImages ; index as i;" (click)="changePicSrc(pic)" src="{{pic}}"></div>
+          <div  class="picture-container w100"><div *ngFor="let pic of profileImages ; index as i;"> <img [ngClass]="{'pic-border': selectedImageIndex === i}" class="transform cursor-pointer "
+                (click)="changePicSrc(pic,i)" src="{{pic}}"></div></div>
         </div>
         <div class="upload-picture margin-top align-center"><span class="font-size20"></span> <button mat-button
             class="main-button" type="submit"> <label class="custom-file-upload">
@@ -147,11 +144,11 @@
         <div class="input-container margin-top">
           <img src="assets\img\icons\mail.svg">
           <input matInput placeholder="E-mail" formControlName="emailForReset" required>
-          <div class="placeholder"></div>
           <mat-error *ngIf="emailForReset.invalid && emailForReset.touched">
             {{ getErrorMessageResetEmail() }}
           </mat-error>
         </div>
+        <div class="placeholder"></div>
         <p *ngIf="!this.userService.resetEmailFound" class="margin-top25 grey-span-resetpw">Receive an e-mail to reset
           your password</p>
         <p *ngIf="this.userService.resetEmailFound" class="margin-top25 grey-span-resetpw">An e-mail to reset your

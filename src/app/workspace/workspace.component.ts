@@ -21,8 +21,6 @@ export class WorkspaceComponent implements OnInit {
   firestore: Firestore = inject(Firestore);
   panelOpenState: boolean = true;
   channel: Channel = new Channel;
-  allChannels: Channel[] = [];
-  yourChannels: Channel[] = [];
   unsubscribeChannels: any;
   currentUser;
   unsubscribeChats: any;
@@ -46,7 +44,7 @@ export class WorkspaceComponent implements OnInit {
    * Initializes the component, loading channels, direct messages, and users.
    */
   ngOnInit(): void {
-    this.loadChannels();
+    this.chatservice.getallChannels();
     this.loadDirectMessages();
     this.loadUsers();
     this.userService.profileEdited.subscribe(() => {
@@ -60,29 +58,12 @@ export class WorkspaceComponent implements OnInit {
    * Cleans up subscriptions when the component is destroyed.
    */
   ngOnDestroy(): void {
-    this.unsubscribeChannels;
+    this.chatservice.unSubChannels;
     this.unsubscribeChats;
     this.unsubscribeUsers;
     if (this.unSubMessages) {
       this.unSubMessages();
     }
-  }
-
-  /**
-   * Loads all channels from the Firestore and sets up a subscription.
-   */
-  loadChannels() {
-    this.unsubscribeChannels = onSnapshot(
-      query(collection(this.firestore, "channels"), orderBy("name")),
-      (snapshot) => {
-        this.allChannels = snapshot.docs.map((doc) => {
-          const channel = doc.data() as Channel;
-          channel.id = doc.id;
-          return channel;
-        });
-        this.getPersonalChannels();
-      }
-    );
   }
 
 
@@ -118,18 +99,6 @@ export class WorkspaceComponent implements OnInit {
     );
   }
 
-
-  /**
-   * Filters the channels to show only those relevant to the current user.
-   */
-  async getPersonalChannels() {
-    this.yourChannels = [];
-    if (this.userService.currentUser.name?.startsWith('Guest')) {
-      this.yourChannels = this.chatservice.allChannels;
-    } else {
-      this.yourChannels = this.chatservice.yourChannels;
-    }
-  }
 
 
   /**
@@ -232,7 +201,7 @@ export class WorkspaceComponent implements OnInit {
    * @returns {User | null} The other user in the conversation, or null if not found.
    */
   getOtherUser(members: any[]) {
-    if (members[0].id === this.currentUser.id) {
+    if (members.length == 1) {
       return this.currentUser;
     } else {
       let otherUser = members.find(member => member.id !== this.userService.currentUser.id);

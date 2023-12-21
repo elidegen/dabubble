@@ -186,7 +186,7 @@ export class ChatService {
     if (user.id !== this.userService.currentUser.id) {
       return this.setIdForDirectMessage(user);
     } else {
-      return this.setIdForPersonalChat(user);
+      return this.setIdForPersonalChat();
     }
   }
 
@@ -207,10 +207,9 @@ export class ChatService {
 
   /**
    * Sets the ID and members for a personal chat based on the current user.
-   * @param {User} user - The user for whom to set the personal chat ID and members.
    * @returns The ID of the personal chat.
    */
-  setIdForPersonalChat(user: User) {
+  setIdForPersonalChat() {
     let userId = this.userService.currentUser.id;
     let currentUserData = this.convertUser(this.userService.currentUser);
     this.chat.members.push(currentUserData);
@@ -272,6 +271,8 @@ export class ChatService {
         this.yourChannels.push(channel);
       }
     });  
+    console.log('personal channels chatservice', this.yourChannels);
+    
   }
 
   /**
@@ -295,7 +296,7 @@ export class ChatService {
   /**
    * Loads all direct messages
    */
-  loadAllDirectMessages() {
+  async loadAllDirectMessages() {
     this.unSubDirectMessages = onSnapshot(
       query(collection(this.firestore, "direct messages"), orderBy("name")),
       (snapshot) => {

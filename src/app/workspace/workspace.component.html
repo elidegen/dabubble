@@ -25,7 +25,7 @@
           </mat-expansion-panel-header>
           <div class="channel-section">
             <div class="channel-container">
-              <div class="channel-button-container" *ngFor="let channel of this.yourChannels;">
+              <div class="channel-button-container" *ngFor="let channel of this.chatservice.yourChannels;">
                 <button (click)="renderChannel(channel)" mat-button>
                   <div class="channel-btn">
                     <span class="channel-name"><b>#</b> {{channel.name}}</span>
