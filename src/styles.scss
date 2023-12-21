@@ -356,6 +356,10 @@ h2 {
     display: flex;
 }
 
+.emoji-picker {
+    z-index: 10;
+}
+
 
 .delete-message {
     color: red !important;

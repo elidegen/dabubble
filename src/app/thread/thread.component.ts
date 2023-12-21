@@ -111,6 +111,7 @@ export class ThreadComponent implements OnInit {
    */
   async addMessageToThread() {
     if (this.currentMessage.id && this.message.content?.trim() !== '' || this.showUploadedFile) {
+      this.message.content = this.message.content!.replace(this.taggedNames, '');
       this.setThreadValues();
       await this.threadService.sendMessageInThread(this.currentMessage, this.message);
       this.threadService.updateThreadCount(this.currentMessage, this.message.time);
@@ -119,13 +120,13 @@ export class ThreadComponent implements OnInit {
     }
     this.scrollToBottom();
     this.showUploadedFile = false;
+    this.taggedNames ="";
   }
 
   /**
    * Sets values for the current thread message, such as content, timestamp, creator information, and profile picture.
    */
   setThreadValues() {
-    this.message.content = this.message.content!.replace(this.taggedNames, '');
     this.getSentMessageTime();
     this.getSentMessageDate();
     this.message.creator = this.userService.currentUser.name;
