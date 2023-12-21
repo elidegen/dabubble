@@ -248,7 +248,7 @@ export class ChatService {
   /**
    * Loads all channels 
    */
-  getallChannels() {
+  async getallChannels() {
     this.unSubChannels = onSnapshot(
       query(collection(this.firestore, "channels"), orderBy("name")),
       (snapshot) => {
@@ -287,6 +287,9 @@ export class ChatService {
         this.allMessagesOfChannel.push(message.data());
       });
     }
+
+    console.log('chatservice', this.allMessagesOfChannel);
+    
   }
 
   /**

@@ -22,7 +22,7 @@ export class UserService {
   resetEmailFound: boolean = false;
   openUserContainerTextfield = new BehaviorSubject<boolean>(false);
   nameStringForTextfield: any;
-  openUserContainerThreadTextfield= new BehaviorSubject<boolean>(false);
+  openUserContainerThreadTextfield = new BehaviorSubject<boolean>(false);
   chat: Chat = new Chat();
   channelEdited = new EventEmitter<void>();
   profileEdited = new EventEmitter<void>();
@@ -30,7 +30,7 @@ export class UserService {
 
   ngOnInit() {
     this.getCurrentUserFromLocalStorage();
-   
+
   }
 
   constructor(public router: Router) {
@@ -69,7 +69,7 @@ export class UserService {
         this.updateUserId(item, docRef!.id);
         this.createDirectMessage(item)
       }
-    )
+      )
   }
 
   /**
@@ -94,8 +94,9 @@ export class UserService {
    */
   async deleteUser(colId: string, docId: string) {
     await deleteDoc(this.getSingleDocRef(colId, docId))
-    .catch((err) => { console.log(err); 
-    })
+      .catch((err) => {
+        console.log(err);
+      })
   }
 
   /**
@@ -115,10 +116,12 @@ export class UserService {
    * @returns - A promise that resolves when the user document is successfully updated.
    */
   async updateUser(user: User) {
-    let docRef = this.getSingleDocRef('users', user.id || '');
-    await updateDoc(docRef, this.getUpdateData(user)).catch(
-      (error) => { console.log(error); }
-    );
+    if (user.id) {
+      let docRef = this.getSingleDocRef('users', user.id || '');
+      await updateDoc(docRef, this.getUpdateData(user)).catch(
+        (error) => { console.log(error); }
+      );
+    }
   }
 
   /**
@@ -170,7 +173,7 @@ export class UserService {
     let userJson = JSON.stringify(this.currentUser);
     localStorage.setItem('currentUser', userJson);
   }
-  
+
   /**
    * Serializes the current user object to JSON and stores it in the local storage.
    * Uses the key 'currentUser' for storing in the local storage.
@@ -178,7 +181,7 @@ export class UserService {
   getCurrentChatFromLocalStorage() {
     const chatJson = localStorage.getItem('currentChat');
     if (chatJson) {
-    return JSON.parse(chatJson) as Channel;
+      return JSON.parse(chatJson) as Channel;
     } else {
       return
     }
@@ -274,9 +277,9 @@ export class UserService {
       await setDoc(specificDocRef, {
         ...this.chat.toJSON(),
       })
-      .catch((err) => {
-        console.log('error', err);
-      })
+        .catch((err) => {
+          console.log('error', err);
+        })
       this.setPersonalChatToLocalStorage(this.chat);
     }
   }
@@ -288,7 +291,7 @@ export class UserService {
   checkUserForDirectMessageName(user: User) {
     this.chat.name = user.name;
   }
-  
+
 
   /**
    * This function sets the document reference for a dm by combining the user id with the currentUser id
@@ -303,7 +306,7 @@ export class UserService {
     this.chat.id = userId;
     return userId
   }
-    
+
 
   /**
    * Sets values of user

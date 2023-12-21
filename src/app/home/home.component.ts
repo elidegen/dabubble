@@ -90,7 +90,9 @@ export class HomeComponent {
     this.isInputFocused = true;
     if (this.searchInput !== this.lastSearchInput) {
       this.filterUsers();
-      this.filterChannels();
+      console.log('erster');
+      
+      this.filterChannelMessages();
       this.filterDirectMessages();
       this.lastSearchInput = this.searchInput;
     }
@@ -101,36 +103,33 @@ export class HomeComponent {
     }
   }
 
-
-  /**
-   * Shows only channels that belong to the current user when '#' is entered in the search input.
-   */
-  showOnlyYourChannels() {
-    if (this.searchInput == "#") {
-      this.filteredChannels = this.chatService.yourChannels;
-    }
-
-  }
-
-
   /**
    * Filters users based on the search input.
    */
   filterUsers() {
-    this.filteredUsers = this.userService.users.filter(user =>
-      user.name?.toLowerCase().includes(this.searchInput.toLowerCase())
-    );
+    if (this.searchInput.trim() == '@') {
+      this.filteredUsers = this.userService.users;
+    } else {
+      const searchTerm = this.searchInput.substring(1).toLowerCase();
+      this.filteredUsers = this.userService.users.filter(user => {
+        const userName = user.name?.toLowerCase();
+        return userName && userName.startsWith(searchTerm);
+      });
+    }
   }
+
+ 
 
 
   /**
    * Filters channel messages based on the search input.
    */
-  async filterChannels() {
+  async filterChannelMessages() {
     await this.chatService.getAllChannelMessages();
     this.filteredChannelMessages = [];
+    const searchTerm = this.searchInput.substring(1).toLowerCase();
     this.chatService.allMessagesOfChannel.forEach(message => {
-      if (message.content?.toLowerCase().includes(this.searchInput.toLowerCase())) {
+      if (message.content?.toLowerCase().startsWith(searchTerm)) {
         this.filteredChannelMessages.push(message);
       }
     });

@@ -89,7 +89,6 @@ export class DirectMessageChatComponent implements OnInit {
   loadDMFromLocalStorage() {
     this.loadUsers();
     this.currentChat = this.userService.getCurrentChatFromLocalStorage();
-    console.log('current dm', this.currentChat);
     this.loadMessages();
   }
 
@@ -240,7 +239,7 @@ export class DirectMessageChatComponent implements OnInit {
   }
 
   async updateMessageContent(message: Message) {
-    let messageId = message.id
+    let messageId = message.id;
     const messageColRef = doc(collection(this.firestore, `direct messages/${this.currentChat?.id}/messages/`), messageId);
     await updateDoc(messageColRef, this.setMessageValues()).catch((error) => {
       console.error('Error updating document:', error);

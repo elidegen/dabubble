@@ -26,7 +26,6 @@ export class DialogShowGroupMemberComponent implements OnInit {
     }
   }
 
-
   /**
    * Opens the dialog to add new members to the group.
    */
@@ -36,7 +35,6 @@ export class DialogShowGroupMemberComponent implements OnInit {
     });
     this.dialogRef?.close()
   }
-
 
   /**
    * Initializes the component and subscribes to the chat service to receive the current chat.
@@ -54,7 +52,6 @@ export class DialogShowGroupMemberComponent implements OnInit {
     });
   }
 
-
   /**
    * Fetches all members of the current chat's channel from Firestore and updates their online status.
    */
@@ -69,7 +66,6 @@ export class DialogShowGroupMemberComponent implements OnInit {
       }
     }
   }
-
 
   /**
    * Updates the online status of each member in the current chat's channel.

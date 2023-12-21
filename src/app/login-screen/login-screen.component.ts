@@ -26,7 +26,6 @@ export class LoginScreenComponent implements OnInit {
   showUserCreatedSuccess = false;
   showEmailSent = false;
 
-
   ngOnInit() {
     this.hideContentAfterAnimation();
   }
@@ -76,7 +75,6 @@ export class LoginScreenComponent implements OnInit {
   get disableSelect() {
     return this.addUser.get("disableSelect") as FormControl;
   }
-
 
   //------------- Functions for error messages of inputs ------------------------------------------------------
   getErrorMessageLogin(): string {
@@ -141,7 +139,6 @@ export class LoginScreenComponent implements OnInit {
   }
 
   //---------------------------------------------------------------------------------------------------
-
   /**
    * Changes picture source
    * @param pic 
@@ -149,7 +146,6 @@ export class LoginScreenComponent implements OnInit {
   changePicSrc(pic: string) {
     this.picSrc = pic;
   }
-
 
   /**
    * @method createUser
@@ -169,10 +165,6 @@ export class LoginScreenComponent implements OnInit {
     }
   }
 
-
-
-
-
   /**
    * Delays the execution of a set of actions using setTimeout.
    * If the user is available, changes the switch case to 'avatar',
@@ -186,10 +178,9 @@ export class LoginScreenComponent implements OnInit {
       this.firestoreService.showSpinner = false;
       setTimeout(() => {
         this.userAlreadyInUse = false;
-      }, 1500);
-    }, 1500);
+      }, 1000);
+    }, 1000);
   }
-
 
   /**
    * Sets new user information
@@ -198,10 +189,9 @@ export class LoginScreenComponent implements OnInit {
     this.newUser.name = this.newName.value;
     this.newUser.email = this.newEmail.value;
     this.newUser.password = this.newPassword.value;
-    this.userService.currentEmail = this.newEmail.value;
-    this.userService.currentPassword = this.newPassword.value;
+    // this.userService.currentEmail = this.newEmail.value;
+    // this.userService.currentPassword = this.newPassword.value;
   }
-
 
   /**
    * Clears inputs
@@ -209,7 +199,6 @@ export class LoginScreenComponent implements OnInit {
   clearInputs() {
     this.addUser.reset();
   }
-
 
   /**
    * @method uploadUser
@@ -220,12 +209,13 @@ export class LoginScreenComponent implements OnInit {
   async uploadUser() {
     this.newUser.picture = this.picSrc;
     this.newUser.online = true;
+    this.userService.currentEmail = this.newEmail.value;
+    this.userService.currentPassword = this.newPassword.value;
     await this.authService.createUser();
     this.signInSuccess();
     await this.userService.addUser(this.newUser as User);
     await this.authService.signInUser(this.userService.currentEmail, this.userService.currentPassword);
   }
-
 
   /**
    * @method loginUser
@@ -250,13 +240,13 @@ export class LoginScreenComponent implements OnInit {
   }
 
 
-  signInSuccess() {
-    this.authService.signInSuccess = true;
-    this.userNotFound = false;
-    setTimeout(() => {
-      this.authService.signInSuccess = false;
-    }, 1500);
-  }
+signInSuccess() {
+  this.authService.signInSuccess = true;
+  this.userNotFound = false;
+  setTimeout(() => {
+    this.authService.signInSuccess = false;
+  }, 1500);
+}
 
 
   /**
@@ -267,7 +257,6 @@ export class LoginScreenComponent implements OnInit {
   loginWithGoogle() {
     this.authService.signInWithGoogle();
   }
-
 
   /**
    * @method hideContentAfterAnimation
@@ -290,7 +279,6 @@ export class LoginScreenComponent implements OnInit {
     this.switch_expression = newSwitchCase;
   }
 
-
   /**
    * @method sendResetEmail
    * @description Sends a password reset email to the specified address.
@@ -303,7 +291,6 @@ export class LoginScreenComponent implements OnInit {
       this.showEmailSent = false;
     }, 1000);
   }
-
 
   /**
    * @method onFileSelected
@@ -328,7 +315,6 @@ export class LoginScreenComponent implements OnInit {
     }
   }
 
-
   /**
    * @method checkIfUserExists
    * @description Checks if a user exists based on the provided email and password.
@@ -342,7 +328,6 @@ export class LoginScreenComponent implements OnInit {
       this.userNotFound = true;
     }
   }
-
 
   /**
    * @method loginGuest

@@ -91,7 +91,6 @@ export class AuthService {
       let existingChat: Chat | Channel;
       existingChat = JSON.parse(chatJson);
       const isUserMember = existingChat.members.some((member: any) => member.id === user.id);
-      console.log('was passiert hier?', isUserMember);
       if (!isUserMember) {
         await this.addPersonalChatToLocalStorage(user.id);
       }

@@ -5,9 +5,9 @@ mat-card {
     justify-content: space-between;
     width: 430px;
 
-        @media(max-width: 930px){
-            width: 350px;
-        }
+    @media(max-width: 930px) {
+        width: 350px;
+    }
 }
 
 mat-card-header {
@@ -92,6 +92,7 @@ header {
 .main-chat-container {
     overflow-y: scroll;
     padding: 10px 0 0 0 !important;
+
     &::-webkit-scrollbar {
         display: none;
     }
@@ -184,10 +185,12 @@ header {
     padding: 0 20px;
     gap: 16px;
 
-    img {
-        height: 50px;
-        width: 50px;
-        border-radius: 50%;
+    .message-avatar-container {
+        img {
+            height: 50px;
+            width: 50px;
+            border-radius: 50%;
+        }
     }
 }
 
@@ -313,6 +316,7 @@ header {
     height: 20px;
     width: 20px;
     background-color: white;
+
     img {
         height: 16px;
         width: 16px;
@@ -330,6 +334,7 @@ header {
     border-radius: 24px;
     padding: 16px 0;
     background-color: white;
+
     textarea {
         outline: 0;
         border: 0;
@@ -338,9 +343,11 @@ header {
         resize: none;
         height: 64px;
         border-radius: 24px;
+
         &::-webkit-scrollbar {
             display: none;
         }
+
         &:disabled {
             background-color: white;
         }
