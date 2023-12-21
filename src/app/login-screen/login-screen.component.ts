@@ -43,7 +43,7 @@ export class LoginScreenComponent implements OnInit {
 
   addUser = new FormGroup({
     newName: new FormControl('', [Validators.required, Validators.minLength(5)]),
-    newEmail: new FormControl('', [Validators.required, Validators.email]),
+    newEmail: new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z0-9]{2,}')]),
     newPassword: new FormControl('', [Validators.required]),
     disableSelect: new FormControl(false),
   });
@@ -114,20 +114,6 @@ export class LoginScreenComponent implements OnInit {
       return 'Email is required for password reset';
     }
     return this.emailForReset.hasError('email') ? 'Not a valid email' : '';
-  }
-
-  getErrorMessageNewEmail() {
-    if (this.newEmail?.hasError('email')) {
-      return 'Type in a valid e-mail';
-    }
-    return "";
-  }
-
-  getErrorMessageNewPassword() {
-    if (this.newPassword?.hasError('minLenght')) {
-      return 'You need a password with minium 6 letters';
-    }
-    return "";
   }
 
   getErrorMessageNoUser() {

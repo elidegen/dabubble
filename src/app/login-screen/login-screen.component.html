@@ -35,7 +35,7 @@
         <div class="input-container margin-top"><img src="assets\img\icons\lock.svg"><input type="password" matInput
             placeholder="Password" [formControl]="loginpassword" required>
           <mat-error *ngIf="loginpassword.invalid && loginpassword.touched">
-            {{ getErrorMessageLoginPassword() }}
+            Wrong E-mail or password
           </mat-error>
           <mat-error>{{getErrorMessageNoUser()}}</mat-error>
         </div>
@@ -70,22 +70,24 @@
       <form [formGroup]="addUser" (ngSubmit)="createUser()">
         <div class="input-container margin-top25">
           <img src="assets\img\icons\person.svg">
-          <input minlength="5" [formControl]="newName" matInput placeholder="Name" required>
+          <input minlength="5" formControlName="newName" matInput placeholder="Name" required>
           <div class="placeholder"></div>
-          <mat-error class="error" *ngIf="this.newName?.hasError('minlength')">Your name need minimum 5
+          <mat-error class="error" *ngIf="addUser.get('newName')?.hasError('minlength')">Your name need minimum 5
             letters</mat-error>
         </div>
         <div class="input-container margin-top25">
           <img src="assets\img\icons\mail.svg">
-          <input [formControl]="newEmail" matInput placeholder="E-mail" required>
+          <input formControlName="newEmail" matInput placeholder="E-mail" required>
           <div class="placeholder"></div>
-          <mat-error class="error" *ngIf="!newEmail.valid">{{getErrorMessageNewEmail()}}</mat-error>
+          <mat-error class="error" *ngIf="addUser.get('newEmail')?.errors?.['pattern']">Please enter a valid E-Mail
+            address</mat-error>
         </div>
 
         <div class="input-container margin-top25"><img src="assets\img\icons\lock.svg"><input minlength="6"
-            type="password" [formControl]="newPassword" matInput placeholder="Password" required>
+            type="password" formControlName="newPassword" matInput placeholder="Password" required>
           <div class="placeholder"></div>
-          <mat-error class="error error-bottom" *ngIf="this.newPassword?.hasError('minlength')">You need a password with
+          <mat-error class="error error-bottom" *ngIf="addUser.get('newPassword')?.hasError('minlength')">You need a
+            password with
             minium 6
             letters</mat-error> <mat-error class="error" *ngIf="this.userAlreadyInUse">This user already
             exists</mat-error>
