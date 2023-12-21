@@ -5,7 +5,7 @@
     </div>
 
     <div class="add-members-container">
-      <input #search class="w100 input-members search" type="text" placeholder="Search @"
+      <input #search class="w100 input-members search" type="text" placeholder="Search"
         [(ngModel)]="firestoreService.searchInput" (input)="filterEverything()" (click)="this.isInputFocused = true;">
       <div class="user-search-container" *ngIf="isInputFocused">
         <div *ngIf="this.firestoreService.searchInput.trim() !== '' && !(filteredChannelMessages.length === 0 && firestoreService.filteredUsers.length === 0 && filteredChannelMessages.length === 0)" class="search-results">

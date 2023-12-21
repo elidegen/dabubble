@@ -62,16 +62,17 @@ export class DialogViewProfileComponent {
   async editUser() {
     this.user = this.editedUser;
     this.userService.currentUser = this.user;
-    this.userService.setCurrentUserToLocalStorage();
+    this.chatService.closeThread();
     await this.userService.updateUser(this.user);
-    this.authService.updateUserEmail(this.user.email!);  
+    this.authService.updateUserEmail(this.user.email!); 
+    this.dialogRef.close();
     await this.updateCurrentUserInChannel(this.user);
     await this.updateChannelMessages(this.user);  
     await this.updateCurrentUserInDirect(this.user);
     await this.updateDMMessages(this.user);
-    
+    this.userService.setCurrentUserToLocalStorage();
+    this.updateLocalStorage(this.user);
     this.userService.profileEdited.emit();
-    this.dialogRef.close();
   }
 
   
@@ -120,7 +121,7 @@ export class DialogViewProfileComponent {
     this.dialogRef.close();
   }
 
-  
+
   async updateCurrentUserInChannel(user: User) {
     await this.chatService.getallChannels();
     const yourChannels = this.chatService.yourChannels;
