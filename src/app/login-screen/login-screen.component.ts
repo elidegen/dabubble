@@ -182,11 +182,11 @@ export class LoginScreenComponent implements OnInit {
    */
   delayAndPerformActions() {
     setTimeout(() => {
-        this.changeSwitchCase('avatar');
-        this.firestoreService.showSpinner = false;
-        setTimeout(() => {
-          this.userAlreadyInUse = false;
-        }, 1500);
+      this.changeSwitchCase('avatar');
+      this.firestoreService.showSpinner = false;
+      setTimeout(() => {
+        this.userAlreadyInUse = false;
+      }, 1500);
     }, 1500);
   }
 
@@ -250,13 +250,13 @@ export class LoginScreenComponent implements OnInit {
   }
 
 
-signInSuccess() {
-  this.authService.signInSuccess = true;
-  this.userNotFound = false;
-  setTimeout(() => {
-    this.authService.signInSuccess = false;
-  }, 1500);
-}
+  signInSuccess() {
+    this.authService.signInSuccess = true;
+    this.userNotFound = false;
+    setTimeout(() => {
+      this.authService.signInSuccess = false;
+    }, 1500);
+  }
 
 
   /**
