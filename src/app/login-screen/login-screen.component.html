@@ -22,22 +22,25 @@
     <div class="form-container">
       <h1 class="color-purple2-text padding-bottom">Login</h1>
       <p>We recommend using the email address that you use at work.</p>
-      <form [formGroup]="login">
-        <div class="input-container margin-top ">
-          <img src="assets\img\icons\mail.svg">
-          <input matInput placeholder="E-mail" [formControl]="loginemail" required>
-          <mat-error *ngIf="loginemail.invalid && loginemail.touched">
-            {{ getErrorMessageLogin() }}
-          </mat-error>
-        </div>
 
-        <div class="placeholder"></div>
-        <div class="input-container margin-top"><img src="assets\img\icons\lock.svg"><input type="password" matInput
-            placeholder="Password" [formControl]="loginpassword" required>
-          <mat-error *ngIf="loginpassword.invalid && loginpassword.touched">
-            Wrong E-mail or password
-          </mat-error>
-          <mat-error>{{getErrorMessageNoUser()}}</mat-error>
+      <form [formGroup]="login">
+        <div class="login-fields">
+          <div class="input-container">
+            <img src="assets\img\icons\mail.svg">
+            <input matInput placeholder="E-mail" [formControl]="loginemail" required>
+            <mat-error *ngIf="loginemail.invalid && loginemail.touched">
+              {{ getErrorMessageLogin() }}
+            </mat-error>
+          </div>
+
+          <div class="placeholder"></div>
+          <div class="input-container"><img src="assets\img\icons\lock.svg"><input type="password" matInput
+              placeholder="Password" [formControl]="loginpassword" required>
+            <mat-error *ngIf="loginpassword.invalid && loginpassword.touched">
+              Wrong E-mail or password
+            </mat-error>
+            <mat-error>{{getErrorMessageNoUser()}}</mat-error>
+          </div>
         </div>
 
         <span (click)="changeSwitchCase('resetPassword')"
@@ -73,7 +76,7 @@
           <mat-error class="error" *ngIf="addUser.get('newName')?.hasError('minlength')">Your name need minimum 5
             letters</mat-error>
         </div>
-      
+
         <div class="input-container margin-top25">
           <img src="assets\img\icons\mail.svg">
           <input formControlName="newEmail" matInput placeholder="E-mail" required>
@@ -91,7 +94,7 @@
             letters</mat-error> <mat-error class="error" *ngIf="this.userAlreadyInUse">This user already
             exists</mat-error>
         </div>
-  
+
         <span class="margin-top gap checkbox-bottom cursor-pointer align-center"><input [formControl]="disableSelect"
             class="cursor-pointer" type="checkbox">I accept
           the <a routerLink="/privacy" class="color-purple2-text transform">privacy policy</a></span>
@@ -114,8 +117,11 @@
       <h2>{{newUser.name}}</h2>
       <form [formGroup]="addUser">
         <div class="choose-profile-pic margin-top"><span class="font-size20 w100 ">Choose from list</span>
-          <div  class="picture-container w100"><div *ngFor="let pic of profileImages ; index as i;"> <img [ngClass]="{'pic-border': selectedImageIndex === i}" class="transform cursor-pointer "
-                (click)="changePicSrc(pic,i)" src="{{pic}}"></div></div>
+          <div class="picture-container w100">
+            <div *ngFor="let pic of profileImages ; index as i;"> <img
+                [ngClass]="{'pic-border': selectedImageIndex === i}" class="transform cursor-pointer "
+                (click)="changePicSrc(pic,i)" src="{{pic}}"></div>
+          </div>
         </div>
         <div class="upload-picture margin-top align-center"><span class="font-size20"></span> <button mat-button
             class="main-button" type="submit"> <label class="custom-file-upload">

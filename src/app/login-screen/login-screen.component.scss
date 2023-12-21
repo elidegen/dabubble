@@ -20,6 +20,13 @@
     left: 0;
 }
 
+.login-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+
 .login-container {
     display: flex;
     flex-direction: column;
@@ -125,7 +132,6 @@
     width: 200px;
 }
 
-
 .bottom-line {
     border-bottom: 2px solid #B7BADD;
     width: 45%;
@@ -180,16 +186,13 @@ mat-error {
     animation: popupAnimation 2s ease;
 }
 
-
 @keyframes popupAnimation {
     from {
-
         transform: translate(-30%, -30%);
     }
 
     to {
         transform: translate(-50%, -50%);
-
     }
 }
 
@@ -208,7 +211,6 @@ mat-error {
     gap: 20px;
     font-size: 18px;
     color: var(--textGray);
-    margin-top: 20px;
     position: relative;
     border: 1px solid transparent;
 
@@ -305,7 +307,6 @@ input {
     }
 }
 
-
 .transform {
     &:hover {
         font-weight: bold;
@@ -318,7 +319,6 @@ input {
 
 .cursor-pointer {
     cursor: pointer;
-
 }
 
 .responsive-create-account {
@@ -344,18 +344,19 @@ input {
 
     img {
         border-radius: 50%;
+
         &:hover {
-        box-shadow: 0px 1px 8px 2px grey;
-        border-radius: 50%;
-        background-color: grey;
-    }
+            box-shadow: 0px 1px 8px 2px grey;
+            border-radius: 50%;
+            background-color: grey;
+        }
     }
 }
 
 .pic-border {
     box-shadow: 0px 1px 8px 2px grey;
-        border-radius: 50%;
-        background-color: grey;
+    border-radius: 50%;
+    background-color: grey;
 }
 
 input[type="email"] {
@@ -371,13 +372,11 @@ input[type="email"] {
     border-radius: 50%;
 }
 
-
 .picture-container {
     display: flex;
     justify-content: space-between;
     gap: 5px;
 }
-
 
 @keyframes moveToLeftCorner {
     from {
@@ -393,11 +392,10 @@ input[type="email"] {
     }
 }
 
-
 form {
     align-items: center;
+    gap: 5px;
 }
-
 
 @keyframes holdSpanLeft {
     from {
@@ -406,10 +404,8 @@ form {
     }
 }
 
-
 @keyframes moveLeft {
     from {
-
         transform: translate(-20%, -50%);
         opacity: 1;
     }
