@@ -197,8 +197,11 @@ mat-drawer {
 .text-align-center {
     text-align: center;
 }
+
 .first-chat-box {
     overflow-y: hidden;
+    margin-top: auto;
+
     &::-webkit-scrollbar {
         display: none;
     }
@@ -211,6 +214,7 @@ mat-drawer {
     flex-direction: column;
     justify-content: flex-end;
     padding: 0 16px;
+
     span:first-child {
         font-size: 20px;
         font-weight: bold;
