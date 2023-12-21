@@ -232,7 +232,7 @@ export class WorkspaceComponent implements OnInit {
    * @returns {User | null} The other user in the conversation, or null if not found.
    */
   getOtherUser(members: any[]) {
-    if (members[0].id === this.currentUser.id) {
+    if (members.length == 1) {
       return this.currentUser;
     } else {
       let otherUser = members.find(member => member.id !== this.userService.currentUser.id);

@@ -5,11 +5,11 @@
     </div>
 
     <div class="add-members-container">
-      <input #search class="w100 input-members search" type="text" placeholder="Search" [(ngModel)]="searchInput" (input)="filterEverything()" (click)="this.isInputFocused = true;">
+      <input #search class="w100 input-members search" type="text" placeholder="Search @" [(ngModel)]="searchInput" (input)="filterEverything()" (click)="this.isInputFocused = true;">
       <div class="user-search-container" *ngIf="isInputFocused">
         <div *ngIf="this.searchInput.trim() !== ''" class="search-results">
 
-          <div *ngIf="this.searchInput.startsWith('@') && filteredUsers.length !== 0">
+          <div *ngIf="filteredUsers.length !== 0">
             <h1>Users:</h1>
             <button class="user-container" *ngFor="let user of filteredUsers" (click)="selectUser(user)">
               <div (click)="selectUser(user)" class="profile-container">
