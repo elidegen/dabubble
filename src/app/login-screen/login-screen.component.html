@@ -2,10 +2,15 @@
 <div *ngIf="this.authService.signInSuccess == true" class="account-popup"><span>Login successfull</span></div>
 <div *ngIf="showUserCreatedSuccess == true" class="account-popup"><span>Account created</span></div>
 <div *ngIf="showEmailSent == true" class="account-popup"><span>E-mail sent</span></div>
-<div *ngIf="!animationIsFinished" class="start-animation-container"></div>
-<div *ngIf="!animationIsFinished" class="start-animation start-animation-responsive hideafteranimation">
-  <div class="start-animation-logo"><img src="assets\img\icons\logo.svg"></div><span
-    class="start-animation-span">DABubble</span>
+<div *ngIf="!animationIsFinished" class="start-animation-container">
+  <div class="animated-content-container">
+    <div class="animation-content">
+      <div class="start-animation-logo">
+        <img src="assets\img\icons\logo.svg">
+      </div>
+      <span class="start-animation-span">DABubble</span>
+    </div>
+  </div>
 </div>
 
 <div [ngSwitch]="switch_expression" class="login-container">
@@ -95,9 +100,10 @@
             exists</mat-error>
         </div>
 
-        <span class="margin-top gap checkbox-bottom cursor-pointer align-center"><input [formControl]="disableSelect"
-            class="cursor-pointer" type="checkbox">I accept
-          the <a routerLink="/privacy" class="color-purple2-text transform">privacy policy</a></span>
+        <span class="margin-top gap checkbox-bottom cursor-pointer align-center">
+          <input [formControl]="disableSelect" class="cursor-pointer" type="checkbox">
+          I accept the <a routerLink="/privacy" class="color-purple2-text transform">privacy policy</a>
+        </span>
         <div class="submit-buttons justify-content-end">
           <button mat-button class="align-self main-button primary" type="submit"
             [disabled]="!disableSelect.value || !addUser.valid ">Next</button>
@@ -138,8 +144,6 @@
     </div>
   </div>
 
-
-
   <div *ngSwitchCase="'resetPassword'" class="login bg-white">
     <div class="form-container">
       <img (click)="changeSwitchCase('login')" class="position-relative cursor-pointer transform arrow"
@@ -154,7 +158,6 @@
             {{ getErrorMessageResetEmail() }}
           </mat-error>
         </div>
-        <!-- <div class="placeholder"></div> -->
         <p *ngIf="!this.userService.resetEmailFound" class="margin-top25 grey-span-resetpw">Receive an e-mail to reset
           your password</p>
         <p *ngIf="this.userService.resetEmailFound" class="margin-top25 grey-span-resetpw">An e-mail to reset your
@@ -171,6 +174,7 @@
     <button (click)="changeSwitchCase('createAccount')" mat-button class="main-button ">Create Account</button>
   </div>
   <div class="impressum-span">
-    <a routerLink="/imprint">Legal Notice</a><a routerLink="/privacy">Privacy Policy</a>
+    <span routerLink="/imprint">Legal Notice</span>
+    <span routerLink="/privacy">Privacy Policy</span>
   </div>
 </div>
