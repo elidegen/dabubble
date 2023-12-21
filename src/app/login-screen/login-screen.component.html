@@ -109,8 +109,8 @@
       <h2>{{newUser.name}}</h2>
       <form [formGroup]="addUser">
         <div class="choose-profile-pic margin-top"><span class="font-size20 w100 ">Choose from list</span>
-          <div class="picture-container w100"> <img class="transform cursor-pointer "
-              *ngFor="let pic of profileImages ; index as i;" (click)="changePicSrc(pic)" src="{{pic}}"></div>
+          <div  class="picture-container w100"><div *ngFor="let pic of profileImages ; index as i;"> <img [ngClass]="{'pic-border': selectedImageIndex === i}" class="transform cursor-pointer "
+                (click)="changePicSrc(pic,i)" src="{{pic}}"></div></div>
         </div>
         <div class="upload-picture margin-top align-center"><span class="font-size20"></span> <button mat-button
             class="main-button" type="submit"> <label class="custom-file-upload">
