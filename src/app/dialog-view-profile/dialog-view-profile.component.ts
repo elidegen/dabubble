@@ -109,12 +109,12 @@ export class DialogViewProfileComponent {
     this.user = this.editedUser;
     this.userService.currentUser = this.user;
     this.userService.setCurrentUserToLocalStorage();
-    await this.userService.updateUser(this.user);
-    this.authService.updateUserEmail(this.user.email!);  
-    await this.updateCurrentUserInChannel(this.user);
+    // await this.userService.updateUser(this.user);
+    // this.authService.updateUserEmail(this.user.email!);  
+    // await this.updateCurrentUserInChannel(this.user);
     await this.updateChannelMessages(this.user);  
-    await this.updateCurrentUserInDirect(this.user);
-    await this.updateDMMessages(this.user)
+    // await this.updateCurrentUserInDirect(this.user);
+    // await this.updateDMMessages(this.user)
     this.userService.profileEdited.emit();
     this.dialogRef.close();
   }
@@ -206,14 +206,16 @@ export class DialogViewProfileComponent {
     let channelMessages: any[];
     await this.chatService.getallChannels();
     await this.chatService.getAllChannelMessages();
-    channelMessages = this.chatService.allMessagesOfChannel
+    channelMessages = this.chatService.allMessagesOfChannel;
+    console.log('Message', this.chatService.allMessagesOfChannel);
     channelMessages.forEach((message) => {
-      let messageDocRef = doc(collection(this.firestore, `channels/${message.channelID}/messages`), message.id);
-      updateDoc(messageDocRef, {
-        creator: user.name
-      })
+      if (message.creatorId === user.id) {
+        let messageDocRef = doc(collection(this.firestore, `channels/${message.channelID}/messages`), message.id);
+        updateDoc(messageDocRef, {
+          creator: user.name
+        })
+      }
     })
-    
   }
 
   async updateDMMessages(user: User) {
@@ -222,11 +224,12 @@ export class DialogViewProfileComponent {
     await this.chatService.getDMMessages();
     dmMessages = this.chatService.allMessagesOfDM;
     dmMessages.forEach((message) => {
-      let messageDocRef = doc(collection(this.firestore, `direct messages/${message.channelID}/messages`), message.id);
-      updateDoc(messageDocRef, {
-        creator: user.name
-      })
+      if (message.creatorId === user.id) {
+        let messageDocRef = doc(collection(this.firestore, `direct messages/${message.channelID}/messages`), message.id);
+        updateDoc(messageDocRef, {
+          creator: user.name
+        })
+      }
     })
-    
   }
 }
