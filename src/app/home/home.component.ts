@@ -58,6 +58,7 @@ export class HomeComponent {
     const clickedElement = event.target as HTMLElement;
     if (!clickedElement.classList.contains('home-search') && !clickedElement.classList.contains('user-search-container') && !clickedElement.classList.contains('user-container') && this.homeInputFocused && !clickedElement.classList.contains('input-members')) {
       this.homeInputFocused = false;  
+      this.searchInput = '';
     } 
   }
 
@@ -176,6 +177,7 @@ export class HomeComponent {
    * @param {any} message - The message used to identify the channel.
    */
   selectChannel(message: any) {
+    this.searchInput = '';
     this.chatService.getChannelByMessage(message);
     this.homeInputFocused = false;
   }
@@ -186,6 +188,7 @@ export class HomeComponent {
    * @param {any} message - The message used to identify the direct message chat.
    */
   selectDirectMessage(message: any) {
+    this.searchInput = '';    
     this.chatService.getDirectMessageByMessage(message);
     this.homeInputFocused = false;
   }
