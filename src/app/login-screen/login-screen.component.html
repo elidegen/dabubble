@@ -2,7 +2,7 @@
 <div *ngIf="this.authService.signInSuccess == true" class="account-popup"><span>Login successfull</span></div>
 <div *ngIf="showUserCreatedSuccess == true" class="account-popup"><span>Account created</span></div>
 <div *ngIf="showEmailSent == true" class="account-popup"><span>E-mail sent</span></div>
-<!-- <div *ngIf="!animationIsFinished" class="start-animation-container">
+<div *ngIf="!animationIsFinished" class="start-animation-container">
   <div class="animated-content-container">
     <div class="animation-content">
       <div class="start-animation-logo">
@@ -11,7 +11,7 @@
       <span class="start-animation-span">DABubble</span>
     </div>
   </div>
-</div> -->
+</div>
 
 <div [ngSwitch]="switch_expression" class="login-container">
   <div class="login-header">

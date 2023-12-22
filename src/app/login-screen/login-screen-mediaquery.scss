@@ -25,8 +25,6 @@
     .responsive-create-account {
         display: flex;
     }
-
-
 }
 
 @media (max-height: 800px) {
@@ -116,23 +114,6 @@
 .margin-top30 {
     margin-top: 0;
 }
-
-// .start-animation {
-//     display: none;
-// }
-
-// .start-animation-responsive {
-//     display: flex;
-//     gap: 20px;
-//     align-items: center;
-//     position: absolute;
-//     top: 50%;
-//     left: 50%;
-//     transform: translate(-50%, -50%);
-//     z-index: 2;
-//     animation: moveLeft 1s ease, moveToTop 1s ease 1.5s;
-//     overflow: hidden;
-// }
 
 .checkbox {
     width: 10px !important;
