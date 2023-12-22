@@ -5,7 +5,7 @@
     opacity: 0;
     z-index: 2;
     position: absolute;
-    animation: fadeAway 4s;
+    animation: fadeAway 3s;
 }
 
 .animated-content-container {
@@ -25,10 +25,10 @@
     align-items: center;
     gap: 16px;
     @media(min-width: 600px){
-        animation: toLeftTop 4s forwards;
+        animation: toLeftTop 3s forwards;
     }
     @media(max-width: 600px){
-        animation: toTop 4s forwards;
+        animation: toTop 3s forwards;
     }
 }
 
@@ -425,7 +425,7 @@ form {
         transform: translate(-50%, -50%);
     }
 
-    50% {
+    66% {
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
@@ -444,7 +444,7 @@ form {
         transform: translate(-50%, -50%);
     }
 
-    50% {
+    66% {
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
