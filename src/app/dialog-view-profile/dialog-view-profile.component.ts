@@ -226,13 +226,9 @@ export class DialogViewProfileComponent {
 
   async updateThreadMessages(user: User) {
     let threadMessages: any[];
-    console.log('hier');
-    
     await this.threadService.getallThreads();
     await this.threadService.getThreadMessages();
     threadMessages = this.threadService.allThreadMessages;
-    console.log('threadmessages', threadMessages);
-    
     threadMessages.forEach((message) => {
       if (message.creatorId === user.id) {
         let messageDocRef = doc(collection(this.firestore, `threads/${message.channelID}/messages`), message.id);

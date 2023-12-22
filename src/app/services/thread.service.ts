@@ -144,8 +144,6 @@ export class ThreadService {
       }
       
     );
-
-    console.log('all', this.allThreads);
   }
 
   async getThreadMessages() {
@@ -158,7 +156,6 @@ export class ThreadService {
         this.allThreadMessages.push(message.data());
       });
     }
-    console.log('thread all M',this.allThreadMessages);
   }
 
 }
