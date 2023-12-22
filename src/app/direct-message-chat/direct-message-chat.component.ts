@@ -373,6 +373,7 @@ export class DirectMessageChatComponent implements OnInit {
         let interlocutor = this.allUsers.find(user => user.id == otherUser.id);
         return interlocutor;
       } else {
+        this.chatService.chatWindow = 'empty';
         return null;
       }
     }
