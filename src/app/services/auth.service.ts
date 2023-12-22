@@ -145,13 +145,13 @@ export class AuthService {
       await this.deleteDMWithGuest();
       await this.deleteGuest();
     }
-    this.userService.removeCurrentUserFromLocalStorage();
+    await this.userService.removeCurrentUserFromLocalStorage();
     let userIndexToLogout = this.findUserIndexWithEmail(this.userService.currentUser.email);
     if (userIndexToLogout != -1) {
       this.userService.users[userIndexToLogout].online = false;
       await this.userService.updateUser(this.userService.users[userIndexToLogout]);
     }
-    this.finishSignOut();
+    await this.finishSignOut();
   }
 
 

@@ -320,7 +320,7 @@ export class LoginScreenComponent implements OnInit {
    * Signs out any currently authenticated user, signs in as a guest, and navigates to the home page.
    */
   async loginGuest() {
-    this.authService.signOutUser();
+    await this.authService.signOutUser();
     await this.authService.signInGuest();
     this.authService.signInSuccess = true;
     setTimeout(() => {
