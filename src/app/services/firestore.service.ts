@@ -23,7 +23,7 @@ export class FirestoreService {
   firstThreeItems: any[] = [];
   allUsers: User[] = [];
   filteredUsers: User[] = [];
-  searchInput: string = '';
+  // searchInput: string = '';
   showSpinner = false;
   showThreadSpinner = false;
   messageAdded = new EventEmitter<void>();
@@ -249,16 +249,16 @@ export class FirestoreService {
   /**
    * Ths function filters all users
    */
-  filterAllUsers() {
+  filterAllUsers(searchInput: String) {
     let searchTerm: any;
-    this.searchInput = this.searchInput.trim();
-    if (this.searchInput == '@') {
+    searchInput = searchInput.trim();
+    if (searchInput == '@') {
       this.filteredUsers = this.allUsers;
     } else {
-      if (this.searchInput.startsWith('@')) {
-        searchTerm = this.searchInput.substring(1).toLowerCase().trim();
+      if (searchInput.startsWith('@')) {
+        searchTerm = searchInput.substring(1).toLowerCase().trim();
       } else {
-        searchTerm = this.searchInput.toLowerCase().trim();
+        searchTerm = searchInput.toLowerCase().trim();
       }
       this.filteredUsers = this.allUsers.filter(user => {
         const userName = user.name?.toLowerCase();

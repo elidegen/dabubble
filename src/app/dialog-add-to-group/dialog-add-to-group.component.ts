@@ -29,7 +29,7 @@ export class DialogAddToGroupComponent {
   currentChat!: Channel | undefined;
   selectedUsers: any[] = [];
   filteredUsers: User[] = [];
-  isInputFocused: boolean = false;
+  addGroupInputFocused: boolean = false;
   users: User[] = [];
   searchInput: string = '';
   currentUser;
@@ -59,8 +59,10 @@ export class DialogAddToGroupComponent {
   @HostListener('document:click', ['$event'])
   checkClick(event: Event) {
     const clickedElement = event.target as HTMLElement;
-    if (!clickedElement.classList.contains('user-search-container') && !clickedElement.classList.contains('user-container') && this.isInputFocused && !clickedElement.classList.contains('input-members')) {
-      this.isInputFocused = false;
+    if (!clickedElement.classList.contains('user-search-container') && !clickedElement.classList.contains('user-container') && this.addGroupInputFocused && !clickedElement.classList.contains('input-members')) {
+      this.addGroupInputFocused = false;
+    } else {
+      this.addGroupInputFocused = true;
     }
   }
 
@@ -82,7 +84,7 @@ export class DialogAddToGroupComponent {
    * Filters the list of users based on the user's input in the search field.
    */
   filterUsers(): void {
-    this.isInputFocused = true;
+    this.addGroupInputFocused = true;
     this.filteredUsers = this.users.filter(user =>
       user.name?.toLowerCase().includes(this.searchInput.toLowerCase())
     );

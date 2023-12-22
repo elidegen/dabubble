@@ -31,7 +31,7 @@ export class HomeComponent {
 
   @ViewChild('search') search!: ElementRef;
   searchInput: string = '';
-  isInputFocused: boolean = false;
+  homeInputFocused: boolean = false;
   filteredUsers: User[] = [];
   filteredChannels: Channel[] = [];
   filteredChannelMessages: Message[] = [];
@@ -47,6 +47,19 @@ export class HomeComponent {
 
   openBottomSheet(): void {
     this._bottomSheet.open(BottomSheetOverviewExampleSheet);
+  }
+
+  /**
+   * Listens for document click events and checks if the click is outside user search and member inputs to update focus state.
+   * @param {Event} event - The DOM event object.
+   */
+  @HostListener('document:click', ['$event'])
+  checkClick(event: Event) {
+    const clickedElement = event.target as HTMLElement;
+    if (!clickedElement.classList.contains('home-search') && !clickedElement.classList.contains('user-search-container') && !clickedElement.classList.contains('user-container') && this.homeInputFocused && !clickedElement.classList.contains('input-members')) {
+      this.homeInputFocused = false;
+      console.log('schliessen');      
+    } 
   }
 
   /**
@@ -69,29 +82,16 @@ export class HomeComponent {
   }
 
   /**
-   * Listens for document click events and checks if the click is outside user search and member inputs to update focus state.
-   * @param {Event} event - The DOM event object.
-   */
-  @HostListener('document:click', ['$event'])
-  checkClick(event: Event) {
-    const clickedElement = event.target as HTMLElement;
-    if (!clickedElement.classList.contains('user-search-container') && !clickedElement.classList.contains('user-container') && this.isInputFocused && !clickedElement.classList.contains('input-members')) {
-      this.isInputFocused = false;
-    }
-  }
-
-  /**
    * Filters users, channels, and direct messages based on the search input. Updates filtered results.
    */
   filterEverything(): void {
-    this.isInputFocused = true;
-    if (this.firestoreService.searchInput) {
-      this.firestoreService.filterAllUsers();
+    this.homeInputFocused = true;
+    if (this.searchInput) {
+      this.firestoreService.filterAllUsers(this.searchInput);
       this.filterChannelMessages();
       this.filterDirectMessages();
     }
-    if (this.firestoreService.searchInput.trim() === '') {
-      console.log('test 1');
+    if (this.searchInput.trim() === '') {
       this.allChannelMessagesLoaded = false;
       this.allDMMessagesLoaded = false
       this.firestoreService.filteredUsers = [];
@@ -111,13 +111,13 @@ export class HomeComponent {
     }
     this.filteredChannelMessages = [];
     let searchTerm: any;
-    if (this.firestoreService.searchInput == '#') {
+    if (this.searchInput == '#') {
       this.filteredChannelMessages = this.chatService.allMessagesOfChannel;
     } else {
-      if (this.firestoreService.searchInput.startsWith('#')) {
-        searchTerm = this.firestoreService.searchInput.substring(1).toLowerCase().trim();
+      if (this.searchInput.startsWith('#')) {
+        searchTerm = this.searchInput.substring(1).toLowerCase().trim();
       } else {
-        searchTerm = this.firestoreService.searchInput.toLowerCase().trim();
+        searchTerm = this.searchInput.toLowerCase().trim();
       }
     }
     this.chatService.allMessagesOfChannel.forEach(message => {
@@ -125,10 +125,7 @@ export class HomeComponent {
         this.filteredChannelMessages.push(message);
       }
     });
-  
-    }
-  
-  
+  }
 
   /**
    * Filters direct messages based on the search input.
@@ -141,11 +138,10 @@ export class HomeComponent {
     }
     this.filteredDirectMessages = [];
     this.chatService.allMessagesOfDM.forEach(message => {
-      if (message.content?.toLowerCase().includes(this.firestoreService.searchInput.toLowerCase().trim())) {
+      if (message.content?.toLowerCase().includes(this.searchInput.toLowerCase().trim())) {
         this.filteredDirectMessages.push(message);
       }
     });
-
   }
 
   /**
@@ -169,7 +165,7 @@ export class HomeComponent {
     this.chatService.createDirectMessage(user);
     this.chatService.chatWindow = 'direct';
     this.search.nativeElement.value = '';
-    this.isInputFocused = false;
+    this.homeInputFocused = false;
     if (this.chatService.isMobile) {
       this.router.navigate(['main']);
     }
@@ -182,7 +178,7 @@ export class HomeComponent {
    */
   selectChannel(message: any) {
     this.chatService.getChannelByMessage(message);
-    this.isInputFocused = false;
+    this.homeInputFocused = false;
   }
 
 
@@ -192,7 +188,7 @@ export class HomeComponent {
    */
   selectDirectMessage(message: any) {
     this.chatService.getDirectMessageByMessage(message);
-    this.isInputFocused = false;
+    this.homeInputFocused = false;
   }
 }
 
