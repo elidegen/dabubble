@@ -149,8 +149,13 @@ export class AuthService {
     let userIndexToLogout = this.findUserIndexWithEmail(this.userService.currentUser.email);
     if (userIndexToLogout != -1) {
       this.userService.users[userIndexToLogout].online = false;
-      this.userService.updateUser(this.userService.users[userIndexToLogout]);
+      await this.userService.updateUser(this.userService.users[userIndexToLogout]);
     }
+    this.finishSignOut();
+  }
+
+
+  async finishSignOut() {
     this.userService.currentUser = new User;
     this.chatService.openChat = null;
     this.chatService.openDirectMessage = null;
