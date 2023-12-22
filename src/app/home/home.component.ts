@@ -57,8 +57,7 @@ export class HomeComponent {
   checkClick(event: Event) {
     const clickedElement = event.target as HTMLElement;
     if (!clickedElement.classList.contains('home-search') && !clickedElement.classList.contains('user-search-container') && !clickedElement.classList.contains('user-container') && this.homeInputFocused && !clickedElement.classList.contains('input-members')) {
-      this.homeInputFocused = false;
-      console.log('schliessen');      
+      this.homeInputFocused = false;  
     } 
   }
 
