@@ -97,7 +97,14 @@ import { NewMessageComponent } from './new-message/new-message.component';
     MatExpansionModule,
     ReactiveFormsModule,
     PickerComponent,
-
+    provideFirebaseApp(() => initializeApp({ 
+      "projectId": "dabubble-dec6e", 
+    "appId": "1:260526664736:web:1646199aec6fed465aa045", 
+    "storageBucket": "dabubble-dec6e.appspot.com", 
+    "apiKey": "AIzaSyA9gpqSDb0Sd0ZgwkB81Q6EPZ-Om-nPpbQ",
+     "authDomain": "dabubble-dec6e",
+      "messagingSenderId": "260526664736" })),
+    provideFirestore(() => getFirestore()),
     // provideFirebaseApp(() => initializeApp({ 
     //   "projectId": "dabubble-81b67", 
     // "appId": "1:983219363350:web:25eacf514195e328531f37", 
@@ -106,21 +113,14 @@ import { NewMessageComponent } from './new-message/new-message.component';
     //  "authDomain": "dabubble-81b67.firebaseapp.com",
     //   "messagingSenderId": "983219363350" })),
 
-    provideFirebaseApp(() => initializeApp({
-      "projectId": "dabubble-c4b96", "appId":
-        "1:390532295885:web:ad6cd75380acc256d50d84", "storageBucket": "dabubble-c4b96.appspot.com", "apiKey": "AIzaSyAEu4ozPAp4fPV6zGVHoY_x9YT8wbZrMs4",
-      "authDomain": "dabubble-c4b96.firebaseapp.com", "messagingSenderId": "390532295885"
-    })),
-    provideFirestore(() => getFirestore()),
-
-    // provideFirebaseApp(() => initializeApp({ 
-    //   "projectId": "dabubble-dec6e", 
-    // "appId": "1:260526664736:web:1646199aec6fed465aa045", 
-    // "storageBucket": "dabubble-dec6e.appspot.com", 
-    // "apiKey": "AIzaSyA9gpqSDb0Sd0ZgwkB81Q6EPZ-Om-nPpbQ",
-    //  "authDomain": "dabubble-dec6e",
-    //   "messagingSenderId": "260526664736" })),
+    // provideFirebaseApp(() => initializeApp({
+    //   "projectId": "dabubble-c4b96", "appId":
+    //     "1:390532295885:web:ad6cd75380acc256d50d84", "storageBucket": "dabubble-c4b96.appspot.com", "apiKey": "AIzaSyAEu4ozPAp4fPV6zGVHoY_x9YT8wbZrMs4",
+    //   "authDomain": "dabubble-c4b96.firebaseapp.com", "messagingSenderId": "390532295885"
+    // })),
     // provideFirestore(() => getFirestore()),
+
+
   ],
   providers: [],
   bootstrap: [AppComponent]

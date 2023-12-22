@@ -75,7 +75,7 @@ export class UserService {
 
 
   async addNewUserToCommunityChannel(newUser: User) {
-    const communityRef = doc(collection(this.firestore, 'channels'), 'tjgAJvmPnxcHQhuhkubb');
+    const communityRef = doc(collection(this.firestore, 'channels'), 'fEaYSlbmat8w3bdfmpIC');
     try {
       const newUserJSON = newUser.toJSON();
       await updateDoc(communityRef, {
