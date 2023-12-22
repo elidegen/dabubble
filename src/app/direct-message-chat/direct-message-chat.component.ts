@@ -32,6 +32,18 @@ export class DirectMessageChatComponent implements OnInit {
   showUploadedFile = false;
   newThread = new Thread();
   unsubscribeUsers: any;
+  deletedUser: User = {
+    name: 'Deleted User',
+    email: '',
+    password: '',
+    id: '',
+    picture: 'assets/img/avatars/deletedUser.png',
+    online: false,
+    loginTime: 0,
+    toJSON: function (): { name: string | undefined; email: string | undefined; password: string | undefined; id: string | undefined; picture: string | undefined; online: boolean | undefined; loginTime: number; } {
+      throw new Error('Function not implemented.');
+    }
+  }
   // ------------- for editing of message ----------------
   edit: boolean = false;
   editingMessage: string | undefined;
@@ -130,10 +142,12 @@ export class DirectMessageChatComponent implements OnInit {
    * @param {any} id - The ID of the user whose profile is to be displayed.
    */
   openProfileDialog(id: any): void {
-    this.dialog.open(DialogViewProfileComponent, {
-      panelClass: 'dialog-container',
-      data: { userID: id },
-    });
+    if(id){
+      this.dialog.open(DialogViewProfileComponent, {
+        panelClass: 'dialog-container',
+        data: { userID: id },
+      });
+    }
   }
 
   /**
@@ -191,10 +205,10 @@ export class DirectMessageChatComponent implements OnInit {
       this.getSentMessageDate();
       this.message.creator = this.userService.currentUser.name;
       this.message.creatorId = this.userService.currentUser.id,
-      this.message.channel = this.currentChat.name;
+        this.message.channel = this.currentChat.name;
       this.message.channelID = this.currentChat.id;
       this.message.profilePic = this.userService.currentUser.picture,
-      this.message.channel = this.currentChat.name;
+        this.message.channel = this.currentChat.name;
     }
   }
 
@@ -350,13 +364,13 @@ export class DirectMessageChatComponent implements OnInit {
    */
   loadUsers() {
     this.unsubscribeUsers = onSnapshot(
-    query(collection(this.firestore, "users"), orderBy("name")),
-    (snapshot) => {
-      this.allUsers = snapshot.docs.map((doc) => {
-      const user = doc.data() as User;
-      return user;
+      query(collection(this.firestore, "users"), orderBy("name")),
+      (snapshot) => {
+        this.allUsers = snapshot.docs.map((doc) => {
+          const user = doc.data() as User;
+          return user;
+        });
       });
-    });
   }
 
   /**
@@ -371,10 +385,13 @@ export class DirectMessageChatComponent implements OnInit {
       let otherUser = members.find(member => member.id !== this.userService.currentUser.id);
       if (otherUser) {
         let interlocutor = this.allUsers.find(user => user.id == otherUser.id);
-        return interlocutor;
+        if (interlocutor) {
+          return interlocutor;
+        } else {
+          return this.deletedUser;
+        }
       } else {
-        this.chatService.chatWindow = 'empty';
-        return null;
+        return this.deletedUser;
       }
     }
   }

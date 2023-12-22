@@ -19,10 +19,11 @@ export class DialogAddChannelComponent {
   firestore: Firestore = inject(Firestore);
   addMembers: boolean = false;
   allMembers: boolean = true;
-  isInputFocused: boolean = false;
+  addChnlInputFocused: boolean = false;
   touched: boolean = false;
   selectedUsers: any[] = [];
   currentUser;
+  searchInput: string = '';
 
   constructor(@Optional() @Inject(MatDialogRef) public dialogRef: MatDialogRef<DialogAddChannelComponent> | undefined, public chatService: ChatService, public userService: UserService, public firestoreService: FirestoreService, public router: Router) {
     firestoreService.loadUsers()
@@ -40,8 +41,10 @@ export class DialogAddChannelComponent {
   @HostListener('document:click', ['$event'])
   checkClick(event: Event) {
     const clickedElement = event.target as HTMLElement;
-    if (!clickedElement.classList.contains('user-search-container') && !clickedElement.classList.contains('user-container') && this.isInputFocused && !clickedElement.classList.contains('input-members')) {
-      this.isInputFocused = false;
+    if (!clickedElement.classList.contains('user-search-container') && !clickedElement.classList.contains('user-container') && this.addChnlInputFocused && !clickedElement.classList.contains('input-members')) {
+      this.addChnlInputFocused = false;
+    } else {
+      this.addChnlInputFocused = true;
     }
   }
 

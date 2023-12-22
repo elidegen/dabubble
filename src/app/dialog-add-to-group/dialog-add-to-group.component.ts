@@ -15,8 +15,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./dialog-add-to-group.component.scss']
 })
 export class DialogAddToGroupComponent {
-  
-  constructor(public dialogRef: MatDialogRef<DialogAddToGroupComponent>, public chatService: ChatService, 
+
+  constructor(public dialogRef: MatDialogRef<DialogAddToGroupComponent>, public chatService: ChatService,
     public userService: UserService, public firestoreService: FirestoreService, public router: Router) {
     this.currentChat = this.userService.getCurrentChatFromLocalStorage();
     this.loadUsers();
@@ -29,7 +29,7 @@ export class DialogAddToGroupComponent {
   currentChat!: Channel | undefined;
   selectedUsers: any[] = [];
   filteredUsers: User[] = [];
-  isInputFocused: boolean = false;
+  addGroupInputFocused: boolean = false;
   users: User[] = [];
   searchInput: string = '';
   currentUser;
@@ -50,7 +50,6 @@ export class DialogAddToGroupComponent {
     });
   }
 
-
   /**
    * Listens for clicks on the document to determine if the click occurred outside the user search container.
    * If so, it blurs the search input.
@@ -59,11 +58,10 @@ export class DialogAddToGroupComponent {
   @HostListener('document:click', ['$event'])
   checkClick(event: Event) {
     const clickedElement = event.target as HTMLElement;
-    if (!clickedElement.classList.contains('user-search-container') && !clickedElement.classList.contains('user-container') && this.isInputFocused && !clickedElement.classList.contains('input-members')) {
-      this.isInputFocused = false;
+    if (!clickedElement.classList.contains('user-search-container') && !clickedElement.classList.contains('user-container') && this.addGroupInputFocused && !clickedElement.classList.contains('input-members')) {
+      this.addGroupInputFocused = false;
     }
   }
-
 
   /**
    * Loads all users from Firestore and initializes them as User instances.
@@ -77,17 +75,15 @@ export class DialogAddToGroupComponent {
     }
   }
 
-
   /**
    * Filters the list of users based on the user's input in the search field.
    */
   filterUsers(): void {
-    this.isInputFocused = true;
+    this.addGroupInputFocused = true;
     this.filteredUsers = this.users.filter(user =>
       user.name?.toLowerCase().includes(this.searchInput.toLowerCase())
     );
   }
-
 
   /**
    * Prevents event propagation when a user is selected from the list.
@@ -96,7 +92,6 @@ export class DialogAddToGroupComponent {
   userSelected(event: Event) {
     event.stopPropagation();
   }
-
 
   /**
    * Removes a selected user from the list of selected members.
@@ -108,7 +103,6 @@ export class DialogAddToGroupComponent {
       this.selectedUsers.splice(index, 1);
     }
   }
-
 
   /**
    * Toggles the selection state of a user when clicked, adding or removing them from the list of selected members.
@@ -125,7 +119,6 @@ export class DialogAddToGroupComponent {
     }
   }
 
-
   /**
    * Adds or removes highlight from user buttons based on whether they are selected.
    */
@@ -139,7 +132,6 @@ export class DialogAddToGroupComponent {
     });
   }
 
-
   /**
    * Removes highlight from the button associated with a user.
    * @param {User} user - The user whose button should be unhighlighted.
@@ -151,7 +143,6 @@ export class DialogAddToGroupComponent {
       userContainer.nativeElement.classList.remove('user-container-highlighted');
     }
   }
-
 
   /**
    * Adds highlight to the button associated with a user.
@@ -165,12 +156,11 @@ export class DialogAddToGroupComponent {
     }
   }
 
-
   /**
    * Fetches all existing members of the current channel from Firestore.
    */
   async getAllChannelMembers() {
-    if (this.currentChat?.id) { 
+    if (this.currentChat?.id) {
       const channelDocRef = doc(this.firestore, `channels/${this.currentChat.id}`);
       const channelDocSnap = await getDoc(channelDocRef);
       if (channelDocSnap.exists()) {
@@ -181,14 +171,12 @@ export class DialogAddToGroupComponent {
     }
   }
 
-
   /**
    * Shows the existing members of the channel as selected by default.
    */
   showExistingMembers() {
     this.selectedUsers = this.allChannelMembers;
   }
-
 
   /**
    * Adds the selected members to the current channel in Firestore.
@@ -216,7 +204,7 @@ export class DialogAddToGroupComponent {
    * @param {any[]} usersToFormat - The users to format for Firestore.
    * @returns {Object[]} An array of user objects formatted for Firestore.
    */
-  formatMembers(usersToFormat: any[]){
+  formatMembers(usersToFormat: any[]) {
     const formattedUsers = usersToFormat.map(user => {
       return {
         name: user.name,
@@ -229,7 +217,6 @@ export class DialogAddToGroupComponent {
     });
     return formattedUsers;
   }
-
 
   checkIfCurrentUserIsMember(members: any[]) {
     if (this.currentChat) {
@@ -244,7 +231,6 @@ export class DialogAddToGroupComponent {
     }
   }
 
-
   /**
    * Adds the selected users to the channel members array, preparing them to be added to Firestore.
    * @param {any[]} selectedUsers - The selected users to be added to the channel.
@@ -257,7 +243,6 @@ export class DialogAddToGroupComponent {
       this.addSelectedUsersToChannel(this.selectedUsers);
     }
   }
-
 
   /**
    * Adds the selected users to the channel members array, preparing them to be added to Firestore.
@@ -276,7 +261,6 @@ export class DialogAddToGroupComponent {
     });
     this.channel.members.push(...formattedUsers);
   }
-
 
   /**
    * Adds the current user to the list of selected members if they are not already included.

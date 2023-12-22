@@ -10,10 +10,10 @@ import { User } from 'src/models/user.class';
   styleUrls: ['./new-message.component.scss']
 })
 export class NewMessageComponent {
-  isInputFocused: boolean = false;
+  newMsgInputFocused: boolean = false;
   @ViewChild('search') search!: ElementRef;
   currentUser: User;
-
+  searchInput: string = '';
 
   /**
    * Checks click events on the document to manage input focus.
@@ -22,18 +22,16 @@ export class NewMessageComponent {
   @HostListener('document:click', ['$event'])
   checkClick(event: Event) {
     const clickedElement = event.target as HTMLElement;
-    if (!clickedElement.classList.contains('user-search-container') && !clickedElement.classList.contains('user-container') && this.isInputFocused && !clickedElement.classList.contains('input-members')) {
-      this.isInputFocused = false;
+    if (!clickedElement.classList.contains('user-search-container') && !clickedElement.classList.contains('user-container') && this.newMsgInputFocused && !clickedElement.classList.contains('input-members')) {
+      this.newMsgInputFocused = false;
     }
   }
-
 
   constructor(public firestoreService: FirestoreService, public chatService: ChatService, public userService: UserService) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser as User;
     chatService.checkScreenWidth();
   }
-
 
   /**
    * Selects a user to start a direct message chat.
@@ -44,7 +42,6 @@ export class NewMessageComponent {
     this.search.nativeElement.value = '';
   }
 
-
   /**
    * Stops propagation of a user selection event.
    * @param {Event} event - The DOM event.
@@ -52,17 +49,4 @@ export class NewMessageComponent {
   userSelected(event: Event) {
     event.stopPropagation();
   }
-
-
-  /**
-   * Filters users based on search input.
-   */
-  // filterUsers(): void {
-  //   this.isInputFocused = true;
-  //   if (this.firestoreService.searchInput.trim() == '@') {
-  //     this.firestoreService.filteredUsers = this.firestoreService.allUsers;
-  //   } else if (this.firestoreService.searchInput.startsWith('@')) {
-  //     this.firestoreService.filterAllUsers();
-  //   }
-  // }
 }
