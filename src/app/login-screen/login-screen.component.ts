@@ -130,7 +130,7 @@ export class LoginScreenComponent implements OnInit {
    * Changes picture source
    * @param pic 
    */
-  changePicSrc(pic: string,i:any) {
+  changePicSrc(pic: string, i: any) {
     this.picSrc = pic;
     this.selectedImageIndex = i;
   }
@@ -200,7 +200,7 @@ export class LoginScreenComponent implements OnInit {
     await this.authService.createUser();
     this.signInSuccess();
     await this.userService.addUser(this.newUser as User);
-    
+
     await this.authService.signInUser(this.userService.currentEmail, this.userService.currentPassword);
   }
 
@@ -226,15 +226,13 @@ export class LoginScreenComponent implements OnInit {
     }
   }
 
-
-signInSuccess() {
-  this.authService.signInSuccess = true;
-  this.userNotFound = false;
-  setTimeout(() => {
-    this.authService.signInSuccess = false;
-  }, 1500);
-}
-
+  signInSuccess() {
+    this.authService.signInSuccess = true;
+    this.userNotFound = false;
+    setTimeout(() => {
+      this.authService.signInSuccess = false;
+    }, 1500);
+  }
 
   /**
    * @method loginWithGoogle

@@ -11,7 +11,6 @@ import { collection, deleteDoc, getDoc } from 'firebase/firestore';
 import { Chat } from 'src/models/chat.class';
 import { Channel } from 'src/models/channel.class';
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -27,16 +26,14 @@ export class AuthService {
   signInSuccess: any;
   chat: Chat = new Chat();
 
-  constructor(public router: Router, public userService: UserService, public chatService: ChatService) {
-    
-  }
+  constructor(public router: Router, public userService: UserService, public chatService: ChatService) { }
 
   /**
   * Creates a new user using email and password.
   * On success, sets a flag indicating availability.
   */
   async createUser() {
-   await createUserWithEmailAndPassword(this.auth, this.userService.currentEmail, this.userService.currentPassword)
+    await createUserWithEmailAndPassword(this.auth, this.userService.currentEmail, this.userService.currentPassword)
       .then((userCredential) => {
         const user = userCredential.user;
       })
@@ -127,7 +124,6 @@ export class AuthService {
     return currentTime.getTime();
   }
 
-
   /**
    * Signs in a guest user and updates their login time.
    */
@@ -139,7 +135,6 @@ export class AuthService {
     await this.userService.addUser(this.userService.currentUser);
     this.userService.setCurrentUserToLocalStorage();
   }
-
 
   /**
    * Signs out the current user and updates their online status.
@@ -179,7 +174,6 @@ export class AuthService {
     }
   }
 
-
   removeCurrentChat() {
     localStorage.removeItem('currentChat');
   }
@@ -187,7 +181,6 @@ export class AuthService {
   getGuestName() {
     return Math.floor(Math.random() * 100000);
   }
-
 
   /**
    * Signs in a user with Google authentication.
@@ -202,7 +195,7 @@ export class AuthService {
       .catch((error) => {
         console.error('Fehler bei Google-Anmeldung:', error);
         alert('Fehler bei Google-Anmeldung');
-      }); 
+      });
     await this.addGoogleUser()
   }
 
@@ -216,13 +209,12 @@ export class AuthService {
     } else {
       this.userService.currentUser.name = user.displayName || ""
       this.userService.currentUser.email = user.email || "";
-      this.userService.currentUser.picture = 'assets/img/icons/google.png' || "";
+      this.userService.currentUser.picture = 'assets/img/icons/google.svg' || "";
       this.userService.currentUser.online = true;
       this.userService.currentUser.loginTime = this.getLoginTime();
       this.userService.currentUser.id = user.uid;
     }
   }
-
 
   /**
     * Adds a Google user if they don't already exist in the system.
@@ -238,8 +230,7 @@ export class AuthService {
     await this.router.navigate(['home']);
   }
 
-
-  updateUserEmail(newEmail:string) {
+  updateUserEmail(newEmail: string) {
     const auth = getAuth();
     const user = auth.currentUser;
     if (user) {
@@ -248,7 +239,7 @@ export class AuthService {
       } catch (error) {
         console.error("Fehler beim Aktualisieren der E-Mail-Adresse:", error);
       }
-    } 
+    }
   }
 
   /**
@@ -265,23 +256,20 @@ export class AuthService {
       });
   }
 
-
   findUserIndexWithEmail(email: any) {
     return this.userService.users.findIndex(user => user.email === email);
   }
 
-
   findUserIndexWithId(Id: string) {
     return this.userService.users.findIndex(user => user.id === Id);
   }
-
 
   async uploadProfileImage(file: any) {
     const storage = getStorage();
     const storageReference = storageRef(storage, `profileImages/${file.name}`);
     const uploadTask = uploadBytesResumable(storageReference, file);
     uploadTask.on('state_changed',
-      () => {},
+      () => { },
       (error) => {
       },
       () => {
@@ -304,7 +292,6 @@ export class AuthService {
     return null; // Oder werfen Sie einen Fehler oder geben Sie einen Standardwert zurück
   }
 
-
   /**
     * Checks if the file URL points to an image based on common image file extensions.
     * 
@@ -316,7 +303,6 @@ export class AuthService {
       return imageExtensions.includes(extension.toLowerCase()) || null;
     }
   }
-
 
   /**
     * Checks if the file URL points to a PDF file.

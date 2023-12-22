@@ -372,8 +372,13 @@ h2 {
     display: flex;
 }
 
-.emoji-picker {
-    z-index: 10;
+
+.emojiPicker {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 20;
+    transform: translate(-50%, -50%);
 }
 
 

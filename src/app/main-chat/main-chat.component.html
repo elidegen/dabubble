@@ -1,5 +1,6 @@
 <mat-drawer-container (click)="closeEmojiPicker()" autosize [ngSwitch]="chatService.chatWindow">
-
+  <emoji-mart [style]="{ width: 'unset' }" #emojiPicker *ngIf="this.emojiService.showTextChatEmojiPicker == true" class="emojiPicker"
+  (emojiClick)="addEmojiTextField($event)"></emoji-mart>
   <app-header-mobile *ngIf="chatService.isMobile"></app-header-mobile>
 
   <mat-card class="mr-16">
@@ -203,8 +204,7 @@
 
           <emoji-mart class="emoji-mart" [style]="{ width: 'unset' }" #emojiPicker *ngIf="this.emojiService.showMainChatEmojiPicker == true" class="emojiPicker"
             (emojiClick)="addEmoji($event)"></emoji-mart>
-          <emoji-mart [style]="{ width: 'unset' }" #emojiPicker *ngIf="this.emojiService.showTextChatEmojiPicker == true" class="emojiPicker"
-            (emojiClick)="addEmojiTextField($event)"></emoji-mart>
+         
         </mat-card-content>
 
         <mat-card-content *ngSwitchCase="false" class="empty-channel-message-container">

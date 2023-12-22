@@ -12,7 +12,7 @@
         </div>
         <div class="name">
             <h1>{{user.name}}</h1>
-            <span (click)="editState = true" *ngIf="currentUser.id == user.id && !userService.currentUser.name?.startsWith('Guest') && userService.currentUser.picture !== 'assets/img/icons/google.png'">Edit</span>
+            <span (click)="editState = true" *ngIf="currentUser.id == user.id && !userService.currentUser.name?.startsWith('Guest') && userService.currentUser.picture !== 'assets/img/icons/google.svg'">Edit</span>
         </div>
         <div [ngSwitch]="user.online">
             <div class="status" *ngSwitchCase="false">
