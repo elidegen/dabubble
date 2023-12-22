@@ -138,11 +138,6 @@ export class AuthService {
     this.userService.currentUser.loginTime = this.getLoginTime();
     await this.userService.addUser(this.userService.currentUser);
     this.userService.setCurrentUserToLocalStorage();
-    signInAnonymously(this.auth)
-    .then(() => {
-    })
-    .catch((error) => {
-    });
   }
 
 
