@@ -154,7 +154,6 @@ export class AuthService {
     await this.finishSignOut();
   }
 
-
   async finishSignOut() {
     this.userService.currentUser = new User;
     this.chatService.openChat = null;

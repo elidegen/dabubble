@@ -47,7 +47,6 @@ import { MatListModule } from '@angular/material/list';
 import { HeaderMobileComponent } from './header-mobile/header-mobile.component';
 import { NewMessageComponent } from './new-message/new-message.component';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -98,13 +97,14 @@ import { NewMessageComponent } from './new-message/new-message.component';
     ReactiveFormsModule,
     PickerComponent,
 
-    provideFirebaseApp(() => initializeApp({ 
-      "projectId": "dabubble-dec6e", 
-    "appId": "1:260526664736:web:1646199aec6fed465aa045", 
-    "storageBucket": "dabubble-dec6e.appspot.com", 
-    "apiKey": "AIzaSyA9gpqSDb0Sd0ZgwkB81Q6EPZ-Om-nPpbQ",
-     "authDomain": "dabubble-dec6e.firebaseapp.com",
-      "messagingSenderId": "260526664736" })),
+    provideFirebaseApp(() => initializeApp({
+      "projectId": "dabubble-dec6e",
+      "appId": "1:260526664736:web:1646199aec6fed465aa045",
+      "storageBucket": "dabubble-dec6e.appspot.com",
+      "apiKey": "AIzaSyA9gpqSDb0Sd0ZgwkB81Q6EPZ-Om-nPpbQ",
+      "authDomain": "dabubble-dec6e.firebaseapp.com",
+      "messagingSenderId": "260526664736"
+    })),
     provideFirestore(() => getFirestore()),
 
     // provideFirebaseApp(() => initializeApp({ 
@@ -121,8 +121,6 @@ import { NewMessageComponent } from './new-message/new-message.component';
     //   "authDomain": "dabubble-c4b96.firebaseapp.com", "messagingSenderId": "390532295885"
     // })),
     // provideFirestore(() => getFirestore()),
-
-
   ],
   providers: [],
   bootstrap: [AppComponent]
