@@ -89,8 +89,6 @@ export class ThreadComponent implements OnInit {
       this.firestoreService.unSubThread();
     }
     this.firestoreService.loadThread(this.currentMessage.id);
-    console.log('currentThread', this.currentMessage);
-    
   }
 
   /**
@@ -100,6 +98,11 @@ export class ThreadComponent implements OnInit {
     this.currentMessage = this.userService.getCurrentChatFromLocalStorage();
     this.threadService.currentMessage = this.currentMessage;
     this.firestoreService.loadThread(this.currentMessage.id);
+    if (this.currentMessage.type = 'direct') {
+      this.threadService.isThreadInDM = true;
+    }
+
+   
   }
   
   ngOnDestroy() {
@@ -134,6 +137,7 @@ export class ThreadComponent implements OnInit {
     this.message.creator = this.userService.currentUser.name;
     this.message.profilePic = this.userService.currentUser.picture;
     this.message.creatorId = this.userService.currentUser.id;
+    this.message.channelID = this.currentMessage.id;
   }
   
   /**

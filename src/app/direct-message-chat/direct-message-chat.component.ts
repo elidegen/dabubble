@@ -346,7 +346,7 @@ export class DirectMessageChatComponent implements OnInit {
    */
   async openThreadInDirect(message: Message) {
     let messageId = message.id;
-    await this.threadService.createThread(messageId, this.newThread);
+    await this.threadService.createThread(message);
     this.threadService.openMessage = message;
     this.threadService.isThreadInDM = true;
     if (this.chatService.isMobile) {

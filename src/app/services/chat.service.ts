@@ -37,7 +37,6 @@ export class ChatService {
   isMobile: boolean = false;
   workspaceOpen: boolean = true;
   threadOpen: boolean = true;
-  private allChannelMessagesLoaded = false;
 
   // -------------- channel -----------------------
   get openChat$(): Observable<Channel | null> {

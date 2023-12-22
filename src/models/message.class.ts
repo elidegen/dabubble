@@ -55,6 +55,7 @@ export class Message {
             messageSelected: this.messageSelected,
             files: this.files,
             mentions: this.mentions,
+            id: this.id,
         }
     }
 }

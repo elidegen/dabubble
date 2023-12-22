@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { inject } from '@angular/core';
-import { Firestore, collection, doc, addDoc,getDocs,updateDoc, getDoc, setDoc, DocumentReference, DocumentData} from '@angular/fire/firestore';
+import { Firestore, collection, doc, addDoc,getDocs,updateDoc, getDoc, setDoc, DocumentReference, DocumentData, onSnapshot, query, orderBy} from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { Thread } from 'src/models/thread.class';
 import { Channel } from 'src/models/channel.class';
@@ -15,19 +15,22 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 export class ThreadService {
   firestore: Firestore = inject(Firestore);
-  threads: Thread[] = [];
   allMessages: Message[] = [];
   currentChat = new Channel();
   currentMessage = new Message();
+  thread = new Thread()
   threadMessage: any = [];
   messagesByDate: { [date: string]: Message[] } = {};
   organizedMessages: { date: string, messages: Message[] }[] = [];
   openThread = new EventEmitter<void>();
   changeChat = new EventEmitter<void>();
   isThreadInDM: boolean = false;
-  allThreadMessages: Message[] = [];
+  allThreads: any[] = [];
+  allThreadMessages: any[]= [];
   unSubThread: any;
-  constructor(public router: Router, public userService: UserService, public chatService: ChatService) {}
+  constructor(public router: Router, public userService: UserService, public chatService: ChatService) {
+    this.getallThreads();
+  }
 
   public _openMessageSubject: BehaviorSubject<Message | null> = new BehaviorSubject<Message | null>(null);
   
@@ -40,6 +43,7 @@ export class ThreadService {
   }
 
   ngOnInit() {
+    this.getallThreads();
   }
 
   /**
@@ -47,14 +51,17 @@ export class ThreadService {
    * @param messageId - id of message
    * @param thread - new thread model
    */
-  async createThread(messageId: any, thread: Thread) {
+  async createThread(message: Message) {
     const threadCollectionRef = collection(this.firestore, 'threads');
-    
-    const specificDocRef: DocumentReference<DocumentData> = doc(threadCollectionRef, messageId);
+    this.thread.channelID = message.id;
+    this.thread.content = message.content;
+    this.thread.creator = this.userService.currentUser.name;
+    this.thread.creatorId = this.userService.currentUser.id;
+    const specificDocRef: DocumentReference<DocumentData> = doc(threadCollectionRef, message.id);
     const docSnapshot = await getDoc(specificDocRef)
     if (!docSnapshot.exists()) {
       await setDoc(specificDocRef, {
-        ...thread.toJSON(),
+        ...this.thread.toJSON(),
       });
     }
   }
@@ -65,11 +72,23 @@ export class ThreadService {
    * @param message - new message
    */
   async sendMessageInThread(thread: any, message: Message) {
-    let threadId = thread.id
+    let threadId = thread.id;
     const subColRef = collection(this.firestore, `threads/${threadId}/messages`);
     await addDoc(subColRef, message.toJSON())
     .catch((err) => {
       console.log(err);
+    }).then((docRef: void | DocumentReference<DocumentData, DocumentData>) => {
+      if (docRef && docRef instanceof DocumentReference) {
+        this.updateChannelId('channels', message, docRef.id, subColRef);
+      }
+    });
+  }
+
+  async updateChannelId(colId: string, message: Message, newId: string, subColRef: any) {
+    message.id = newId;
+    const threadMessageRef = doc(subColRef, message.id)
+    updateDoc(threadMessageRef, {
+      id: message.id,
     })
   }
 
@@ -113,6 +132,35 @@ export class ThreadService {
       return threadCount;
     });
   }
+
+  async getallThreads() {
+    this.unSubThread = onSnapshot(
+      query(collection(this.firestore, 'threads')),
+      (snapshot) => {
+        this.allThreads = snapshot.docs.map((doc) => {
+          const thread = doc.data() as Thread;
+          return thread;
+        });
+      }
+      
+    );
+
+    console.log('all', this.allThreads);
+  }
+
+  async getThreadMessages() {
+    this.allThreadMessages = [];
+    for (const thread of this.allThreads) {
+      const threadId = thread.channelID;
+      const messageCol = collection(this.firestore, `threads/${threadId}/messages`);
+      const querySnapshot = await getDocs(messageCol);
+      querySnapshot.forEach((message) => {
+        this.allThreadMessages.push(message.data());
+      });
+    }
+    console.log('thread all M',this.allThreadMessages);
+  }
+
 }
 
 

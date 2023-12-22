@@ -1,16 +1,23 @@
 export class Thread {
-    date: string | undefined;
-    id: string | undefined;
+    content: string | undefined;
+    creator: string | undefined;
+    creatorId: string | undefined;
+    channelID: any;
+ 
 
     constructor(obj?: any) {
-        this.date = obj ? obj.date : '';
-        this.id = obj ? obj.date: '';
+        this.channelID = obj ? obj.channelID: '';
+        this.creator = obj ? obj.creator : '';
+        this.creatorId = obj ? obj.creatorId : '';
+        this.content = obj ? obj.content : '';
     }
 
     public toJSON() {
         return {
-            date: this.date,
-            id: this.id
+            channelID: this.channelID,
+            creator: this.creator,
+            creatorId: this.creatorId,
+            content: this.content,
         }
     }
 }

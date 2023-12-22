@@ -10,6 +10,7 @@ import { DocumentData, collection, doc } from 'firebase/firestore';
 import { Firestore, getDoc, getDocs, query, updateDoc, where } from '@angular/fire/firestore';
 import { Channel } from 'src/models/channel.class';
 import { Chat } from 'src/models/chat.class';
+import { ThreadService } from '../services/thread.service';
 
 @Component({
   selector: 'app-dialog-view-profile',
@@ -34,7 +35,7 @@ export class DialogViewProfileComponent {
     @Inject(MAT_DIALOG_DATA) public data: { userID: string },
     public userService: UserService,
     public authService: AuthService,
-    public firestoreService: FirestoreService, public chatService: ChatService, public router: Router) {
+    public firestoreService: FirestoreService, public chatService: ChatService, public router: Router, public threadService: ThreadService) {
     this.currentUser = this.userService.currentUser;
     this.setUser();
   }
@@ -70,6 +71,9 @@ export class DialogViewProfileComponent {
     await this.updateChannelMessages(this.user);  
     await this.updateCurrentUserInDirect(this.user);
     await this.updateDMMessages(this.user);
+    if (this.chatService.isMobile) {
+      this.updateThreadMessages(this.user);
+    }
     this.userService.setCurrentUserToLocalStorage();
     this.updateLocalStorage(this.user);
     this.userService.profileEdited.emit();
@@ -196,7 +200,7 @@ export class DialogViewProfileComponent {
 
 
   updateLocalStorage(user: User) {
-    this.currentChat = this.userService.getCurrentUserFromLocalStorage();
+    this.currentChat = this.userService.getCurrentChatFromLocalStorage();
     if (this.currentChat.type == 'direct' && this.currentChat) {
       const currentUserIndex = this.currentChat.members.findIndex((member: { id: string | undefined; }) => member.id == user.id);
       if (currentUserIndex !== -1) {
@@ -217,5 +221,25 @@ export class DialogViewProfileComponent {
     } else {
       return
     }
+  }
+
+
+  async updateThreadMessages(user: User) {
+    let threadMessages: any[];
+    console.log('hier');
+    
+    await this.threadService.getallThreads();
+    await this.threadService.getThreadMessages();
+    threadMessages = this.threadService.allThreadMessages;
+    console.log('threadmessages', threadMessages);
+    
+    threadMessages.forEach((message) => {
+      if (message.creatorId === user.id) {
+        let messageDocRef = doc(collection(this.firestore, `threads/${message.channelID}/messages`), message.id);
+        updateDoc(messageDocRef, {
+          creator: user.name
+        })
+      }
+    })
   }
 }

@@ -83,6 +83,15 @@
     .text-field-container {
         margin: 0;
     }
+    .main-responsive {
+        left: 133px !important;
+    }
+    .profile-container {
+        img {
+            height: 50px;
+            width: 50px;
+        }
+    }
 }
 
 @media (max-width: 500px) {
@@ -92,6 +101,11 @@
             height: 80px;
             width: 80px;
         }
+    }
+    .main-responsive {
+        left: 86px !important;
+        border-radius: 32px !important;
+        bottom: 84px;
     }
 
     @media (max-height: 650px) {

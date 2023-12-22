@@ -213,7 +213,7 @@
         </mat-card-content>
 
       </div>
-      <div class="user-search-container-textfield" *ngIf="this.userService.openUserContainerTextfield.value == true">
+      <div class="user-search-container-textfield main-responsive" *ngIf="this.userService.openUserContainerTextfield.value == true">
         <button (click)="getUserNameString(user)" class="user-container" *ngFor="let user of this.userService.users">
           <div class="profile-container">
             <img src="{{user.picture}}" alt="profile">

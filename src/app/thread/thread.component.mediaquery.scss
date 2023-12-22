@@ -50,6 +50,20 @@
     }
 }
 
+@media (max-width: 450px) {
+    .profile-container {
+        img {
+            height: 50px;
+            width: 50px;
+        }
+    }
+    .thread-search {
+        left: 80px !important;
+        bottom: 84px !important;
+        border-radius: 32px;
+    }
+}
+
 @media (max-height: 900px) {
     .mt-thread {
         margin-top: 12px;

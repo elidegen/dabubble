@@ -211,20 +211,20 @@ a {
 }
 
 .user-search-container-textfield {
-    position: relative;
     height: fit-content;
+    width: fit-content;
+    position: absolute;
     max-height: 300px;
     overflow-y: scroll;
     background-color: white;
     z-index: 2;
-    left: 20px;
-    bottom: 0px;
-    border-radius: 0 32px 32px 32px;
+    left: 168px;
+    bottom: 70px;
+    border-radius: 32px 32px 32px 0px;
     box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.4);
     padding: 16px;
     display: flex;
     flex-direction: column;
-    width: fit-content;
     gap: 16px;
 
     &::-webkit-scrollbar {

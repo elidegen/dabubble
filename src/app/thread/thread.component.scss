@@ -261,11 +261,6 @@ header {
             height: 20px;
             width: 20px;
         }
-
-        // .mat-mdc-icon-button .mat-mdc-button-touch-target {
-        //     height: 24px;
-        //     width: 24px;
-        // }
     }
 }
 
@@ -365,4 +360,8 @@ header {
 
 .mt-thread {
     margin-top: 16px;
+}
+
+.thread-search {
+    left: 113px !important;
 }

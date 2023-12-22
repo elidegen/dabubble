@@ -90,14 +90,13 @@
             address</mat-error>
         </div>
 
-        <div class="input-container margin-top25"><img src="assets\img\icons\lock.svg"><input minlength="6"
-            type="password" formControlName="newPassword" matInput placeholder="Password" required>
+        <div class="input-container margin-top25"><img src="assets\img\icons\lock.svg">
+          <input type="password" formControlName="newPassword" matInput placeholder="Password" required>
           <div class="placeholder"></div>
-          <mat-error class="error error-bottom" *ngIf="addUser.get('newPassword')?.hasError('minlength')">You need a
-            password with
-            minium 6
-            letters</mat-error> <mat-error class="error" *ngIf="this.userAlreadyInUse">This user already
-            exists</mat-error>
+          <mat-error class="error error-bottom" *ngIf="addUser.get('newPassword')?.hasError('minlength')">
+            You need apassword with minimum 8 letters
+          </mat-error> 
+          <mat-error class="error" *ngIf="this.userAlreadyInUse">This user already exists</mat-error>
         </div>
 
         <span class="margin-top gap checkbox-bottom cursor-pointer align-center">
@@ -129,12 +128,15 @@
                 (click)="changePicSrc(pic,i)" src="{{pic}}"></div>
           </div>
         </div>
-        <div class="upload-picture margin-top align-center"><span class="font-size20"></span> <button mat-button
-            class="main-button" type="submit"> <label class="custom-file-upload">
+        <div class="upload-picture margin-top align-center">
+          <span class="font-size20"></span> 
+          <button mat-button class="main-button" type="submit">
+            <label class="custom-file-upload">
               <input class="dataInput" (change)="onFileSelected($event)" type="file" accept="image/jpeg, image/png">
               Upload file
             </label>
-          </button></div>
+          </button>
+        </div>
 
         <div class="submit-buttons margin-top justify-content-end">
 

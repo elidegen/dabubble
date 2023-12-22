@@ -300,8 +300,7 @@ export class MainChatComponent implements OnInit {
    * @param {Message} message - The message to create a thread for.
    */
   async openThread(message: Message) {
-    let messageId = message.id;
-    await this.threadService.createThread(messageId, this.newThread);
+    await this.threadService.createThread(message);
     this.threadService.openMessage = message;
     this.threadService.isThreadInDM = false;
     if (this.chatService.isMobile) {

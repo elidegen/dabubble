@@ -50,6 +50,9 @@ export class DialogEditChannelComponent implements OnInit {
         this.getAllChannelMembers();
       }
     });
+    this.userService.profileEdited.subscribe(() => {
+      this.getAllChannelMembers();
+    })
   }
 
   /**

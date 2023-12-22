@@ -45,7 +45,7 @@ export class LoginScreenComponent implements OnInit {
   addUser = new FormGroup({
     newName: new FormControl('', [Validators.required, Validators.minLength(5)]),
     newEmail: new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z0-9]{2,}')]),
-    newPassword: new FormControl('', [Validators.required]),
+    newPassword: new FormControl('', [Validators.required, Validators.minLength(8)]),
     disableSelect: new FormControl(false),
   });
 
