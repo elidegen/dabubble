@@ -113,3 +113,12 @@ form {
     align-items: center;
     gap: 10px;
 }
+
+.message-button-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    button {
+        margin: 0;
+    }
+}
