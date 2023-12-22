@@ -9,9 +9,9 @@
   *ngIf="this.emojiService.showTextChatEmojiPicker == true" class="emojiPicker"
   (emojiClick)="addEmojiTextField($event)"></emoji-mart>
   <mat-card-header>
-    <button class="br-32 profile-button" (click)="openProfileDialog(getOtherUser(currentChat?.members)?.id)">
-      <img src="{{ getOtherUser(currentChat?.members)?.picture }}">
-      <span class="mr-16">{{ getOtherUser(currentChat?.members)?.name }}</span>
+    <button class="br-32 profile-button" (click)="openProfileDialog(getOtherUser(currentChat?.members).id)">
+      <img src="{{ getOtherUser(currentChat?.members).picture }}">
+      <span class="mr-16">{{ getOtherUser(currentChat?.members).name }}</span>
     </button>
   </mat-card-header>
 
@@ -129,17 +129,17 @@
 
   <mat-card-content *ngSwitchCase="false" class="empty-direct-message-container">
     <div class="chat-partner-container">
-      <img src="{{ getOtherUser(currentChat?.members)?.picture}}" alt="">
+      <img src="{{ getOtherUser(currentChat?.members).picture}}" alt="">
       <span *ngIf="getOtherUser(currentChat?.members)?.id !== currentUser.id">{{
-        getOtherUser(currentChat?.members)?.name }}</span>
-      <span *ngIf="getOtherUser(currentChat?.members)?.id === currentUser.id">{{
-        getOtherUser(currentChat?.members)?.name }} (You)</span>
+        getOtherUser(currentChat?.members).name }}</span>
+      <span *ngIf="getOtherUser(currentChat?.members).id === currentUser.id">{{
+        getOtherUser(currentChat?.members).name }} (You)</span>
     </div>
     <div>
       <span class="empty-room-description" *ngIf="getOtherUser(currentChat?.members)?.id !== currentUser.id">This
         conversation is only taking place between
-        <span (click)="openProfileDialog(getOtherUser(currentChat?.members)?.id)"
-          class="user-highlighted">@{{getOtherUser(currentChat?.members)?.name }}</span> and you.
+        <span (click)="openProfileDialog(getOtherUser(currentChat?.members).id)"
+          class="user-highlighted">@{{getOtherUser(currentChat?.members).name }}</span> and you.
       </span>
       <span class="empty-room-description" *ngIf="getOtherUser(currentChat?.members)?.id === currentUser.id"><b>This
           room is just for you.</b> Take notes, list your to-dos, or keep links and files handy. Feel free to discuss
@@ -161,7 +161,7 @@
     <div class="textfield-content">
       <div class="text-field-container">
         <textarea (keyup.enter)="sendMessage()" [(ngModel)]="message.content"
-          placeholder="Message to {{ getOtherUser(this.currentChat?.members)?.name }} "></textarea>
+          placeholder="Message to {{ getOtherUser(this.currentChat?.members).name }} "></textarea>
         <div class="message-buttons">
           <div class="attachments">
             <div class="border-right">

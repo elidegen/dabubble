@@ -12,7 +12,7 @@
         </div>
         <div class="name">
             <h1>{{user.name}}</h1>
-            <span (click)="editState = true" *ngIf="currentUser.id == user.id && !userService.currentUser.name?.startsWith('Guest') && userService.currentUser.picture !== 'assets/img/icons/google.png'">Edit</span>
+            <span (click)="editState = true" *ngIf="currentUser.id == user.id && !userService.currentUser.name?.startsWith('Guest') && userService.currentUser.picture !== 'assets/img/icons/google.svg'">Edit</span>
         </div>
         <div [ngSwitch]="user.online">
             <div class="status" *ngSwitchCase="false">
@@ -41,13 +41,15 @@
                 <h2>Guest</h2>
             </div>
         </div>
-        <button *ngIf="currentUser.id !== user.id" (click)="selectUser(user)" mat-button
-            class="main-button primary mr-16 align-center" type="submit">
-            <span class="align-center">
-                <img src="assets/img/icons/message.svg" alt="">
-                Message
-            </span>
-        </button>
+        <div class="message-button-container">
+            <button *ngIf="currentUser.id !== user.id" (click)="selectUser(user)" mat-button
+                class="main-button primary mr-16 align-center" type="submit">
+                <span class="align-center">
+                    <img src="assets/img/icons/message.svg" alt="">
+                    Message
+                </span>
+            </button>
+        </div>
     </mat-card-content>
 
     <mat-card-content *ngSwitchCase="true">
@@ -89,29 +91,3 @@
         </div>
     </mat-card-content>
 </mat-card>
-
-
-
-<!-- <mat-card >
-    <mat-card-content>
-        <div class="header">
-            <h1>Profile</h1>
-            <button mat-icon-button (click)="dialogRef.close()">
-                <mat-icon>close</mat-icon>
-            </button>
-        </div>
-        <div class="picture">
-            <img src="assets/img/avatars/profile.svg" alt="" />
-        </div>
-        <div class="name">
-            <h1>Guest</h1>
-        </div>
-        <div>
-            <div class="status">
-                <div class="status-circle" style="background-color: #92c83e !important;"></div>
-                <span style="color: #92c83e;">Active</span>
-            </div>
-        </div>
-       
-    </mat-card-content>
-</mat-card> -->

@@ -105,7 +105,7 @@ h2 {
 }
 
 .group-members-button {
-    padding: 4px 12px 4px 24px !important;
+    padding: 6px 14px 6px 26px !important;
     border-radius: 32px;
     height: fit-content;
     width: fit-content;
@@ -244,10 +244,6 @@ mat-card {
         background-color: var(--purple2);
         color: white;
     }
-
-    // .message-container {
-    //     align-items: flex-end;
-    // }
 
     .message-row-container {
         &:hover {

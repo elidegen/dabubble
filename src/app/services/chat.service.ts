@@ -39,28 +39,28 @@ export class ChatService {
   threadOpen: boolean = true;
   private allChannelMessagesLoaded = false;
 
-    // -------------- channel -----------------------
-    get openChat$(): Observable<Channel | null> {
-      return this._openChatSubject.asObservable();
-    }
-  
-  
-    set openChat(channel: Channel | null) {
-      this._openChatSubject.next(channel);
-    }
-  
-  
-    // ----------------- Direct Message --------------------------
-    get openDirectMessage$(): Observable<Chat | null> {
-      return this._openDirectMessageSubject.asObservable();
-    }
-  
-  
-    set openDirectMessage(chat: Chat | null) {
-      this._openDirectMessageSubject.next(chat);
-    }
-  
-    // Create direct messages ------------------------------
+  // -------------- channel -----------------------
+  get openChat$(): Observable<Channel | null> {
+    return this._openChatSubject.asObservable();
+  }
+
+
+  set openChat(channel: Channel | null) {
+    this._openChatSubject.next(channel);
+  }
+
+
+  // ----------------- Direct Message --------------------------
+  get openDirectMessage$(): Observable<Chat | null> {
+    return this._openDirectMessageSubject.asObservable();
+  }
+
+
+  set openDirectMessage(chat: Chat | null) {
+    this._openDirectMessageSubject.next(chat);
+  }
+
+  // Create direct messages ------------------------------
 
   constructor(public userService: UserService, public router: Router) {
     this.getallChannels();
@@ -119,9 +119,9 @@ export class ChatService {
    */
   compareNewDirectMessageWithExisting(user: User) {
     this.getAllDirectMessages()
-    .then(() => {
-      this.findDirectMessage(user);
-    });
+      .then(() => {
+        this.findDirectMessage(user);
+      });
   }
 
   /**
@@ -271,7 +271,7 @@ export class ChatService {
       if (channel.members.some((member: { id: string; }) => member.id === this.userService.currentUser.id)) {
         this.yourChannels.push(channel);
       }
-    });  
+    });
   }
 
   /**
@@ -287,8 +287,6 @@ export class ChatService {
         this.allMessagesOfChannel.push(message.data());
       });
     }
-    console.log('chatservice all channel m', this.allMessagesOfChannel );
-    
   }
 
   /**

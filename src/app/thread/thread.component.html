@@ -28,6 +28,8 @@
   
               <div class="message message-content">
                 <span class="word-break">{{this.threadService.currentMessage.content}}</span>
+                <a (click)="openProfileDialog(mention['id'])" *ngFor="let mention of threadService.currentMessage.mentions">
+                @{{mention.name}}</a>
               </div>
             </div>
   
