@@ -217,7 +217,7 @@
         <button (click)="getUserNameString(user)" class="user-container" *ngFor="let user of this.userService.users">
           <div class="profile-container">
             <img src="{{user.picture}}" alt="profile">
-            <div class="online-status"></div>
+            this.userService.currentUser.picture
           </div>
           <span>{{user.name}}</span>
         </button>

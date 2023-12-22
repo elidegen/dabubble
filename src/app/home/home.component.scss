@@ -97,6 +97,10 @@ main {
     left: 50%;
 }
 
+.offline-status {
+    background-color: grey!important;
+}
+
 mat-drawer-container {
     width: 100vw;
     background-color: transparent;

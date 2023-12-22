@@ -16,7 +16,7 @@
               (click)="selectUser(user)">
               <div (click)="selectUser(user)" class="profile-container">
                 <img src="{{user.picture}}" alt="profile">
-                <div class="online-status"></div>
+                <div [ngClass]="{'offline-status': user.online == false}" class="online-status"></div>
               </div>
               <span>{{user.name}}</span>
             </button>
@@ -115,7 +115,7 @@
               (click)="selectUser(user)">
               <div (click)="selectUser(user)" class="profile-container">
                 <img src="{{user.picture}}" alt="profile">
-                <div class="online-status"></div>
+                <div [ngClass]="{'offline-status': user.online === false}" class="online-status"></div>
               </div>
               <span>{{user.name}}</span>
             </button>
