@@ -186,6 +186,7 @@ export class DirectMessageChatComponent implements OnInit {
    */
   async sendMessage() {
     if (this.currentChat?.id && this.message.content?.trim() !== '' || this.showUploadedFile) {
+      this.showUploadedFile = false;
       this.message.content = this.message.content!.replace(this.taggedNames, '');
       this.determineMessageValues();
       await this.firestoreService.sendMessageInDirectMessage(this.currentChat!.id, this.message);
