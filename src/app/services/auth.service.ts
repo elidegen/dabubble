@@ -270,17 +270,15 @@ export class AuthService {
 
   async uploadProfileImage(file: any) {
     const storage = getStorage();
+
     const storageReference = storageRef(storage, `profileImages/${file.name}`);
+    
     const uploadTask = uploadBytesResumable(storageReference, file);
-    uploadTask.on('state_changed',
-      () => { },
-      (error) => {
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          this.customPic = downloadURL;
-        });
-      }
+    uploadTask.on('state_changed', () => {
+      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+        this.customPic = downloadURL;
+      });
+    }
     );
   }
 
