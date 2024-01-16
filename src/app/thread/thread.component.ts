@@ -84,7 +84,7 @@ export class ThreadComponent implements OnInit {
    */
   loadThread(message: Message) {
     this.currentMessage = message;
-    this.threadService.currentMessage = message;
+    this.threadService.currentMessage = message;    
     if (this.firestoreService.unSubThread) {
       this.firestoreService.unSubThread();
     }

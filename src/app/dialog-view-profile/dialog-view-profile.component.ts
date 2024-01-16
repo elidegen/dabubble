@@ -11,6 +11,7 @@ import { Firestore, getDoc, getDocs, query, updateDoc, where } from '@angular/fi
 import { Channel } from 'src/models/channel.class';
 import { Chat } from 'src/models/chat.class';
 import { ThreadService } from '../services/thread.service';
+import { verifyBeforeUpdateEmail } from 'firebase/auth';
 
 @Component({
   selector: 'app-dialog-view-profile',

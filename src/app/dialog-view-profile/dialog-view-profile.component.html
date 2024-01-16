@@ -31,7 +31,7 @@
             </div>
             <div class="email">
                 <h2>E-Mail Adress</h2>
-                <a matTooltip="Mail to" href="mailto:{{user.email}}">{{user.email}}</a>
+                <a matTooltip="send mail" href="mailto:{{user.email}}">{{user.email}}</a>
             </div>
         </div>
         <div *ngIf="userService.currentUser.name?.startsWith('Guest')" class="email-container">
@@ -74,13 +74,15 @@
             </div>
             <input [(ngModel)]="editedUser.name" #nameInput="ngModel" required name="editedUserName" type="text">
             <mat-error *ngIf="nameInput.invalid">Please enter your name</mat-error>
-            <div class="display-flex">
-                <img class="mr-16" src="assets/img/icons/mail.svg">
-                <h2>E-Mail Adress</h2>
+            <div *ngIf="!userService.currentUser.name?.startsWith('Guest')" class="email-container">
+                <div class="mail-icon mr-16">
+                    <img src="assets/img/icons/mail.svg" alt="">
+                </div>
+                <div class="email">
+                    <h2>E-Mail Adress</h2>
+                    <a matTooltip="send mail" href="mailto:{{user.email}}">{{user.email}}</a>
+                </div>
             </div>
-            <input [(ngModel)]="editedUser.email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required
-                #mailInput="ngModel" name="editedUserEmail" type="email">
-            <mat-error *ngIf="mailInput.invalid">Please enter valid E-Mail</mat-error>
         </form>
 
         <div class="buttons w100">

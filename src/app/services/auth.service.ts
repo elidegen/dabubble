@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { inject } from '@angular/core';
 import { Firestore, doc, updateDoc, } from '@angular/fire/firestore';
-import { getAuth, updateEmail, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, sendPasswordResetEmail, signInAnonymously, } from "firebase/auth";
+import { getAuth, updateEmail, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, sendPasswordResetEmail, signInAnonymously, verifyBeforeUpdateEmail, } from "firebase/auth";
 import { Router } from '@angular/router';
 import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { UserService } from './user.service';
@@ -237,9 +237,12 @@ export class AuthService {
   updateUserEmail(newEmail: string) {
     const auth = getAuth();
     const user = auth.currentUser;
+    console.log('user', user);
+
     if (user) {
       try {
-        updateEmail(user, newEmail);
+        verifyBeforeUpdateEmail(user, newEmail);
+        console.log('user updated');
       } catch (error) {
         console.error("Fehler beim Aktualisieren der E-Mail-Adresse:", error);
       }
@@ -272,7 +275,7 @@ export class AuthService {
     const storage = getStorage();
 
     const storageReference = storageRef(storage, `profileImages/${file.name}`);
-    
+
     const uploadTask = uploadBytesResumable(storageReference, file);
     uploadTask.on('state_changed', () => {
       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
