@@ -68,8 +68,7 @@ export class UserService {
         this.updateUserId(item, docRef!.id);
         this.addNewUserToCommunityChannel(item)
         this.createDirectMessage(item)
-      }
-      )
+      })
   }
 
   async addNewUserToCommunityChannel(newUser: User) {
