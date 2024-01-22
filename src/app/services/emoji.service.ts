@@ -1,51 +1,25 @@
 import { Injectable } from '@angular/core';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EmojiService {
   showEmojiPicker: boolean = false;
-
-  showMainChatEmojiPicker: boolean = false;
-  showThreadEmojiPicker: boolean = false;
-  showTextChatEmojiPicker: boolean = false;
-  showThreadTextChatEmojiPicker: boolean = false;
   
   emojiString: any = "";
   messageId: any = "";
-  constructor() { }
+  constructor(public userService: UserService) { }
 
   /**
    * Adds an emoji to the main chat.
    * Updates the emojiString with the selected emoji and hides the picker.
    *
    */
-  addEmojiMainChat(event: any) {
+  addEmoji(event: any) {
     let emojiString = event["emoji"].native;
     this.emojiString = emojiString;
-    this.showMainChatEmojiPicker == false;
-  }
-
-  /**
-    * Adds an emoji to the thread.
-    * Updates the emojiString with the selected emoji and hides the picker.
-    *
-    */
-  addEmojiThread($event: any) {
-    let emojiString = $event["emoji"].native;
-    this.emojiString = emojiString;
-    this.showThreadEmojiPicker == false;
-  }
-
-  /**
-     * Adds an emoji to the text chat.
-     * Updates the emojiString with the selected emoji and hides the picker.
-     *
-     */
-  addEmojiTextChat(event: any) {
-    let emojiString = event["emoji"].native;
-    this.emojiString = emojiString;
-    this.showTextChatEmojiPicker = false;
+    this.showEmojiPicker == false;
   }
 
   /**
@@ -54,8 +28,18 @@ export class EmojiService {
    */
   openEmojiPicker(messageId: any) {
     setTimeout(() => {
-      this.showMainChatEmojiPicker = true;
+      this.showEmojiPicker = true;
     }, 10);
     this.messageId = messageId;
+  }
+
+  /**
+   * Closes the emoji picker.
+   */
+  closeEmojiPicker() {
+    if (this.showEmojiPicker == true && this.emojiString == "") {
+      this.showEmojiPicker = false;
+    }
+    this.userService.openUserContainerTextfield.next(false);
   }
 }

@@ -275,7 +275,7 @@ export class DirectMessageChatComponent implements OnInit {
    */
   openEmojiPickerChat() {
     setTimeout(() => {
-      this.emojiService.showTextChatEmojiPicker = true;
+      this.emojiService.showEmojiPicker = true;
     }, 100);
   }
 
@@ -307,9 +307,9 @@ export class DirectMessageChatComponent implements OnInit {
    */
   addEmoji(event: any) {
     if (this.emojiService.messageId != "") {
-      this.emojiService.addEmojiMainChat(event);
+      this.emojiService.addEmoji(event);
       this.firestoreService.addReaction(this.emojiService.emojiString, this.emojiService.messageId, this.currentChat?.id, 'direct messages')
-      this.emojiService.showMainChatEmojiPicker = false;
+      this.emojiService.showEmojiPicker = false;
     }
   }
 
@@ -318,7 +318,7 @@ export class DirectMessageChatComponent implements OnInit {
    * @param {any} $event - The event object containing the emoji data.
    */
   addEmojiTextField($event: any) {
-    this.emojiService.addEmojiTextChat($event);
+    this.emojiService.addEmoji($event);
     this.message.content += this.emojiService.emojiString;
   }
 
@@ -384,16 +384,5 @@ export class DirectMessageChatComponent implements OnInit {
         return this.deletedUser;
       }
     }
-  }
-
-  /**
-   * Closes the emoji picker.
-   */
-  closeEmojiPicker() {
-    if (this.emojiService.showMainChatEmojiPicker == true || this.emojiService.showTextChatEmojiPicker == true && this.emojiService.emojiString == "") {
-      this.emojiService.showMainChatEmojiPicker = false;
-      this.emojiService.showTextChatEmojiPicker = false;
-    }
-    this.userService.openUserContainerTextfield.next(false);
   }
 }

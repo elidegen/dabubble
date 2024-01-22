@@ -153,7 +153,7 @@ export class ThreadComponent implements OnInit {
    */
   openEmojiPicker(messageId: any) {
     setTimeout(() => {
-      this.emojiService.showThreadEmojiPicker = true;
+      this.emojiService.showEmojiPicker = true;
     }, 1);
     this.emojiService.messageId = messageId;
   }
@@ -176,19 +176,8 @@ export class ThreadComponent implements OnInit {
    */
   openEmojiPickerChat() {
     setTimeout(() => {
-      this.emojiService.showThreadTextChatEmojiPicker = true;
+      this.emojiService.showEmojiPicker = true;
     }, 1);
-  }
-
-  /**
-   * Closes the emoji picker if it's open and no emoji has been selected.
-   */
-  closeEmojiPicker() {
-    if (this.emojiService.showThreadEmojiPicker == true || this.emojiService.showThreadTextChatEmojiPicker == true && this.emojiService.emojiString == "") {
-      this.emojiService.showThreadEmojiPicker = false;
-      this.emojiService.showThreadTextChatEmojiPicker = false;
-    }
-    this.userService.openUserContainerThreadTextfield.next(false);
   }
 
   /**
@@ -196,9 +185,9 @@ export class ThreadComponent implements OnInit {
    * @param {any} $event - The emoji select event.
    */
   addEmoji($event: any) {
-    this.emojiService.addEmojiThread($event);
+    this.emojiService.addEmoji($event);
     this.firestoreService.addReaction(this.emojiService.emojiString, this.emojiService.messageId, this.currentMessage.id, 'threads');
-    this.emojiService.showThreadEmojiPicker = false;
+    this.emojiService.showEmojiPicker = false;
     this.emojiService.emojiString = "";
   }
 
@@ -207,9 +196,9 @@ export class ThreadComponent implements OnInit {
    * @param {any} $event - The emoji select event.
    */
   addEmojiTextField($event: any) {
-    this.emojiService.addEmojiTextChat($event);
+    this.emojiService.addEmoji($event);
     this.message.content += this.emojiService.emojiString;
-    this.emojiService.showThreadTextChatEmojiPicker = false;
+    this.emojiService.showEmojiPicker = false;
     this.emojiService.emojiString = "";
   }
 

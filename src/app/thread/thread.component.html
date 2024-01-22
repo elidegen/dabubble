@@ -1,5 +1,5 @@
 <app-header-mobile *ngIf="chatService.isMobile"></app-header-mobile>
-<mat-card (click)="closeEmojiPicker()">
+<mat-card (click)="this.emojiService.closeEmojiPicker()">
   <mat-card-header>
     <header>
       <div class="header">
@@ -122,10 +122,10 @@
         </div>
       </div>
       <emoji-mart class="emoji-mart" [style]="{ width: 'unset' }"
-        *ngIf="this.emojiService.showThreadEmojiPicker == true" class="emojiPicker"
+        *ngIf="this.emojiService.showEmojiPicker == true" class="emojiPicker"
         (emojiClick)="addEmoji($event)"></emoji-mart>
       <emoji-mart class="emoji-mart" [style]="{ width: 'unset' }"
-        *ngIf="this.emojiService.showThreadTextChatEmojiPicker == true" class="emojiPicker"
+        *ngIf="this.emojiService.showEmojiPicker == true" class="emojiPicker"
         (emojiClick)="addEmojiTextField($event)"></emoji-mart>
     </section>
 

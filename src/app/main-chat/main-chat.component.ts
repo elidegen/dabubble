@@ -244,20 +244,11 @@ export class MainChatComponent implements OnInit {
    */
   openEmojiPickerChat() {
     setTimeout(() => {
-      this.emojiService.showTextChatEmojiPicker = true;
+      this.emojiService.showEmojiPicker = true;
     }, 30);
   }
 
-  /**
-   * Closes the emoji picker.
-   */
-  closeEmojiPicker() {
-    if (this.emojiService.showMainChatEmojiPicker == true || this.emojiService.showTextChatEmojiPicker == true && this.emojiService.emojiString == "") {
-      this.emojiService.showMainChatEmojiPicker = false;
-      this.emojiService.showTextChatEmojiPicker = false;
-    }
-    this.userService.openUserContainerTextfield.next(false);
-  }
+  
 
   /**
    * Adds an emoji to a message.
@@ -265,9 +256,9 @@ export class MainChatComponent implements OnInit {
    */
   addEmoji(event: any) {
     if (this.emojiService.messageId != "") {
-      this.emojiService.addEmojiMainChat(event);
+      this.emojiService.addEmoji(event);
       this.firestoreService.addReaction(this.emojiService.emojiString, this.emojiService.messageId, this.currentChat?.id, 'channels')
-      this.emojiService.showMainChatEmojiPicker = false;
+      this.emojiService.showEmojiPicker = false;
       this.emojiService.emojiString = "";
     }
   }
@@ -277,7 +268,7 @@ export class MainChatComponent implements OnInit {
    * @param {any} $event - The emoji select event.
    */
   addEmojiTextField($event: any) {
-    this.emojiService.addEmojiTextChat($event);
+    this.emojiService.addEmoji($event);
     this.message.content += this.emojiService.emojiString;
     this.emojiService.emojiString = "";
   }
