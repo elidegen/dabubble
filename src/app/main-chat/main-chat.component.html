@@ -184,7 +184,7 @@
                     (click)="firestoreService.addReaction('🙌', message.id, currentChat?.id, 'channels')">
                     <img src="assets/img/emojis/hands.svg" alt="">
                   </button>
-                  <button class="hostlistener-dont-trigger" (click)="openEmojiPicker(message.id)" mat-icon-button>
+                  <button class="hostlistener-dont-trigger" (click)="this.emojiService.openEmojiPicker(message.id)" mat-icon-button>
                     <img src="assets/img/icons/add_reaction.svg" alt="">
                   </button>
                   <button (click)="openThread(message)" mat-icon-button>

@@ -103,7 +103,7 @@
               (click)="firestoreService.addReaction('🙌', message.id, currentChat?.id, 'direct messages')">
               <img src="assets/img/emojis/hands.svg" />
             </button>
-            <button class="hostlistener-dont-trigger" (click)="openEmojiPicker(message.id)" mat-icon-button>
+            <button class="hostlistener-dont-trigger" (click)="this.emojiService.openEmojiPicker(message.id)" mat-icon-button>
               <img src="assets/img/icons/add_reaction.svg" />
             </button>
             <button mat-icon-button *ngIf="message.creatorId == currentUser.id"

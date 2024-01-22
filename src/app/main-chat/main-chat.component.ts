@@ -240,17 +240,6 @@ export class MainChatComponent implements OnInit {
   //----------------------------------------------------------------------------------------------------
 
   /**
-   * Opens the emoji picker for a specific message.
-   * @param {any} messageId - The ID of the message to add an emoji to.
-   */
-  openEmojiPicker(messageId: any) {
-    setTimeout(() => {
-      this.emojiService.showMainChatEmojiPicker = true;
-    }, 30);
-    this.emojiService.messageId = messageId;
-  }
-
-  /**
    * Opens the emoji picker for the chat input field.
    */
   openEmojiPickerChat() {

@@ -120,6 +120,7 @@ section {
     gap: 16px;
     margin-top: 2px;
     width: fit-content;
+    cursor: pointer;
 
     &:hover .comments {
         font-weight: bold;

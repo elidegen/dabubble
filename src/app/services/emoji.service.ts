@@ -4,10 +4,13 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class EmojiService {
+  showEmojiPicker: boolean = false;
+
   showMainChatEmojiPicker: boolean = false;
   showThreadEmojiPicker: boolean = false;
   showTextChatEmojiPicker: boolean = false;
   showThreadTextChatEmojiPicker: boolean = false;
+  
   emojiString: any = "";
   messageId: any = "";
   constructor() { }
@@ -43,5 +46,16 @@ export class EmojiService {
     let emojiString = event["emoji"].native;
     this.emojiString = emojiString;
     this.showTextChatEmojiPicker = false;
+  }
+
+  /**
+   * Opens the emoji picker for a specific message.
+   * @param {any} messageId - The ID of the message to add an emoji to.
+   */
+  openEmojiPicker(messageId: any) {
+    setTimeout(() => {
+      this.showMainChatEmojiPicker = true;
+    }, 10);
+    this.messageId = messageId;
   }
 }

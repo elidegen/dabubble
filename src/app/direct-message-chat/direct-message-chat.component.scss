@@ -139,7 +139,6 @@
 .message-row-container {
     position: relative;
     padding: 8px 0;
-    cursor: pointer;
 
     &:hover {
         background-color: var(--primary);
@@ -356,6 +355,7 @@ mat-card-header {
     gap: 16px;
     margin-top: 2px;
     width: fit-content;
+    cursor: pointer;
 
     &:hover .comments {
         font-weight: bold;

@@ -271,17 +271,6 @@ export class DirectMessageChatComponent implements OnInit {
   //----------------------------------------------------------------------------------------------------------------
 
   /**
-   * Toggles the display of the emoji picker for a specific message.
-   * @param {any} messageId - The ID of the message to show the emoji picker for.
-   */
-  openEmojiPicker(messageId: any) {
-    setTimeout(() => {
-      this.emojiService.showMainChatEmojiPicker = true;
-    }, 10);
-    this.emojiService.messageId = messageId;
-  }
-
-  /**
    * Toggles the display of the emoji picker for the text input field in the chat.
    */
   openEmojiPickerChat() {
