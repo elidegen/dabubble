@@ -2,10 +2,10 @@
 
 <app-header-mobile *ngIf="chatService.isMobile"></app-header-mobile>
 
-<div (click)="this.emojiService.closeEmojiPicker()" [ngSwitch]="firestoreService.messageIsExisting" class="chat-window-container">
-  <emoji-mart class="emoji-mart" [style]="{ width: 'unset' }" #emojiPicker
+<div [ngSwitch]="firestoreService.messageIsExisting" class="chat-window-container">
+  <!-- <emoji-mart class="emoji-mart" [style]="{ width: 'unset' }" #emojiPicker
     *ngIf="this.emojiService.showEmojiPicker == true" class="emojiPicker"
-    (emojiClick)="addEmojiTextField($event)"></emoji-mart>
+    (emojiClick)="addEmojiTextField($event)"></emoji-mart> -->
   <mat-card-header>
     <button class="br-32 profile-button" (click)="openProfileDialog(getOtherUser(currentChat?.members).id)">
       <img src="{{ getOtherUser(currentChat?.members).picture }}">
@@ -73,10 +73,9 @@
               <div class="reaction-container">
                 <div class="reaction-emoji-container">
                   <button class="reaction-emoji-button"
+                    (click)="firestoreService.addReaction(emoji.key,message.id, currentChat?.id, 'direct messages')"
                     *ngFor="let emoji of message.reactionCount | keyvalue; let i = index">
-                    <div
-                      (click)="firestoreService.addReaction(emoji.key,message.id, currentChat?.id, 'direct messages')"
-                      class="emoji-fit">{{emoji.key}}</div>
+                    <div class="emoji-fit">{{emoji.key}}</div>
                     <span>{{ emoji.value }}</span>
                   </button>
                 </div>
@@ -103,7 +102,8 @@
               (click)="firestoreService.addReaction('🙌', message.id, currentChat?.id, 'direct messages')">
               <img src="assets/img/emojis/hands.svg" />
             </button>
-            <button class="hostlistener-dont-trigger" (click)="this.emojiService.openEmojiPicker(message.id)" mat-icon-button>
+            <button class="hostlistener-dont-trigger" (click)="this.emojiService.openEmojiPicker(message.id, 'direct messages')"
+              mat-icon-button>
               <img src="assets/img/icons/add_reaction.svg" />
             </button>
             <button mat-icon-button *ngIf="message.creatorId == currentUser.id"
@@ -121,9 +121,9 @@
       </section>
     </ng-container>
 
-    <emoji-mart class="emoji-mart" [style]="{ width: 'unset' }" #emojiPicker
+    <!-- <emoji-mart class="emoji-mart" [style]="{ width: 'unset' }" #emojiPicker
       *ngIf="this.emojiService.showEmojiPicker == true" class="emojiPicker"
-      (emojiClick)="addEmoji($event)"></emoji-mart>
+      (emojiClick)="addEmoji($event)"></emoji-mart> -->
   </mat-card-content>
 
   <mat-card-content *ngSwitchCase="false" class="empty-direct-message-container">
@@ -174,7 +174,7 @@
               </button>
             </div>
 
-            <button (click)="openEmojiPickerChat()" mat-icon-button>
+            <button (click)="this.emojiService.openEmojiPicker('', 'direct messages')" mat-icon-button>
               <img src="assets/img/icons/smiley.svg" />
             </button>
 

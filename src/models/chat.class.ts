@@ -9,13 +9,12 @@ export class Chat {
         this.members = obj ? obj.members : [];
         this.id = obj ? obj.id : '';
         this.type = obj ? obj.type : '';
-        
     }
 
     public toJSON() {
         return {
-            name:  this.name,
-            members:  this.members,
+            name: this.name,
+            members: this.members,
             id: this.id,
             type: this.type,
         }

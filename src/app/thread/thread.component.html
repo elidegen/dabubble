@@ -1,5 +1,5 @@
 <app-header-mobile *ngIf="chatService.isMobile"></app-header-mobile>
-<mat-card (click)="this.emojiService.closeEmojiPicker()">
+<mat-card>
   <mat-card-header>
     <header>
       <div class="header">
@@ -96,9 +96,9 @@
 
             <div class="reaction-emoji-container">
               <button class="reaction-emoji-button"
+                (click)="firestoreService.addReaction(emoji.key, thread.id, this.currentMessage.id, 'threads')"
                 *ngFor="let emoji of thread.reactionCount | keyvalue; let i = index">
-                <div (click)="firestoreService.addReaction(emoji.key, thread.id, this.currentMessage.id, 'threads')"
-                  class="emoji-fit">{{emoji.key}}</div>
+                <div class="emoji-fit">{{emoji.key}}</div>
                 <span>{{ emoji.value }}</span>
               </button>
             </div>
@@ -106,7 +106,7 @@
         </div>
 
         <div class="reaction" [ngClass]="{'own-message': thread.creatorId == currentUser.id}">
-          <button mat-icon-button (click)="toggled = true" (click)="openEmojiPicker(thread.id)">
+          <button mat-icon-button (click)="toggled = true" (click)="this.emojiService.openEmojiPicker(thread.id, 'threads')">
             <img src="assets/img/icons/add_reaction.svg" alt="">
           </button>
           <button mat-icon-button *ngIf="thread.creatorId == currentUser.id"
@@ -121,12 +121,9 @@
           </div>
         </div>
       </div>
-      <emoji-mart class="emoji-mart" [style]="{ width: 'unset' }"
+      <!-- <emoji-mart class="emoji-mart" [style]="{ width: 'fit-content' }"
         *ngIf="this.emojiService.showEmojiPicker == true" class="emojiPicker"
-        (emojiClick)="addEmoji($event)"></emoji-mart>
-      <emoji-mart class="emoji-mart" [style]="{ width: 'unset' }"
-        *ngIf="this.emojiService.showEmojiPicker == true" class="emojiPicker"
-        (emojiClick)="addEmojiTextField($event)"></emoji-mart>
+        (emojiClick)="this.emojiService.addEmoji($event)"></emoji-mart> -->
     </section>
 
   </mat-card-content>
@@ -157,12 +154,11 @@
             </button>
           </div>
 
-          <button (click)="openEmojiPickerChat()" mat-icon-button class="textfield-buttons">
+          <button (click)="this.emojiService.openEmojiPicker('', 'threads')" mat-icon-button>
             <img src="assets/img/icons/smiley.svg" alt="" />
           </button>
 
-          <button (click)="this.userService.openUserContainerThreadTextField()" mat-icon-button
-            class="textfield-buttons">
+          <button (click)="this.userService.openUserContainerThreadTextField()" mat-icon-button>
             <img src="assets/img/icons/@.svg" alt="" />
           </button>
           <ng-container *ngFor="let messagefile of this.message.files">

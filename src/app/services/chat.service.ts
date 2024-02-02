@@ -347,7 +347,7 @@ export class ChatService {
    * @param message 
    */
   getChannelByMessage(message: any) {
-    let channel = this.allChannels.find(channel => channel.id === message.channelID);
+    let channel = this.allChannels.find(channel => channel.id === message.channelId);
     this.openChat = channel;
     this.chatWindow = 'channel';
     if (this.isMobile) {
@@ -360,7 +360,7 @@ export class ChatService {
    * @param message 
    */
   getDirectMessageByMessage(message: any) {
-    let direct = this.allLoadedDirectMessages.find(dm => dm.id === message.channelID);
+    let direct = this.allLoadedDirectMessages.find(dm => dm.id === message.channelId);
     this.openDirectMessage = direct;
     this.chatWindow = 'direct';
     if (this.isMobile) {

@@ -376,14 +376,82 @@ h2 {
     background-color: grey;
 }
 
-.emojiPicker {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    z-index: 20;
-    transform: translate(-50%, -50%);
+.emoji-overlay {
+    z-index: 100;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .emoji-mart {
+        width: fit-content !important;
+        max-width: 400px;
+    }
 }
 
+.reaction-emoji-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+
+    span {
+        font-size: 14px;
+    }
+
+    .emoji-fit {
+        font-size: 20px;
+        margin-bottom: 3px;
+    }
+}
+
+.reaction-emoji-button {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 6px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.16);
+    transition: all 125ms;
+
+    &:hover {
+        background-color: #ccc !important;
+    }
+}
+
+.message-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.attachments {
+    display: flex;
+    align-items: center;
+
+    button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.border-right {
+    border-right: 2px solid lightgrey;
+}
+
+mat-drawer-container {
+    mat-drawer {
+        border: 1px solid red;
+    }
+}
 
 .delete-message {
     color: red !important;
@@ -424,16 +492,4 @@ textarea {
     left: 0;
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.4);
-}
-
-@media (max-width: 1300px) {
-    .emoji-mart {
-        width: 220px !important;
-    }
-}
-
-@media (max-width: 500px) {
-    .emoji-mart {
-        width: 310px !important;
-    }
 }

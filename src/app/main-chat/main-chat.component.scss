@@ -172,28 +172,6 @@ mat-card-header {
     }
 }
 
-.border-right {
-    border-right: 2px solid lightgrey;
-}
-
-.attachments {
-    display: flex;
-    align-items: center;
-
-    button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-}
-
-.message-buttons {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-}
-
 mat-card {
     height: calc(100vh - 96px);
 }

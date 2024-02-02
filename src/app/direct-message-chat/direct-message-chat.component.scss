@@ -24,28 +24,6 @@
     }
 }
 
-.border-right {
-    border-right: 2px solid lightgrey;
-}
-
-.attachments {
-    display: flex;
-    align-items: center;
-
-    button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-}
-
-.message-buttons {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-}
-
 .date-container {
     display: flex;
     padding: 0 20px;
@@ -226,41 +204,6 @@ section {
     flex-direction: column-reverse;
     justify-content: center;
     gap: 6px;
-}
-
-.reaction-emoji-container {
-    display: flex;
-    gap: 8px;
-    margin-top: 4px;
-}
-
-.reaction-emoji-button {
-    background-color: white;
-    outline: none;
-    border: 1px solid #ccc;
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 2px 6px;
-    font-size: 10px;
-    cursor: pointer;
-    text-align: center;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-    transition: box-shadow 0.2s ease-in-out;
-
-    &:hover {
-        background-color: white !important;
-    }
-
-    img {
-        height: 16px;
-        width: 15px;
-    }
-}
-
-.emoji-fit {
-    font-size: 20px;
 }
 
 .textfield-content {

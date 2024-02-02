@@ -13,6 +13,7 @@ import { FirestoreService } from '../services/firestore.service';
 import { User } from 'src/models/user.class';
 import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-profile.component';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-thread',
@@ -42,6 +43,7 @@ export class ThreadComponent implements OnInit {
   editingThreadMessage: string | undefined;
   scrollPosition: any;
   @ViewChild('scrollContainer') scrollContainer!: ElementRef<HTMLDivElement>;
+  emojiSubscription: Subscription;
 
   constructor(public threadService: ThreadService, public dialog: MatDialog, public userService: UserService,
     public authService: AuthService, public chatService: ChatService, public emojiService: EmojiService,
@@ -49,6 +51,11 @@ export class ThreadComponent implements OnInit {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
     chatService.checkScreenWidth();
+    this.emojiSubscription = this.emojiService.emojiMain$.subscribe((emojiObj: any) => {
+      if (emojiObj.textarea == 'threads') {
+        this.message.content += emojiObj.emoji;
+      }
+    })
   }
 
   ngOnInit() {
@@ -135,7 +142,7 @@ export class ThreadComponent implements OnInit {
     this.message.creator = this.userService.currentUser.name;
     this.message.profilePic = this.userService.currentUser.picture;
     this.message.creatorId = this.userService.currentUser.id;
-    this.message.channelID = this.currentMessage.id;
+    this.message.channelId = this.currentMessage.id;
   }
 
   /**
@@ -145,17 +152,6 @@ export class ThreadComponent implements OnInit {
     if (this.scrollContainer) {
       this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
     }
-  }
-
-  /**
-   * Opens the emoji picker for adding emojis to a thread message.
-   * @param {any} messageId - The ID of the message.
-   */
-  openEmojiPicker(messageId: any) {
-    setTimeout(() => {
-      this.emojiService.showEmojiPicker = true;
-    }, 1);
-    this.emojiService.messageId = messageId;
   }
 
   /**
@@ -169,37 +165,6 @@ export class ThreadComponent implements OnInit {
     this.message.content += taggedName!;
     this.message.mentions.push(user);
     this.userService.openUserContainerTextfield.next(false);
-  }
-
-  /**
-   * Opens the emoji picker for the chat input field in a thread.
-   */
-  openEmojiPickerChat() {
-    setTimeout(() => {
-      this.emojiService.showEmojiPicker = true;
-    }, 1);
-  }
-
-  /**
-   * Adds an emoji to a thread message.
-   * @param {any} $event - The emoji select event.
-   */
-  addEmoji($event: any) {
-    this.emojiService.addEmoji($event);
-    this.firestoreService.addReaction(this.emojiService.emojiString, this.emojiService.messageId, this.currentMessage.id, 'threads');
-    this.emojiService.showEmojiPicker = false;
-    this.emojiService.emojiString = "";
-  }
-
-  /**
-   * Adds an emoji to the chat input field in a thread.
-   * @param {any} $event - The emoji select event.
-   */
-  addEmojiTextField($event: any) {
-    this.emojiService.addEmoji($event);
-    this.message.content += this.emojiService.emojiString;
-    this.emojiService.showEmojiPicker = false;
-    this.emojiService.emojiString = "";
   }
 
   /**

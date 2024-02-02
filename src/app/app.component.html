@@ -1,1 +1,15 @@
 <router-outlet></router-outlet>
+<div class="emoji-overlay" (click)="this.emojiService.showEmojiPicker = false" *ngIf="this.emojiService.showEmojiPicker == true">
+        <emoji-mart
+            (click)="stopP($event)"
+            (emojiClick)="this.emojiService.addEmoji($event)"
+            class="emojiPicker"
+            color="#797ef3"
+            emoji="bubbles"
+            set="google"
+            [showSingleCategory]="true"
+            #emojiPicker
+        ></emoji-mart>
+</div>
+
+<!--  *ngIf="this.emojiService.showEmojiPicker == true" -->

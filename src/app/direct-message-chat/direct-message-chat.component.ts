@@ -13,6 +13,7 @@ import { FirestoreService } from '../services/firestore.service';
 import { Router } from '@angular/router';
 import { ThreadService } from '../services/thread.service';
 import { Thread } from 'src/models/thread.class';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-direct-message-chat',
@@ -50,6 +51,7 @@ export class DirectMessageChatComponent implements OnInit {
   @ViewChild('editor') editor!: ElementRef;
   scrollPosition: any;
   @ViewChild('scrollContainer') scrollContainer!: ElementRef<HTMLDivElement>;
+  emojiSubscription: Subscription;
 
   constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService,
     public authService: AuthService, public emojiService: EmojiService, public firestoreService: FirestoreService,
@@ -57,6 +59,11 @@ export class DirectMessageChatComponent implements OnInit {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser;
     chatService.checkScreenWidth();
+    this.emojiSubscription = this.emojiService.emojiMain$.subscribe((emojiObj: any) => {
+      if (emojiObj.textarea == 'direct messages') {
+        this.message.content += emojiObj.emoji;
+      }
+    })
   }
 
   /**
@@ -68,6 +75,7 @@ export class DirectMessageChatComponent implements OnInit {
         this.loadSelectedDM(openDirectMessage)
       } else {
         this.loadDMFromLocalStorage();
+        this.chatService.chatWindow = this.currentChat!.type;
       }
     });
     this.firestoreService.messageAddedInDirect.subscribe(() => {
@@ -207,7 +215,7 @@ export class DirectMessageChatComponent implements OnInit {
       this.message.creator = this.userService.currentUser.name;
       this.message.creatorId = this.userService.currentUser.id,
         this.message.channel = this.currentChat.name;
-      this.message.channelID = this.currentChat.id;
+      this.message.channelId = this.currentChat.id;
       this.message.profilePic = this.userService.currentUser.picture,
         this.message.channel = this.currentChat.name;
     }
@@ -266,17 +274,6 @@ export class DirectMessageChatComponent implements OnInit {
     return {
       content: this.editor.nativeElement.value,
     }
-  }
-
-  //----------------------------------------------------------------------------------------------------------------
-
-  /**
-   * Toggles the display of the emoji picker for the text input field in the chat.
-   */
-  openEmojiPickerChat() {
-    setTimeout(() => {
-      this.emojiService.showEmojiPicker = true;
-    }, 100);
   }
 
   /**

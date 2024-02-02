@@ -87,28 +87,6 @@
     }
 }
 
-.message-buttons {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-}
-
-.attachments {
-    display: flex;
-    align-items: center;
-
-    button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-}
-
-.border-right {
-    border-right: 2px solid lightgrey;
-}
-
 .send-button {
     &:disabled {
         svg path {

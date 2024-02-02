@@ -41,6 +41,7 @@ import { FormsModule } from '@angular/forms';
 import { ImprintComponent } from './imprint/imprint.component';
 import { DirectMessageChatComponent } from './direct-message-chat/direct-message-chat.component';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { PrivacyComponent } from './privacy/privacy.component';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatListModule } from '@angular/material/list';
@@ -96,6 +97,7 @@ import { NewMessageComponent } from './new-message/new-message.component';
     MatExpansionModule,
     ReactiveFormsModule,
     PickerComponent,
+    EmojiComponent,
 
     provideFirebaseApp(() => initializeApp({
       apiKey: "AIzaSyCHURlXChiuX6um-iNF7cx47WX31Uhwq74",

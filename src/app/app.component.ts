@@ -1,28 +1,55 @@
-import { Component, HostListener } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { ChatService } from './services/chat.service';
 import { Router } from '@angular/router';
+import { EmojiService } from './services/emoji.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit {
   title = 'dabubble';
   isMobile = true;
+  // @ViewChild('emojiPicker') emojiPicker!: ElementRef;
 
-  constructor(private chatService: ChatService, public router: Router) { }
+  constructor(private chatService: ChatService, public emojiService: EmojiService, public router: Router) { }
 
   /**
    * Event listener for the 'window:resize' event, which triggers actions when the window is resized.
    * @param {any} event - The window resize event object.
    */
   @HostListener('window:resize', ['$event'])
-  onResize(event: any): void {
+  onResize(): void {
     if (this.router.url !== '/') {
       this.chatService.checkScreenWidth();
       if (this.chatService.workspaceDrawerStateSubject.value == true && window.innerWidth >= 800 && window.innerWidth < 1350) { }
       this.chatService.closeThread();
     }
+  }
+
+  stopP(event: Event){    
+    event.stopPropagation();
+  }
+
+  ngAfterViewInit(): void {
+    // Hier ist emojiPicker garantiert initialisiert
+    // if (this.emojiPicker) {
+    //   console.log(this.emojiPicker.nativeElement);
+    // } else {
+    //   console.error('emojiPicker is undefined or null.');
+    // }
+  }
+
+  /**
+     * Listens for clicks on the document to manage input focus state.
+     * @param {Event} event - The click event on the document.
+     */
+  @HostListener('document:click', ['$event'])
+  lorem(event: Event) {
+
+    // if (!this.emojiPicker.nativeElement.contains(event.target)) {
+    //   this.emojiService.showEmojiPicker = false;
+    // }
   }
 }

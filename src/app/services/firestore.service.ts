@@ -275,7 +275,9 @@ export class FirestoreService {
    * @param colId - The type of chat collection ('channels', 'threads', or 'direct messages')
    * @returns - A Promise that resolves once the reaction is added
    */
-  async addReaction(emoji: any, messageId: any, chatId: any, colId: any) {
+  async addReaction(emoji: any, messageId: any, chatId: any, colId: any) {    
+    console.log('colid', colId);
+    
     if (chatId) {
       let allMessages: any[] = [];
       if (colId == 'channels') {
@@ -298,7 +300,7 @@ export class FirestoreService {
    * @param colId - The type of chat collection ('channels', 'threads', or 'direct messages')
    * @returns {void} - This function does not return a value
    */
-  pushReaction(allMessages: any[], emoji: any, messageId: any, chatId: any, colId: any) {
+  pushReaction(allMessages: any[], emoji: any, messageId: any, chatId: any, colId: any) {    
     const subReactionColRef = doc(collection(this.firestore, `${colId}/${chatId}/messages/`), messageId);
     let messageIndex = allMessages.findIndex(message => message.id === messageId);
     let currentMessage = allMessages[messageIndex];

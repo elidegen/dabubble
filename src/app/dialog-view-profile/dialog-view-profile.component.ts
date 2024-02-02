@@ -163,7 +163,7 @@ export class DialogViewProfileComponent {
     channelMessages = this.chatService.allMessagesOfChannel;
     channelMessages.forEach((message) => {
       if (message.creatorId === user.id) {
-        let messageDocRef = doc(collection(this.firestore, `channels/${message.channelID}/messages`), message.id);
+        let messageDocRef = doc(collection(this.firestore, `channels/${message.channelId}/messages`), message.id);
         updateDoc(messageDocRef, {
           creator: user.name
         })
@@ -178,7 +178,7 @@ export class DialogViewProfileComponent {
     dmMessages = this.chatService.allMessagesOfDM;
     dmMessages.forEach((message) => {
       if (message.creatorId === user.id) {
-        let messageDocRef = doc(collection(this.firestore, `direct messages/${message.channelID}/messages`), message.id);
+        let messageDocRef = doc(collection(this.firestore, `direct messages/${message.channelId}/messages`), message.id);
         updateDoc(messageDocRef, {
           creator: user.name
         })
@@ -217,7 +217,7 @@ export class DialogViewProfileComponent {
     threadMessages = this.threadService.allThreadMessages;
     threadMessages.forEach((message) => {
       if (message.creatorId === user.id) {
-        let messageDocRef = doc(collection(this.firestore, `threads/${message.channelID}/messages`), message.id);
+        let messageDocRef = doc(collection(this.firestore, `threads/${message.channelId}/messages`), message.id);
         updateDoc(messageDocRef, {
           creator: user.name
         })

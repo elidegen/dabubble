@@ -1,23 +1,26 @@
-import { Component, ElementRef, OnInit, ViewChild, inject, Input } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { DialogEditChannelComponent } from '../dialog-edit-channel/dialog-edit-channel.component';
-import { DialogAddToGroupComponent } from '../dialog-add-to-group/dialog-add-to-group.component';
-import { DialogShowGroupMemberComponent } from '../dialog-show-group-member/dialog-show-group-member.component';
-import { MatDrawer } from '@angular/material/sidenav';
-import { Firestore, collection, doc, updateDoc } from '@angular/fire/firestore';
-import { ChatService } from '../services/chat.service';
+
+import { User } from 'src/models/user.class';
+import { Router } from '@angular/router';
+import { Thread } from 'src/models/thread.class';
+import { emojis } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { Channel } from 'src/models/channel.class';
 import { Message } from 'src/models/message.class';
-import { UserService } from '../services/user.service';
 import { Reaction } from 'src/models/reaction.class';
-import { ThreadService } from '../services/thread.service';
-import { Thread } from 'src/models/thread.class';
+import { MatDrawer } from '@angular/material/sidenav';
+import { MatDialog } from '@angular/material/dialog';
+import { ChatService } from '../services/chat.service';
 import { AuthService } from '../services/auth.service';
+import { UserService } from '../services/user.service';
 import { EmojiService } from '../services/emoji.service';
-import { User } from 'src/models/user.class';
+import { ThreadService } from '../services/thread.service';
 import { FirestoreService } from '../services/firestore.service';
+import { DialogAddToGroupComponent } from '../dialog-add-to-group/dialog-add-to-group.component';
+import { DialogEditChannelComponent } from '../dialog-edit-channel/dialog-edit-channel.component';
 import { DialogViewProfileComponent } from '../dialog-view-profile/dialog-view-profile.component';
-import { Router } from '@angular/router';
+import { DialogShowGroupMemberComponent } from '../dialog-show-group-member/dialog-show-group-member.component';
+import { Firestore, collection, doc, updateDoc } from '@angular/fire/firestore';
+import { Component, ElementRef, OnInit, ViewChild, inject, Input } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-main-chat',
@@ -27,10 +30,10 @@ import { Router } from '@angular/router';
 
 export class MainChatComponent implements OnInit {
   firestore: Firestore = inject(Firestore);
-  currentChat!: Channel | undefined;
-  message: Message = new Message();
+  currentChannel!: Channel | undefined;
+  message: Message = new Message;
   reaction: Reaction = new Reaction;
-  newThread = new Thread();
+  newThread = new Thread;
   currentUser: User;
   allReactionsByMessage: [] = [];
   editingMessage: string | undefined;
@@ -48,11 +51,26 @@ export class MainChatComponent implements OnInit {
   @ViewChild('emojiPicker') emojiPickerElementRef!: ElementRef;
   @ViewChild('messageContainer') messageContainer!: ElementRef;
   @ViewChild('scrollContainer') scrollContainer!: ElementRef<HTMLDivElement>;
-  constructor(public dialog: MatDialog, public chatService: ChatService, public userService: UserService, public threadService: ThreadService, public authService: AuthService, public emojiService: EmojiService, public firestoreService: FirestoreService, public router: Router) {
+  emojiSubscription: Subscription;
+
+
+  constructor(public dialog: MatDialog,
+    public chatService: ChatService,
+    public userService: UserService,
+    public threadService: ThreadService,
+    public authService: AuthService,
+    public emojiService: EmojiService,
+    public firestoreService: FirestoreService,
+    public router: Router) {
     userService.getCurrentUserFromLocalStorage();
     this.currentUser = this.userService.currentUser as User;
     firestoreService.loadUsers();
     chatService.checkScreenWidth();
+    this.emojiSubscription = this.emojiService.emojiMain$.subscribe((emojiObj: any) => {
+      if (emojiObj.textarea == 'channels') {
+        this.message.content += emojiObj.emoji;
+      }
+    })
   }
 
   async ngOnInit() {
@@ -61,39 +79,40 @@ export class MainChatComponent implements OnInit {
         this.setCurrentChannel(openChat);
       } else {
         this.loadChannelFromLocalStorage();
+        this.chatService.chatWindow = this.currentChannel!.type;
       }
     });
     this.checkEventEmitter();
   }
 
   /**
-   * Loads selected channel as currentChat
+   * Loads selected channel as currentChannel
    * @param openChat 
    */
   setCurrentChannel(openChat: Channel) {
-    const newChat = openChat as Channel;
+    const newChat = openChat;
     this.userService.setCurrentChatToLocalStorage(newChat);
-    if (!this.currentChat || this.currentChat.id !== newChat.id) {
-      this.currentChat = newChat;
+    if (!this.currentChannel || this.currentChannel.id !== newChat.id) {
+      this.currentChannel = newChat;
       this.threadService.currentChat = newChat;
       if (this.firestoreService.unSubChannelMessages) {
         this.firestoreService.unSubChannelMessages();
       }
     }
-    this.firestoreService.loadChannelMessages(this.currentChat);
-    this.firestoreService.getAllChannelMembers(this.currentChat.id);
+    this.firestoreService.loadChannelMessages(this.currentChannel);
+    this.firestoreService.getAllChannelMembers(this.currentChannel.id);
   }
 
   /**
    * Loads channel from LocalStorage
    */
   loadChannelFromLocalStorage() {
-    this.currentChat = this.userService.getCurrentChatFromLocalStorage();
-    if (this.currentChat?.type == 'channel') {
+    this.currentChannel = this.userService.getCurrentChatFromLocalStorage();
+    if (this.currentChannel?.type == 'channel') {
       this.chatService.chatWindow = 'channel';
-      this.firestoreService.loadChannelMessages(this.currentChat);
-      this.firestoreService.getAllChannelMembers(this.currentChat?.id);
-    } else if (this.currentChat?.type == 'direct') {
+      this.firestoreService.loadChannelMessages(this.currentChannel);
+      this.firestoreService.getAllChannelMembers(this.currentChannel?.id);
+    } else if (this.currentChannel?.type == 'direct') {
       this.chatService.chatWindow = 'direct';
     } else {
       this.chatService.chatWindow = 'newMessage';
@@ -108,7 +127,7 @@ export class MainChatComponent implements OnInit {
       this.scrollToBottom();
     });
     this.userService.channelEdited.subscribe(() => {
-      this.firestoreService.getAllChannelMembers(this.currentChat?.id);
+      this.firestoreService.getAllChannelMembers(this.currentChannel?.id);
     })
   }
 
@@ -161,13 +180,13 @@ export class MainChatComponent implements OnInit {
   * Sends a chat message in the current channel.
   */
   async sendMessage() {
-    if (this.currentChat?.id && this.message.content?.trim() !== '' || this.showUploadedFile) {
+    if (this.currentChannel?.id && this.message.content?.trim() !== '' || this.showUploadedFile) {
       this.showUploadedFile = false;
       this.message.content = this.message.content!.replace(this.taggedNames, '');
       this.getSentMessageTimeAndDate();
       this.setMessageValuesForSentMessage();
       this.message.messageSelected = false;
-      await this.firestoreService.sendMessageInChannel(this.currentChat!, this.message);
+      await this.firestoreService.sendMessageInChannel(this.currentChannel!, this.message);
       this.taggedNames = "";
       this.message = new Message();
       this.scrollToBottom();
@@ -178,14 +197,14 @@ export class MainChatComponent implements OnInit {
    * Sets values for sent Message
    */
   setMessageValuesForSentMessage() {
-    if (this.currentChat) {
+    if (this.currentChannel) {
       this.message.creator = this.userService.currentUser.name;
       this.message.creatorId = this.userService.currentUser.id,
-        this.message.channel = this.currentChat.name;
-      this.message.channelID = this.currentChat.id;
+        this.message.channel = this.currentChannel.name;
+      this.message.channelId = this.currentChannel.id;
       this.message.profilePic = this.userService.currentUser.picture,
-        this.message.channel = this.currentChat.name;
-      this.message.channel = this.currentChat.name;
+        this.message.channel = this.currentChannel.name;
+      this.message.channel = this.currentChannel.name;
     }
   }
 
@@ -237,18 +256,6 @@ export class MainChatComponent implements OnInit {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     return (months.indexOf(month) + 1).toString().padStart(2, '0');
   }
-  //----------------------------------------------------------------------------------------------------
-
-  /**
-   * Opens the emoji picker for the chat input field.
-   */
-  openEmojiPickerChat() {
-    setTimeout(() => {
-      this.emojiService.showEmojiPicker = true;
-    }, 30);
-  }
-
-  
 
   /**
    * Adds an emoji to a message.
@@ -257,20 +264,10 @@ export class MainChatComponent implements OnInit {
   addEmoji(event: any) {
     if (this.emojiService.messageId != "") {
       this.emojiService.addEmoji(event);
-      this.firestoreService.addReaction(this.emojiService.emojiString, this.emojiService.messageId, this.currentChat?.id, 'channels')
+      this.firestoreService.addReaction(this.emojiService.emojiString, this.emojiService.messageId, this.currentChannel?.id, 'channels')
       this.emojiService.showEmojiPicker = false;
       this.emojiService.emojiString = "";
     }
-  }
-
-  /**
-   * Adds an emoji to the chat input field.
-   * @param {any} $event - The emoji select event.
-   */
-  addEmojiTextField($event: any) {
-    this.emojiService.addEmoji($event);
-    this.message.content += this.emojiService.emojiString;
-    this.emojiService.emojiString = "";
   }
 
   /**
@@ -299,7 +296,7 @@ export class MainChatComponent implements OnInit {
    * @param {Message} message - The message to be edited.
    */
   editMessage(message: Message) {
-    if (this.currentChat) {
+    if (this.currentChannel) {
       if (message.creator == this.currentUser.name) {
         this.edit = true;
         this.editingMessage = message.id;
@@ -313,7 +310,7 @@ export class MainChatComponent implements OnInit {
    */
   async updateMessageContent(message: Message) {
     let messageId = message.id;
-    const messageColRef = doc(collection(this.firestore, `channels/${this.currentChat?.id}/messages/`), messageId);
+    const messageColRef = doc(collection(this.firestore, `channels/${this.currentChannel?.id}/messages/`), messageId);
     await updateDoc(messageColRef, this.setMessageValues())
       .catch((error) => {
         console.error('Error updating document:', error);
