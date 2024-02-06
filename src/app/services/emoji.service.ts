@@ -33,14 +33,21 @@ export class EmojiService {
    * Updates the emojiString with the selected emoji and hides the picker.
    */
   async addEmoji(event: any) {
-    console.log('emojiii', event["emoji"]);    
     let emojiString = event["emoji"].native;
     this.emojiString = emojiString;
-    console.log('msgid', this.messageId, 'chatwindow', this.chatService.chatWindow);
-
+    let currentChat: any = this.userService.getCurrentChatFromLocalStorage();
+    let messageID = this.messageId;
+    
+    
     if (this.messageId) {
-      let currentChat = this.userService.getCurrentChatFromLocalStorage();
-      await this.firestoreService.addReaction(this.emojiString, this.messageId, currentChat!.id, this.currentChatType);
+      if (typeof this.messageId != 'string') {
+        currentChat = this.messageId.channelID;
+        messageID = this.messageId.id;
+      } else {
+        currentChat = currentChat!.id
+      }
+      console.log('addemoji', this.emojiString, messageID, currentChat, this.currentChatType);
+      await this.firestoreService.addReaction(this.emojiString, messageID, currentChat, this.currentChatType);
     } else {
       this.updateTextarea(emojiString);
     }
@@ -55,6 +62,6 @@ export class EmojiService {
     this.showEmojiPicker = !this.showEmojiPicker;
     this.messageId = messageId;
     this.currentChatType = msgType;
-    console.log('crt', this.currentChatType);    
+    console.log('openpicker msgid', messageId, 'curcht', this.currentChatType);    
   }
 }

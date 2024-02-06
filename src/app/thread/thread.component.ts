@@ -142,7 +142,7 @@ export class ThreadComponent implements OnInit {
     this.message.creator = this.userService.currentUser.name;
     this.message.profilePic = this.userService.currentUser.picture;
     this.message.creatorId = this.userService.currentUser.id;
-    this.message.channelId = this.currentMessage.id;
+    this.message.channelID = this.currentMessage.id;
   }
 
   /**

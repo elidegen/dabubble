@@ -2,10 +2,10 @@ export class Thread {
     content: string | undefined;
     creator: string | undefined;
     creatorId: string | undefined;
-    channelId: any;
+    channelID: any;
 
     constructor(obj?: any) {
-        this.channelId = obj ? obj.channelId : '';
+        this.channelID = obj ? obj.channelID : '';
         this.creator = obj ? obj.creator : '';
         this.creatorId = obj ? obj.creatorId : '';
         this.content = obj ? obj.content : '';
@@ -13,7 +13,7 @@ export class Thread {
 
     public toJSON() {
         return {
-            channelId: this.channelId,
+            channelID: this.channelID,
             creator: this.creator,
             creatorId: this.creatorId,
             content: this.content,

@@ -44,16 +44,6 @@
     width: 100%;
 }
 
-.main-chat-container {
-    overflow-y: scroll;
-    height: 100%;
-    display: flex;
-
-    &::-webkit-scrollbar {
-        display: none;
-    }
-}
-
 .d-flex-end {
     display: flex;
     flex-direction: column;

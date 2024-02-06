@@ -48,12 +48,12 @@ export class FirestoreService {
       })
       .then((docRef: void | DocumentReference<DocumentData, DocumentData>) => {
         if (docRef && docRef instanceof DocumentReference) {
-          this.updateChannelId('channels', channel, docRef.id);
+          this.updatechannelID('channels', channel, docRef.id);
         }
       });
   }
 
-  async updateChannelId(colId: string, channel: Channel, newId: string) {
+  async updatechannelID(colId: string, channel: Channel, newId: string) {
     channel.id = newId;
     await this.updateChannel(colId, channel);
   }
@@ -123,16 +123,16 @@ export class FirestoreService {
    * @param message - message
    */
   async sendMessageInChannel(channel: Channel, message: Message) {
-    let channelId = channel.id;
-    const subColRef = collection(this.firestore, `channels/${channelId}/messages`);
+    let channelID = channel.id;
+    const subColRef = collection(this.firestore, `channels/${channelID}/messages`);
     await addDoc(subColRef, message.toJSON())
       .catch((err) => {
         console.log('Error', err);
       })
       .then((docRef: void | DocumentReference<DocumentData, DocumentData>) => {
         if (docRef && docRef instanceof DocumentReference) {
-          if (channelId) {
-            this.updateMessageId(`channels/${channelId}/messages`, message, docRef.id);
+          if (channelID) {
+            this.updateMessageId(`channels/${channelID}/messages`, message, docRef.id);
           }
         }
       });
@@ -159,11 +159,11 @@ export class FirestoreService {
   //----------------------------------------------------------------------------------------------------
   /**
    * This function loads all members of a channel
-   * @param channelId 
+   * @param channelID 
    */
-  async getAllChannelMembers(channelId: any) {
-    if (channelId) {
-      const channelDocRef = doc(this.firestore, `channels/${channelId}`);
+  async getAllChannelMembers(channelID: any) {
+    if (channelID) {
+      const channelDocRef = doc(this.firestore, `channels/${channelID}`);
       const channelDocSnap = await getDoc(channelDocRef);
       if (channelDocSnap.exists()) {
         const channelData = channelDocSnap.data();
@@ -275,9 +275,7 @@ export class FirestoreService {
    * @param colId - The type of chat collection ('channels', 'threads', or 'direct messages')
    * @returns - A Promise that resolves once the reaction is added
    */
-  async addReaction(emoji: any, messageId: any, chatId: any, colId: any) {    
-    console.log('colid', colId);
-    
+  async addReaction(emoji: any, messageId: any, chatId: any, colId: any) {
     if (chatId) {
       let allMessages: any[] = [];
       if (colId == 'channels') {
@@ -286,8 +284,8 @@ export class FirestoreService {
         allMessages = this.allThreadMessages;
       } else if (colId == 'direct messages') {
         allMessages = this.allDirectMessages;
-      }
-      this.pushReaction(allMessages, emoji, messageId, chatId, colId)
+      }      
+      this.pushReaction(allMessages, emoji, messageId, chatId, colId);
     }
   }
 
@@ -300,17 +298,17 @@ export class FirestoreService {
    * @param colId - The type of chat collection ('channels', 'threads', or 'direct messages')
    * @returns {void} - This function does not return a value
    */
-  pushReaction(allMessages: any[], emoji: any, messageId: any, chatId: any, colId: any) {    
+  async pushReaction(allMessages: any[], emoji: any, messageId: any, chatId: any, colId: any) {    
     const subReactionColRef = doc(collection(this.firestore, `${colId}/${chatId}/messages/`), messageId);
     let messageIndex = allMessages.findIndex(message => message.id === messageId);
     let currentMessage = allMessages[messageIndex];
-    const reactionItem = { emoji, creatorId: this.userService.currentUser.id, creator: this.userService.currentUser.name };
+    const reactionItem = { emoji, creatorId: this.userService.currentUser.id, creator: this.userService.currentUser.name };    
     if (currentMessage.reaction.some((emojiArray: { emoji: string; creatorId: string; }) => emojiArray.emoji === emoji && emojiArray.creatorId === this.userService.currentUser.id)) {
       currentMessage.reaction = currentMessage.reaction.filter((emojiArray: { emoji: string; creatorId: string; }) => !(emojiArray.emoji === emoji && emojiArray.creatorId === this.userService.currentUser.id));
     } else {
       currentMessage.reaction.push(reactionItem);
     }
-    updateDoc(subReactionColRef, this.updateMessage(allMessages[messageIndex]));
+    await updateDoc(subReactionColRef, this.updateMessage(allMessages[messageIndex]));
   }
 
   updateMessage(message: any) {

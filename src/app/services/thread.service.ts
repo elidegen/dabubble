@@ -54,7 +54,7 @@ export class ThreadService {
    */
   async createThread(message: Message) {
     const threadCollectionRef = collection(this.firestore, 'threads');
-    this.thread.channelId = message.id;
+    this.thread.channelID = message.id;
     this.thread.content = message.content;
     this.thread.creator = this.userService.currentUser.name;
     this.thread.creatorId = this.userService.currentUser.id;
@@ -80,12 +80,12 @@ export class ThreadService {
         console.log(err);
       }).then((docRef: void | DocumentReference<DocumentData, DocumentData>) => {
         if (docRef && docRef instanceof DocumentReference) {
-          this.updateChannelId('channels', message, docRef.id, subColRef);
+          this.updatechannelID('channels', message, docRef.id, subColRef);
         }
       });
   }
 
-  async updateChannelId(colId: string, message: Message, newId: string, subColRef: any) {
+  async updatechannelID(colId: string, message: Message, newId: string, subColRef: any) {
     message.id = newId;
     const threadMessageRef = doc(subColRef, message.id)
     updateDoc(threadMessageRef, {
@@ -99,10 +99,10 @@ export class ThreadService {
   async updateThreadCount(message: Message, time: any) {
     message.threadCount = await this.countThreadMessages(message.id);
     if (this.isThreadInDM) {
-      const subReactionColRef = doc(collection(this.firestore, `direct messages/${message.channelId}/messages/`), message.id);
+      const subReactionColRef = doc(collection(this.firestore, `direct messages/${message.channelID}/messages/`), message.id);
       updateDoc(subReactionColRef, this.updateMessage(message, time));
     } else {
-      const subReactionColRef = doc(collection(this.firestore, `channels/${message.channelId}/messages/`), message.id);
+      const subReactionColRef = doc(collection(this.firestore, `channels/${message.channelID}/messages/`), message.id);
       updateDoc(subReactionColRef, this.updateMessage(message, time));
     }
   }
@@ -150,7 +150,7 @@ export class ThreadService {
   async getThreadMessages() {
     this.allThreadMessages = [];
     for (const thread of this.allThreads) {
-      const threadId = thread.channelId;
+      const threadId = thread.channelID;
       const messageCol = collection(this.firestore, `threads/${threadId}/messages`);
       const querySnapshot = await getDocs(messageCol);
       querySnapshot.forEach((message) => {

@@ -18,7 +18,7 @@ body {
 }
 
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 0;
 }
 
 ::-webkit-scrollbar-corner {
@@ -92,6 +92,10 @@ mat-card,
 .mat-dialog-container {
     border-radius: 32px !important;
     box-shadow: none !important;
+
+    ::-webkit-scrollbar{
+        display: none;
+    }
 }
 
 .mat-dialog-container {
@@ -171,11 +175,8 @@ input {
 
 a {
     border-radius: 32px !important;
-}
-
-a {
-    cursor: pointer;
     text-decoration: none;
+    cursor: pointer;
 
     &:hover {
         font-weight: bold;
@@ -341,6 +342,11 @@ h2 {
     position: relative;
 }
 
+mat-drawer-inner-container {
+    border-radius: 32px;
+    overflow: hidden;
+}
+
 .more-menu {
     display: none;
     z-index: 2;
@@ -422,6 +428,7 @@ h2 {
 
     &:hover {
         background-color: #ccc !important;
+        transform: rotate(5deg);
     }
 }
 
@@ -445,6 +452,16 @@ h2 {
 
 .border-right {
     border-right: 2px solid lightgrey;
+}
+
+.main-chat-container {
+    overflow-y: scroll;
+    // height: 100%;
+    // display: flex;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 }
 
 mat-drawer-container {

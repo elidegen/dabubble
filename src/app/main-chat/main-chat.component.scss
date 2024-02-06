@@ -203,15 +203,6 @@ mat-card {
     width: 100%;
 }
 
-.main-chat-container {
-    overflow-y: scroll;
-    height: 100%;
-
-    &::-webkit-scrollbar {
-        display: none;
-    }
-}
-
 .my-messages {
     .message-box {
         flex-direction: row-reverse;

@@ -215,7 +215,7 @@ export class DirectMessageChatComponent implements OnInit {
       this.message.creator = this.userService.currentUser.name;
       this.message.creatorId = this.userService.currentUser.id,
         this.message.channel = this.currentChat.name;
-      this.message.channelId = this.currentChat.id;
+      this.message.channelID = this.currentChat.id;
       this.message.profilePic = this.userService.currentUser.picture,
         this.message.channel = this.currentChat.name;
     }

@@ -106,24 +106,21 @@
         </div>
 
         <div class="reaction" [ngClass]="{'own-message': thread.creatorId == currentUser.id}">
-          <button mat-icon-button (click)="toggled = true" (click)="this.emojiService.openEmojiPicker(thread.id, 'threads')">
+          <button mat-icon-button (click)="toggled = true" (click)="this.emojiService.openEmojiPicker(thread, 'threads')">
             <img src="assets/img/icons/add_reaction.svg" alt="">
           </button>
-          <button mat-icon-button *ngIf="thread.creatorId == currentUser.id"
+          <button mat-icon-button *ngIf="thread.creatorId == currentUser.id" class="more-menu-button"
             (click)="firestoreService.toggleMoreMenu(thread)">
             <img src="assets/img/icons/more.svg" alt="">
+            <div class="more-menu" [class.visible]="thread.messageSelected">
+              <span (click)="editThreadMessage(thread)">Edit message</span>
+              <span class="delete-message"
+                (click)="firestoreService.deleteMessageOfChat('threads', currentMessage.id, thread.id)">Delete
+                Message</span>
+            </div>
           </button>
-          <div class="more-menu" [class.visible]="thread.messageSelected">
-            <span (click)="editThreadMessage(thread)">Edit message</span>
-            <span class="delete-message"
-              (click)="firestoreService.deleteMessageOfChat('threads', currentMessage.id, thread.id)">Delete
-              Message</span>
-          </div>
         </div>
       </div>
-      <!-- <emoji-mart class="emoji-mart" [style]="{ width: 'fit-content' }"
-        *ngIf="this.emojiService.showEmojiPicker == true" class="emojiPicker"
-        (emojiClick)="this.emojiService.addEmoji($event)"></emoji-mart> -->
     </section>
 
   </mat-card-content>

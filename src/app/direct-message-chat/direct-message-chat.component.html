@@ -102,28 +102,28 @@
               (click)="firestoreService.addReaction('🙌', message.id, currentChat?.id, 'direct messages')">
               <img src="assets/img/emojis/hands.svg" />
             </button>
-            <button class="hostlistener-dont-trigger" (click)="this.emojiService.openEmojiPicker(message.id, 'direct messages')"
-              mat-icon-button>
+            <button class="hostlistener-dont-trigger"
+              (click)="this.emojiService.openEmojiPicker(message.id, 'direct messages')" mat-icon-button>
               <img src="assets/img/icons/add_reaction.svg" />
             </button>
-            <button mat-icon-button *ngIf="message.creatorId == currentUser.id"
+
+            <button class="more-menu-button" mat-icon-button *ngIf="message.creatorId == currentUser.id"
               (click)="firestoreService.toggleMoreMenu(message)">
               <img src="assets/img/icons/more.svg" />
+
+              <div class="more-menu" [class.visible]="message.messageSelected">
+                <span (click)="editMessage(message)">Edit message</span>
+                <span class="delete-message"
+                  (click)="firestoreService.deleteMessageOfChat('direct messages', currentChat?.id, message.id)">Delete
+                  Message</span>
+              </div>
             </button>
-            <div class="more-menu" [class.visible]="message.messageSelected">
-              <span (click)="editMessage(message)">Edit message</span>
-              <span class="delete-message"
-                (click)="firestoreService.deleteMessageOfChat('direct messages', currentChat?.id, message.id)">Delete
-                Message</span>
-            </div>
+
+
           </div>
         </div>
       </section>
     </ng-container>
-
-    <!-- <emoji-mart class="emoji-mart" [style]="{ width: 'unset' }" #emojiPicker
-      *ngIf="this.emojiService.showEmojiPicker == true" class="emojiPicker"
-      (emojiClick)="addEmoji($event)"></emoji-mart> -->
   </mat-card-content>
 
   <mat-card-content *ngSwitchCase="false" class="empty-direct-message-container">

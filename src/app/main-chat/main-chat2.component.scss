@@ -155,7 +155,7 @@ mat-drawer {
 }
 
 .first-chat-box {
-    overflow-y: hidden;
+    overflow-y: scroll;
     margin-top: auto;
 
     &::-webkit-scrollbar {
