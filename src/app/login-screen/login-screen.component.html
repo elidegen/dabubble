@@ -93,7 +93,7 @@
           <input type="password" formControlName="newPassword" matInput placeholder="Password" required>
           <div class="placeholder"></div>
           <mat-error class="error error-bottom" *ngIf="addUser.get('newPassword')?.hasError('minlength')">
-            You need apassword with minimum 8 letters
+            You need a password with minimum 8 letters
           </mat-error>
           <mat-error class="error" *ngIf="this.userAlreadyInUse">This user already exists</mat-error>
         </div>

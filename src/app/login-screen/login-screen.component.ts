@@ -224,6 +224,22 @@ export class LoginScreenComponent implements OnInit {
       this.getErrorMessageNoUser();
     }
   }
+  
+  /**
+   * @method loginGuest
+   * @description Logs in a user as a guest.
+   * Signs out any currently authenticated user, signs in as a guest, and navigates to the home page.
+   */
+  async loginGuest() {
+    await this.authService.signOutUser();
+    await this.authService.signInGuest();
+    this.authService.signInSuccess = true;
+    setTimeout(() => {
+      this.authService.signInSuccess = false;
+      this.router.navigate(['home']);
+      this.chatService.chatWindow = 'empty';
+    }, 1000);
+  }
 
   signInSuccess() {
     this.authService.signInSuccess = true;
@@ -311,21 +327,5 @@ export class LoginScreenComponent implements OnInit {
     } else {
       this.userNotFound = true;
     }
-  }
-
-  /**
-   * @method loginGuest
-   * @description Logs in a user as a guest.
-   * Signs out any currently authenticated user, signs in as a guest, and navigates to the home page.
-   */
-  async loginGuest() {
-    await this.authService.signOutUser();
-    await this.authService.signInGuest();
-    this.authService.signInSuccess = true;
-    setTimeout(() => {
-      this.authService.signInSuccess = false;
-      this.router.navigate(['home']);
-      this.chatService.chatWindow = 'empty';
-    }, 1000);
   }
 }

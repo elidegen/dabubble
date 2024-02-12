@@ -66,8 +66,8 @@ export class UserService {
       (err) => { console.log(err) })
       .then((docRef) => {
         this.updateUserId(item, docRef!.id);
-        this.addNewUserToCommunityChannel(item)
-        this.createDirectMessage(item)
+        this.addNewUserToCommunityChannel(item);
+        this.createDirectMessage(item);
       })
   }
 
@@ -117,7 +117,9 @@ export class UserService {
    * @returns - A promise that resolves when the user ID is successfully updated.
    */
   async updateUserId(user: User, newId: string,) {
-    user.id = newId;
+    if(user.name != 'Guest'){
+      user.id = newId;
+    }
     await this.updateUser(user);
   }
 

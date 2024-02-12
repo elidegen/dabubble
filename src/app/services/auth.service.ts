@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { inject } from '@angular/core';
 import { Firestore, doc, updateDoc, } from '@angular/fire/firestore';
-import { getAuth, updateEmail, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, sendPasswordResetEmail, signInAnonymously, verifyBeforeUpdateEmail, } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, sendPasswordResetEmail, verifyBeforeUpdateEmail, } from "firebase/auth";
 import { Router } from '@angular/router';
 import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { UserService } from './user.service';
@@ -21,12 +21,11 @@ export class AuthService {
   public storage = getStorage();
   provider = new GoogleAuthProvider();
   customPic: string = "";
-  newGuest: User = new User;
   uploadFile: any;
   signInSuccess: any;
   chat: Chat = new Chat();
 
-  constructor(public router: Router, public userService: UserService, public chatService: ChatService) { }
+  constructor(public router: Router, public userService: UserService, public chatService: ChatService) {}
 
   /**
   * Creates a new user using email and password.
@@ -127,8 +126,8 @@ export class AuthService {
   /**
    * Signs in a guest user and updates their login time.
    */
-  async signInGuest() {
-    this.userService.currentUser.name = "Guest" + this.getGuestName();
+  async signInGuestOld() {
+    this.userService.currentUser.name = "Guest";
     this.userService.currentUser.picture = 'assets/img/avatars/profile.svg';
     this.userService.currentUser.online = true;
     this.userService.currentUser.loginTime = this.getLoginTime();
@@ -136,16 +135,35 @@ export class AuthService {
     this.userService.setCurrentUserToLocalStorage();
   }
 
+  async signInGuest() {
+    this.userService.currentUser.name = 'Guest';
+    this.userService.currentUser.id = 'Guest';
+    this.userService.currentUser.picture = 'assets/img/avatars/profile.svg';
+    this.userService.currentUser.loginTime = this.getLoginTime();
+    if (this.guestDoesntExists()) {
+      await this.userService.addUser(this.userService.currentUser);
+      await this.userService.updateUser(this.userService.currentUser);
+    }
+    this.userService.setCurrentUserToLocalStorage();
+  }
+
+  guestDoesntExists() {
+    console.log('users', this.userService.users);
+    
+    if (this.userService.users.some(user => user.id === 'Guest')) {
+      console.log('guest does exist');
+      return false;
+    } else {
+      console.log('guest doesnt exist');
+      return true;
+    }
+  }
+
   /**
    * Signs out the current user and updates their online status.
    */
   async signOutUser() {
-    if (this.userService.currentUser.name?.startsWith('Guest')) {
-      await this.removeGuestFromEveryChannel();
-      await this.deleteDMWithGuest();
-      await this.deleteGuest();
-    }
-    await this.userService.removeCurrentUserFromLocalStorage();
+    this.userService.removeCurrentUserFromLocalStorage();
     let userIndexToLogout = this.findUserIndexWithEmail(this.userService.currentUser.email);
     if (userIndexToLogout != -1) {
       this.userService.users[userIndexToLogout].online = false;
@@ -164,26 +182,8 @@ export class AuthService {
     });
   }
 
-  /**
-   * This function deletes a guest and resets the currenChat in the local storage
-   */
-  async deleteGuest() {
-    this.removeCurrentChat();
-    try {
-      let guest = this.userService.currentUser;
-      const userDocRef = doc(collection(this.firestore, 'users'), guest.id);
-      await deleteDoc(userDocRef);
-    } catch (error) {
-      console.error('Error deleting guest:', error);
-    }
-  }
-
   removeCurrentChat() {
     localStorage.removeItem('currentChat');
-  }
-
-  getGuestName() {
-    return Math.floor(Math.random() * 100000);
   }
 
   /**
@@ -317,41 +317,6 @@ export class AuthService {
     const extension = this.getFileType(fileUrl);
     if (extension) {
       return extension.toLowerCase() === 'pdf';
-    }
-  }
-
-  /**
-   * Removes the current user (guest) from the members list of every channel.
-   */
-  async removeGuestFromEveryChannel() {
-    let guest = this.userService.currentUser;
-    await this.chatService.getallChannels();
-    let allChannels = this.chatService.allChannels;
-    for (const channel of allChannels) {
-      const guestIndex = channel.members.findIndex((oldGuest: { name: string | undefined; }) => oldGuest.name == guest.name);
-      if (guestIndex !== -1) {
-        channel.members.splice(guestIndex, 1);
-        const channelDocRef = doc(collection(this.firestore, 'channels'), channel.id);
-        await updateDoc(channelDocRef, {
-          members: channel.members,
-        });
-      }
-    }
-  }
-
-  /**
-   * Deletes all direct message documents involving the current user (guest).
-   */
-  async deleteDMWithGuest() {
-    let guest = this.userService.currentUser;
-    await this.chatService.loadAllDirectMessages();
-    let allDMs = this.chatService.allLoadedDirectMessages;
-    for (const dm of allDMs) {
-      const guestIndex = dm.members.findIndex((oldGuest: { name: string | undefined; }) => oldGuest.name == guest.name);
-      if (guestIndex !== -1) {
-        const dmDocRef = doc(collection(this.firestore, 'direct messages'), dm.id);
-        await deleteDoc(dmDocRef);
-      }
     }
   }
 }
