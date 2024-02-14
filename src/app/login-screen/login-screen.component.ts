@@ -224,7 +224,7 @@ export class LoginScreenComponent implements OnInit {
       this.getErrorMessageNoUser();
     }
   }
-  
+
   /**
    * @method loginGuest
    * @description Logs in a user as a guest.
@@ -298,20 +298,18 @@ export class LoginScreenComponent implements OnInit {
    * Uploads the selected file using the authentication service and shows a spinner during the process.
    * @param {Event} event - The event object containing the selected file.
    */
-  onFileSelected(event: any): void {
+  async onFileSelected(event: any): Promise<void> {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
       if (file.size > 500000) {
         alert("File is too big!");
       } else {
-        this.authService.uploadProfileImage(file);
         this.firestoreService.showSpinner = true;
-      }
-      setTimeout(() => {
+        await this.authService.uploadProfileImage(file);
         this.picSrc = this.authService.customPic;
         this.firestoreService.showSpinner = false;
         event.target.value = '';
-      }, 2500);
+      }
     }
   }
 

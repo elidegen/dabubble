@@ -99,8 +99,7 @@
         </div>
 
         <span class="margin-top gap checkbox-bottom cursor-pointer align-center">
-          <input [formControl]="disableSelect" class="cursor-pointer" type="checkbox">
-          I accept the <a routerLink="/privacy" class="color-purple2-text transform">privacy policy</a>
+          <input [formControl]="disableSelect" class="cursor-pointer" type="checkbox">I accept the<a routerLink="/privacy" class="color-purple2-text transform">privacy policy</a>
         </span>
         <div class="submit-buttons justify-content-end">
           <button mat-button class="align-self main-button primary" type="submit"
@@ -114,14 +113,14 @@
     <div class="form-container">
       <img (click)="changeSwitchCase('createAccount')" class="position-relative cursor-pointer transform arrow"
         src="assets\img\icons\arrow_back.svg">
-      <h1 class="color-purple2-text padding-bottom"> Choose your Avatar</h1>
+      <h1 class="color-purple2-text padding-bottom">Choose your Avatar</h1>
       <div class="big-profile-pic"><img class="userPic" src="{{this.picSrc}}"></div>
       <h2>{{newUser.name}}</h2>
       <form [formGroup]="addUser">
-        <div class="choose-profile-pic margin-top"><span class="font-size20 w100 ">Choose from list</span>
+        <div class="choose-profile-pic margin-top"><span class="font-size20 w100">Choose from list</span>
           <div class="picture-container w100">
             <div *ngFor="let pic of profileImages ; index as i;"> <img
-                [ngClass]="{'pic-border': selectedImageIndex === i}" class="transform cursor-pointer "
+                [ngClass]="{'pic-border': selectedImageIndex === i}" class="transform cursor-pointer"
                 (click)="changePicSrc(pic,i)" src="{{pic}}"></div>
           </div>
         </div>

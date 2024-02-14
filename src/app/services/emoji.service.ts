@@ -46,7 +46,6 @@ export class EmojiService {
       } else {
         currentChat = currentChat!.id
       }
-      console.log('addemoji', this.emojiString, messageID, currentChat, this.currentChatType);
       await this.firestoreService.addReaction(this.emojiString, messageID, currentChat, this.currentChatType);
     } else {
       this.updateTextarea(emojiString);
@@ -61,7 +60,6 @@ export class EmojiService {
   openEmojiPicker(messageId: any, msgType: string) {
     this.showEmojiPicker = !this.showEmojiPicker;
     this.messageId = messageId;
-    this.currentChatType = msgType;
-    console.log('openpicker msgid', messageId, 'curcht', this.currentChatType);    
+    this.currentChatType = msgType;  
   }
 }

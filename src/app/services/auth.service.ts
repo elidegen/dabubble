@@ -147,14 +147,10 @@ export class AuthService {
     this.userService.setCurrentUserToLocalStorage();
   }
 
-  guestDoesntExists() {
-    console.log('users', this.userService.users);
-    
+  guestDoesntExists() {    
     if (this.userService.users.some(user => user.id === 'Guest')) {
-      console.log('guest does exist');
       return false;
     } else {
-      console.log('guest doesnt exist');
       return true;
     }
   }
@@ -237,12 +233,10 @@ export class AuthService {
   updateUserEmail(newEmail: string) {
     const auth = getAuth();
     const user = auth.currentUser;
-    console.log('user', user);
 
     if (user) {
       try {
         verifyBeforeUpdateEmail(user, newEmail);
-        console.log('user updated');
       } catch (error) {
         console.error("Fehler beim Aktualisieren der E-Mail-Adresse:", error);
       }
@@ -273,16 +267,37 @@ export class AuthService {
 
   async uploadProfileImage(file: any) {
     const storage = getStorage();
-
     const storageReference = storageRef(storage, `profileImages/${file.name}`);
-
     const uploadTask = uploadBytesResumable(storageReference, file);
-    uploadTask.on('state_changed', () => {
-      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-        this.customPic = downloadURL;
-      });
-    }
-    );
+
+    return new Promise<void>((resolve, reject) => {
+      uploadTask.on('state_changed',
+        (snapshot) => {
+          // Hier können Sie den Fortschritt des Uploads überwachen, wenn nötig.
+        },
+        (error) => {
+          // Hier können Sie auf Upload-Fehler reagieren.
+          reject(error);
+        },
+        () => {
+          // Upload erfolgreich abgeschlossen, jetzt die Download-URL abrufen.
+          getDownloadURL(uploadTask.snapshot.ref)
+            .then((downloadURL) => {
+              this.customPic = downloadURL;
+              resolve();
+            })
+            .catch((error) => {
+              reject(error);
+            });
+        }
+      );
+    });
+    // uploadTask.on('state_changed', () => {
+    //   getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+    //     this.customPic = downloadURL;
+    //   });
+    // }
+    // );
   }
 
   /**

@@ -8,7 +8,7 @@ import { EmojiService } from './services/emoji.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent {
   title = 'dabubble';
   isMobile = true;
   // @ViewChild('emojiPicker') emojiPicker!: ElementRef;
@@ -28,28 +28,7 @@ export class AppComponent implements AfterViewInit {
     }
   }
 
-  stopP(event: Event){    
+  stopP(event: Event) {
     event.stopPropagation();
-  }
-
-  ngAfterViewInit(): void {
-    // Hier ist emojiPicker garantiert initialisiert
-    // if (this.emojiPicker) {
-    //   console.log(this.emojiPicker.nativeElement);
-    // } else {
-    //   console.error('emojiPicker is undefined or null.');
-    // }
-  }
-
-  /**
-     * Listens for clicks on the document to manage input focus state.
-     * @param {Event} event - The click event on the document.
-     */
-  @HostListener('document:click', ['$event'])
-  lorem(event: Event) {
-
-    // if (!this.emojiPicker.nativeElement.contains(event.target)) {
-    //   this.emojiService.showEmojiPicker = false;
-    // }
   }
 }
