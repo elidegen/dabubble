@@ -11,7 +11,6 @@ import { EmojiService } from './services/emoji.service';
 export class AppComponent {
   title = 'dabubble';
   isMobile = true;
-  // @ViewChild('emojiPicker') emojiPicker!: ElementRef;
 
   constructor(private chatService: ChatService, public emojiService: EmojiService, public router: Router) { }
 

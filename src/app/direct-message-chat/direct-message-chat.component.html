@@ -104,19 +104,16 @@
               <img src="assets/img/icons/add_reaction.svg" />
             </button>
 
-            <button class="more-menu-button" mat-icon-button *ngIf="message.creatorId == currentUser.id"
-              (click)="firestoreService.toggleMoreMenu(message)">
+            <button class="more-menu-button" mat-icon-button *ngIf="message.creatorId == currentUser.id">
               <img src="assets/img/icons/more.svg" />
 
-              <div class="more-menu" [class.visible]="message.messageSelected">
+              <div class="more-menu">
                 <span (click)="editMessage(message)">Edit message</span>
                 <span class="delete-message"
                   (click)="firestoreService.deleteMessageOfChat('direct messages', currentChat?.id, message.id)">Delete
                   Message</span>
               </div>
             </button>
-
-
           </div>
         </div>
       </section>
